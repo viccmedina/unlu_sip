@@ -112,6 +112,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+seminario/
 
 # Spyder project settings
 .spyderproject
