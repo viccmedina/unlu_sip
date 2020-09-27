@@ -23,7 +23,7 @@ source seminario/bin/activate
 Podemos instalar todas las librerias que necesitmos sin afectar nuestro SO. Para ello ejecutamos:
 
 ```python
-pip3 install -r requirements.txt
+pip3 install -r requirements/requirements.txt
 ```
 
 Luego, para salir del mismo ejecutamos:
@@ -53,3 +53,16 @@ set FLASK_APP=app.py (Windows)
 Con ese comando nos quedará levantado el servidor de Flask y nos dará un enlace para ingresar.
 Accedemos al mismo y debemos ver una página en blanco y minimalista con un "hello world!".
 Si logramos visualizarlo, hemos configurado todo de manera correcta.
+
+
+## Markdown
+Si queremos visualizar archivos de Markdown (.md) debemos tener instalado el paquete `grip`
+
+Si no estamos seguros de que tenemos instaldo el paquete mencionado, simplemente volvemos a instalar los requerimientos:
+
+```python
+pip3 install -r requirements/requirements.txt
+```
+
+
+
