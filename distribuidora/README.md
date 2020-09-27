@@ -31,14 +31,8 @@ El alcance del mismo se verá reflejado en la renovación e incorporación de lo
 
 Para el desarrollo del sistema se ha utilizado:
 
-Flask: 
-![alt text](https://github.com/viccmedina/unlu_sip/tree/master/extras/flask_logo.jpg "Logo Flask")
+<img src="extras/flask_logo.jpg" width="200px" alt="Logo Flask/">
+<img src="extras/sqlalchemy_logo.png" width="200px" alt="Logo SQLAlchemy"/>
+<img src="extras/jinja2.png" width="200px" alt="Logo Jinja2"/>
+<img src="extras/bootstrap.png" width="200px" alt="Logo Bootstrap"/>
 
-SQLAlchemy: 
-![alt text](https://github.com/viccmedina/unlu_sip/tree/master/extras/sqlalchemy_logo.png "Logo SQLAlchemy")
-
-Jinja2: 
-![alt text](https://github.com/viccmedina/unlu_sip/tree/master/extras/jinja2_logo.png "Logo Flask")
-
-Bootstrap: 
-![alt text](https://github.com/viccmedina/unlu_sip/tree/master/extras/bootstrap_logo.jpg "Logo Flask")
