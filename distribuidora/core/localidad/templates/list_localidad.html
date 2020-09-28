@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="jumbotron">
+		<h1>Listado de Localidades disponibles</h1>
+	</div>
+
+	<ul>
+		{% for loc in localidad %}
+			<li>{{ loc }}</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}

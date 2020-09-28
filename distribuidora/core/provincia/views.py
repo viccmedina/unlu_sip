@@ -18,8 +18,6 @@ def add():
 		descripcion = form.descripcion.data
 
 		new_provincia = Provincia(descripcion)
-		print('#'*40)
-		print(new_provincia)
 		db.session.add(new_provincia)
 		db.session.commit()
 		return redirect(url_for('provincia.list'))

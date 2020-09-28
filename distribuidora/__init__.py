@@ -16,6 +16,7 @@ Migrate(app, db)
 
 # Blueprints
 from distribuidora.core.provincia.views import provincia_blueprint
+from distribuidora.core.localidad.views import localidad_blueprint
 
 app.register_blueprint(provincia_blueprint, url_prefix='/provincia')
-
+app.register_blueprint(localidad_blueprint, url_prefix='/localidad')
