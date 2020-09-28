@@ -1,12 +1,13 @@
 from distribuidora import db
 
-class Porvincia(db.Model):
+class Provincia(db.Model):
 	"""
 	Este modelo representará a las provincias asociadas a una localidad.
 	Contará con los siquientes campos:
 	provincia_id --> clave primaria
 	descripcion --> nombre de la provincia
 	ts_created --> momento en que el registro fue creado
+	localidades --> dado que una provincia puede tener multiples localidades
 	"""
 
 	# Nombre de la tabla
@@ -16,6 +17,7 @@ class Porvincia(db.Model):
 	provincia_id = db.Column(db.Integer, primary_key=True)
 	descripcion = db.Column(db.String(80), nullable=False)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
+	#localidades = db.relationship('Localidades', backref='localidad', lazy=True)
 
 	def __init__(self, descripcion):
 		"""
@@ -27,4 +29,4 @@ class Porvincia(db.Model):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-		return 'Porvincia de {}'.format(self.descripcion)
+		return 'Provincia de {}'.format(self.descripcion)

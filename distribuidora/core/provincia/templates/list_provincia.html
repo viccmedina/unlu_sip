@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="jumbotron">
+		<h1>Listado de Provincias disponibles</h1>
+	</div>
+
+	<ul>
+		{% for prov in provincia %}
+			<li>{{ prov }}</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
