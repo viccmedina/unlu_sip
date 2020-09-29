@@ -1,6 +1,7 @@
 from distribuidora import db
 
 class Permiso(db.Model):
+	pass
 	"""
 	Este modelo representará a los permisos
 	Contará con los siquientes campos:
@@ -9,7 +10,7 @@ class Permiso(db.Model):
 	nombre --> nombre del permiso
 	descripcion --> descipcion
 	ts_created --> momento en que el registro fue creado
-	"""
+	
 
 	# Nombre de la tabla
 	__tablename__ = 'permiso'
@@ -21,14 +22,11 @@ class Permiso(db.Model):
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 	def __init__(self,nombre, descripcion):
-		"""
 		Constructor de la clase permiso
-		"""
 		self.descripcion = descripcion
         self.nombre = nombre
 
 	def __repr__(self):
-		"""
 		Nos devolverá una representación del Modelo
-		"""
 		return 'Permiso:  {}'.format(self.nombre, self.descripcion)
+	"""

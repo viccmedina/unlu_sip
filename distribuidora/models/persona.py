@@ -1,6 +1,8 @@
 from distribuidora import db
 
+
 class Persona(db.Model):
+	pass
 	"""
 	Este modelo representará a la entidad Persona.
 	Contará con los siquientes campos:
@@ -17,7 +19,7 @@ class Persona(db.Model):
 	num_dni --> numero de dni de la persona
 	domicilio_id  --> domicilio_id  foreing jey referenciando a la entidad domicilio
 	ts_created --> momento en que el registro fue creado
-	"""
+	
 
 	# Nombre de la tabla
 	__tablename__ = 'persona'
@@ -38,9 +40,7 @@ class Persona(db.Model):
 
 
 	def __init__(self, fecha_nacimiento, email, telefono_ppal, tipo_dni_id,domicilio_id ):
-		"""
 		Constructor de la clase persona
-		"""
 		self.fecha_nacimiento = fecha_nacimiento
 		self.email = email
         self.telefono_ppal = telefono_ppal
@@ -48,7 +48,9 @@ class Persona(db.Model):
         self.domicilio_id = domicilio_id
 
 	def __repr__(self):
-		"""
 		Nos devolverá una representación del Modelo
-		"""
-		return 'Persna: {}'.format(self.apellido, self.nombre, self.num_dni, self.razon_social, self.telefono_sec, self.fecha_nacimiento, self.email, self.telefono_ppal, self.tipo_dni_id, self.domicilio_id)
+		return 'Persna: {}'.format(self.apellido, self.nombre, self.num_dni, self.razon_social, \
+			self.telefono_sec, self.fecha_nacimiento, self.email, self.telefono_ppal, self.tipo_dni_id, \
+			self.domicilio_id)
+	"""
+

@@ -1,6 +1,7 @@
 from distribuidora import db
 
 class Usuario(db.Model):
+	pass
 	"""
 	Este modelo representará a la tabla usuarios.
 	Contará con los siquientes campos:
@@ -10,7 +11,6 @@ class Usuario(db.Model):
 	descripcion --> descripcion del usuario
 	persona_id -- > persona_id  foreing key referenciando a la entidad persona
 	ts_created --> momento en que el registro fue creado
-	"""
 
 	# Nombre de la tabla
 	__tablename__ = 'usuario'
@@ -25,15 +25,12 @@ class Usuario(db.Model):
 
 
 	def __init__(self, username, password, persona_id):
-		"""
 		Constructor de la clase localidad
-		"""
 		self.username = username
 		self.password = password
         self.persona_id = persona_id
 
 	def __repr__(self):
-		"""
 		Nos devolverá una representación del Modelo
-		"""
 		return 'usuario:  {}'.format(self.username, self.password, self.descripcion, self.persona_id)
+	"""

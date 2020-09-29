@@ -1,6 +1,7 @@
 from distribuidora import db
 
 class Domicilio(db.Model):
+	pass
 	"""
 	Este modelo representará a las Domicilio.
 	Contará con los siquientes campos:
@@ -13,7 +14,7 @@ class Domicilio(db.Model):
 	aclaracion --> aclaracion del domicilio
 	localidad_id --> clave forania refenciando a la tabla localidad
 	ts_created --> momento en que el registro fue creado
-	"""
+	
 
 	# Nombre de la tabla
 	__tablename__ = 'domicilio'
@@ -30,14 +31,12 @@ class Domicilio(db.Model):
 
 
 	def __init__(self, calle, localidad_id):
-		"""
 		Constructor de la clase domicilio
-		"""
 		self.calle = calle
 		self.localidad_id = localidad_id
 
 	def __repr__(self):
-		"""
 		Nos devolverá una representación del Modelo
-		"""
 		return 'domicilio:  {}'.format(self.calle, self.numero, self.departamento, self.piso, self.aclaracion, self.localidad_id)
+	"""
+	
