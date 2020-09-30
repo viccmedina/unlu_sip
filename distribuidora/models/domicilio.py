@@ -1,7 +1,6 @@
 from distribuidora import db
 
 class Domicilio(db.Model):
-	pass
 	"""
 	Este modelo representará a las Domicilio.
 	Contará con los siquientes campos:
@@ -15,28 +14,32 @@ class Domicilio(db.Model):
 	localidad_id --> clave forania refenciando a la tabla localidad
 	ts_created --> momento en que el registro fue creado
 	
-
+	"""
 	# Nombre de la tabla
 	__tablename__ = 'domicilio'
 
 	# Atributos
 	domicilio_id = db.Column(db.Integer, primary_key=True)
-    calle = db.Column(db.String(50),nullable=False)
-    numero = db.Column(db.Integer)
-    departamento = db.Column(db.String(50))
-    piso = db.Column(db.Integer)
+	calle = db.Column(db.String(50),nullable=False)
+	numero = db.Column(db.Integer)
+	departamento = db.Column(db.String(50))
+	piso = db.Column(db.Integer)
 	aclaracion = db.Column(db.String(80), nullable=False)
-    localidad_id = db.Column(db.Integer, db.ForeignKey('localidad.localidad_id'),nullable=False)
+	localidad_id = db.Column(db.Integer, db.ForeignKey('localidad.localidad_id'),nullable=False)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
 	def __init__(self, calle, localidad_id):
+		"""
 		Constructor de la clase domicilio
+		"""
 		self.calle = calle
 		self.localidad_id = localidad_id
 
 	def __repr__(self):
+		"""
 		Nos devolverá una representación del Modelo
-		return 'domicilio:  {}'.format(self.calle, self.numero, self.departamento, self.piso, self.aclaracion, self.localidad_id)
-	"""
+		"""
+
+		return 'domicilio:  {}'.format(self.calle)
 	
