@@ -1,6 +1,6 @@
 from distribuidora import db
 
-class tipo_dni(db.Model):
+class TipoDNI(db.Model):
 	"""
 	Este modelo representará el tipo de dni.
 	Contará con los siquientes campos:

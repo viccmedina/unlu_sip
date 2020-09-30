@@ -18,8 +18,9 @@ Migrate(app, db)
 from distribuidora.core.provincia.views import provincia_blueprint
 from distribuidora.core.localidad.views import localidad_blueprint
 from distribuidora.core.domicilio.views import domicilio_blueprint
+from distribuidora.core.tipo_dni.views import tipo_dni_blueprint
 
 app.register_blueprint(provincia_blueprint, url_prefix='/provincia')
 app.register_blueprint(localidad_blueprint, url_prefix='/localidad')
-app.register_blueprint(domicilio_blueprint, url_prefix='/domicilio')
+app.register_blueprint(tipo_dni_blueprint, url_prefix='/tipo_dni')
 
