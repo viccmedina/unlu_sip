@@ -14,14 +14,18 @@ db = SQLAlchemy(app)
 # Conectamos la aplicación con DB
 Migrate(app, db)
 
+
 # Blueprints
+from distribuidora.core.views import core_blueprint
 from distribuidora.core.provincia.views import provincia_blueprint
 from distribuidora.core.localidad.views import localidad_blueprint
 from distribuidora.core.domicilio.views import domicilio_blueprint
 from distribuidora.core.tipo_dni.views import tipo_dni_blueprint
 from distribuidora.core.rol_permiso.views import rol_permiso_blueprint
 
+app.register_blueprint(core_blueprint, url_prefix='/')
 app.register_blueprint(provincia_blueprint, url_prefix='/provincia')
 app.register_blueprint(localidad_blueprint, url_prefix='/localidad')
+app.register_blueprint(domicilio_blueprint, url_prefix='/domicilio')
 app.register_blueprint(tipo_dni_blueprint, url_prefix='/tipo_dni')
 app.register_blueprint(rol_permiso_blueprint, url_prefix='/rol_permiso')

@@ -14,13 +14,13 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
   <h5 class="my-0 mr-md-auto font-weight-normal">Distr. Vazquez</h5>
   <nav class="my-2 my-md-0 mr-md-3">
-    <a class="p-2 text-dark" href="#">Home</a>
-    <a class="p-2 text-dark" href="#">Productos</a>
-    <a class="p-2 text-dark" href="#">Nosotros</a>
-    <a class="p-2 text-dark" href="#">Cómo Comprar</a>
-    <a class="p-2 text-dark" href="#">Contactos</a>
+    <a class="p-2 text-dark" href="{{ url_for('core_blueprint.index') }}">Home</a>
+    <a class="p-2 text-dark" href="{{ url_for('core_blueprint.productos') }}">Productos</a>
+    <a class="p-2 text-dark" href="{{ url_for('core_blueprint.nosotros') }}">Nosotros</a>
+    <a class="p-2 text-dark" href="{{ url_for('core_blueprint.como_comprar') }}">Cómo Comprar</a>
+    <a class="p-2 text-dark" href="{{ url_for('core_blueprint.contacto') }}">Contactos</a>
   </nav>
-  <a class="btn btn-outline-primary" href="#">Iniciar Sesión</a>
+  <a class="btn btn-outline-primary" href="{{ url_for('core_blueprint.login') }}">Iniciar Sesión</a>
 </div>
 	{% block content %}
 	
