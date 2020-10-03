@@ -1,23 +1,21 @@
 from distribuidora import db
 
-class Provincia(db.Model):
+class TipoDNI(db.Model):
 	"""
-	Este modelo representará a las provincias asociadas a una localidad.
+	Este modelo representará el tipo de dni.
 	Contará con los siquientes campos:
-	provincia_id --> clave primaria
-	descripcion --> nombre de la provincia
+	tipo_dni_id --> clave primaria
+	descripcion --> describe el tipo de dni
 	ts_created --> momento en que el registro fue creado
-	localidades --> dado que una provincia puede tener multiples localidades
 	"""
 
 	# Nombre de la tabla
-	__tablename__ = 'provincia'
+	__tablename__ = 'tipo_dni'
 
 	# Atributos
-	provincia_id = db.Column(db.Integer, primary_key=True)
+	tipo_dni_id = db.Column(db.Integer, primary_key=True)
 	descripcion = db.Column(db.String(80), nullable=False)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
-	localidades = db.relationship('Localidad', backref=db.backref('localidad', lazy=True))
 
 	def __init__(self, descripcion):
 		"""
@@ -29,4 +27,4 @@ class Provincia(db.Model):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-		return '{}'.format(self.descripcion)
+		return 'tipo de dni:  {}'.format(self.descripcion, self.descripcion)

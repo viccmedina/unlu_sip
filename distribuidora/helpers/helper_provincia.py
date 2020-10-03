@@ -5,6 +5,8 @@ from distribuidora.models.provincia import Provincia
 En este archivito crearemos algunas provincias en la db
 """
 
+db.create_all()
+
 descripcion = "Buenos Aires"
 new_provincia = Provincia(descripcion)
 db.session.add(new_provincia)

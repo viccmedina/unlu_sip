@@ -1,9 +1,29 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, validators, PasswordField, DateTimeField
-
+from wtforms import StringField, SubmitField, SelectField, PasswordField, DateTimeField, validators
 from distribuidora.models.localidad import Localidad
 from distribuidora.models.provincia import Provincia
 from distribuidora.models.tipo_dni import TipoDNI
+
+class AddRol(FlaskForm):
+    """
+    Nos permite crear el formulario desde flask gracias a la herencia de FlaskForm.
+
+    Será utilizado para agregar nuevos roles
+    """
+    nombre = StringField('Nombre',validators=[validators.required()])
+    descripcion = StringField('Descripcion:',validators=[validators.required()])
+    submit = SubmitField('Agregar')
+
+
+class AddPermiso(FlaskForm):
+    """
+    Nos permite crear el formulario desde flask gracias a la herencia de FlaskForm.
+
+    Será utilizado para agregar nuevos permisos
+    """
+    nombre = StringField('nombre',validators=[validators.required()])
+    descripcion = StringField('descripcion:',validators=[validators.required()])
+    submit = SubmitField('Agregar')
 
 
 class AddUsuario(FlaskForm):
