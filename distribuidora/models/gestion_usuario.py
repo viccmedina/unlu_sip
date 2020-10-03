@@ -1,18 +1,16 @@
 from distribuidora import db
 
 
-#esto va aca?? estas 3 relaciones \'/
 
+# Establecemos las tablas pivot.
+
+# Relacionamos un usuario con uno o mas roles.
 usuario_rol = db.Table('usuario_rol',
     db.Column('usuario_id', db.Integer, db.ForeignKey('usuario.usuario_id'), primary_key=True),
     db.Column('rol_id', db.Integer, db.ForeignKey('rol.rol_id'), primary_key=True)
 )
 
-usuario_permiso = db.Table('usuario_permiso',
-    db.Column('usuario_id', db.Integer, db.ForeignKey('usuario.usuario_id'), primary_key=True),
-    db.Column('permiso_id', db.Integer, db.ForeignKey('permiso.permiso_id'), primary_key=True)
-)
-
+# Relacionamos los roles con los permisos
 rol_permiso = db.Table('rol_permiso',
     db.Column('rol_id', db.Integer, db.ForeignKey('rol.rol_id'), primary_key=True),
     db.Column('permiso_id', db.Integer, db.ForeignKey('permiso.permiso_id'), primary_key=True)
