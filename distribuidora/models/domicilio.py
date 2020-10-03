@@ -29,11 +29,15 @@ class Domicilio(db.Model):
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-	def __init__(self, calle, localidad_id):
+	def __init__(self, calle, numero, departamento, piso, aclaracion,localidad_id):
 		"""
 		Constructor de la clase domicilio
 		"""
 		self.calle = calle
+		self.numero = numero
+		self.departamento = departamento
+		self.piso = piso
+		self.aclaracion = aclaracion
 		self.localidad_id = localidad_id
 
 	def __repr__(self):
