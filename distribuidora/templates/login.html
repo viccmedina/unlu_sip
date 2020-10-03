@@ -17,7 +17,7 @@
                     <input type="password" class="form-control password" id="password" placeholder="Contraseña..." name="password">
                 </div>
 
-                <small id="emailHelp" class="form-text text-muted">Para registrarse como cliente, haga click <a href="#">AQUÍ</a></small>
+                <small id="emailHelp" class="form-text text-muted">Para registrarse como cliente, haga click <a href="{{ url_for('usuario.add_usuario') }}">AQUÍ</a></small>
                 <button type="submit" class="btn btn-primary btn-customized mb-2 ">Iniciar Sesión</button>
                 <p class="copyright">&copy; SIP Grupo 1.</p>
             </form>

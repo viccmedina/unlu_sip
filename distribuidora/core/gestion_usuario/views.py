@@ -95,23 +95,26 @@ def add_usuario():
 
         new_domicilio = Domicilio(calle, numero, piso, departamento, aclaracion, localidad_id)#creamos un domicilio
         db.session.add(new_domicilio)
-        db.session.commit()#agregamos el domicilio a la bd
+        #agregamos el domicilio a la bd
+        db.session.commit()
         new_persona = Persona(apellido, nombre, num_dni, fecha_nacimiento, email, razon_social,
                               telefono_ppal, telefono_sec, tipo_dni, new_domicilio.domicilio_id)#creamos una persona
         db.session.add(new_persona)
-        db.session.commit()#agregamos una persona a la db
+        #agregamos una persona a la db
+        db.session.commit()
         #datos del usuario
         username = form.username.data
         password = form.password.data
-        persona_id = Persona.query.filter_by(descripcion=form.email.data).first()
-        new_usuario = Usuario(username, password, persona_id)#creamos un nuevo usuario
+        persona_id = Persona.query.filter_by(email=form.email.data).first()
+        #creamos un nuevo usuario
+        new_usuario = Usuario(username, password, persona_id)
         db.session.add(new_usuario)
-        db.session.commit()#lo agregamos a la db
+        #lo agregamos a la db
+        db.session.commit()
 
         return redirect(url_for('usuario.list'))
     else:
         print('HAY UN ERROR')
-        print(form.descripcion.data)
         print(form.errors)
         return render_template('add_usuario.html', form=form)
 
