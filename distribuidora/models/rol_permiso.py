@@ -36,7 +36,7 @@ class Rol(db.Model):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-		return 'Rol:  {}'.format(self.nombre, self.descripcion)
+		return self.nombre
 
 
 class Permiso(db.Model):
@@ -72,4 +72,4 @@ class Permiso(db.Model):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-		return 'Permiso:  {}'.format(self.nombre, self.descripcion)
+		return self.nombre
