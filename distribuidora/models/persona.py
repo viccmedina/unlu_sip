@@ -62,5 +62,3 @@ class Persona(db.Model):
 		return 'Persona: {}'.format(self.apellido, self.nombre, self.num_dni, self.razon_social, \
 		self.telefono_sec, self.fecha_nacimiento, self.email, self.telefono_ppal, self.tipo_dni_id, \
 		self.domicilio_id)
-
-

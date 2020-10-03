@@ -17,7 +17,6 @@ class Localidad(db.Model):
 	localidad_id = db.Column(db.Integer, primary_key=True)
 	descripcion = db.Column(db.String(80), nullable=False)
 	provincia_id = db.Column(db.Integer, db.ForeignKey('provincia.provincia_id'), nullable=False)
-	domiclios = db.relationship('Domicilio', backref=db.backref('domicilio', lazy=True))
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
