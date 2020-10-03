@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for
-from distribuidora import db
-from distribuidora.models.rol_permiso import Rol, Permiso
+from flask import Blueprint, render_template
+from distribuidora.models.gestion_usuario import Rol, Permiso
 
 rol_permiso_blueprint = Blueprint('rol_permiso', __name__, template_folder='templates')
 
@@ -17,5 +16,5 @@ def list_permiso():
 	"""
 	Nos devolverá el listado de todas las localidades en la BD
 	"""
-	rol = Rol.query.all()
-	return render_template('list_rol.html', rol=rol)
+	permiso = Permiso.query.all()
+	return render_template('list_permiso.html', permiso=permiso)

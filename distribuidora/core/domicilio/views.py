@@ -8,7 +8,7 @@ domicilio_blueprint = Blueprint('domicilio', __name__, template_folder='template
 @domicilio_blueprint.route('/list')
 def list():
 	"""
-	Nos devolverá el listado de todas las localidades en la BD
+	Nos devolverá el listado de todas los domicilios en la BD
 	"""
 	domicilio = Domicilio.query.all()
 	return render_template('list_domicilio.html', domiclio=domicilio)
