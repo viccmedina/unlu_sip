@@ -41,3 +41,61 @@ Aca debemos poner todas las inserciones a la base. Es recomendable tenerlas toda
 para poder ejecutar un único archivo que realiza una funcionalidad externar a la app.
 Es una tarea de desarrollo y testing.
 """
+
+descripcion = "Buenos Aires"
+new_provincia = Provincia(descripcion)
+db.session.add(new_provincia)
+db.session.commit()
+
+
+
+#Agregamos la localidad de paso del rey de la PROVINCIA de Bs As
+descripcion = "Paso del rey"
+
+provincia = Provincia.query.filter_by(descripcion="Buenos Aires").first()
+print('Se ha insertado: {}'.format(provincia.provincia_id))
+
+new_localidad = Localidad(descripcion, provincia.provincia_id)
+db.session.add(new_localidad)
+db.session.commit()
+
+# creamo el tipo "numero dni"
+descripcion = "DNI"
+new_tipo_dni = TipoDNI(descripcion)
+db.session.add(new_tipo_dni)
+db.session.commit()
+
+
+#creamo el tipo libreta civica
+descripcion = "Libreta Cívica"
+new_tipo_dni = TipoDNI(descripcion)
+db.session.add(new_tipo_dni)
+db.session.commit()
+
+
+descripcion = "Libreta de Enrolamiento"
+new_tipo_dni = TipoDNI(descripcion)
+db.session.add(new_tipo_dni)
+db.session.commit()
+
+# Agregamos los tipos de Roles
+
+descripcion = 'Cliente'
+new_rol = Rol(descripcion, descripcion)
+db.session.add(new_rol)
+db.session.commit()
+
+descripcion = 'Operador'
+new_rol = Rol(descripcion, descripcion)
+db.session.add(new_rol)
+db.session.commit()
+
+descripcion = 'Administrador'
+new_rol = Rol(descripcion, descripcion)
+db.session.add(new_rol)
+db.session.commit()
+
+descripcion = 'Gerencial'
+new_rol = Rol(descripcion, descripcion)
+db.session.add(new_rol)
+db.session.commit()

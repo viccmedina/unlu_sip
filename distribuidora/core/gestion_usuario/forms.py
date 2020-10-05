@@ -1,8 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, PasswordField, DateTimeField, validators
+from wtforms import StringField, SubmitField, SelectField, PasswordField, DateTimeField, validators, \
+    ValidationError
 from distribuidora.models.localidad import Localidad
 from distribuidora.models.provincia import Provincia
 from distribuidora.models.tipo_dni import TipoDNI
+from distribuidora.models.gestion_usuario import Usuario
 
 class AddRol(FlaskForm):
     """
@@ -35,8 +37,8 @@ class AddUsuario(FlaskForm):
     """
     
     #atributos de persona
-    apellido = StringField('Apellido:',validators=[validators.required()])
-    nombre = StringField('Nombre:',validators=[validators.required()])
+    apellido = StringField('Apellido:',validators=[validators.required('Nombre'), validators.Length(min=4, max=25)])
+    nombre = StringField('Nombre:',validators=[validators.required(), validators.Length(min=4, max=25)])
     num_dni = StringField('Nro. Documento:',validators=[validators.required()])
     fecha_nacimiento = DateTimeField('Fecha de Nacimiento', format='%d/%m/%y', validators=[validators.required()])
     email = StringField('Email:',validators=[validators.required()])
@@ -60,3 +62,11 @@ class AddUsuario(FlaskForm):
     password = PasswordField('Contraseña:',validators=[validators.required()])
 
     submit = SubmitField('Registrarse')
+
+    def validar_email(self, field):
+        """
+        Validamos que el usuario que se esta intentando registrar lo haga
+        con un email que no se ha registrado con anterioridad.
+        """
+        if Usuario.query.filter_by(email=field.data).first():
+            raise ValidationError('El email ya se encuentra registrado en el sistema!')
