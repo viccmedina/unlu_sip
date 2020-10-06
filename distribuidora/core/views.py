@@ -45,10 +45,3 @@ def como_comprar():
 
 	return render_template('como_comprar.html')
 
-@core_blueprint.route('/login')
-def login():
-	"""
-	TO-DO:: ESTO DEBE ESTAR EN USUARIO, CUANDO LO TENGAMOS LISTO
-	"""
-
-	return render_template('login.html')

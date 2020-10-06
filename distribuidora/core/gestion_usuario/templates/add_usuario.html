@@ -36,17 +36,6 @@
 			        {{ form.fecha_nacimiento(class="form-control form-control-md") }}
 			    </div>
 
-				 <div class="row">
-				    <div class="col">
-				      	{{ form.tipo_dni.label(class="form-control-label") }}
-			        	{{ form.tipo_dni(class="form-control form-control-md") }}
-				    </div>
-				    <div class="col">
-				      	{{ form.num_dni.label(class="form-control-label") }}
-			        	{{ form.num_dni(class="form-control form-control-md") }}
-				    </div>
-				 </div>
-
 				<div class="row">
 				    <div class="col">
 				      	{{ form.telefono_ppal.label(class="form-control-label") }}
@@ -94,17 +83,10 @@
 			        {{ form.aclaracion.label(class="form-control-label") }}
 			        {{ form.aclaracion(class="form-control form-control-md") }}
 			    </div>
-
-			    <div class="row">
-				    <div class="col">
-				      	{{ form.telefono_ppal.label(class="form-control-label") }}
-			        	{{ form.telefono_ppal(class="form-control form-control-md") }}
-				    </div>
-				    <div class="col">
-				      	{{ form.telefono_sec.label(class="form-control-label") }}
-			        	{{ form.telefono_sec(class="form-control form-control-md") }}
-				    </div>
-				 </div>
+			    <div class="form-group">
+			        {{ form.email.label(class="form-control-label") }}
+			        {{ form.email(class="form-control form-control-md") }}
+			    </div>
 			    <div class="row">
 				    <div class="col">
 				      	{{ form.username.label(class="form-control-label") }}

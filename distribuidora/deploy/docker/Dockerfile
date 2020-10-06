@@ -10,4 +10,4 @@ RUN export FLASK_APP=app.py && export FLASK_ENVIROMENT=development
 
 VOLUME /opt/unlu_sip
 
-CMD [ "python3", "app.py" ]
+# CMD [ "python3", "app.py" ]

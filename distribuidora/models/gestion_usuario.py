@@ -1,5 +1,6 @@
-from distribuidora import db
-
+from distribuidora import db, login_manager
+from werkzeug.security import generate_password_hash,check_password_hash
+from flask_login import UserMixin
 
 
 # Establecemos las tablas pivot.
@@ -15,6 +16,10 @@ rol_permiso = db.Table('rol_permiso',
     db.Column('rol_id', db.Integer, db.ForeignKey('rol.rol_id'), primary_key=True),
     db.Column('permiso_id', db.Integer, db.ForeignKey('permiso.permiso_id'), primary_key=True)
 )
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.query.get(user_id)
 
 class Rol(db.Model):
 	"""
@@ -86,7 +91,7 @@ class Permiso(db.Model):
 		return 'Permiso:  {}'.format(self.nombre, self.descripcion)
 
 
-class Usuario(db.Model):
+class Usuario(db.Model, UserMixin):
 
 	"""
 	Este modelo representará a la tabla usuarios.
@@ -104,7 +109,7 @@ class Usuario(db.Model):
 	# Atributos
 	usuario_id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(50), unique=True, nullable=False)
-	password = db.Column(db.String(50),nullable=False)
+	password_hash = db.Column(db.String(50),nullable=False)
 	descripcion = db.Column(db.String(50))
 	persona_id = db.Column(db.Integer, db.ForeignKey('persona.persona_id'),nullable=False)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
@@ -115,11 +120,11 @@ class Usuario(db.Model):
 		Constructor de la clase usuario
 		"""
 		self.username = username
-		self.password = password
+		self.password_hash = generate_password_hash(password)
 		self.persona_id = persona_id
 
+	def check_password(self,password):
+		return check_password_hash(self.password_hash,password)
+
 	def __repr__(self):
-		"""
-		Nos devolverá una representación del Modelo
-		"""
-		return 'usuario:  {}'.format(self.username, self.password, self.descripcion, self.persona_id)
+		return f"UserName: {self.username}"

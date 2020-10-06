@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, PasswordField, DateTimeField, validators, \
+from wtforms import StringField, SubmitField, SelectField, PasswordField, DateField, validators, \
     ValidationError
 from distribuidora.models.localidad import Localidad
 from distribuidora.models.provincia import Provincia
@@ -40,7 +40,7 @@ class AddUsuario(FlaskForm):
     apellido = StringField('Apellido:',validators=[validators.required('Nombre'), validators.Length(min=4, max=25)])
     nombre = StringField('Nombre:',validators=[validators.required(), validators.Length(min=4, max=25)])
     num_dni = StringField('Nro. Documento:',validators=[validators.required()])
-    fecha_nacimiento = DateTimeField('Fecha de Nacimiento', format='%d/%m/%y', validators=[validators.required()])
+    fecha_nacimiento = DateField('Fecha de Nacimiento', validators=[validators.required()])
     email = StringField('Email:',validators=[validators.required()])
     razon_social = StringField('Razón Social:',validators=[validators.required()])
     telefono_ppal = StringField('Teléfono Principal:',validators=[validators.required()])
@@ -48,7 +48,6 @@ class AddUsuario(FlaskForm):
     tipo_dni = SelectField('Tipo Documento:', choices=TipoDNI.query.all())
     
     #atributos de domicilio
-    domicilio = StringField('domicilio:',validators=[validators.required()])
     calle = StringField('Calle:',validators=[validators.required()])
     numero = StringField('Nro:',validators=[validators.required()])
     piso = StringField('Piso:',validators=[validators.required()])
@@ -70,3 +69,12 @@ class AddUsuario(FlaskForm):
         """
         if Usuario.query.filter_by(email=field.data).first():
             raise ValidationError('El email ya se encuentra registrado en el sistema!')
+
+class LoginForm(FlaskForm):
+    """
+    Nos permite loguearnos en el sistema
+    """
+
+    email = StringField('Email:',validators=[validators.required()])
+    password = PasswordField('Contraseña:',validators=[validators.required()])
+    submit = SubmitField('Iniciar Sesión')

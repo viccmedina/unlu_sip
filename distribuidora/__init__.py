@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-# from flask_migrate import Migrate
+from flask_login import LoginManager
 from distribuidora.settings import DB_PATH, DB_SECRET_KEY
 
 app = Flask(__name__)
@@ -11,8 +11,17 @@ app.config['SECRET_KEY'] = DB_SECRET_KEY
 
 db = SQLAlchemy(app)
 
-# Conectamos la aplicación con DB
-# Migrate(app, db)
+########################
+# Configuración de Login
+########################
+
+login_manager = LoginManager()
+
+# We can now pass in our app to the login manager
+login_manager.init_app(app)
+
+# Tell users what view to go to when they need to login.
+login_manager.login_view = "core.login"
 
 
 # Blueprints

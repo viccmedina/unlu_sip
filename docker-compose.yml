@@ -1,0 +1,9 @@
+version: '3'
+services:
+  aplicacion:
+    image: aplicacion:1.0
+    volumes: 
+      - '/opt/unlu_sip:/opt/unlu_sip'
+    ports:
+      - '5000:5000'
+    command: 'python3 app.py'

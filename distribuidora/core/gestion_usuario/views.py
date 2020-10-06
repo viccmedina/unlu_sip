@@ -1,7 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, request
+from flask_login import login_user, current_user, logout_user, login_required
+from werkzeug.security import generate_password_hash,check_password_hash
 from distribuidora import db
 from distribuidora.models.gestion_usuario import Rol, Permiso, Usuario
-from distribuidora.core.gestion_usuario.forms import AddPermiso, AddRol, AddUsuario
+from distribuidora.models.tipo_dni import TipoDNI
+from distribuidora.core.gestion_usuario.forms import AddPermiso, AddRol, AddUsuario, LoginForm
 
 gestion_usuario_blueprint = Blueprint('usuario', __name__, template_folder='templates')
 
@@ -117,6 +120,69 @@ def add_usuario():
         print('HAY UN ERROR')
         print(form.errors)
         return render_template('add_usuario.html', form=form)
+
+
+@gestion_usuario_blueprint .route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        usuario = Usuario.query.filter_by(emai=form.email.data).first()
+        if usuario.check_password(form.password.data) and usuario is not None:
+            login_user(usuario)
+            next = request.args.get('next')
+            if next == None or not next[0]=='/':
+                next=url_for('core_blueprint.index')
+
+    return render_template('login.html', form=form)
+
+@gestion_usuario_blueprint .route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('core_blueprint.index'))
+
+
+@gestion_usuario_blueprint.route('/home_cliente')
+def home_cliente():
+    panel = []
+    mock_data = {
+        'titulo': 'Gestionar Nuevo Pedido',
+        'subtitulo': 'Nuevo Pedido',
+        'descripcion': 'Esto es una descripcion',
+        'boton': 'Nuevo Pedido'
+    }
+
+    panel.append(mock_data)
+    mock_data = {
+        'titulo': 'Gestionar Nuevo Pedido 2',
+        'subtitulo': 'Nuevo Pedido 2',
+        'descripcion': 'Esto es una descripcion 2',
+        'boton': 'Nuevo Pedido 2'
+    }
+    panel.append(mock_data)
+
+    collapse = []
+    mock_data = {
+    'titulo': 'Mis Datos',
+    'contenido': 'Estos son datos de Prueba'
+    }
+    collapse.append(mock_data)
+    
+    mock_data = {
+    'titulo': 'Mis Datos',
+    'contenido': 'Estos son datos de Prueba'
+    }
+
+    mock_data = {
+    'titulo': 'Pedidos Guardados',
+    'contenido': None
+    }
+    collapse.append(mock_data)
+
+    datos = {
+        'accesos_rapidos': panel,
+        'collapse': collapse
+    }
+    return render_template('home_cliente.html', datos=datos)
 
 @gestion_usuario_blueprint.route('/list/usuario')
 def list_usuario():
