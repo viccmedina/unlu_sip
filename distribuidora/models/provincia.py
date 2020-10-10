@@ -1,4 +1,5 @@
 from distribuidora import db
+from distribuidora.models.localidad import Localidad
 
 class Provincia(db.Model):
 	"""
@@ -17,7 +18,7 @@ class Provincia(db.Model):
 	provincia_id = db.Column(db.Integer, primary_key=True)
 	descripcion = db.Column(db.String(80), nullable=False)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
-	localidades = db.relationship('Localidad', backref=db.backref('localidad', lazy=True))
+	localidad = db.relationship('Localidad', backref='localidad', lazy=True, uselist=True)
 
 	def __init__(self, descripcion):
 		"""
