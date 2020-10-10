@@ -1,5 +1,5 @@
 from distribuidora import db
-
+from distribuidora.models.domicilio import Domicilio
 
 class Persona(db.Model):
 
@@ -35,12 +35,15 @@ class Persona(db.Model):
 	telefono_ppal = db.Column(db.String(50),nullable=False)
 	telefono_sec = db.Column(db.String(50))
 	tipo_dni_id = db.Column(db.Integer,db.ForeignKey('tipo_dni.tipo_dni_id'),nullable=False)
-	domicilio_id = db.Column(db.Integer, db.ForeignKey('domicilio.domicilio_id'),nullable=False)
+	#domicilio_id = db.Column(db.Integer, db.ForeignKey('domicilio.domicilio_id'),nullable=False)
+	
+	usuario = db.relationship('Usuario', backref='persona', lazy=True, uselist=False)
+	domicilio = db.relationship('Domicilio', backref='persona', lazy=True, uselist=True)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
 	def __init__(self, apellido, nombre, num_dni, fecha_nacimiento, email, razon_socail, telefono_ppal,
-				 telefono_sec,  tipo_dni_id, domicilio_id ):
+				 telefono_sec,  tipo_dni_id ):
 		"""
 		Constructor de la clase persona
 		"""
@@ -53,12 +56,11 @@ class Persona(db.Model):
 		self.telefono_ppal = telefono_ppal
 		self.telefono_sec = telefono_sec
 		self.tipo_dni_id = tipo_dni_id
-		self.domicilio_id = domicilio_id
+
 
 	def __repr__(self):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
 		return 'Persona: {}'.format(self.apellido, self.nombre, self.num_dni, self.razon_social, \
-		self.telefono_sec, self.fecha_nacimiento, self.email, self.telefono_ppal, self.tipo_dni_id, \
-		self.domicilio_id)
+		self.telefono_sec, self.fecha_nacimiento, self.email, self.telefono_ppal, self.tipo_dni_id)

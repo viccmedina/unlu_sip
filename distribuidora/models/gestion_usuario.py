@@ -1,8 +1,5 @@
-from distribuidora import db, login_manager
+from distribuidora import db
 from werkzeug.security import generate_password_hash,check_password_hash
-from flask_login import UserMixin
-
-
 # Establecemos las tablas pivot.
 
 # Relacionamos un usuario con uno o mas roles.
@@ -17,9 +14,8 @@ rol_permiso = db.Table('rol_permiso',
     db.Column('permiso_id', db.Integer, db.ForeignKey('permiso.permiso_id'), primary_key=True)
 )
 
-@login_manager.user_loader
-def load_user(user_id):
-    return Usuario.query.get(user_id)
+
+
 
 class Rol(db.Model):
 	"""
@@ -39,6 +35,10 @@ class Rol(db.Model):
 	rol_id = db.Column(db.Integer, primary_key=True)
 	nombre = db.Column(db.String(50), nullable=False)
 	descripcion = db.Column(db.String(80), nullable=False)
+	rol_permiso = db.relationship('Permiso', secondary=rol_permiso, lazy='subquery',
+        backref=db.backref('roles', lazy=True))
+	usuario_rol = db.relationship('Usuario', secondary=usuario_rol, lazy='subquery',
+        backref=db.backref('roles', lazy=True))
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 	def __init__(self,nombre, descripcion):
@@ -91,7 +91,7 @@ class Permiso(db.Model):
 		return 'Permiso:  {}'.format(self.nombre, self.descripcion)
 
 
-class Usuario(db.Model, UserMixin):
+class Usuario(db.Model):
 
 	"""
 	Este modelo representará a la tabla usuarios.

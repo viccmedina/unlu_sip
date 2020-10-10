@@ -1,5 +1,5 @@
 from distribuidora import db
-from distribuidora.models.localidad import Localidad
+
 
 class Domicilio(db.Model):
 	"""
@@ -27,6 +27,7 @@ class Domicilio(db.Model):
 	piso = db.Column(db.Integer)
 	aclaracion = db.Column(db.String(80), nullable=False)
 	localidad_id = db.Column(db.Integer, db.ForeignKey('localidad.localidad_id'),nullable=False)
+	persona_id = db.Column(db.Integer, db.ForeignKey('persona.persona_id'),nullable=False)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
