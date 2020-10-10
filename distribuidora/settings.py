@@ -1,5 +1,6 @@
 DB_PATH = ''
 DB_SECRET_KEY = ''
+DATOS_PATH = ''
 
 try:
    from distribuidora.settings_local import *

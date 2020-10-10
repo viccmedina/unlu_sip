@@ -1,0 +1,4 @@
+nombre,descripcion,rol
+producto.alta,Alta de Productos,Gerencia
+producto.baja,Baja de Productos,Gerencia
+producto.modificar,Modificación de Porductos,Gerencia

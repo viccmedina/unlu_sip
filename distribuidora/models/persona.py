@@ -29,12 +29,12 @@ class Persona(db.Model):
 	apellido = db.Column(db.String(50))
 	nombre = db.Column(db.String(50))
 	num_dni = db.Column(db.String(10))
-	fecha_nacimiento = db.Column(db.DateTime,nullable=False)
+	fecha_nacimiento = db.Column(db.DateTime, nullable=True)
 	email = db.Column(db.String(50),nullable=False)
 	razon_social = db.Column(db.String(50))
 	telefono_ppal = db.Column(db.String(50),nullable=False)
 	telefono_sec = db.Column(db.String(50))
-	tipo_dni_id = db.Column(db.Integer,db.ForeignKey('tipo_dni.tipo_dni_id'),nullable=False)
+	tipo_dni_id = db.Column(db.Integer,db.ForeignKey('tipo_dni.tipo_dni_id'),nullable=True)
 	#domicilio_id = db.Column(db.Integer, db.ForeignKey('domicilio.domicilio_id'),nullable=False)
 	
 	usuario = db.relationship('Usuario', backref='persona', lazy=True, uselist=False)
@@ -42,25 +42,19 @@ class Persona(db.Model):
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-	def __init__(self, apellido, nombre, num_dni, fecha_nacimiento, email, razon_socail, telefono_ppal,
-				 telefono_sec,  tipo_dni_id ):
+	def __init__(self, apellido, nombre, email, telefono_ppal):
 		"""
 		Constructor de la clase persona
 		"""
 		self.apellido = apellido
 		self.nombre = nombre
-		self.num_dni = num_dni
-		self.fecha_nacimiento = fecha_nacimiento
 		self.email = email
-		self.razon_social = razon_socail
 		self.telefono_ppal = telefono_ppal
-		self.telefono_sec = telefono_sec
-		self.tipo_dni_id = tipo_dni_id
+		
 
 
 	def __repr__(self):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-		return 'Persona: {}'.format(self.apellido, self.nombre, self.num_dni, self.razon_social, \
-		self.telefono_sec, self.fecha_nacimiento, self.email, self.telefono_ppal, self.tipo_dni_id)
+		return 'Persona: {}'.format(self.apellido, self.nombre)
