@@ -9,7 +9,6 @@ gestion_usuario = Blueprint('gestion_usuario', __name__, template_folder='templa
 
 @gestion_usuario.route('/login', methods=['GET', 'POST'])
 def login():
-
     form = LoginForm()
     if form.validate_on_submit():
         # Grab the user from our User Models table
@@ -18,7 +17,7 @@ def login():
         # Check that the user was supplied and the password is right
         # The verify_password method comes from the User object
         # https://stackoverflow.com/questions/2209755/python-operation-vs-is-not
-
+        print(user.has_role('Gerencia'), flush=True)
         if user.check_password(form.password.data) and user is not None:
             #Log in the user
 
@@ -32,19 +31,13 @@ def login():
             # So let's now check if that next exists, otherwise we'll go to
             # the welcome page.
             if next == None or not next[0]=='/':
-                next = url_for('admin')
+                next = url_for('admin.index')
 
             return redirect(next)
     return render_template('login.html', form=form)
 
-
-@gestion_usuario.route("/admin")
-def admin():
-    logout_user()
-    return redirect(url_for('admin'))
-
-
-@gestion_usuario.route("/logout")
+@gestion_usuario.route('/logout', methods=['GET', 'POST'])
 def logout():
-    logout_user()
-    return redirect(url_for('login'))
+    logout_user()    
+    flash("You have been logged out.")
+    return redirect(url_for('gestion_usuario.login'))
