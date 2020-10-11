@@ -58,3 +58,13 @@ class Persona(db.Model):
 		Nos devolverá una representación del Modelo
 		"""
 		return 'Persona: {}'.format(self.apellido, self.nombre)
+
+
+	def get_email(self):
+		return self.email
+
+	def get_tel_principal(self):
+		return self.telefono_ppal
+
+	def get_tel_secundario(self):
+		return self.telefono_sec

@@ -1,3 +1,4 @@
 apellido,nombre,email,telefono_principal
 Administrador,Administrador,admin@admin.com.ar,1234567
-Prueba,Prueba,prueba@prueba.com.ar,1234567
+Operador,Operador,operador@prueba.com.ar,1234567
+Cliente,Cliente,cliente@prueba.com.ar,1234555
