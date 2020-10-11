@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_babelex import Babel
 from distribuidora.settings import DB_PATH, DB_SECRET_KEY
 
 
@@ -15,7 +16,9 @@ db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 
-login_manager.login_view = "gestion_usuario.login"
+login_manager.init_app(app)
+
+babel = Babel(app)
 
 from distribuidora.core.gestion_usuario.views import gestion_usuario
 app.register_blueprint(gestion_usuario)

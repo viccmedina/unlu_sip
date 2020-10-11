@@ -4,17 +4,33 @@ from distribuidora.models.localidad import Localidad
 from distribuidora.models.gestion_usuario import Rol, Permiso, Usuario
 from distribuidora.models.tipo_dni import TipoDNI
 from distribuidora.models.persona import Persona
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
+from flask_login import current_user, login_required
 
-admin = Admin(app)
+
+
+class MyAdminIndexView(AdminIndexView):
+
+
+	def is_accessible(self):
+		print(current_user, flush=True)
+		if current_user.is_authenticated:
+			print('AUTENTICADO', flush=True)
+			return current_user.has_role('Gerencia')
+		else:
+			print('NO AUTENTICADO', flush=True)
+		
+
+
+admin = Admin(app, index_view=MyAdminIndexView())
+
 admin.add_view(ModelView(Provincia, db.session))
 admin.add_view(ModelView(Localidad, db.session))
 admin.add_view(ModelView(Usuario, db.session))
 admin.add_view(ModelView(Rol, db.session))
 admin.add_view(ModelView(Permiso, db.session))
 admin.add_view(ModelView(Persona, db.session))
-
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0')

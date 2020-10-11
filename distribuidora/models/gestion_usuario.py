@@ -1,10 +1,12 @@
-from distribuidora import db
+from distribuidora import db, login_manager
 from werkzeug.security import generate_password_hash,check_password_hash
+from flask_login import UserMixin
+
 # Establecemos las tablas pivot.
 
 # Relacionamos un usuario con uno o mas roles.
 usuario_rol = db.Table('usuario_rol',
-    db.Column('usuario_id', db.Integer, db.ForeignKey('usuario.usuario_id'), primary_key=True),
+    db.Column('id', db.Integer, db.ForeignKey('usuario.id'), primary_key=True),
     db.Column('rol_id', db.Integer, db.ForeignKey('rol.rol_id'), primary_key=True)
 )
 
@@ -91,12 +93,16 @@ class Permiso(db.Model):
 		return 'Permiso:  {}'.format(self.nombre, self.descripcion)
 
 
-class Usuario(db.Model):
+@login_manager.user_loader
+def load_user(usuario_id):
+    return Usuario.query.get(int(usuario_id))
+
+class Usuario(db.Model, UserMixin):
 
 	"""
 	Este modelo representará a la tabla usuarios.
 	Contará con los siquientes campos:
-	usuario_id  --> clave primaria
+	id  --> clave primaria
 	username --> nombre de usuario
 	password --> passwd del usuario
 	descripcion --> descripcion del usuario
@@ -107,7 +113,7 @@ class Usuario(db.Model):
 	__tablename__ = 'usuario'
 
 	# Atributos
-	usuario_id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(50), unique=True, nullable=False)
 	password_hash = db.Column(db.String(50),nullable=False)
 	descripcion = db.Column(db.String(50))
@@ -129,3 +135,10 @@ class Usuario(db.Model):
 
 	def __repr__(self):
 		return f"UserName: {self.username}"
+
+	def has_role(self, role):
+		lista_roles = [str(r) for r in self.usuario_rol]
+		if role in lista_roles:
+			return True
+		else:
+			return False
