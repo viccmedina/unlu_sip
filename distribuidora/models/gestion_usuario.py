@@ -1,6 +1,7 @@
 from distribuidora import db, login_manager
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
+from distribuidora.models.persona import Persona
 
 # Establecemos las tablas pivot.
 
@@ -129,6 +130,21 @@ class Usuario(db.Model, UserMixin):
 		self.username = username
 		self.password_hash = generate_password_hash(password)
 		self.persona_id = persona_id
+
+	def get_username(self):
+		return self.username
+
+	def get_email(self):
+		print('persona id {}'.format(self.persona_id), flush=True)
+
+	def get_mis_datos(self):
+		datos = {}
+		datos['username'] = self.username
+		persona = Persona.query.filter_by(persona_id = self.persona_id).first()
+		datos['email'] = persona.get_email()
+		datos['tel_principal'] = persona.get_tel_principal()
+		datos['tel_secundario'] = persona.get_tel_secundario()
+		return datos
 
 	def check_password(self,password):
 		return check_password_hash(self.password_hash,password)
