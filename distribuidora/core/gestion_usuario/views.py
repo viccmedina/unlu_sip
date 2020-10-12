@@ -18,7 +18,6 @@ def login():
             print('pass y username OK', flush=True)
             #Log in the user
             if user.has_role('Gerencia'):
-                print('ES GERENCIA', flush=True)
                 login_user(user)
                 flash('Bienvenido.')
 
@@ -60,14 +59,14 @@ def logout():
 @login_required
 @gestion_usuario.route('/home_operador', methods=['POST', 'GET'])
 def home_operador():
-    return render_template('home_operador.html', datos=current_user.get_mis_datos())
+    return render_template('home_operador.html', \
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated)
 
 
 @login_required
 @gestion_usuario.route('/home_cliente', methods=['POST', 'GET'])
 def home_cliente():
-    print('-'*60)
-    print(current_user, flush=True)
-    print(current_user.get_mis_datos(), flush=True)
-    print('-'*60)
-    return render_template('home_cliente.html', datos=current_user.get_mis_datos())
+    return render_template('home_cliente.html', \
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated)
