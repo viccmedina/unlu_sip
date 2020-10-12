@@ -27,4 +27,4 @@ class TipoDNI(db.Model):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-		return 'tipo de dni:  {}'.format(self.descripcion, self.descripcion)
+		return 'tipo de dni:  {}'.format(self.descripcion)
