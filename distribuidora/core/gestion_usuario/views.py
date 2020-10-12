@@ -32,7 +32,7 @@ def login():
                 if next == None or not next[0]=='/':
                     next = url_for('admin.index')
             elif user.has_role('Operador'):
-                next = url_for('gestion_usuario.otro')
+                next = url_for('gestion_usuario.home_operador')
                 
             elif user.has_role('Cliente'):
                 flash('Bienvenido.')
@@ -57,9 +57,10 @@ def logout():
     return redirect(url_for('gestion_usuario.login'))
 
 
-@gestion_usuario.route('/otro', methods=['POST', 'GET'])
-def otro():
-    return render_template('otro.html')
+@login_required
+@gestion_usuario.route('/home_operador', methods=['POST', 'GET'])
+def home_operador():
+    return render_template('home_operador.html', datos=current_user.get_mis_datos())
 
 
 @login_required
