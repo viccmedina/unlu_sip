@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_babelex import Babel
 from distribuidora.settings import DB_PATH, DB_SECRET_KEY
 
 
@@ -13,5 +14,14 @@ app.config['SECRET_KEY'] = DB_SECRET_KEY
 
 db = SQLAlchemy(app)
 
-#from distribuidora.core.gestion_usuario.views import gestion_usuario
-#app.register_blueprint(gestion_usuario)
+login_manager = LoginManager()
+
+login_manager.init_app(app)
+
+babel = Babel(app)
+
+from distribuidora.core.views import core_blueprint
+from distribuidora.core.gestion_usuario.views import gestion_usuario
+
+app.register_blueprint(core_blueprint, url_prefix='/')
+app.register_blueprint(gestion_usuario)
