@@ -20,7 +20,11 @@
     <a class="p-2 text-dark" href="{{ url_for('core_blueprint.como_comprar') }}">Cómo Comprar</a>
     <a class="p-2 text-dark" href="{{ url_for('core_blueprint.contacto') }}">Contactos</a>
   </nav>
-  <a class="btn btn-outline-primary" href="{{ url_for('gestion_usuario.login') }}">Iniciar Sesión</a>
+  {% if is_authenticated %}
+  	<a class="btn btn-outline-primary" href="{{ url_for('gestion_usuario.logout') }}">Cerrar Sesión</a>
+  {% else %}
+  	<a class="btn btn-outline-primary" href="{{ url_for('gestion_usuario.login') }}">Iniciar Sesión</a>
+  {% endif %}
 </div>
 	{% block content %}
 	
