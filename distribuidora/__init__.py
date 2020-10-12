@@ -13,9 +13,5 @@ app.config['SECRET_KEY'] = DB_SECRET_KEY
 
 db = SQLAlchemy(app)
 
-login_manager = LoginManager()
-
-login_manager.login_view = "gestion_usuario.login"
-
-from distribuidora.core.gestion_usuario.views import gestion_usuario
-app.register_blueprint(gestion_usuario)
+#from distribuidora.core.gestion_usuario.views import gestion_usuario
+#app.register_blueprint(gestion_usuario)
