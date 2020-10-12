@@ -13,37 +13,37 @@ def login():
     if form.validate_on_submit():
 
         user = Usuario.query.filter_by(username=form.username.data).first()
-        print('el usuario tiene el rol: {}'.format(user.usuario_rol), flush=True)
-        if user.check_password(form.password.data) and user is not None:
-            print('pass y username OK', flush=True)
-            #Log in the user
-            if user.has_role('Gerencia'):
-                login_user(user)
-                flash('Bienvenido.')
+        if user is not None:
+            if user.check_password(form.password.data):
+                print('pass y username OK', flush=True)
+                #Log in the user
+                if user.has_role('Gerencia'):
+                    login_user(user)
+                    flash('Bienvenido.')
 
-                # If a user was trying to visit a page that requires a login
-                # flask saves that URL as 'next'.
-                next = request.args.get('next')
+                    # If a user was trying to visit a page that requires a login
+                    # flask saves that URL as 'next'.
+                    next = request.args.get('next')
 
-                # So let's now check if that next exists, otherwise we'll go to
-                # the welcome page.
-            
-                if next == None or not next[0]=='/':
-                    next = url_for('admin.index')
-            elif user.has_role('Operador'):
-                next = url_for('gestion_usuario.home_operador')
+                    # So let's now check if that next exists, otherwise we'll go to
+                    # the welcome page.
                 
-            elif user.has_role('Cliente'):
-                flash('Bienvenido.')
-                next = url_for('gestion_usuario.home_cliente')
+                    if next == None or not next[0]=='/':
+                        next = url_for('admin.index')
+                elif user.has_role('Operador'):
+                    next = url_for('gestion_usuario.home_operador')
+                    
+                elif user.has_role('Cliente'):
+                    flash('Bienvenido.')
+                    next = url_for('gestion_usuario.home_cliente')
 
-            login_user(user)
-            flash('Bienvenido.') 
-            return redirect(next)
-        else:
-            print('ALGO NO ESTA BIEN', flush=True)
-            print(user, flush=True)
-            print(user.check_password(form.password.data), flush=True)
+                login_user(user)
+                flash('Bienvenido.') 
+                return redirect(next)
+            else:
+                print('ALGO NO ESTA BIEN', flush=True)
+                print(user, flush=True)
+                print(user.check_password(form.password.data), flush=True)
 
     return render_template('login.html', form=form)
 
