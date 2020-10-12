@@ -38,3 +38,4 @@ class Pedido(db.Model):
         Nos devolverá una representación del Modelo
         """
         return 'pedido {}'.format(self.detalle_id, self.usuario_id, self.estado_pedido_id, self.tipo_pedido_id)
+

@@ -1,4 +1,4 @@
-frodem distribuidora import db
+from distribuidora import db
 
 class Precio(db.Model):
     """

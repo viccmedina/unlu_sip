@@ -59,6 +59,10 @@ class Persona(db.Model):
 		"""
 		return 'Persona: {}'.format(self.apellido, self.nombre)
 
+	def name_completo(self):
+		return self.apellido +"  "+self.nombre
+
+
 
 	def get_email(self):
 		return self.email
