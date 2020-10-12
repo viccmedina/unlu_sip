@@ -55,7 +55,7 @@ class Domicilio(db.Model):
 	def getLocalidad(self):
 		loca = Localidad.query.filter_by(localidad_id=self.localidad_id)
 		prov = Provincia.query.filter_by(provincia_id=loca.provincia_id)
-		return "Localidad " +loca" de la provincia de " + prov
+		return "Localidad {} de la provincia de {}".format(loca, prov)
 
 # metodo qe devuelva calle/nº
 # localidad/pcia
