@@ -9,6 +9,12 @@ gestion_usuario = Blueprint('gestion_usuario', __name__, template_folder='templa
 
 @gestion_usuario.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Validamos el formulario de logue. Tenemos en cuenta si el usuario existe
+    en nuestro sistema, también si la password es la correcta.
+    Dependiendo de su rol, el usuario en cuestión es redireccionado a su propio
+    home.
+    """
     form = LoginForm()
     if form.validate_on_submit():
 
@@ -19,31 +25,22 @@ def login():
                 #Log in the user
                 if user.has_role('Gerencia'):
                     login_user(user)
-                    flash('Bienvenido.')
-
-                    # If a user was trying to visit a page that requires a login
-                    # flask saves that URL as 'next'.
                     next = request.args.get('next')
 
-                    # So let's now check if that next exists, otherwise we'll go to
-                    # the welcome page.
-                
                     if next == None or not next[0]=='/':
                         next = url_for('admin.index')
                 elif user.has_role('Operador'):
                     next = url_for('gestion_usuario.home_operador')
                     
                 elif user.has_role('Cliente'):
-                    flash('Bienvenido.')
                     next = url_for('gestion_usuario.home_cliente')
 
                 login_user(user)
-                flash('Bienvenido.') 
                 return redirect(next)
             else:
-                print('ALGO NO ESTA BIEN', flush=True)
-                print(user, flush=True)
-                print(user.check_password(form.password.data), flush=True)
+                flash('Contraseña incorrecta', 'error')
+        else:
+            flash(u'Usuario inexistente', 'error')
 
     return render_template('login.html', form=form)
 
@@ -51,14 +48,20 @@ def login():
 @login_required
 @gestion_usuario.route('/logout', methods=['GET', 'POST'])
 def logout():
+    """
+    Para cerrar sesión.
+    """
     logout_user()    
-    flash("You have been logged out.")
+    flash("Usted ha cerrador sesión", 'warning')
     return redirect(url_for('gestion_usuario.login'))
 
 
 @login_required
 @gestion_usuario.route('/home_operador', methods=['POST', 'GET'])
 def home_operador():
+    """
+    Vista home del usuario de tipo Operador
+    """
     return render_template('home_operador.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated)
@@ -67,6 +70,9 @@ def home_operador():
 @login_required
 @gestion_usuario.route('/home_cliente', methods=['POST', 'GET'])
 def home_cliente():
+    """
+    Vista home del usuario de tipo Cliente
+    """
     return render_template('home_cliente.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated)

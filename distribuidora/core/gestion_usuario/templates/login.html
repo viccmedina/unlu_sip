@@ -5,15 +5,40 @@
 <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-10 col-md-8 col-lg-6">
+
             <form class="form-example" action="" method="POST">
-                <h1>Bienvenido</h1>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for category, message in messages %}
+                                {% if category == "error" %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                            {{ message }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                {% endif%}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                
+                 <h1>Bienvenido</h1>
                 <p class="description">Distribuidora Vazquez, Paso del Rey</p>
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }} {{ form.username(class="form-control form-control-md") }}
                     <ul>
                         {% for error in form.username.errors %}
-                            <li style="color;red;">{{ error }}</li>
+                            <li style="color: red;">{{ error }}</li>
                     </ul>
                     {% endfor %}
                 </div>
@@ -21,7 +46,7 @@
                     {{ form.password.label(class="form-control-label") }} {{ form.password(class="form-control form-control-md") }}
                     <ul>
                         {% for error in form.password.errors %}
-                            <li style="color;red;">{{ error }}</li>
+                            <li style="color: red;">{{ error }}</li>
                     </ul>
                     {% endfor %}
                 </div>
@@ -32,5 +57,4 @@
             </form>
         </div>
     </div>
-
 {% endblock %}
