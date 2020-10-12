@@ -17,8 +17,6 @@ login_manager = LoginManager()
 
 login_manager.init_app(app)
 
-babel = Babel(app)
-
 from distribuidora.core.views import core_blueprint
 from distribuidora.core.gestion_usuario.views import gestion_usuario
 
