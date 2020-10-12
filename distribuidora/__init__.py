@@ -1,4 +1,4 @@
-from flask import Flask
+ºfrom flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from distribuidora.settings import DB_PATH, DB_SECRET_KEY
@@ -16,6 +16,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 
 login_manager.init_app(app)
+
 
 from distribuidora.core.views import core_blueprint
 from distribuidora.core.gestion_usuario.views import gestion_usuario

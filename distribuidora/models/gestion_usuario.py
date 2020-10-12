@@ -144,6 +144,7 @@ class Usuario(db.Model, UserMixin):
 		datos['email'] = persona.get_email()
 		datos['tel_principal'] = persona.get_tel_principal()
 		datos['tel_secundario'] = persona.get_tel_secundario()
+		print(datos, flush=True)
 		return datos
 
 	def check_password(self,password):

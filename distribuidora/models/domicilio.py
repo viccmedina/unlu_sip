@@ -1,4 +1,6 @@
 from distribuidora import db
+from distribuidora.models.localidad import Localidad
+from distribuidora.models.provincia import Provincia
 
 
 class Domicilio(db.Model):
@@ -46,4 +48,14 @@ class Domicilio(db.Model):
 		"""
 		loc = Localidad.query.filter_by(localidad_id=self.localidad_id)
 		return 'Calle {} {}, localidad de'.format(self.calle, self.numero, loc)
-	
+
+	def getDireccion(self):
+		return "calle " + self.calle + " numero " +self.numero
+
+	def getLocalidad(self):
+		loca = Localidad.query.filter_by(localidad_id=self.localidad_id)
+		prov = Provincia.query.filter_by(provincia_id=loca.provincia_id)
+		return "Localidad " +loca" de la provincia de " + prov
+
+# metodo qe devuelva calle/nº
+# localidad/pcia

@@ -1,4 +1,6 @@
 from distribuidora import db
+from distribuidora.models.precio import Precio
+
 
 class Producto(db.Model):
     """
@@ -37,3 +39,11 @@ class Producto(db.Model):
         Nos devolverá una representación del Modelo
         """
         return 'productos {}'.format(self.descripcion, self.precio_id, self.tipo_producto_id)
+
+
+    def getProducto(self):
+        return self.descripcion
+
+    def getPrecioProdcuto(self):
+        precio = Precio.query.filter_by(provincia_id=self.precio_id)
+        return "Producto " +self.descripcion+" precio: "+ precio.valor
