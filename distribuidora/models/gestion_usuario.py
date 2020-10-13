@@ -137,6 +137,10 @@ class Usuario(db.Model, UserMixin):
 	def get_email(self):
 		print('persona id {}'.format(self.persona_id), flush=True)
 
+	def get_role(self):
+		lista_roles = [str(r) for r in self.usuario_rol]
+		return lista_roles[0]
+
 	def get_mis_datos(self):
 		datos = {}
 		datos['username'] = self.username
