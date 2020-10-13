@@ -21,7 +21,21 @@
     <a class="p-2 text-dark" href="{{ url_for('core_blueprint.contacto') }}">Contactos</a>
   </nav>
   {% if is_authenticated %}
-  	<a class="btn btn-outline-primary" href="{{ url_for('gestion_usuario.logout') }}">Cerrar Sesión</a>
+  	<div class="dropdown">
+  		<button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    		Mi Perfil
+  		</button>
+	  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+	  		{% if rol == 'Operador' %}
+		    	<a class="dropdown-item" href="{{ url_for('gestion_usuario.home_operador') }}">Mi Perfil</a>
+		    {% else %}
+		    	{% if rol == 'Cliente' %}
+		    	<a class="dropdown-item" href="{{ url_for('gestion_usuario.home_cliente') }}">Mi Perfil</a>
+		    	{% endif %}
+		    {% endif %}
+		    <a class="dropdown-item" href="{{ url_for('gestion_usuario.logout') }}">Cerrar Sesión</a>
+	  	</div>
+	</div>
   {% else %}
   	<a class="btn btn-outline-primary" href="{{ url_for('gestion_usuario.login') }}">Iniciar Sesión</a>
   {% endif %}

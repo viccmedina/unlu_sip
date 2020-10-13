@@ -64,7 +64,8 @@ def home_operador():
     """
     return render_template('home_operador.html', \
         datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated)
+        is_authenticated=current_user.is_authenticated, \
+        rol='operador')
 
 
 @login_required
@@ -75,4 +76,5 @@ def home_cliente():
     """
     return render_template('home_cliente.html', \
         datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated)
+        is_authenticated=current_user.is_authenticated, \
+        rol='cliente')
