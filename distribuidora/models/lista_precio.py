@@ -1,6 +1,6 @@
 from distribuidora import db
 
-class Lista_precio(db.Model):
+class ListaPrecio(db.Model):
 	"""
 	Este modelo representará el lista de precios
 	Contará con los siquientes campos:
@@ -16,8 +16,9 @@ class Lista_precio(db.Model):
 	# Atributos
 	lista_precio_id = db.Column(db.Integer, primary_key=True)
 	descripcion = db.Column(db.String(80), nullable=False)
-	fecha = db.Column(db.DateTime, nulleable=False)
+	precios = db.relationship('Precio', backref='precio', lazy=True)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
+
 	def __init__(self, descripcion, fecha):
 		"""
 		Constructor de la clase lista de precios

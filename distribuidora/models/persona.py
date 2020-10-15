@@ -1,5 +1,6 @@
 from distribuidora import db
 from distribuidora.models.domicilio import Domicilio
+from distribuidora.models.cuenta_corriente import CuentaCorriente
 
 class Persona(db.Model):
 
@@ -35,8 +36,7 @@ class Persona(db.Model):
 	telefono_ppal = db.Column(db.String(50),nullable=False)
 	telefono_sec = db.Column(db.String(50))
 	tipo_dni_id = db.Column(db.Integer,db.ForeignKey('tipo_dni.tipo_dni_id'),nullable=True)
-	#domicilio_id = db.Column(db.Integer, db.ForeignKey('domicilio.domicilio_id'),nullable=False)
-	
+	cuenta_corriente = db.relationship('CuentaCorriente', backref='cuenta_corriente', lazy=True, uselist=False)
 	usuario = db.relationship('Usuario', backref='persona', lazy=True, uselist=False)
 	domicilio = db.relationship('Domicilio', backref='persona', lazy=True, uselist=True)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())

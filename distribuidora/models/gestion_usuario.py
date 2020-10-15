@@ -2,6 +2,7 @@ from distribuidora import db, login_manager
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from distribuidora.models.persona import Persona
+from distribuidora.models.stock import DetalleStock
 
 # Establecemos las tablas pivot.
 
@@ -120,6 +121,8 @@ class Usuario(db.Model, UserMixin):
 	descripcion = db.Column(db.String(50))
 	persona_id = db.Column(db.Integer, db.ForeignKey('persona.persona_id'),nullable=False)
 	usuario_rol = db.relationship('Rol', secondary=usuario_rol)
+	movientos = db.relationship('MovimientoCtaCorriente', uselist=False, backref='movimientos', lazy=True)
+	detalle_stock = db.relationship('DetalleStock', uselist=False, backref='detalles_stocks_usuarios', lazy=True)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
