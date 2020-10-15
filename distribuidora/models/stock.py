@@ -1,6 +1,38 @@
 from distribuidora import db
+from distribuidora.models.producto import Producto
 
-class Stock(db.Model):
+class TipoMovimientoStock(db.Model):
+    """
+    Este modelo representará el movimiento del stock.
+    Contará con los siquientes campos:
+    movimiento_stock_id --> clave primaria
+    descripcion --> describe el tipo de dni
+    ts_created --> momento en que el registro fue creado
+    """
+
+    # Nombre de la tabla
+    __tablename__ = 'tipo_movimiento_stock'
+
+    # Atributos
+    tipo_movimiento_stock_id = db.Column(db.Integer, primary_key=True)
+    descripcion = db.Column(db.String(80), nullable=False)
+    detalle_stock = db.relationship('DetalleStock', backref='detalles_stocks', lazy=True)
+    ts_created = db.Column(db.DateTime, server_default=db.func.now())
+
+    def __init__(self, descripcion):
+        """
+        Constructor de la clase movimiento_stock
+        """
+        self.descripcion = descripcion
+
+    def __repr__(self):
+        """
+        Nos devolverá una representación del Modelo
+        """
+        return 'movimiento de stock:  {}'.format(self.descripcion)
+
+
+class DetalleStock(db.Model):
     """
     Este modelo representará a stock.
     Contará con los siquientes campos:
@@ -14,15 +46,17 @@ class Stock(db.Model):
     """
 
     # Nombre de la tabla
-    __tablename__ = 'stock'
+    __tablename__ = 'detalle_stock'
 
     # Atributos
     stock_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
     cantidad = db.Column(db.String(80), nullable=False)
-    tipo_movimiento_id = db.Column(db.Integer, db.ForeignKey('tipo_movimiento.tipo_movimiento_id'),nulleable=False)
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.usuario_id'), nullable=False)
-    tipo_producto_id = db.Column(db.Integer, db.ForeignKey('tipo_producto.tipo_producto_id'), nullable=False)
+    tipo_movimiento_stock_id = db.Column(db.Integer, db.ForeignKey(\
+        'tipo_movimiento_stock.tipo_movimiento_stock_id'), \
+        nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 

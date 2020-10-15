@@ -1,4 +1,6 @@
 from distribuidora import db
+from distribuidora.models.lista_precio import ListaPrecio
+
 
 class Precio(db.Model):
     """
@@ -17,7 +19,7 @@ class Precio(db.Model):
     # Atributos
     precio_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
-    valor = db.Column(db.String(10), nullable=False)
+    valor = db.Column(db.Float(), nullable=False)
     lista_precio_id = db.Column(db.Integer, db.ForeignKey('lista_precio.lista_precio_id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
@@ -34,4 +36,4 @@ class Precio(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'precio de {}'.format(self.descripcion, self.valor, self.lista_precio_id)
+        return 'precio de {}'.format(self.descripcion)

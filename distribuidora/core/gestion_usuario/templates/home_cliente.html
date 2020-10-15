@@ -1,68 +1,62 @@
 {% extends "index.html" %}
 
 {% block content %}
-<div class="container-fluid">
-	<div class="row">
-  		<div class="col-sm-5 col-md-3">
-  			<div class="accordion" id="accordionExample">
-			  <div class="card">
-			    <div class="card-header" id="headingOne">
-			      <h2 class="mb-0">
-			        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-			          Mis Datos
-			        </button>
-			      </h2>
-			    </div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-5 col-md-3">
+				<div class="accordion" id="accordionExample">
+					<div class="card">
+						<div class="card-header" id="headingOne">
+							<h2 class="mb-0">
+								<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+									Mis Datos
+								</button>
+							</h2>
+						</div>
 
-			    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-			      <div class="card-body">
-		        	<p>{{ datos.username }}</p>
-		        	<p>{{ datos.email }}</p>
-		        	<p>Teléfono Principal: {{ datos.tel_principal }}</p>
-		        	{% if datos.tel_secundario is not none %}
-		        		<p>{{ datos.tel_secundario }}</p>
-		        	{% endif %}
-			      </div>
-			    </div>
-			  </div>
-			
-			  <div class="card">
-				    <div class="card-header" id="headingThree">
-				      <h2 class="mb-0">
-				        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-				          Novedades
-				        </button>
-				      </h2>
-				    </div>
-			   </div>
-  			</div>
-  		</div>
+						<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+							<div class="card-body">
+								<p>{{ datos.username }}</p>
+								<p>{{ datos.email }}</p>
+								<p>Teléfono Principal: {{ datos.tel_principal }}</p>
+								{% if datos.tel_secundario is not none %}
+								<p>{{ datos.tel_secundario }}</p>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-5 offset-sm-2 col-md-9 offset-md-0">
+						<div class="card-deck">
+							<div class="card" style="height: 18rem;">
+								<img src="static/img/gestion_pedido.svg" class="card-img-top" alt="gestión de pedidos" width="100%" height="100">
+								<div class="card-body">
+									<h5 class="card-title">Realizar Pedido</h5>
+									<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+									<button type="button" class="btn btn-primary btn-sm">Ver más</button>
+								</div>
+							</div>
+							<div class="card" style="height: 18rem;">
+								<img src="static/img/gestion_stock.svg" class="card-img-top" alt="gestión de stock" width="100%" height="100">
+								<div class="card-body">
+									<h5 class="card-title">Ver Pedidos</h5>
+									<p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+									<button type="button" class="btn btn-primary btn-sm">Ver más</button>
+								</div>
+							</div>
+							<div class="card" style="height: 18rem;">
+								<img src="static/img/gestion_ctas_corrientes.svg" class="card-img-top" alt="gestión de ctas corrientes" width="100%" height="100">
+								<div class="card-body">
+									<h5 class="card-title">Editar Perfil</h5>
+									<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+									<button type="button" class="btn btn-primary btn-sm">Ver más</button>
+								</div>
+							</div>
+						</div>
 
-  		<div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-			<div class="card">
-				<div class="card-header">
-				    Gestión de Pedidos
-				</div>
-				<div class="card-body">
-				    <h5 class="card-title">Mis Pedidos</h5>
-				    <p class="card-text">Ver pedidos previos y actuales</p>
-				    <a href="#" class="btn btn-primary btn-sm">Ver Pedidos</a>
+
+					</div>
 				</div>
 			</div>
-			<br>
-			<div class="card">
-				<div class="card-header">
-				    Gestión de Devolución
-				</div>
-				<div class="card-body">
-				    <h5 class="card-title">Mis Devoluciones</h5>
-				    <p class="card-text">Ver devoluciones previas y actuales</p>
-				    <a href="#" class="btn btn-primary btn-sm">Ver Devoluciones</a>
-				</div>
-			</div>
-
 		</div>
-	</div>
-</div>
 <br>
 {% endblock %}
