@@ -1,4 +1,5 @@
 from distribuidora import db, login_manager
+from sqlalchemy import event
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from distribuidora.models.persona import Persona
@@ -131,8 +132,10 @@ class Usuario(db.Model, UserMixin):
 		Constructor de la clase usuario
 		"""
 		self.username = username
-		self.password_hash = generate_password_hash(password)
+		self.password_hash = password
 		self.persona_id = persona_id
+
+
 
 	def get_username(self):
 		return self.username
@@ -166,3 +169,9 @@ class Usuario(db.Model, UserMixin):
 			return True
 		else:
 			return False
+
+@event.listens_for(Usuario.password_hash, 'set', retval=True)
+def hash_user_password(target, value, oldvalue, initiator):
+    if value != oldvalue:
+        return generate_password_hash(value)
+    return value
