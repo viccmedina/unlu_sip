@@ -34,11 +34,11 @@
 				    <div class="card h-100" style="height: 18rem;">
 				      <img src="static/img/stock/consultar.svg" class="card-img-top" alt="Consultar stock" width="100%" height="100">
 				      <div class="card-body">
-				        <h5 class="card-title">Consultar Stock</h5>
-				        <p class="card-text">Podrás consular el Stock disponible de cada producto.</p>
+				        <h5 class="card-title">Consultar Movimiento</h5>
+				        <p class="card-text">Podrás consular los movimientos de cada Cuenta Corriente.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.consultar_stock') }}" role="button">Consultar</a>
+						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.consultar_cta_corriente') }}" role="button">Consultar</a>
     				</div>				      
 				    </div>
 				  </div>
@@ -47,10 +47,10 @@
 				      <img src="static/img/stock/nuevo_movimiento.svg" class="card-img-top" alt="Realizar Devolución" width="100%" height="100">
 				      <div class="card-body">
 				        <h5 class="card-title">Nuevo Movimiento</h5>
-				        <p class="card-text">Podrás dar de entrada a un producto o dar de baja una cantidad determinada.</p>
+				        <p class="card-text">Podrás dar entrada a un nuevo movimiento a una Cuenta Corriente determinada.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.agregar') }}" role="button">Nuevo Movimiento</a>
+						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.agregar') }}" role="button">Nuevo Movimiento</a>
     				</div>
 				    </div>
 				  </div>
@@ -62,7 +62,7 @@
 				        <p class="card-text">Podrás importar de forma masiva movimientos anteriores por medio de un archivo csv/xlsx.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.importar') }}" role="button">Importar Movimientos</a>
+						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.importar') }}" role="button">Importar Movimientos</a>
     				</div>
 				    </div>
 				  </div>
@@ -74,7 +74,7 @@
 				        <p class="card-text">Podras exportar a un archivo csv/xlsx la consulta de movimientos.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.exportar') }}" role="button">Exportar Movimientos</a>
+						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.exportar') }}" role="button">Exportar Movimientos</a>
     				</div>
 				    </div>
 				  </div>

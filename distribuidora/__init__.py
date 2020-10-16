@@ -21,7 +21,9 @@ login_manager.init_app(app)
 from distribuidora.core.views import core_blueprint
 from distribuidora.core.gestion_usuario.views import gestion_usuario
 from distribuidora.core.gestion_stock.views import stock
+from distribuidora.core.gestion_cta_corriente.views import cta_corriente
 
 app.register_blueprint(stock)
 app.register_blueprint(core_blueprint, url_prefix='/')
 app.register_blueprint(gestion_usuario)
+app.register_blueprint(cta_corriente)
