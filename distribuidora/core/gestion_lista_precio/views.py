@@ -1,5 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
+from distribuidora.core.gestion_lista_precio.forms import ImportarListaPrecio
 from distribuidora import db
 
 lista_precio = Blueprint('lista_precio', __name__, template_folder='templates')
@@ -58,10 +59,13 @@ def exportar():
     rol='operador')
 
 
-@lista_precio.route('/importar', methods=['GET'])
+@lista_precio.route('/lista_precio/importar', methods=['GET'])
 @login_required	
 def importar():
-	return render_template('importar_lista_precio.html', \
-    datos=current_user.get_mis_datos(), \
-    is_authenticated=current_user.is_authenticated, \
-    rol='operador')
+    form = ImportarListaPrecio()
+    return render_template('importar_lista_precio.html',\
+    datos=current_user.get_mis_datos(),\
+    is_authenticated=current_user.is_authenticated,\
+    rol='operador',\
+    site='Importar Lista de Precios',\
+    form=form)
