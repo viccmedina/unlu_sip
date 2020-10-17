@@ -7,7 +7,7 @@ from distribuidora.models.persona import Persona
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user, login_required
-
+from flask_admin.menu import MenuLink
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -20,11 +20,17 @@ class MyAdminIndexView(AdminIndexView):
 			return current_user.has_role('Gerencia')
 		else:
 			print('NO AUTENTICADO', flush=True)
-		
+
+class LogoutMenuLink(MenuLink):
+
+    def is_accessible(self):
+        return current_user.is_authenticated             
 
 
-admin = Admin(app, index_view=MyAdminIndexView())
 
+
+admin=Admin(app, index_view=MyAdminIndexView())
+admin.add_link(LogoutMenuLink(name='Cerrar Sesión', category='', url="/logout"))
 admin.add_view(ModelView(Provincia, db.session))
 admin.add_view(ModelView(Localidad, db.session))
 admin.add_view(ModelView(Usuario, db.session))
