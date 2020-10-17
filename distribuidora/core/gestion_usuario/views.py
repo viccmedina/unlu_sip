@@ -62,10 +62,12 @@ def home_operador():
     """
     Vista home del usuario de tipo Operador
     """
+    site = 'Home {}'.format(current_user.get_username())
     return render_template('home_operador.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
-        rol='operador')
+        rol='operador',
+        site=site)
 
 
 @login_required
@@ -74,7 +76,9 @@ def home_cliente():
     """
     Vista home del usuario de tipo Cliente
     """
+    site = 'Home {}'.format(current_user.get_username())
     return render_template('home_cliente.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
-        rol='cliente')
+        rol='cliente',
+        site=site)
