@@ -9,6 +9,6 @@ from flask_login import current_user
 
 
 class LoginForm(FlaskForm):
-    username = StringField('UserName', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Log In')
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Contraseña', validators=[DataRequired()])
+    submit = SubmitField('Iniciar Sesión')
