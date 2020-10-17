@@ -47,7 +47,7 @@ class EstadoPedido(db.Model):
 
     # Atributos
     estado_pedido_id = db.Column(db.Integer, primary_key=True)
-    descripcion = db.Column(db.String(80), nullable=False)
+    descripcion = db.Column(db.String(80), nullable=False, unique=True)
     pedidos = db.relationship('Pedido', uselist=False, backref='pedido', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 

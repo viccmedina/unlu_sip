@@ -14,7 +14,7 @@ class TipoDNI(db.Model):
 
 	# Atributos
 	tipo_dni_id = db.Column(db.Integer, primary_key=True)
-	descripcion = db.Column(db.String(80), nullable=False)
+	descripcion = db.Column(db.String(80), nullable=False, unique=True)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 	persona = db.relationship('Persona', backref='tipo_dni', lazy=True)
 	def __init__(self, descripcion):

@@ -39,7 +39,7 @@ class Rol(db.Model):
 
 	# Atributos
 	rol_id = db.Column(db.Integer, primary_key=True)
-	nombre = db.Column(db.String(50), nullable=False)
+	nombre = db.Column(db.String(50), nullable=False, unique=True)
 	descripcion = db.Column(db.String(80), nullable=False)
 	
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
@@ -76,7 +76,7 @@ class Permiso(db.Model):
 
 	# Atributos
 	permiso_id = db.Column(db.Integer, primary_key=True)
-	nombre = db.Column(db.String(50), nullable=False)
+	nombre = db.Column(db.String(50), nullable=False, unique=True)
 	descripcion = db.Column(db.String(80), nullable=False)
 	rol_permiso = db.relationship('Rol', secondary=rol_permiso)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
@@ -138,23 +138,36 @@ class Usuario(db.Model, UserMixin):
 
 
 	def get_username(self):
+		"""
+		Devuelve el username.
+		"""
 		return self.username
 
 	def get_email(self):
 		print('persona id {}'.format(self.persona_id), flush=True)
 
 	def get_role(self):
+		"""
+		Devuelve el o los roles que tiene asociado el usuario.
+		"""
 		lista_roles = [str(r) for r in self.usuario_rol]
 		return lista_roles[0]
 
 	def get_mis_datos(self):
+		"""
+		Nos devuelve un diccionario con los siguientes campos:
+		- username
+		- email
+		- telefono principal
+		- telefono secundario
+		"""
+
 		datos = {}
 		datos['username'] = self.username
 		persona = Persona.query.filter_by(persona_id = self.persona_id).first()
 		datos['email'] = persona.get_email()
 		datos['tel_principal'] = persona.get_tel_principal()
 		datos['tel_secundario'] = persona.get_tel_secundario()
-		print(datos, flush=True)
 		return datos
 
 	def check_password(self,password):
@@ -164,12 +177,18 @@ class Usuario(db.Model, UserMixin):
 		return f"UserName: {self.username}"
 
 	def has_role(self, role):
+		"""
+		Verificamos si el usuario tiene el rol pasado
+		por parametro
+		"""
 		lista_roles = [str(r) for r in self.usuario_rol]
 		if role in lista_roles:
 			return True
 		else:
 			return False
 
+
+# Lo necesitamos para que el modulo admin hashee la password
 @event.listens_for(Usuario.password_hash, 'set', retval=True)
 def hash_user_password(target, value, oldvalue, initiator):
     if value != oldvalue:

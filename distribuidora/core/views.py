@@ -23,7 +23,8 @@ def index():
 	print(current_user.is_authenticated, flush=True)
 	return render_template('index.html', \
 		is_authenticated=current_user.is_authenticated, \
-		rol=rol)
+		rol=rol, \
+		site='Home')
 
 @core_blueprint.route('/productos')
 def productos():
@@ -33,7 +34,8 @@ def productos():
 	rol = obtener_rol()
 	return render_template('productos.html', \
 		is_authenticated=current_user.is_authenticated, \
-		rol=rol)
+		rol=rol, \
+		site='Productos')
 
 @core_blueprint.route('/contacto')
 def contacto():
@@ -43,7 +45,8 @@ def contacto():
 	rol = obtener_rol()
 	return render_template('contacto.html', \
 		is_authenticated=current_user.is_authenticated, \
-		rol=rol)
+		rol=rol, \
+		site='Contactos')
 
 @core_blueprint.route('/nosotros')
 def nosotros():
@@ -53,7 +56,8 @@ def nosotros():
 	rol = obtener_rol()
 	return render_template('nosotros.html', \
 		is_authenticated=current_user.is_authenticated, \
-		rol=rol)
+		rol=rol, \
+		site='Nosotros')
 
 @core_blueprint.route('/como_comprar')
 def como_comprar():
@@ -63,5 +67,6 @@ def como_comprar():
 	rol = obtener_rol()
 	return render_template('como_comprar.html', \
 		is_authenticated=current_user.is_authenticated, \
-		rol=rol)
+		rol=rol, \
+		site='Cómo Comparar')
 
