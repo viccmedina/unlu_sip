@@ -11,7 +11,8 @@ def index():
 		return render_template('home_stock.html', \
 			datos=current_user.get_mis_datos(),\
 			is_authenticated=current_user.is_authenticated, \
-			rol='operador')
+			rol='operador', \
+            site='Gestión de Stock')
 
 @stock.route('/consultar', methods=['GET'])
 @login_required		

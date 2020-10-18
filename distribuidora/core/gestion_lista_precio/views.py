@@ -12,7 +12,8 @@ def index():
 		return render_template('home_lista_precio.html', \
 			datos=current_user.get_mis_datos(),\
 			is_authenticated=current_user.is_authenticated, \
-			rol='operador')
+			rol='operador', \
+            site='Gestión de Precios')
 
 @lista_precio.route('/consultar', methods=['GET'])
 @login_required		
