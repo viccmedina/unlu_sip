@@ -7,16 +7,16 @@
               <li style="color: red;">{{ error }}</li>
             {% endfor %}
           </ul>
-<form>
-  <div class="form-row">
-    {{ form.hidden_tag() }}
-    <div class="col-9">
-      {{ form.file(class="form-control form-control-md") }}
-    </div>
-    <div class="col">
-      {{ form.submit(class="btn btn-primary mb-2") }}
-    </div>
-  </div>
-</form>
+          <form>
+            <div class="form-row">
+              {{ form.hidden_tag() }}
+              <div class="col-9">
+                {{ form.file(class="form-control form-control-md") }}
+              </div>
+              <div class="col">
+                {{ form.submit(class="btn btn-primary mb-2") }}
+              </div>
+            </div>
+          </form>
 
 {% endblock%}

@@ -26,10 +26,10 @@
     		Mi Perfil
   		</button>
 	  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-	  		{% if rol == 'Operador' %}
+	  		{% if rol == 'operador' %}
 		    	<a class="dropdown-item" href="{{ url_for('gestion_usuario.home_operador') }}">Mi Perfil</a>
 		    {% else %}
-		    	{% if rol == 'Cliente' %}
+		    	{% if rol == 'cliente' %}
 		    	<a class="dropdown-item" href="{{ url_for('gestion_usuario.home_cliente') }}">Mi Perfil</a>
 		    	{% endif %}
 		    {% endif %}
