@@ -1,25 +1,26 @@
 from distribuidora import db
 
-class TipoDNI(db.Model):
+class Tipo_producto(db.Model):
 	"""
-	Este modelo representará el tipo de dni.
+	Este modelo representará el tipo de producto
 	Contará con los siquientes campos:
-	tipo_dni_id --> clave primaria
-	descripcion --> describe el tipo de dni
+	tipo_producto_id --> clave primaria
+	descripcion --> describe el tipo de producto
 	ts_created --> momento en que el registro fue creado
 	"""
 
 	# Nombre de la tabla
-	__tablename__ = 'tipo_dni'
+	__tablename__ = 'tipo_producto'
 
 	# Atributos
-	tipo_dni_id = db.Column(db.Integer, primary_key=True)
+	tipo_producto_id = db.Column(db.Integer, primary_key=True)
 	descripcion = db.Column(db.String(80), nullable=False)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
-	persona = db.relationship('Persona', backref='tipo_dni', lazy=True)
+	producto = db.relationship('Producto', backref='tipo_producto', lazy=True)
+
 	def __init__(self, descripcion):
 		"""
-		Constructor de la clase Provincia
+		Constructor de la clase Tipo de producto
 		"""
 		self.descripcion = descripcion
 
@@ -27,4 +28,4 @@ class TipoDNI(db.Model):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-		return 'tipo de dni:  {}'.format(self.descripcion)
+		return 'tipo de producto:  {}'.format(self.descripcion)

@@ -1,5 +1,6 @@
 from distribuidora import db
 
+
 class Domicilio(db.Model):
 	"""
 	Este modelo representará a las Domicilio.
@@ -26,17 +27,16 @@ class Domicilio(db.Model):
 	piso = db.Column(db.Integer)
 	aclaracion = db.Column(db.String(80), nullable=False)
 	localidad_id = db.Column(db.Integer, db.ForeignKey('localidad.localidad_id'),nullable=False)
+	persona_id = db.Column(db.Integer, db.ForeignKey('persona.persona_id'),nullable=False)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-	def __init__(self, calle, numero, departamento, piso, aclaracion,localidad_id):
+	def __init__(self, calle, numero, aclaracion,localidad_id):
 		"""
 		Constructor de la clase domicilio
 		"""
 		self.calle = calle
 		self.numero = numero
-		self.departamento = departamento
-		self.piso = piso
 		self.aclaracion = aclaracion
 		self.localidad_id = localidad_id
 
@@ -44,6 +44,6 @@ class Domicilio(db.Model):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-
-		return 'domicilio:  {}'.format(self.calle)
+		loc = Localidad.query.filter_by(localidad_id=self.localidad_id)
+		return 'Calle {} {}, localidad de'.format(self.calle, self.numero, loc)
 	

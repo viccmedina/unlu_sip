@@ -1,0 +1,104 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-5 col-md-3">
+			<div class="accordion" id="accordionExample">
+				<div class="card">
+					<div class="card-header" id="headingOne">
+						<h2 class="mb-0">
+							<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								Mis Datos
+							</button>
+						</h2>
+					</div>
+
+					<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+						<div class="card-body">
+							<p>{{ datos.username }}</p>
+							<p>{{ datos.email }}</p>
+							<p>Teléfono Principal: {{ datos.tel_principal }}</p>
+							{% if datos.tel_secundario is not none %}
+							<p>{{ datos.tel_secundario }}</p>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header" id="headingThree">
+						<h2 class="mb-0">
+							<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+								Confirmar Pedidos
+							</button>
+						</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-5 offset-sm-2 col-md-9 offset-md-0">
+			<div class="card-deck">
+				<div class="card" style="height: 18rem;">
+					<a href="#"> <img src="static/img/informe_pedidos.svg" class="card-img-top"
+						 alt="gestión de pedidos" width="100%" height="100"> </a>
+					<div class="card-body">
+						<h5 class="card-title">Emitir informe de Pedidos</h5>
+						<p class="card-text">Emitira un informe con los pedidos realizados.</p>
+						<button type="button" class="btn btn-primary btn-sm">Emitir</button>
+					</div>
+				</div>
+				<div class="card" style="height: 18rem;">
+					<a href="#"> <img src="static/img/informe_stock.svg" class="card-img-top"
+						 alt="gestión de stock" width="100%" height="100"> </a>
+					<div class="card-body">
+						<h5 class="card-title">Emitir informe de Stock</h5>
+						<p class="card-text">Emitira un informe con el stock.</p>
+						<button type="button" class="btn btn-primary btn-sm">Emitir</button>
+					</div>
+				</div>
+				<div class="card" style="height: 18rem;">
+					<a href="#">  <img src="static/img/informe_cta_corriente.svg" class="card-img-top"
+									   alt="gestión de ctas corrientes" width="100%" height="100"> </a>
+					<div class="card-body">
+						<h5 class="card-title">Emitir informe de Ctas Corrientes</h5>
+						<p class="card-text">Emitira un informe con el saldo de las cuentas corrientes .</p>
+						<button type="button" class="btn btn-primary btn-sm">Emitir</button>
+					</div>
+				</div>
+			</div>
+		<br>
+			<div class="card-deck">
+				<div class="card" style="height: 18rem;">
+					<a href="#"> <img src="static/img/informe_producto_vendido.svg" class="card-img-top"
+									  alt="gestión de productos" width="100%" height="100"> </a>
+					<div class="card-body">
+						<h5 class="card-title">Emitir informe de Producto/s mas vendido/s</h5>
+						<p class="card-text">Emitira un informe con el/los producto/s mas vendidos.</p>
+						<button type="button" class="btn btn-primary btn-sm">Emitir</button>
+					</div>
+				</div>
+				<div class="card" style="height: 18rem;">
+					<a href="{{url_for("gestion_admin.emitir_lista_precios") }}"> <img src="static/img/informe_precios.svg" class="card-img-top"
+									  alt="gestión de lista de precios" width="100%" height="100"></a>
+					<div class="card-body">
+						<h5 class="card-title">Emitir Lista de Precios</h5>
+						<p class="card-text">Emitira un informe con la lista de precios acutal.</p>
+						<button type="button" class="btn btn-primary btn-sm">Emitir</button>
+					</div>
+				</div>
+				<div class="card" style="height: 18rem;">
+					<a href="#"> <img src="static/img/informe_ventas.svg" class="card-img-top" al
+									  t="gestión de informes" width="100%" height="100"> </a>
+					<div class="card-body">
+						<h5 class="card-title">Emitir informe ventas</h5>
+						<p class="card-text">Emitira un informe de todas las ventas. </p>
+						<button type="button" class="btn btn-primary btn-sm">Emitir</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+{% endblock %}

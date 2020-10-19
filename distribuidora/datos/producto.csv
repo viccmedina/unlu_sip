@@ -1,0 +1,6 @@
+descripcion,precio_id,estado_producto,tipo_producto
+Harina,1,vigente,kilogramos
+Huevo,2,vigente,cantidad
+Levadura,3,vigente,cantidad
+Azucar,4,vigente,kilogramos
+leche,5,vigente,cm3

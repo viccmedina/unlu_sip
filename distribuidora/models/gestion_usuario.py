@@ -1,22 +1,22 @@
 from distribuidora import db
+from werkzeug.security import generate_password_hash,check_password_hash
+# Establecemos las tablas pivot.
 
-
-#esto va aca?? estas 3 relaciones \'/
-
+# Relacionamos un usuario con uno o mas roles.
 usuario_rol = db.Table('usuario_rol',
     db.Column('usuario_id', db.Integer, db.ForeignKey('usuario.usuario_id'), primary_key=True),
     db.Column('rol_id', db.Integer, db.ForeignKey('rol.rol_id'), primary_key=True)
 )
 
-usuario_permiso = db.Table('usuario_permiso',
-    db.Column('usuario_id', db.Integer, db.ForeignKey('usuario.usuario_id'), primary_key=True),
-    db.Column('permiso_id', db.Integer, db.ForeignKey('permiso.permiso_id'), primary_key=True)
+# Relacionamos los roles con los permisos
+rol_permiso = db.Table('rol_permiso',
+    
+    db.Column('permiso_id', db.Integer, db.ForeignKey('permiso.permiso_id'), primary_key=True),
+    db.Column('rol_id', db.Integer, db.ForeignKey('rol.rol_id'), primary_key=True)
 )
 
-rol_permiso = db.Table('rol_permiso',
-    db.Column('rol_id', db.Integer, db.ForeignKey('rol.rol_id'), primary_key=True),
-    db.Column('permiso_id', db.Integer, db.ForeignKey('permiso.permiso_id'), primary_key=True)
-)
+
+
 
 class Rol(db.Model):
 	"""
@@ -36,6 +36,7 @@ class Rol(db.Model):
 	rol_id = db.Column(db.Integer, primary_key=True)
 	nombre = db.Column(db.String(50), nullable=False)
 	descripcion = db.Column(db.String(80), nullable=False)
+	
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 	def __init__(self,nombre, descripcion):
@@ -44,12 +45,13 @@ class Rol(db.Model):
 		"""
 		self.descripcion = descripcion
 		self.nombre = nombre
+		
 
 	def __repr__(self):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-		return 'Rol:  {}'.format(self.nombre, self.descripcion)
+		return self.nombre
 
 
 class Permiso(db.Model):
@@ -71,8 +73,9 @@ class Permiso(db.Model):
 	permiso_id = db.Column(db.Integer, primary_key=True)
 	nombre = db.Column(db.String(50), nullable=False)
 	descripcion = db.Column(db.String(80), nullable=False)
+	rol_permiso = db.relationship('Rol', secondary=rol_permiso)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
-
+	
 	def __init__(self,nombre, descripcion):
 		"""
 
@@ -106,9 +109,10 @@ class Usuario(db.Model):
 	# Atributos
 	usuario_id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(50), unique=True, nullable=False)
-	password = db.Column(db.String(50),nullable=False)
+	password_hash = db.Column(db.String(50),nullable=False)
 	descripcion = db.Column(db.String(50))
 	persona_id = db.Column(db.Integer, db.ForeignKey('persona.persona_id'),nullable=False)
+	usuario_rol = db.relationship('Rol', secondary=usuario_rol)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
@@ -117,11 +121,11 @@ class Usuario(db.Model):
 		Constructor de la clase usuario
 		"""
 		self.username = username
-		self.password = password
+		self.password_hash = generate_password_hash(password)
 		self.persona_id = persona_id
 
+	def check_password(self,password):
+		return check_password_hash(self.password_hash,password)
+
 	def __repr__(self):
-		"""
-		Nos devolverá una representación del Modelo
-		"""
-		return 'usuario:  {}'.format(self.username, self.password, self.descripcion, self.persona_id)
+		return f"UserName: {self.username}"

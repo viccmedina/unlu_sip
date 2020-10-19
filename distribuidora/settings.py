@@ -1,7 +1,8 @@
 DB_PATH = ''
 DB_SECRET_KEY = ''
+DATOS_PATH = ''
 
 try:
-   from unlu_sip.distribuidora.settings_local import *
+   from distribuidora.settings_local import *
 except ImportError:
-    raise Exception("A local_settings.py file is required to run this project")
+    raise Exception("A settings_local.py file is required to run this project")
