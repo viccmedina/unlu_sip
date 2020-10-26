@@ -4,13 +4,16 @@ from distribuidora import db
 class TipoMovimientoCtaCorriente(db.Model):
     __tablename__ = 'tipo_movimiento_cta_corriente'
 
-    tipo_movimiento_cta_corriente_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
     movimientos = db.relationship('MovimientoCtaCorriente', backref='movimiento_cta_corriente', lazy=True)
 
     def __init__(self, descripcion):
         self.descripcion = descripcion
+
+    def __repr__(self):
+        return self.id
 
 
 class MovimientoCtaCorriente(db.Model):
@@ -32,7 +35,7 @@ class MovimientoCtaCorriente(db.Model):
     cta_corriente = db.Column(db.Integer, db.ForeignKey('cuenta_corriente.cuenta_corriente_id'),nullable=False)
     # Relacionamos el tipo de movimiento con la cuenta corriente
     tipo_movimiento_cta_corriente = db.Column(db.Integer, db.ForeignKey(\
-        'tipo_movimiento_cta_corriente.tipo_movimiento_cta_corriente_id'), \
+        'tipo_movimiento_cta_corriente.id'), \
         nullable=False)
     # Relacionamos el usuario que realiza el movimiento en la cta corriente
     usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'),nullable=False)

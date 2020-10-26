@@ -122,6 +122,7 @@ class Usuario(db.Model, UserMixin):
 	descripcion = db.Column(db.String(50))
 	persona_id = db.Column(db.Integer, db.ForeignKey('persona.persona_id'),nullable=False)
 	usuario_rol = db.relationship('Rol', secondary=usuario_rol)
+	# Son los movimientos que registra un usuario operador/gerente.
 	movientos = db.relationship('MovimientoCtaCorriente', uselist=False, backref='movimientos', lazy=True)
 	detalle_stock = db.relationship('DetalleStock', uselist=False, backref='detalles_stocks_usuarios', lazy=True)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
@@ -186,6 +187,8 @@ class Usuario(db.Model, UserMixin):
 			return True
 		else:
 			return False
+
+
 
 
 # Lo necesitamos para que el modulo admin hashee la password
