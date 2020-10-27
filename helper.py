@@ -8,6 +8,7 @@ from distribuidora.models.tipo_dni import TipoDNI
 from distribuidora.models.gestion_usuario import Usuario, Rol, Permiso
 from distribuidora.models.domicilio import Domicilio
 from distribuidora.models.persona import Persona
+from distribuidora.models.pedido import EstadoPedido
 
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -37,47 +38,19 @@ print('#'*60)
 
 print('Se comienza la carga de del juego de datos DEMO')
 
-"""
-Aca debemos poner todas las inserciones a la base. Es recomendable tenerlas todas juntas
-para poder ejecutar un único archivo que realiza una funcionalidad externar a la app.
-Es una tarea de desarrollo y testing.
 
-# creamo el tipo "numero dni"
-descripcion = "DNI"
-new_tipo_dni = TipoDNI(descripcion)
-db.session.add(new_tipo_dni)
-db.session.commit()
-
-
-#creamo el tipo libreta civica
-descripcion = "Libreta Cívica"
-new_tipo_dni = TipoDNI(descripcion)
-db.session.add(new_tipo_dni)
-db.session.commit()
+def insertar_tipo_dni():
+	print('Importando Modelo TipoDNI')
+	tipos = []
+	with open(DATOS_PATH + 'tipo_dni.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			tipo_dni = TipoDNI(descripcion=row['descripcion'])
+			tipos.append(tipo_dni)
+		db.session.add_all(tipos)
+		db.session.commit()
 
 
-descripcion = "Libreta de Enrolamiento"
-new_tipo_dni = TipoDNI(descripcion)
-db.session.add(new_tipo_dni)
-db.session.commit()
-
-# Agregamos los tipos de Roles
-
-descripcion = 'Cliente'
-new_rol = Rol(descripcion, descripcion)
-db.session.add(new_rol)
-db.session.commit()
-
-descripcion = 'Operador'
-new_rol = Rol(descripcion, descripcion)
-db.session.add(new_rol)
-db.session.commit()
-
-descripcion = 'Gerencial'
-new_rol = Rol(descripcion, descripcion)
-db.session.add(new_rol)
-db.session.commit()
-"""
 def insertar_provincias():
 	print('Importando Modelo Provincias')
 	lista_prov = []
@@ -173,10 +146,27 @@ def insertar_usuarios():
 			persona = Persona.query.filter_by(email=row['persona']).first()
 			print(rol)
 			print(persona.persona_id)
-			new_usuario = Usuario(username=row['username'], password=row['password'], persona_id=persona.persona_id)
+			new_usuario = Usuario(username=row['username'], password=row['password'], \
+				persona_id=persona.persona_id)
 			new_usuario.usuario_rol.append(rol)
 			lista_usuario.append(new_usuario)
 	db.session.add_all(lista_usuario)
+	db.session.commit()
+
+
+def insertar_estado_pedido():
+	print('Importando Modelo de Estados de Pedidos')
+	estados =	[]
+	with open(DATOS_PATH + 'estado_pedido.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Estado Pedido: {}'.format(row['descripcion']))
+			print('-'*50)
+			estado_pedido = EstadoPedido(descripcion=row['descripcion'], \
+				descripcion_corta=row['descripcion_corta'])
+			
+			estados.append(estado_pedido)
+	db.session.add_all(estados)
 	db.session.commit()
 
 
@@ -192,3 +182,7 @@ if __name__ == '__main__':
 	insertar_personas()
 	print('#'*50)
 	insertar_usuarios()
+	print('#'*50)
+	insertar_estado_pedido()
+	print('#'*50)
+	insertar_tipo_dni()
