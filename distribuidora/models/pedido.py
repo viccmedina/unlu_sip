@@ -72,6 +72,8 @@ class EstadoPedido(db.Model):
     La misma nos brinda el historial de los pedidos y todos los
     estados por los cuales un pedido pasó.
     """
+    __tablename__ = 'estado_pedido'
+
     estado_pedido_id = db.Column(db.Integer, primary_key=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
     pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
