@@ -2,28 +2,81 @@ from distribuidora import db
 from distribuidora.models.precio import Precio
 from distribuidora.models.pedido import DetallePedido
 
-
-class EstadoProducto(db.Model):
+class UnidadMedida(db.Model):
     """
-    Este modelo representará los estados de los productos.
-    Contará con los siquientes campos:
-    estado_producto_id --> clave primaria
-    descripcion --> describe el estado del producto
-    ts_created --> momento en que el registro fue creado
+    Representa la unidad de medida que un envase puede tener.
+    """
+
+    __tablename__ = 'undiad_medida'
+
+    unidad_medida_id = db.Column(db.Integer, primary_key=True)
+    descripcion = db.Column(db.String(80), nullable=False)
+    ts_created = db.Column(db.DateTime, server_default=db.func.now())
+
+    def __init__(self, descripcion):
+        self.descripcion = descripcion
+
+    def __repr__(self):
+        return self.descripcion
+
+
+class Envase(db.Model):
+    """
+    Representa los tipos de envases en que los productos vienen.
+    """
+    __tablename__ = 'envase'
+
+    envase_id = db.Column(db.Integer, primary_key=True)
+    descripcion = db.Column(db.String(80), nullable=False)
+    ts_created = db.Column(db.DateTime, server_default=db.func.now())
+    unidad = db.Column(db.Integer, db.ForeignKey('unidad_medida.unidad_medida_id'), nullable=False)
+
+    def __init__(self, descripcion, unidad_medida):
+        self.descripcion = descripcion
+        self.unidad = unidad_medida
+
+    def __repr__(self):
+        return "{descripcion} {undiad}".format(descripcion=self.descripcion, unidad=unidad)
+
+
+
+class ProductoEnvase(db.Model):
+    """
+    Representa la relacion entre envase y prodcuto.
+    """
+
+    __tablename__ = 'producto_envase'
+
+    producto_envase_id = db.Column(db.Integer, primary_key=True)
+    descripcion = db.Column(db.String(80), nullable=False)
+    ts_created = db.Column(db.DateTime, server_default=db.func.now())
+
+    def __init__(self, descripcion):
+        self.descripcion = descripcion
+
+    def __repr__(self):
+        return self.descripcion
+
+
+class Marca(db.Model):
+    """
+    Representa la marca a la cual un producto pertenece.
+    Este dato es muy importante porque es muy común que los usuarios
+    busquen por este campo.
     """
 
     # Nombre de la tabla
-    __tablename__ = 'estado_producto'
+    __tablename__ = 'marca'
 
     # Atributos
-    estado_producto_id = db.Column(db.Integer, primary_key=True)
+    marca_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
     productos = db.relationship('Producto', backref='estado_producto', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
     def __init__(self, descripcion):
         """
-        Constructor de la clase EstadoProducto
+        Constructor de la clase Marca
         """
         self.descripcion = descripcion
 
@@ -85,20 +138,21 @@ class Producto(db.Model):
     producto_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
     precio_id = db.Column(db.Integer, db.ForeignKey('precio.precio_id'),nullable=False)
-    estado_producto_id = db.Column(db.Integer, db.ForeignKey('estado_producto.estado_producto_id'), nullable=False)
+    marca = db.Column(db.Integer, db.ForeignKey('marca.marca_id'), nullable=False)
     tipo_producto_id = db.Column(db.Integer, db.ForeignKey('tipo_producto.tipo_producto_id'), nullable=False)
     detalle_pedido = db.relationship('DetallePedido', uselist=False, backref='detalle_pedido', lazy=True)
     detalle_stock = db.relationship('DetalleStock', backref='detalle_stock', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, descripcion, precio_id, tipo_producto_id):
+    def __init__(self, descripcion, precio_id, tipo_producto_id, marca):
         """
         Constructor de la clase producto
         """
         self.descripcion = descripcion
         self.precio_id = precio_id
         self.tipo_producto_id = tipo_producto_id
+        self.marca = marca
 
     def __repr__(self):
         """
@@ -112,4 +166,4 @@ class Producto(db.Model):
 
     def getPrecioProdcuto(self):
         precio = Precio.query.filter_by(provincia_id=self.precio_id)
-        return "Producto " + self.descripcion+" precio: " + precio.valor
+        return "Producto " + self.descripcion + " precio: " + precio.valor
