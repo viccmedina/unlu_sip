@@ -1,19 +1,62 @@
 from distribuidora import db
-
+from distribuidora.models.pedido import Pedido
 
 class TipoMovimientoCtaCorriente(db.Model):
     __tablename__ = 'tipo_movimiento_cta_corriente'
 
     id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
+    descripcion_corta = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
     movimientos = db.relationship('MovimientoCtaCorriente', backref='movimiento_cta_corriente', lazy=True)
 
-    def __init__(self, descripcion):
+    def __init__(self, descripcion, descripcion_corta):
         self.descripcion = descripcion
+        self.descripcion_corta
 
     def __repr__(self):
         return self.id
+
+    def get_descripcion(self):
+        return self.descripcion
+
+    def get_descripcion_corta(self):
+        return self.descripcion_corta
+
+class ComprobantePago(db.Model):
+    """
+    Representa a un documento similar a una factura pero que no tiene todo
+    el peso legal de la misma. En el comprobante se deberá reflejar los siguientes
+    campos:
+
+    - fecha_emision : momento en que el comprobante es creado.
+    - fecha_pago: momento en que el comprobante adquiere el estado de pagado.
+    - pedido_id : hace referencia al pedido para el cual, el comprobante fue creado.
+    - movimiento_cta_corriente: hace referencia al movimiento en el cual el saldo
+        es suficiente para pagar el costo del pedido.
+    - monto: hace referencia al valor del
+    """
+
+    comprobante_id = db.Column(db.Integer, primary_key=True)
+    fecha_pago = db.Column(db.DateTime, nullable=True)
+    monto = db.Column(db.Float(), nullable=False)
+    ts_created = db.Column(db.DateTime, server_default=db.func.now())
+    movimiento = db.Column(db.Integer, db.ForeignKey('movimiento_cta_corriente.movimiento_id'),nullable=False)
+    pedido = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
+
+    def __init__(self, monto, pedido_id):
+        self.monto = monto
+        self.pedido = pedido_id
+
+    def get_fecha_pago(self):
+        return self.fecha_pago
+
+    def get_pedido_asociado(self):
+        return self.pedido_id
+
+    def get_movimiento_asociado(self):
+        return self.movimiento
+
 
 
 class MovimientoCtaCorriente(db.Model):
@@ -71,7 +114,7 @@ class CuentaCorriente(db.Model):
     persona_id --> clave forania refenciando a la tabla persona
     tipo_movimiento_id --> clave forania refenciando a la tabla tipo de movimiento
     usuario_id --> clave forania refenciando a la tabla usuario
-    
+
     saldo --> represanta el saldo de la cuenta corriente
     ts_created --> momento en que el registro fue creado
     """
@@ -96,3 +139,10 @@ class CuentaCorriente(db.Model):
         Nos devolverá una representación del Modelo
         """
         return 'cuenta corriente:  {}'.format(self.persona_id)
+
+    def get_saldo_actual():
+        """
+        Debemos calcular el saldo de la cta corriente teniendo encuenta los
+        movimientos.
+        """
+        pass

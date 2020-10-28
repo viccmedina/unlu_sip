@@ -8,7 +8,7 @@ from distribuidora.models.tipo_dni import TipoDNI
 from distribuidora.models.gestion_usuario import Usuario, Rol, Permiso
 from distribuidora.models.domicilio import Domicilio
 from distribuidora.models.persona import Persona
-from distribuidora.models.pedido import EstadoPedido
+from distribuidora.models.pedido import TipoEstadoPedido
 
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -125,7 +125,7 @@ def insertar_personas():
 		for row in csv_reader:
 			print('Persona: {}'.format(row['nombre']))
 			print('-'*50)
-			
+
 			new_persona = Persona(nombre=row['nombre'], apellido=row['apellido'], \
 			 email=row['email'], telefono_ppal=row['telefono_principal'])
 
@@ -154,18 +154,18 @@ def insertar_usuarios():
 	db.session.commit()
 
 
-def insertar_estado_pedido():
-	print('Importando Modelo de Estados de Pedidos')
+def insertar_tipo_estado_pedido():
+	print('Importando Modelo de Tipo de Estados de Pedidos')
 	estados =	[]
-	with open(DATOS_PATH + 'estado_pedido.csv') as csv_file:
+	with open(DATOS_PATH + 'tipo_estado_pedido.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('Estado Pedido: {}'.format(row['descripcion']))
 			print('-'*50)
-			estado_pedido = EstadoPedido(descripcion=row['descripcion'], \
+			tipos_estado_pedido = TipoEstadoPedido(descripcion=row['descripcion'], \
 				descripcion_corta=row['descripcion_corta'])
-			
-			estados.append(estado_pedido)
+
+			estados.append(tipos_estado_pedido)
 	db.session.add_all(estados)
 	db.session.commit()
 
@@ -183,6 +183,6 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_usuarios()
 	print('#'*50)
-	insertar_estado_pedido()
+	insertar_tipo_estado_pedido()
 	print('#'*50)
 	insertar_tipo_dni()

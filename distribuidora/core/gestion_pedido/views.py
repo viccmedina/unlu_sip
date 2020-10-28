@@ -47,4 +47,4 @@ def confirmar_pedido_cliente():
 @pedido.route('/pedido/confirmar/operador', methods=['GET'])
 def confirmar_pedido_operador():
 	nro_pedido = 1
-	confirmar_pedido = 
+	pass
