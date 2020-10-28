@@ -33,23 +33,23 @@ class TipoPedido(db.Model):
         return 'tipo de pedido:  {}'.format(self.descripcion)
 
 
-class EstadoPedido(db.Model):
+class TipoEstadoPedido(db.Model):
     """
     Este modelo representará los estados de pedidos.
     Contará con los siquientes campos:
-    estado_pedido_id --> clave primaria
+    tipo_estado_pedido_id --> clave primaria
     descripcion --> describe el estado del pedido
+    descripcion_corta --> abreviacion de descripcion
     ts_created --> momento en que el registro fue creado
     """
 
     # Nombre de la tabla
-    __tablename__ = 'estado_pedido'
+    __tablename__ = 'tipo_estado_pedido'
 
     # Atributos
-    estado_pedido_id = db.Column(db.Integer, primary_key=True)
+    tipo_estado_pedido_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False, unique=True)
     descripcion_corta = db.Column(db.String(80), nullable=False, unique=True)
-    pedidos = db.relationship('Pedido', uselist=False, backref='pedido', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
     def __init__(self, descripcion, descripcion_corta):
@@ -64,6 +64,31 @@ class EstadoPedido(db.Model):
         Nos devolverá una representación del Modelo
         """
         return 'Estado de Pedido:  {}'.format(self.descripcion)
+
+
+class EstadoPedido(db.Model):
+    """
+    Representa la relacion entre pedido y estado.
+    La misma nos brinda el historial de los pedidos y todos los
+    estados por los cuales un pedido pasó.
+    """
+    estado_pedido_id = db.Column(db.Integer, primary_key=True)
+    ts_created = db.Column(db.DateTime, server_default=db.func.now())
+    pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
+
+    def __init__(self, estado_pedido_id, pedido_id):
+        self.estado_pedido_id = estado_pedido_id
+        self.pedido_id = pedido_id
+
+    def __repr__(self):
+        return "Relación estado pedido {} - {}".format(estado_pedido_id, pedido_id)
+
+    def get_pedido_id(self):
+        return self.pedido_id
+
+    def get_estado_pedido_id(self):
+        return self.estado_pedido_id
+
 
 
 class DetallePedido(db.Model):
@@ -119,7 +144,6 @@ class Pedido(db.Model):
     pedido_id = db.Column(db.Integer, primary_key=True)
     detalle = db.relationship('DetallePedido', uselist=False, backref='detalles_pedidos', lazy=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
-    estado_pedido_id = db.Column(db.Integer, db.ForeignKey('estado_pedido.estado_pedido_id'), nullable=False)
     tipo_pedido_id = db.Column(db.Integer, db.ForeignKey('tipo_pedido.tipo_pedido_id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
@@ -138,4 +162,3 @@ class Pedido(db.Model):
         Nos devolverá una representación del Modelo
         """
         return 'pedido {}'.format(self.detalle_id, self.usuario_id, self.estado_pedido_id, self.tipo_pedido_id)
-
