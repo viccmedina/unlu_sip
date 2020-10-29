@@ -29,8 +29,8 @@ def consultar_stock():
 @login_required	
 def agregar():
     form = agregarStock()
-    form.choice_producto.choices = [(producto.producto_id,producto.descripcion)
-                                    for Producto in Producto.query.all()]
+    form.choice_producto.choices = [(producto.id, producto.descripcion)
+                                    for producto in Producto.query.all()]
     return render_template('form_agregar_movimiento.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
