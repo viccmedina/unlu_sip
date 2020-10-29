@@ -1,5 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
+from distribuidora.core.gestion_stock.forms import agregarStock
+from distribuidora.models.producto import Producto
 from distribuidora import db
 
 stock = Blueprint('stock', __name__, template_folder='templates')
@@ -26,11 +28,15 @@ def consultar_stock():
 @stock.route('/agregar', methods=['GET'])
 @login_required	
 def agregar():
-	return render_template('form_agregar_movimiento.html', \
+    form = agregarStock()
+    form.choice_producto.choices = [(producto.producto_id,producto.descripcion)
+                                    for Producto in Producto.query.all()]
+    return render_template('form_agregar_movimiento.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
-    rol='operador')
-
+    rol='operador',\
+    site='Agregar stock',\
+    form=form)
 
 @stock.route('/exportar', methods=['GET'])
 @login_required	
@@ -43,6 +49,7 @@ def exportar():
 @stock.route('/importar', methods=['GET'])
 @login_required	
 def importar():
+
 	return render_template('importar_movimientos.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
