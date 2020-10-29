@@ -7,7 +7,7 @@ class UnidadMedida(db.Model):
     Representa la unidad de medida que un envase puede tener.
     """
 
-    __tablename__ = 'undiad_medida'
+    __tablename__ = 'unidad_medida'
 
     unidad_medida_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
@@ -71,7 +71,7 @@ class Marca(db.Model):
     # Atributos
     marca_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
-    productos = db.relationship('Producto', backref='estado_producto', lazy=True)
+    productos = db.relationship('Producto', backref='marca', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
     def __init__(self, descripcion):
@@ -138,21 +138,21 @@ class Producto(db.Model):
     producto_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
     precio_id = db.Column(db.Integer, db.ForeignKey('precio.precio_id'),nullable=False)
-    marca = db.Column(db.Integer, db.ForeignKey('marca.marca_id'), nullable=False)
+    marca_id = db.Column(db.Integer, db.ForeignKey('marca.marca_id'), nullable=False)
     tipo_producto_id = db.Column(db.Integer, db.ForeignKey('tipo_producto.tipo_producto_id'), nullable=False)
     detalle_pedido = db.relationship('DetallePedido', uselist=False, backref='detalle_pedido', lazy=True)
     detalle_stock = db.relationship('DetalleStock', backref='detalle_stock', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, descripcion, precio_id, tipo_producto_id, marca):
+    def __init__(self, descripcion, precio_id, tipo_producto_id, marca_id):
         """
         Constructor de la clase producto
         """
         self.descripcion = descripcion
         self.precio_id = precio_id
         self.tipo_producto_id = tipo_producto_id
-        self.marca = marca
+        self.marca_id = marca_id
 
     def __repr__(self):
         """
