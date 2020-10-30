@@ -26,8 +26,8 @@ import csv
 
 if Path(DB_PATH).exists():
     print('La Base Existe, será eliminada y vuelta a generar')
-    #os.remove(DB_PATH)
-    #open(DB_PATH, 'w')
+    os.remove(DB_PATH)
+    open(DB_PATH, 'w')
 else:
     print('La Base NO existe, se generará el archivo en: {}'.format(DB_PATH))
 
@@ -170,7 +170,8 @@ def insertar_tipo_movimiento_cta_corriente():
 		for row in csv_reader:
 			print('Tipo Movimiento: {}'.format(row['descripcion']))
 			print('-'*50)
-			tm = TipoMovimientoCtaCorriente(descripcion=row['descripcion'])
+			tm = TipoMovimientoCtaCorriente(descripcion=row['descripcion'], \
+				descripcion_corta=row['descripcion_corta'])
 			tipos_movimientos.append(tm)
 	db.session.add_all(tipos_movimientos)
 	db.session.commit()
@@ -233,10 +234,10 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_personas()
 	print('#'*50)
-==== BASE ====
 	insertar_usuarios()
 	print('#'*50)
 	insertar_tipo_movimiento_cta_corriente()
 	print('#'*50)
 	insertar_tipo_estado_pedido()
+	print('#'*50)
 	insertar_tipo_dni()

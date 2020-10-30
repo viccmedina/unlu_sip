@@ -1,3 +1,4 @@
-descripcion
-Pago
-Deuda
+descripcion,descripcion_corta
+Pago,P
+Deuda,D
+Reembolso,R

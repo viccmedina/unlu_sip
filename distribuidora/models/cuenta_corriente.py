@@ -12,7 +12,7 @@ class TipoMovimientoCtaCorriente(db.Model):
 
     def __init__(self, descripcion, descripcion_corta):
         self.descripcion = descripcion
-        self.descripcion_corta
+        self.descripcion_corta = descripcion_corta
 
     def __repr__(self):
         return self.id

@@ -1,4 +1,4 @@
 username,password,persona,rol
-admin,admin,admin@admin.com.ar,Gerencia
+gerencia,gerencia,gerencia@gerencia.com.ar,Gerencia
 operador,operador,operador@prueba.com.ar,Operador
 cliente,cliente,cliente@prueba.com.ar,Cliente
