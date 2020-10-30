@@ -51,28 +51,29 @@ def consultar_cta_corriente():
 		resultado=resultado, \
 		site= TITULO + ' - Consulta')
 
-@cta_corriente.route('/agregar', methods=['GET'])
+@cta_corriente.route('/cta_corriente/agregar', methods=['GET'])
 @login_required
 def agregar():
-	return render_template('form_agregar_movimiento.html', \
+	return render_template('form_agregar_movimiento_cta_corriente.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
-    rol=ROL)
+    rol=ROL, \
+	site=TITULO + ' - Nuevo Movimiento')
 
 
-@cta_corriente.route('/exportar', methods=['GET'])
+@cta_corriente.route('/cta_corriente/exportar', methods=['GET'])
 @login_required
 def exportar():
-	return render_template('exportar_movimientos.html', \
+	return render_template('exportar_movimientos_cta_corriente.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
     rol=ROL, \
 	site= TITULO + ' - Exportar')
 
-@cta_corriente.route('/importar', methods=['GET'])
+@cta_corriente.route('/cta_corriente/importar', methods=['GET'])
 @login_required
 def importar():
-	return render_template('importar_movimientos.html', \
+	return render_template('importar_movimientos_cta_corriente.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
     rol=ROL, \
