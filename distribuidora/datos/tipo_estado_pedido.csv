@@ -1,0 +1,9 @@
+descripcion,descripcion_corta
+Pendiente Confirmacion Cliente,PCC
+Pendiente Confirmacion Operador,PCO
+En Preparacion,EP
+En Camino,EC
+Entregado,E
+Demorado,D
+Rechazado Por Operador,RPO
+Anulado Por Cliente,APC

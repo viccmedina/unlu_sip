@@ -52,7 +52,7 @@ def logout():
     Para cerrar sesión.
     """
     logout_user()    
-    flash("Usted ha cerador sesión", 'warning')
+    flash("Usted ha cerrado sesión", 'warning')
     return redirect(url_for('gestion_usuario.login'))
 
 

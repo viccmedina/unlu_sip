@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-5 col-md-3">
+				<div class="accordion" id="accordionExample">
+					<div class="card">
+						<div class="card-header" id="headingOne">
+							<h2 class="mb-0">
+								<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+									Mis Datos
+								</button>
+							</h2>
+						</div>
+
+						<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+							<div class="card-body">
+								<p>{{ datos.username }}</p>
+								<p>{{ datos.email }}</p>
+								<p>Teléfono Principal: {{ datos.tel_principal }}</p>
+								{% if datos.tel_secundario is not none %}
+								<p>{{ datos.tel_secundario }}</p>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+				<div class="row row-cols-9 row-cols-md-3">
+				  <div class="col mb-9" >
+				    <div class="card h-100" style="width: 50rem;">
+
+				      <div class="card-body">
+
+				        <h3 class="card-title">Agregar Stock</h3>
+
+						  <h6>Escoja tipo de movimiento {{ form.choice_move(class="form-control form-control-md") }}</h6>
+						  <h6>Escoja el Producto {{ form.choice_producto(class="form-control form-control-md") }}</h6>
+						  {{ form.cantidad(class="form-control form-control-md") }}
+
+					  </div>
+						<div class="card-footer">
+							{{ form.submit(class="btn btn-primary mb-2") }}
+						  	{{ form.cancelar(class="btn btn-primary mb-2 mb-2") }}
+    					</div>
+				    </div>
+				  </div>
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+{% endblock %}

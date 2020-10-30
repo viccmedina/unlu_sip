@@ -16,14 +16,16 @@ class TipoMovimientoStock(db.Model):
     # Atributos
     tipo_movimiento_stock_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
+    descripcion_corta = db.Column(db.String(80), nullable=False)
     detalle_stock = db.relationship('DetalleStock', backref='detalles_stocks', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
-    def __init__(self, descripcion):
+    def __init__(self, descripcion, descripcion_corta):
         """
         Constructor de la clase movimiento_stock
         """
         self.descripcion = descripcion
+        self.descripcion_corta = descripcion_corta
 
     def __repr__(self):
         """

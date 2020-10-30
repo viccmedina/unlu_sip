@@ -36,7 +36,9 @@
 				      <div class="card-body">
 				        <h5 class="card-title">Realizar Pedido</h5>
 				        <p class="card-text">Podrás realizar un nuevo pedido desde cero o tomando como base un pedido anterior.</p>
-				        <button type="button" class="btn btn-primary btn-sm">Ver más</button>
+				        <div class="card-footer">
+							<a class="btn btn-primary btn-sm" href="{{ url_for('pedido.nuevo_pedido') }}" role="button">Ver Más</a>
+	    				</div>
 				      </div>
 				    </div>
 				  </div>
@@ -46,7 +48,9 @@
 				      <div class="card-body">
 				        <h5 class="card-title">Realizar Devolución</h5>
 				        <p class="card-text">Podrás realizar una devolución de alguno de nuestros productos indicando el motivo.</p>
-				        <button type="button" class="btn btn-primary btn-sm">Ver más</button>
+				        <div class="card-footer">
+							<a class="btn btn-primary btn-sm" href="#" role="button">Ver Más</a>
+	    				</div>
 				      </div>
 				    </div>
 				  </div>
@@ -56,7 +60,10 @@
 				      <div class="card-body">
 				        <h5 class="card-title">Ver Mis Pedidos</h5>
 				        <p class="card-text">Podrás visualizar pedidos realizados con anterioridad y los que actualemente hiciste.</p>
-				        <button type="button" class="btn btn-primary btn-sm">Ver más</button>
+				        </div>
+						<div class="card-footer">
+							<a class="btn btn-primary btn-sm" href="{{ url_for('pedido.consultar_pedido') }}" role="button">Ver Más</a>
+	    				</div>
 				      </div>
 				    </div>
 				  </div>
@@ -66,7 +73,9 @@
 				      <div class="card-body">
 				        <h5 class="card-title">Editar Perfil</h5>
 				        <p class="card-text">¿Tienes un teléfono nuevo? ¿Te mudaste? Si tu información cambio, por favor edita el perfil.</p>
-				        <button type="button" class="btn btn-primary btn-sm">Ver más</button>
+				        <div class="card-footer">
+							<a class="btn btn-primary btn-sm" href="#" role="button">Ver Más</a>
+	    				</div>
 				      </div>
 				    </div>
 				  </div>

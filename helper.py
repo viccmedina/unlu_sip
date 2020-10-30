@@ -11,6 +11,7 @@ from distribuidora.models.persona import Persona
 from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 	CuentaCorriente, MovimientoCtaCorriente
 
+from distribuidora.models.pedido import TipoEstadoPedido
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
 
@@ -39,47 +40,19 @@ print('#'*60)
 
 print('Se comienza la carga de del juego de datos DEMO')
 
-"""
-Aca debemos poner todas las inserciones a la base. Es recomendable tenerlas todas juntas
-para poder ejecutar un único archivo que realiza una funcionalidad externar a la app.
-Es una tarea de desarrollo y testing.
 
-# creamo el tipo "numero dni"
-descripcion = "DNI"
-new_tipo_dni = TipoDNI(descripcion)
-db.session.add(new_tipo_dni)
-db.session.commit()
-
-
-#creamo el tipo libreta civica
-descripcion = "Libreta Cívica"
-new_tipo_dni = TipoDNI(descripcion)
-db.session.add(new_tipo_dni)
-db.session.commit()
+def insertar_tipo_dni():
+	print('Importando Modelo TipoDNI')
+	tipos = []
+	with open(DATOS_PATH + 'tipo_dni.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			tipo_dni = TipoDNI(descripcion=row['descripcion'])
+			tipos.append(tipo_dni)
+		db.session.add_all(tipos)
+		db.session.commit()
 
 
-descripcion = "Libreta de Enrolamiento"
-new_tipo_dni = TipoDNI(descripcion)
-db.session.add(new_tipo_dni)
-db.session.commit()
-"""
-# Agregamos los tipos de Roles
-"""
-descripcion = 'Cliente'
-new_rol = Rol(descripcion, descripcion)
-db.session.add(new_rol)
-db.session.commit()
-
-descripcion = 'Operador'
-new_rol = Rol(descripcion, descripcion)
-db.session.add(new_rol)
-db.session.commit()
-
-descripcion = 'Gerencial'
-new_rol = Rol(descripcion, descripcion)
-db.session.add(new_rol)
-db.session.commit()
-"""
 def insertar_provincias():
 	print('Importando Modelo Provincias')
 	lista_prov = []
@@ -154,7 +127,7 @@ def insertar_personas():
 		for row in csv_reader:
 			print('Persona: {}'.format(row['nombre']))
 			print('-'*50)
-			
+
 			new_persona = Persona(nombre=row['nombre'], apellido=row['apellido'], \
 			 email=row['email'], telefono_ppal=row['telefono_principal'])
 
@@ -176,13 +149,8 @@ def insertar_usuarios():
 			persona = Persona.query.filter_by(email=row['persona']).first()
 			print(rol)
 			print(persona.persona_id)
-			new_usuario = Usuario(username=row['username'], password=row['password'], persona_id=persona.persona_id)
-
-			# Si el usuario a insertar en la BD es un cliente, debemos generarle la Cta Corriente
-			if row['rol'] == 'Cliente':
-				print('El usuario necesita una cta corriente!')
-				new_cta_corriente = CuentaCorriente(persona_id=new_usuario.persona_id)
-				cta_corriente.append(new_cta_corriente)
+			new_usuario = Usuario(username=row['username'], password=row['password'], \
+				persona_id=persona.persona_id)
 			new_usuario.usuario_rol.append(rol)
 			lista_usuario.append(new_usuario)
 	db.session.add_all(lista_usuario)
@@ -238,8 +206,23 @@ def insertar_movimientos_cta_corriente():
 	db.session.commit()
 
 
+def insertar_tipo_estado_pedido():
+	print('Importando Modelo de Tipo de Estados de Pedidos')
+	estados =	[]
+	with open(DATOS_PATH + 'tipo_estado_pedido.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Estado Pedido: {}'.format(row['descripcion']))
+			print('-'*50)
+			tipos_estado_pedido = TipoEstadoPedido(descripcion=row['descripcion'], \
+				descripcion_corta=row['descripcion_corta'])
+
+			estados.append(tipos_estado_pedido)
+	db.session.add_all(estados)
+	db.session.commit()
+
+
 if __name__ == '__main__':
-	"""
 	insertar_provincias()
 	print('#'*50)
 	insertar_localidades()
@@ -250,13 +233,10 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_personas()
 	print('#'*50)
+==== BASE ====
 	insertar_usuarios()
 	print('#'*50)
 	insertar_tipo_movimiento_cta_corriente()
 	print('#'*50)
-	"""
-	insertar_movimientos_cta_corriente()
-
-	result = db.engine.execute('select * from usuario')
-	for row in result:
-		print(row)
+	insertar_tipo_estado_pedido()
+	insertar_tipo_dni()
