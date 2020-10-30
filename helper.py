@@ -177,6 +177,22 @@ def insertar_tipo_movimiento_cta_corriente():
 	db.session.commit()
 
 
+def insertar_cuenta_corriente():
+	"""
+	Nos permite ingresar una cuenta corriente.
+	En este caso solamente será el único cliente por default.
+	"""
+	print('Importando Modelo de Cuenta Corriente')
+	cuentas = []
+	with open(DATOS_PATH + 'cta_corriente.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			c = CuentaCorriente(persona_id=row['persona'])
+			cuentas.append(c)
+	db.session.add_all(cuentas)
+	db.session.commit()
+
+
 def insertar_movimientos_cta_corriente():
 	"""
 	Nos permite ingresar de forma masiva los movimientos
@@ -209,7 +225,7 @@ def insertar_movimientos_cta_corriente():
 
 def insertar_tipo_estado_pedido():
 	print('Importando Modelo de Tipo de Estados de Pedidos')
-	estados =	[]
+	estados = []
 	with open(DATOS_PATH + 'tipo_estado_pedido.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
@@ -241,3 +257,7 @@ if __name__ == '__main__':
 	insertar_tipo_estado_pedido()
 	print('#'*50)
 	insertar_tipo_dni()
+	print('#'*50)
+	insertar_cuenta_corriente()
+	print('#'*50)
+	insertar_movimientos_cta_corriente()
