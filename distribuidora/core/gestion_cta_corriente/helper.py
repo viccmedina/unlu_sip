@@ -1,5 +1,7 @@
 from distribuidora import db
-from distribuidora.core.gestion_cta_corriente.query import SELECT_TIPO_MOVIMIENTOS
+from distribuidora.core.gestion_cta_corriente.query import \
+    SELECT_TIPO_MOVIMIENTOS, \
+    CONSULTA_MOVIMIENTOS_CTA_CORRIENTE, CONSULTAR_NRO_CUENTA_CORRIENTE
 
 def get_tipos_movimientos():
     """
@@ -11,4 +13,33 @@ def get_tipos_movimientos():
     resp = []
     for row in result:
         resp.append(row)
+    return resp
+
+def get_nro_cuenta_corriente(nro_cliente):
+    """
+    Dado un nro de cliente nos devolverá su nro de cuenta corriente.
+    """
+    result = db.engine.execute(CONSULTAR_NRO_CUENTA_CORRIENTE.format(\
+        nro_cliente=nro_cliente))
+    resp = []
+    for row in result:
+        resp.append(dict(row))
+    return resp
+
+def get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cliente):
+    """
+    Dado los siguientes parámetros:
+    - fecha_desde,
+    - fecha_hasta
+    - nro_cliente
+
+    vamos a consultar todos los movimientos de la cta corriente de ese Cliente
+    dentro de ese rango de fechas.
+    """
+    result = db.engine.execute(CONSULTA_MOVIMIENTOS_CTA_CORRIENTE.format(\
+        fecha_desde=fecha_desde, fecha_hasta=fecha_hasta, \
+        nro_cliente=nro_cliente))
+    resp = []
+    for row in result:
+        resp.append(dict(row))
     return resp

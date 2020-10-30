@@ -3,7 +3,7 @@
 {% block content %}
 	<div class="container-fluid">
 		<div class="row">
-      {% include "acordion_perfil_usuario.html" %}
+      {% include "acordeon_perfil_usuario.html" %}
 
 			<div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
 				<div class="row row-cols-9 row-cols-md-3">
@@ -11,28 +11,32 @@
 				    <div class="card h-100" style="width: 50rem;">
 
 				      <div class="card-body">
+				        <h3 class="card-title">Consulta Cta. Corriente</h3>
 
-				        <h3 class="card-title">Agregar Stock</h3>
-
-						  <h6>Usuario {{ form.cliente }}</h6>
-						  <h6>Fecha Desde {{ form.fecha_desde(class="form-control form-control-md") }}</h6>
-              <h6>Fecha Hasta {{ form.fecha_hasta(class="form-control form-control-md") }}</h6>
-              <h6>Tipo Movimiento {{ form.tipo_movimiento(class="form-control form-control-md") }}</h6>
-
-
-					  </div>
-						<div class="card-footer">
-							{{ form.submit(class="btn btn-primary mb-2") }}
-						  	{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
-    					</div>
-				    </div>
-				  </div>
-			</div>
-
-
-		</div>
-
-	</div>
+                <form  method="POST">
+                  {{ form.hidden_tag() }}
+                  <div class="form-group">
+                    {{ form.cliente.label(class="form-control-label") }}
+                    {{ form.cliente(class="form-control form-control-md") }}
+                  </div>
+                  <div class="form-group">
+                    {{ form.fecha_desde.label(class="form-control-label") }}
+                    {{ form.fecha_desde(class="form-control form-control-md") }}
+                  </div>
+                  <div class="form-group">
+                    {{ form.fecha_hasta.label(class="form-control-label") }}
+                    {{ form.fecha_hasta(class="form-control form-control-md") }}
+                  </div>
+                  <div class="form-group">
+                    {{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
+                    {{ form.submit(class="btn btn-success mb-2") }}
+                  </div>
+                </form>
+				     </div>
+			     </div>
+		     </div>
+	     </div>
+  </div>
 
 
 {% endblock %}

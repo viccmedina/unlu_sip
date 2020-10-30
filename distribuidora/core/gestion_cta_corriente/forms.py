@@ -19,12 +19,12 @@ class ConsultarMovimientos(FlaskForm):
         el movimiento.
     - usuario -> persona a la cual pertenece la cta corriente.
     """
-
-    fecha_desde = DateTimeLocalField('Desde', format='%d/%m/%y', validators=[DataRequired()])
-    fecha_hasta = DateTimeLocalField('Hasta', format='%d/%m/%y')
+    format='%Y-%m-%dT%H:%M'
+    fecha_desde = DateTimeLocalField('Desde', format=format , validators=[DataRequired()])
+    fecha_hasta = DateTimeLocalField('Hasta', format=format)
     tp = get_tipos_movimientos()
-    cliente = StringField('Cliente', validators=[DataRequired()])
-    tipo_movimiento = SelectField('Tipo Mov', choices=tp)
+    cliente = StringField('NRO Cliente', validators=[DataRequired()])
+    #tipo_movimiento = SelectField('Tipo Mov', choices=tp)
     submit = SubmitField('Consultar')
     cancelar = SubmitField('Cancelar')
 
