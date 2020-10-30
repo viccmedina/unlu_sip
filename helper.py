@@ -8,6 +8,8 @@ from distribuidora.models.tipo_dni import TipoDNI
 from distribuidora.models.gestion_usuario import Usuario, Rol, Permiso
 from distribuidora.models.domicilio import Domicilio
 from distribuidora.models.persona import Persona
+from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
+	CuentaCorriente, MovimientoCtaCorriente
 
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -23,8 +25,8 @@ import csv
 
 if Path(DB_PATH).exists():
     print('La Base Existe, será eliminada y vuelta a generar')
-    os.remove(DB_PATH)
-    open(DB_PATH, 'w')
+    #os.remove(DB_PATH)
+    #open(DB_PATH, 'w')
 else:
     print('La Base NO existe, se generará el archivo en: {}'.format(DB_PATH))
 
@@ -60,9 +62,9 @@ descripcion = "Libreta de Enrolamiento"
 new_tipo_dni = TipoDNI(descripcion)
 db.session.add(new_tipo_dni)
 db.session.commit()
-
+"""
 # Agregamos los tipos de Roles
-
+"""
 descripcion = 'Cliente'
 new_rol = Rol(descripcion, descripcion)
 db.session.add(new_rol)
@@ -98,7 +100,7 @@ def insertar_provincias():
 		db.session.commit()
 
 
-def insertar_loclidades():
+def insertar_localidades():
 	print('Importando Modelo Localidades')
 	lista_loc = []
 	# Abrimos el archivo csv de Localidades
@@ -164,6 +166,7 @@ def insertar_personas():
 def insertar_usuarios():
 	print('Importando Modelo Usuario')
 	lista_usuario =	[]
+	cta_corriente = []
 	with open(DATOS_PATH + 'usuario.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
@@ -174,16 +177,72 @@ def insertar_usuarios():
 			print(rol)
 			print(persona.persona_id)
 			new_usuario = Usuario(username=row['username'], password=row['password'], persona_id=persona.persona_id)
+
+			# Si el usuario a insertar en la BD es un cliente, debemos generarle la Cta Corriente
+			if row['rol'] == 'Cliente':
+				print('El usuario necesita una cta corriente!')
+				new_cta_corriente = CuentaCorriente(persona_id=new_usuario.persona_id)
+				cta_corriente.append(new_cta_corriente)
 			new_usuario.usuario_rol.append(rol)
 			lista_usuario.append(new_usuario)
 	db.session.add_all(lista_usuario)
+	db.session.add_all(cta_corriente)
+	db.session.commit()
+
+
+def insertar_tipo_movimiento_cta_corriente():
+	"""
+	Nos permite ingresar de forma masiva los tipos de movimientos
+	que vamos a manejar dentro de las cuentas corrientes.
+	"""
+	print('Importando Modelo Tipos de Movimientos de Cuenta Corriente')
+	tipos_movimientos =	[]
+	with open(DATOS_PATH + 'tipo_movimiento_cta_corriente.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Tipo Movimiento: {}'.format(row['descripcion']))
+			print('-'*50)
+			tm = TipoMovimientoCtaCorriente(descripcion=row['descripcion'])
+			tipos_movimientos.append(tm)
+	db.session.add_all(tipos_movimientos)
+	db.session.commit()
+
+
+def insertar_movimientos_cta_corriente():
+	"""
+	Nos permite ingresar de forma masiva los movimientos
+	de las cuentas corrientes.
+	"""
+	print('Importando Modelo Movimientos de Cuenta Corriente')
+	movimientos = []
+	descripcion = 'Mov Demo'
+	with open(DATOS_PATH + 'movimiento_cta_corriente.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Movimiento: {}'.format(row['tipo_movimiento_cta_corriente']))
+			print('-'*50)
+			usuario = Usuario.query.get(row['usuario_registrador'])
+			print('USUARIO: {}'.format(usuario))
+			tm = TipoMovimientoCtaCorriente.query.filter_by(descripcion=row['tipo_movimiento_cta_corriente']).first()
+			print('TIPO MOVIMIENTO {}'.format(tm.id))
+			cta_corriente = CuentaCorriente.query.get(row['cta_corriente'])
+			print('CTA CORRIENTE {}'.format(cta_corriente))
+			if row['tipo_movimiento_cta_corriente'] == 'Deuda':
+				saldo = float(row['saldo']) * (-1)
+			else:
+				saldo = float(row['saldo'])
+			m = MovimientoCtaCorriente(descripcion=descripcion, usuario=usuario.id, tipo_movimiento_cta_corriente=tm.id, \
+				cta_corriente=cta_corriente.cuenta_corriente_id, saldo=saldo)
+			movimientos.append(m)
+	db.session.add_all(movimientos)
 	db.session.commit()
 
 
 if __name__ == '__main__':
+	"""
 	insertar_provincias()
 	print('#'*50)
-	insertar_loclidades()
+	insertar_localidades()
 	print('#'*50)
 	insertar_roles()
 	print('#'*50)
@@ -192,3 +251,12 @@ if __name__ == '__main__':
 	insertar_personas()
 	print('#'*50)
 	insertar_usuarios()
+	print('#'*50)
+	insertar_tipo_movimiento_cta_corriente()
+	print('#'*50)
+	"""
+	insertar_movimientos_cta_corriente()
+
+	result = db.engine.execute('select * from usuario')
+	for row in result:
+		print(row)

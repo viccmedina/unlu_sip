@@ -64,22 +64,29 @@ def consultar_movimientos():
     """
 
     # Por ahora esto será hardcodeado.
-    fecha_desde = None
-    fecha_hasta = None
-    tipo_movimiento = 'Deuda'
+    params = request.get_json()
+    fecha_desde = params['fecha_desde']
+    print(fecha_desde, flush=True)
+    fecha_hasta = params['fecha_hasta']
+    tipo_movimiento = params['tipo_movimiento']
+    id_cta_corriente = params['id_cta_corriente']
     resp = None
     status = None
     msg = None
-    if fecha_hasta is not None and fecha_desde is not None \
-        and tipo_movimiento is not None: 
+    if fecha_hasta is None and fecha_desde is None \
+        and tipo_movimiento is None: 
         status = 'ERROR'
         msg = 'Todos los parametros son nulos! Al menos uno debe ser ingresado.'
     else:
-        if fecha_desde is not None:
+        print('*'*60, flush=True)
+        print(fecha_desde, flush=True)
+        if fecha_desde is None:
             status = 'ERROR_FECHA'
             msg = 'Las fechas son Nulas!. Al menos la fecha_desde debe ser ingresada'
         else:
-            result = db.engine.execute(CONSULTA_CTA_CORRIENTE.format(fecha_desde = '2020-10-25 18:00:00', fecha_hasta = '2020-10-25 22:00:00'))
+            # Necesitamos el id de cta corriente
+            result = db.engine.execute(CONSULTA_CTA_CORRIENTE.format(id_cuenta_corriente = id_cta_corriente, \
+                fecha_desde = fecha_desde, fecha_hasta = '2020-10-25 22:00:00'))
             mov = {}
             for row in result:
                 
