@@ -25,6 +25,7 @@ def index():
 @login_required
 def consultar_cta_corriente():
 
+	resultado = None
 	form = ConsultarMovimientos()
 	if form.validate_on_submit():
 		fecha_desde = form.fecha_desde.data
@@ -35,8 +36,9 @@ def consultar_cta_corriente():
 		cliente = form.cliente.data
 		print('#'*80, flush=True)
 		nro_cta = get_nro_cuenta_corriente(cliente)
-		print(get_consulta_movimientos(fecha_desde, fecha_hasta, \
-			nro_cta[0]['cuenta_corriente_id']), flush=True)
+		resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, \
+			nro_cta[0]['cuenta_corriente_id'])
+		print(resultado, flush=True)
 		print('#'*80, flush=True)
 	else:
 		print(form.errors, flush=True)
@@ -46,6 +48,7 @@ def consultar_cta_corriente():
 		is_authenticated=current_user.is_authenticated, \
 		rol=ROL, \
 		form=form, \
+		resultado=resultado, \
 		site= TITULO + ' - Consulta')
 
 @cta_corriente.route('/agregar', methods=['GET'])

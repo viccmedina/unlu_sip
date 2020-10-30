@@ -1,0 +1,29 @@
+{% block tabla_movimientos %}
+<div class="container">
+  <h2>Resultado</h2>
+  <p>Detalle de los Movimientos consultados:</p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID Movimiento</th>
+        <th>Fecha</th>
+        <th>Tipo de Movimiento</th>
+        <th>Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in resultado %}
+      <tr>
+        <td>{{ r.movimiento_id }}</td>
+        <td>{{ r.ts_created }}</td>
+        <td>{{ r.tipo_movimiento_cta_corriente }}</td>
+        <td>{{ r.saldo }}</td>
+
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
