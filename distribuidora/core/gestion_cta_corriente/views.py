@@ -18,14 +18,24 @@ def index():
 			rol='operador', \
             site='Gestión Ctas Corrientes')
 
-@cta_corriente.route('/consultar', methods=['GET'])
+@cta_corriente.route('/cta_corriente/consultar', methods=['GET'])
 @login_required
 def consultar_cta_corriente():
-    return render_template('form_consultar_cta_corriente.html', \
-    datos=current_user.get_mis_datos(), \
-    is_authenticated=current_user.is_authenticated, \
-    rol='operador')
 
+	form = ConsultarMovimientos()
+	"""
+	if form.validate_on_submit():
+		fecha_desde = form.fecha_desde.data
+		fecha_hasta = form.fecha_hasta.data
+		if fecha_hasta is None:
+			fecha_hasta = datetime.datetime.now()
+
+		cliente = form.cliente.data
+		print(fecha_hasta, flush=True)
+		print(fecha_desde, flush=True)
+		print(fecha_cliente, flush=True)
+	"""
+	return render_template('form_consultar_cta_corriente.html', datos=current_user.get_mis_datos(),	is_authenticated=current_user.is_authenticated, rol='operador', form=form)
 
 @cta_corriente.route('/agregar', methods=['GET'])
 @login_required
@@ -52,6 +62,7 @@ def importar():
     is_authenticated=current_user.is_authenticated, \
     rol='operador')
 
+"""
 @cta_corriente.route('/consultar/movimientos', methods=['GET'])
 def consultar_movimientos():
 
@@ -63,3 +74,8 @@ def consultar_movimientos():
 			fecha_hasta = datetime.datetime.now()
 
 		cliente = form.cliente.data
+		print(fecha_hasta, flush=True)
+		print(fecha_desde, flush=True)
+		print(fecha_cliente, flush=True)
+	return render_template('form_consultar_cta_corriente.html', form=form)
+"""

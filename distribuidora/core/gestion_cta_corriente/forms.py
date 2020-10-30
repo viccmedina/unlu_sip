@@ -24,8 +24,9 @@ class ConsultarMovimientos(FlaskForm):
     fecha_hasta = DateTimeLocalField('Hasta', format='%d/%m/%y')
     tp = get_tipos_movimientos()
     cliente = StringField('Cliente', validators=[DataRequired()])
-    tipo_deuda = SelectField(u'Tipo Mov', choices=tp)
+    tipo_movimiento = SelectField('Tipo Mov', choices=tp)
     submit = SubmitField('Consultar')
+    cancelar = SubmitField('Cancelar')
 
 class NuevoTipoMovimiento(FlaskForm):
     """
