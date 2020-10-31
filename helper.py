@@ -10,7 +10,7 @@ from distribuidora.models.domicilio import Domicilio
 from distribuidora.models.persona import Persona
 from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 	CuentaCorriente, MovimientoCtaCorriente
-
+from distribuidora.models.producto import Marca
 from distribuidora.models.pedido import TipoEstadoPedido
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -239,6 +239,24 @@ def insertar_tipo_estado_pedido():
 	db.session.commit()
 
 
+def insertar_marca():
+	"""
+	Cargamos las marcas con las cuales trabaja la distribuidora.
+	"""
+	print('Importando Modelo de Marcas')
+	marcas = []
+	with open(DATOS_PATH + 'marca.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Marca: {}'.format(row['descripcion']))
+			print('-'*50)
+			m = Marca(descripcion=row['descripcion'])
+
+			marcas.append(m)
+	db.session.add_all(marcas)
+	db.session.commit()
+
+
 if __name__ == '__main__':
 	insertar_provincias()
 	print('#'*50)
@@ -261,3 +279,5 @@ if __name__ == '__main__':
 	insertar_cuenta_corriente()
 	print('#'*50)
 	insertar_movimientos_cta_corriente()
+	print('#'*50)
+	insertar_marca()
