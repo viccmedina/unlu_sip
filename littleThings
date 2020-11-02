@@ -1,5 +1,7 @@
 * clonamos el repo
 * instalamos docker con "sudo apt install docker.io"
+* sudo usermod -aG docker ${USER} 
+* Reboot del system  (o hacer el enlace simbolico primero, hay q probar)
 * creamos enlace simbolico "ln -s /home/stiven/unlu_sip /opt"
 * creamos la imagen con "docker build -t aplicacion:1.0 -f distribuidora/deploy/docker/Dockerfile ."
 *corremos el contenedor con "docker-compose run aplicacion bash"
