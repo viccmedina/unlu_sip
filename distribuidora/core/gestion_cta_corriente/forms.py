@@ -44,7 +44,7 @@ class AgregarMovimiento(FlaskForm):
     de la Cta Corriente del usuario.
     """
     tp = get_tipos_movimientos()
-    tipo_deuda = SelectField(u'Tipo Mov', choices=tp)
-    cliente = SelectField(u'Cliente', choices=[('jp', 'Juan PErez'), ('mg', 'María Gutierrez'), ('al', 'Ana López')])
+    tipo_movimiento = SelectField(u'Tipo Mov', choices=tp)
+    cliente = StringField('NRO Cliente', validators=[DataRequired()])
     monto = FloatField('Monto', validators=[DataRequired()])
     submit = SubmitField('Agregar')

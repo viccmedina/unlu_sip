@@ -16,3 +16,8 @@ SELECT_TIPO_MOVIMIENTOS = """
 
 	SELECT descripcion FROM tipo_movimiento_cta_corriente
 	"""
+
+SELECT_ID_TIPO_MOVIMIENTO = """
+	SELECT id FROM tipo_movimiento_cta_corriente
+	WHERE descripcion=('{tipo_movimiento}')
+"""

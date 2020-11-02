@@ -1,7 +1,8 @@
 from distribuidora import db
 from distribuidora.core.gestion_cta_corriente.query import \
     SELECT_TIPO_MOVIMIENTOS, \
-    CONSULTA_MOVIMIENTOS_CTA_CORRIENTE, CONSULTAR_NRO_CUENTA_CORRIENTE
+    CONSULTA_MOVIMIENTOS_CTA_CORRIENTE, CONSULTAR_NRO_CUENTA_CORRIENTE, \
+    SELECT_ID_TIPO_MOVIMIENTO
 
 def get_tipos_movimientos():
     """
@@ -12,7 +13,19 @@ def get_tipos_movimientos():
     result = db.engine.execute(SELECT_TIPO_MOVIMIENTOS)
     resp = []
     for row in result:
-        resp.append(row)
+        resp.append(row[0])
+    return resp
+
+def get_id_tipos_movimientos(descripcion):
+    """
+    Dada la descripcion del tipo de movimiento,
+    devolvemos el id.
+    """
+    result = db.engine.execute(SELECT_ID_TIPO_MOVIMIENTO.format(\
+        tipo_movimiento=descripcion))
+    resp = []
+    for row in result:
+        resp.append(dict(row))
     return resp
 
 def get_nro_cuenta_corriente(nro_cliente):

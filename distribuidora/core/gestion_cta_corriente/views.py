@@ -2,8 +2,10 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from distribuidora.core.gestion_cta_corriente.constants import TITULO, ROL
-from distribuidora.core.gestion_cta_corriente.helper import get_consulta_movimientos, get_nro_cuenta_corriente
-from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos
+from distribuidora.core.gestion_cta_corriente.helper import get_consulta_movimientos, \
+	get_nro_cuenta_corriente
+from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos, \
+	AgregarMovimiento
 from distribuidora.models.cuenta_corriente import MovimientoCtaCorriente
 
 import datetime
@@ -51,14 +53,34 @@ def consultar_cta_corriente():
 		resultado=resultado, \
 		site= TITULO + ' - Consulta')
 
-@cta_corriente.route('/cta_corriente/agregar', methods=['GET'])
+@cta_corriente.route('/cta_corriente/agregar', methods=['GET', 'POST'])
 @login_required
 def agregar():
+	form = AgregarMovimiento()
+	tipo_movimiento = form.tipo_movimiento.data
+	monto = form.monto.data
+	cliente = form.cliente.data
+	print(monto, flush=True)
+	print(tipo_movimiento, flush=True)
+	print(cliente, flush=True)
+	"""
+	if form.validate_on_submit():
+		tipo_movimiento = form.tipo_deuda.data
+		monto = form.monto.data
+		cliente = form.cliente.data
+		print('#'*80, flush=True)
+		nro_cta = get_nro_cuenta_corriente(cliente)
+		print(resultado, flush=True)
+		print('#'*80, flush=True)
+	else:
+		print(form.errors, flush=True)
+	"""
 	return render_template('form_agregar_movimiento_cta_corriente.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
     rol=ROL, \
-	site=TITULO + ' - Nuevo Movimiento')
+	site=TITULO + ' - Nuevo Movimiento', \
+	form=form)
 
 
 @cta_corriente.route('/cta_corriente/exportar', methods=['GET'])
