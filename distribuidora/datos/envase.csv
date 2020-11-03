@@ -1,6 +1,7 @@
-descripcion
-botella
-paquete
-pote
-sachet
-carton
+id,descripcion
+1,pote
+2,caja
+3,paquete
+4,lata
+5,sachet
+6,botella

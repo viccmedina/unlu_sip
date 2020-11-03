@@ -1,5 +1,6 @@
-descripcion,precio_id,marca_id,tipo_producto_id,envase
-harina,1,chacabuco,ambiente,paquete
-leche,1,sancor,heladera,sachet
-huevo,1,willy,heladera,carton
-azucar,1,ledesma,ambiente,paquete
+producto_id,descripcion,tipo_producto_id,marca_id
+1,harina,ambiente,chacabuco
+2,azucar,ambiente,ledesma
+3,dulce de leche,ambiente,sancor
+4,levadura,refrigerar,exex
+5,leche,refrigerar,serenisima

@@ -1,3 +1,5 @@
+
+
 * clonamos el repo
 * instalamos docker con "sudo apt install docker.io"
 * sudo usermod -aG docker ${USER} 
@@ -9,7 +11,7 @@
 * Creamos el settings_local.py en /distribuidora que contenga:
 DB_PATH = '/opt/unlu_sip/data.sqlite'
 DB_SECRET_KEY = 'mysecretkey'
-DATOS_PATH = 'opt/distribuidora/datos'
+DATOS_PATH = '/opt/unlu_sip/distribuidora/datos/'
 
 
 * una vez dentro, ejecutamos el archivo helper.py con "python3 helper.py"
