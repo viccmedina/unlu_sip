@@ -1,53 +1,21 @@
 from distribuidora import db
 
 
-
-class TipoPedido(db.Model):
-    """
-    Este modelo representará el tipo de pedido.
-    Contará con los siquientes campos:
-    tipo_pedido_id --> clave primaria
-    descripcion --> describe el tipo de pedido
-    ts_created --> momento en que el registro fue creado
-    """
-
-    # Nombre de la tabla
-    __tablename__ = 'tipo_pedido'
-
-    # Atributos
-    tipo_pedido_id = db.Column(db.Integer, primary_key=True)
-    descripcion = db.Column(db.String(80), nullable=False)
-    ts_created = db.Column(db.DateTime, server_default=db.func.now())
-    pedidos = db.relationship('Pedido', uselist=False, backref='tipos_pedidos', lazy=True)
-
-    def __init__(self, descripcion):
-        """
-        Constructor de la clase tipo de pedido
-        """
-        self.descripcion = descripcion
-
-    def __repr__(self):
-        """
-        Nos devolverá una representación del Modelo
-        """
-        return 'tipo de pedido:  {}'.format(self.descripcion)
-
-
-class TipoEstadoPedido(db.Model):
+class PedidoEstado(db.Model):
     """
     Este modelo representará los estados de pedidos.
     Contará con los siquientes campos:
-    tipo_estado_pedido_id --> clave primaria
+    pedido_estado_id --> clave primaria
     descripcion --> describe el estado del pedido
     descripcion_corta --> abreviacion de descripcion
     ts_created --> momento en que el registro fue creado
     """
 
     # Nombre de la tabla
-    __tablename__ = 'tipo_estado_pedido'
+    __tablename__ = 'pedido_estado'
 
     # Atributos
-    tipo_estado_pedido_id = db.Column(db.Integer, primary_key=True)
+    pedido_estado_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False, unique=True)
     descripcion_corta = db.Column(db.String(80), nullable=False, unique=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
@@ -77,9 +45,10 @@ class EstadoPedido(db.Model):
     estado_pedido_id = db.Column(db.Integer, primary_key=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
     pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
+    pedido_estado_id = db.Column(db.Integer, db.ForeignKey('pedido_estado.pedido_estado_id'),nullable=False)
 
-    def __init__(self, estado_pedido_id, pedido_id):
-        self.estado_pedido_id = estado_pedido_id
+    def __init__(self, pedido_estado_id, pedido_id):
+        self.pedido_estado_id = estado_pedido_id
         self.pedido_id = pedido_id
 
     def __repr__(self):
@@ -135,7 +104,6 @@ class Pedido(db.Model):
     detalle_id --> clave forania refenciando a la tabla detalle
     usuario_id --> clave forania refenciando a la tabla usuario
     estado_id --> clave forania refenciando a la tabla estado
-    tipo_pedido_id --> clave forania refenciando a la tabla tipo de pedido
     ts_created --> momento en que el registro fue creado
     """
 
@@ -146,21 +114,19 @@ class Pedido(db.Model):
     pedido_id = db.Column(db.Integer, primary_key=True)
     detalle = db.relationship('DetallePedido', uselist=False, backref='detalles_pedidos', lazy=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
-    tipo_pedido_id = db.Column(db.Integer, db.ForeignKey('tipo_pedido.tipo_pedido_id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, detalle_id, usuario_id, estado_id, tipo_pedido_id):
+    def __init__(self, usuario_id, estado_id):
         """
         Constructor de la clase pedido
         """
-        self.detalle_id = detalle_id
         self.estado_pedido_id = estado_id
         self.usuario_id = usuario_id
-        self.tipo_pedido_id = tipo_pedido_id
+
 
     def __repr__(self):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'pedido {}'.format(self.detalle_id, self.usuario_id, self.estado_pedido_id, self.tipo_pedido_id)
+        return 'pedido {}'.format(self.detalle_id, self.usuario_id, self.estado_pedido_id)

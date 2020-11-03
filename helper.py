@@ -11,7 +11,7 @@ from distribuidora.models.persona import Persona
 from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 	CuentaCorriente, MovimientoCtaCorriente
 from distribuidora.models.producto import Marca
-from distribuidora.models.pedido import TipoEstadoPedido
+from distribuidora.models.pedido import PedidoEstado
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
 
@@ -223,7 +223,7 @@ def insertar_movimientos_cta_corriente():
 	db.session.commit()
 
 
-def insertar_tipo_estado_pedido():
+def insertar_pedido_estado():
 	print('Importando Modelo de Tipo de Estados de Pedidos')
 	estados = []
 	with open(DATOS_PATH + 'tipo_estado_pedido.csv') as csv_file:
@@ -231,7 +231,7 @@ def insertar_tipo_estado_pedido():
 		for row in csv_reader:
 			print('Estado Pedido: {}'.format(row['descripcion']))
 			print('-'*50)
-			tipos_estado_pedido = TipoEstadoPedido(descripcion=row['descripcion'], \
+			tipos_estado_pedido = PedidoEstado(descripcion=row['descripcion'], \
 				descripcion_corta=row['descripcion_corta'])
 
 			estados.append(tipos_estado_pedido)
@@ -272,7 +272,7 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_tipo_movimiento_cta_corriente()
 	print('#'*50)
-	insertar_tipo_estado_pedido()
+	insertar_pedido_estado()
 	print('#'*50)
 	insertar_tipo_dni()
 	print('#'*50)

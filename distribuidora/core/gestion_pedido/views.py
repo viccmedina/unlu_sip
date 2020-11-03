@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
-from distribuidora.models.pedido import TipoPedido, EstadoPedido, Pedido, DetallePedido
+from distribuidora.models.pedido import EstadoPedido, Pedido, DetallePedido
 
 pedido = Blueprint('pedido', __name__, template_folder='templates')
 
