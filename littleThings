@@ -4,7 +4,14 @@
 * Reboot del system  (o hacer el enlace simbolico primero, hay q probar)
 * creamos enlace simbolico "ln -s /home/stiven/unlu_sip /opt"
 * creamos la imagen con "docker build -t aplicacion:1.0 -f distribuidora/deploy/docker/Dockerfile ."
-*corremos el contenedor con "docker-compose run aplicacion bash"
+* insalamos docker compose con "sudo apt  install docker-compose" 
+* corremos el contenedor con "docker-compose run aplicacion bash"
+* Creamos el settings_local.py en /distribuidora que contenga:
+DB_PATH = '/opt/unlu_sip/data.sqlite'
+DB_SECRET_KEY = 'mysecretkey'
+DATOS_PATH = 'opt/distribuidora/datos'
+
+
 * una vez dentro, ejecutamos el archivo helper.py con "python3 helper.py"
 *exit
 * levantamos el proyecto con "docker-compose up"
