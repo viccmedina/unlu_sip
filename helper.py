@@ -303,23 +303,16 @@ def insertar_envase():
 
 
 def insertar_lista_precio():
-	print('Importando Modelo Unidad de medido')
+	print('Importando Modelo Lista de precios')
 	lista_precio = []
 	with open(DATOS_PATH + 'lista_precio.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Lista de precio: {}'.format(row['fecha_desde'],row['fecha_hasta']))
+			print('Fecha_desde : {}'.format(row['fecha_desde']))
+			print('Fecha_hasta: {}'.format(row['fecha_hasta']))
 			print('-'*50)
-			print("acaaaaa el string " + row['fecha_desde'])
-			#f_desde = datetime.to_time(row['fecha_desde'])g
-			stringg = row['fecha_desde']
-			f_desde = datetime.strptime(stringg, "%d/%m/%Y")
-			print(f_desde)
-			stringg = row['fecha_hasta']
-			f_hasta = datetime.strptime(stringg, "%d/%m/%Y")
-			print(f_hasta)
-			#desde = datetime.datetime.strptime(fecha_desde=row['fecha_desde'], "%y/%m/%d").date
-			#hasta = datetime.datetime.strptime(fecha_hasta=row['fecha_hasta'], "%y/%m/%d")
+			f_desde = datetime.strptime(row['fecha_desde'], "%d/%m/%Y")
+			f_hasta = datetime.strptime(row['fecha_hasta'], "%d/%m/%Y")
 			new_lista_precio = Lista_precio(f_desde,f_hasta)
 			lista_precio.append(new_lista_precio)
 		db.session.add_all(lista_precio)
