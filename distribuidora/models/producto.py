@@ -139,7 +139,7 @@ class Producto(db.Model):
     # Atributos
     producto_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
-    precio_id = db.Column(db.Integer, db.ForeignKey('lista_precio.precio_id'),nullable=False)
+    #precio_id = db.Column(db.Integer, db.ForeignKey('lista_precio.precio_id'),nullable=False)
     marca_id = db.Column(db.Integer, db.ForeignKey('marca.marca_id'), nullable=False)
     tipo_producto_id = db.Column(db.Integer, db.ForeignKey('tipo_producto.tipo_producto_id'), nullable=False)
     detalle_pedido = db.relationship('DetallePedido', uselist=False, backref='detalle_pedido', lazy=True)
@@ -147,12 +147,12 @@ class Producto(db.Model):
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, descripcion, precio_id, tipo_producto_id, marca_id):
+    def __init__(self, descripcion, tipo_producto_id, marca_id):
         """
         Constructor de la clase producto
         """
         self.descripcion = descripcion
-        self.precio_id = precio_id
+        #self.precio_id = precio_id
         self.tipo_producto_id = tipo_producto_id
         self.marca_id = marca_id
 

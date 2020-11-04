@@ -10,7 +10,7 @@ from distribuidora.models.domicilio import Domicilio
 from distribuidora.models.persona import Persona
 from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 	CuentaCorriente, MovimientoCtaCorriente
-from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida
+from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, Producto
 from distribuidora.models.precio import Lista_precio
 from distribuidora.models.pedido import PedidoEstado
 
@@ -274,22 +274,9 @@ def insertar_tipo_producto():
 		db.session.add_all(tipoProd)
 		db.session.commit()
 
-def insertar_envase():
-	print('Importando Modelo Envase')
-	envase = []
-	with open(DATOS_PATH + 'envase.csv') as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		for row in csv_reader:
-			print('Envase: {}'.format(row['descripcion']))
-			print('-'*50)
-			new_envase = Envase(descripcion=row['descripcion'])
-			envase.append(new_envase)
-		db.session.add_all(envase)
-		db.session.commit()
 
-
-def insertar_envase():
-	print('Importando Modelo Unidad de medido')
+def insertar_unidad_medida():
+	print('Importando Modelo Unidad de medida')
 	unidad_medida = []
 	with open(DATOS_PATH + 'unidad_medida.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
@@ -318,6 +305,38 @@ def insertar_lista_precio():
 		db.session.add_all(lista_precio)
 		db.session.commit()
 
+
+def insertar_envase():
+	print('Importando Modelo Envase')
+	envase = []
+	with open(DATOS_PATH + 'envase.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Envase: {}'.format(row['descripcion']))
+			print('-'*50)
+			new_envase = Envase(descripcion=row['descripcion'])
+			envase.append(new_envase)
+		db.session.add_all(envase)
+		db.session.commit()
+
+
+def insertar_producto():
+	print('Importando Modelo de Producto')
+	producto = []
+	with open(DATOS_PATH + 'producto.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Producto: {}'.format(row['descripcion']))
+			print('Tipo de producto: {}'.format(row['tipo_producto_id']))
+			print('Marca del producto: {}'.format(row['marca_id']))
+			print('-'*50)
+			tp = TipoProducto.query.filter_by(descripcion=row['tipo_producto_id']).first()
+			m = Marca.query.filter_by(descripcion=row['marca_id']).first()
+			new_producto = Producto(descripcion=row['descripcion'],
+				tipo_producto_id=tp.tipo_producto_id,marca_id=m.marca_id)
+			producto.append(new_producto)
+		db.session.add_all(producto)
+		db.session.commit()
 
 if __name__ == '__main__':
 	insertar_provincias()
@@ -348,6 +367,8 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_envase()
 	print('#'*50)
-	insertar_envase()
+	insertar_unidad_medida()
 	print('#'*50)
 	insertar_lista_precio()
+	print('#'*50)
+	insertar_producto()
