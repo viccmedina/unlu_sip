@@ -50,14 +50,18 @@ class ProductoEnvase(db.Model):
     __tablename__ = 'producto_envase'
 
     producto_envase_id = db.Column(db.Integer, primary_key=True)
-    descripcion = db.Column(db.String(80), nullable=False)
+    producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'), nullable=False)
+    envase_id = db.Column(db.Integer, db.ForeignKey('envase.envase_id'), nullable=False)
+    unidad_medida_id = db.Column(db.Integer, db.ForeignKey('unidad_medida.unidad_medida_id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
-    def __init__(self, descripcion):
-        self.descripcion = descripcion
+    def __init__(self, producto_id, envase_id, unidad_medida_id):
+        self.producto_id = producto_id
+        self.envase_id = envase_id
+        self.unidad_medida_id = unidad_medida_id
 
     def __repr__(self):
-        return self.descripcion
+        return self.producto_id
 
 
 class Marca(db.Model):

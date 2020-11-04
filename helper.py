@@ -10,7 +10,8 @@ from distribuidora.models.domicilio import Domicilio
 from distribuidora.models.persona import Persona
 from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 	CuentaCorriente, MovimientoCtaCorriente
-from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, Producto
+from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
+	Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio
 from distribuidora.models.pedido import PedidoEstado
 
@@ -338,6 +339,28 @@ def insertar_producto():
 		db.session.add_all(producto)
 		db.session.commit()
 
+
+def insertar_producto_envase():
+	print('Importando Modelo de Producto_Envase')
+	producto_envase = []
+	with open(DATOS_PATH + 'producto_envase.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Producto: {}'.format(row['producto']))
+			print('Envase : {}'.format(row['envase']))
+			print('Unidad de medida: {}'.format(row['unidad_medida']))
+			print('-'*50)
+			p = Producto.query.filter_by(descripcion=row['producto']).first()
+			e = Envase.query.filter_by(descripcion=row['envase']).first()
+			um = UnidadMedida.query.filter_by(descripcion=row['unidad_medida']).first()
+			new_producto_envase = ProductoEnvase(producto_id=p.producto_id,
+				envase_id=e.envase_id,unidad_medida_id=um.unidad_medida_id)
+			producto_envase.append(new_producto_envase)
+		db.session.add_all(producto_envase)
+		db.session.commit()
+
+
+
 if __name__ == '__main__':
 	insertar_provincias()
 	print('#'*50)
@@ -372,3 +395,5 @@ if __name__ == '__main__':
 	insertar_lista_precio()
 	print('#'*50)
 	insertar_producto()
+	print('#'*50)
+	insertar_producto_envase()
