@@ -1,5 +1,5 @@
 from distribuidora import db
-from distribuidora.models.precio import Precio
+from distribuidora.models.precio import Lista_precio
 from distribuidora.models.pedido import DetallePedido
 
 class UnidadMedida(db.Model):
@@ -29,14 +29,16 @@ class Envase(db.Model):
     envase_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
-    unidad = db.Column(db.Integer, db.ForeignKey('unidad_medida.unidad_medida_id'), nullable=False)
-
+    #unidad = db.Column(db.Integer, db.ForeignKey('unidad_medida.unidad_medida_id'), nullable=False)
+    """
     def __init__(self, descripcion, unidad_medida):
         self.descripcion = descripcion
         self.unidad = unidad_medida
-
+    """
+    def __init__(self, descripcion):
+        self.descripcion = descripcion
     def __repr__(self):
-        return "{descripcion} {undiad}".format(descripcion=self.descripcion, unidad=unidad)
+        return "{descripcion} {undiad}".format(descripcion=self.descripcion)
 
 
 
@@ -137,7 +139,7 @@ class Producto(db.Model):
     # Atributos
     producto_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
-    precio_id = db.Column(db.Integer, db.ForeignKey('precio.precio_id'),nullable=False)
+    precio_id = db.Column(db.Integer, db.ForeignKey('lista_precio.precio_id'),nullable=False)
     marca_id = db.Column(db.Integer, db.ForeignKey('marca.marca_id'), nullable=False)
     tipo_producto_id = db.Column(db.Integer, db.ForeignKey('tipo_producto.tipo_producto_id'), nullable=False)
     detalle_pedido = db.relationship('DetallePedido', uselist=False, backref='detalle_pedido', lazy=True)

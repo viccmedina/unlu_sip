@@ -10,8 +10,10 @@ from distribuidora.models.domicilio import Domicilio
 from distribuidora.models.persona import Persona
 from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 	CuentaCorriente, MovimientoCtaCorriente
-from distribuidora.models.producto import Marca
+from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida
+from distribuidora.models.precio import Lista_precio
 from distribuidora.models.pedido import PedidoEstado
+
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
 
@@ -257,6 +259,62 @@ def insertar_marca():
 	db.session.commit()
 
 
+#Cargamos la db con tipo de producto
+def insertar_tipo_producto():
+	print('Importando Modelo tipoProducto')
+	tipoProd = []
+	with open(DATOS_PATH + 'tipo_producto.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Tipo Producto: {}'.format(row['descripcion']))
+			print('-'*50)
+			new_tipo_producto = TipoProducto(descripcion=row['descripcion'])
+			tipoProd.append(new_tipo_producto)
+		db.session.add_all(tipoProd)
+		db.session.commit()
+
+def insertar_envase():
+	print('Importando Modelo Envase')
+	envase = []
+	with open(DATOS_PATH + 'envase.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Envase: {}'.format(row['descripcion']))
+			print('-'*50)
+			new_envase = Envase(descripcion=row['descripcion'])
+			envase.append(new_envase)
+		db.session.add_all(envase)
+		db.session.commit()
+
+
+def insertar_envase():
+	print('Importando Modelo Unidad de medido')
+	unidad_medida = []
+	with open(DATOS_PATH + 'unidad_medida.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Unidad de medida: {}'.format(row['descripcion']))
+			print('-'*50)
+			new_unidad_medida = UnidadMedida(descripcion=row['descripcion'])
+			unidad_medida.append(new_unidad_medida)
+		db.session.add_all(unidad_medida)
+		db.session.commit()
+
+
+def insertar_lista_precio():
+	print('Importando Modelo Unidad de medido')
+	lista_precio = []
+	with open(DATOS_PATH + 'lista_precio.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Lista de precio: {}'.format(row['fecha_desde'],row['fecha_hasta']))
+			print('-'*50)
+			new_lista_precio = Lista_precio(fecha_desde=row['fecha_desde'],fecha_hasta=row['fecha_hasta'])
+			lista_precio.append(new_lista_precio)
+		db.session.add_all(lista_precio)
+		db.session.commit()
+
+
 if __name__ == '__main__':
 	insertar_provincias()
 	print('#'*50)
@@ -281,3 +339,11 @@ if __name__ == '__main__':
 	insertar_movimientos_cta_corriente()
 	print('#'*50)
 	insertar_marca()
+	print('#'*50)
+	insertar_tipo_producto()
+	print('#'*50)
+	insertar_envase()
+	print('#'*50)
+	insertar_envase()
+	print('#'*50)
+	#insertar_lista_precio()

@@ -4,8 +4,8 @@ from distribuidora import db
 from distribuidora.core.gestion_cta_corriente.constants import TITULO, ROL
 from distribuidora.core.gestion_cta_corriente.helper import get_consulta_movimientos, \
 	get_nro_cuenta_corriente
-from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos, \
-	AgregarMovimiento
+#from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos, \
+	#AgregarMovimiento
 from distribuidora.models.cuenta_corriente import MovimientoCtaCorriente
 
 import datetime

@@ -1,8 +1,7 @@
 from distribuidora import db
-from distribuidora.models.lista_precio import ListaPrecio
 
 
-class Precio(db.Model):
+class Lista_precio(db.Model):
     """
     Este modelo representará a los precios.
     Contará con los siquientes campos:
@@ -14,26 +13,25 @@ class Precio(db.Model):
     """
 
     # Nombre de la tabla
-    __tablename__ = 'precio'
+    __tablename__ = 'lista_precio'
 
     # Atributos
     precio_id = db.Column(db.Integer, primary_key=True)
-    descripcion = db.Column(db.String(80), nullable=False)
-    valor = db.Column(db.Float(), nullable=False)
+    fecha_desde = db.Column(db.DateTime, nullable=True)
+    fecha_hasta = db.Column(db.DateTime, nullable=True)
     lista_precio_id = db.Column(db.Integer, db.ForeignKey('lista_precio.lista_precio_id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, descripcion, valor, lista_precio_id):
+    def __init__(self, fecha_desde, fecha_hasta):
         """
         Constructor de la clase precio
         """
-        self.descripcion = descripcion
-        self.valor = valor
-        self.lista_precio_id = lista_precio_id
+        self.fecha_desde = fecha_desde
+        self.fecha_hasta = fecha_hasta
 
     def __repr__(self):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'precio de {}'.format(self.descripcion)
+        return 'precio de {}'.format(self.fecha_desde,self.fecha_hasta)
