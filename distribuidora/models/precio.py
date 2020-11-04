@@ -19,7 +19,7 @@ class Lista_precio(db.Model):
     precio_id = db.Column(db.Integer, primary_key=True)
     fecha_desde = db.Column(db.DateTime, nullable=True)
     fecha_hasta = db.Column(db.DateTime, nullable=True)
-    lista_precio_id = db.Column(db.Integer, db.ForeignKey('lista_precio.lista_precio_id'), nullable=False)
+    #lista_precio_id = db.Column(db.Integer, db.ForeignKey('lista_precio.lista_precio_id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 

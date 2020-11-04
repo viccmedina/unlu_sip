@@ -19,6 +19,7 @@ from distribuidora.settings import DB_PATH, DATOS_PATH
 
 # Libería de Python
 from pathlib import Path
+from datetime import datetime
 
 # Librería del OS
 import os
@@ -309,7 +310,17 @@ def insertar_lista_precio():
 		for row in csv_reader:
 			print('Lista de precio: {}'.format(row['fecha_desde'],row['fecha_hasta']))
 			print('-'*50)
-			new_lista_precio = Lista_precio(fecha_desde=row['fecha_desde'],fecha_hasta=row['fecha_hasta'])
+			print("acaaaaa el string " + row['fecha_desde'])
+			#f_desde = datetime.to_time(row['fecha_desde'])g
+			stringg = row['fecha_desde']
+			f_desde = datetime.strptime(stringg, "%d/%m/%Y")
+			print(f_desde)
+			stringg = row['fecha_hasta']
+			f_hasta = datetime.strptime(stringg, "%d/%m/%Y")
+			print(f_hasta)
+			#desde = datetime.datetime.strptime(fecha_desde=row['fecha_desde'], "%y/%m/%d").date
+			#hasta = datetime.datetime.strptime(fecha_hasta=row['fecha_hasta'], "%y/%m/%d")
+			new_lista_precio = Lista_precio(f_desde,f_hasta)
 			lista_precio.append(new_lista_precio)
 		db.session.add_all(lista_precio)
 		db.session.commit()
@@ -346,4 +357,4 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_envase()
 	print('#'*50)
-	#insertar_lista_precio()
+	insertar_lista_precio()
