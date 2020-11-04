@@ -12,7 +12,7 @@ from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 	CuentaCorriente, MovimientoCtaCorriente
 from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
 	Producto, ProductoEnvase
-from distribuidora.models.precio import Lista_precio
+from distribuidora.models.precio import Lista_precio, Lista_precio_producto
 from distribuidora.models.pedido import PedidoEstado
 
 # Importamos settings
@@ -361,6 +361,31 @@ def insertar_producto_envase():
 
 
 
+def insertar_lista_precio_producto():
+	print('Importando Modelo de Producto_Envase')
+	lista_precio_producto = []
+	with open(DATOS_PATH + 'lista_precio_producto.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Producto: {}'.format(row['producto']))
+			print('Lista_precio : {}'.format(row['lista_id']))
+			print('Precio: {}'.format(row['precio']))
+			print('Fecha_inicio: {}'.format(row['fecha_inicio']))
+			print('fecha_Fin: {}'.format(row['fecha_fin']))
+			print('-'*50)
+			p = Producto.query.filter_by(descripcion=row['producto']).first()
+			f_inicio = datetime.strptime(row['fecha_inicio'], "%d/%m/%Y")
+			f_fin = datetime.strptime(row['fecha_fin'], "%d/%m/%Y")
+			new_lista_precio_producto = Lista_precio_producto(producto_id=p.producto_id,
+				precio_id=row['lista_id'],precio=row['precio'],fecha_inicio=f_inicio,
+				fecha_fin=f_fin)
+			lista_precio_producto.append(new_lista_precio_producto)
+		db.session.add_all(lista_precio_producto)
+		db.session.commit()
+
+
+
+
 if __name__ == '__main__':
 	insertar_provincias()
 	print('#'*50)
@@ -397,3 +422,5 @@ if __name__ == '__main__':
 	insertar_producto()
 	print('#'*50)
 	insertar_producto_envase()
+	print('#'*50)
+	insertar_lista_precio_producto()
