@@ -1,4 +1,11 @@
 unidad_medida_id,descripcion
-1,cm3
-2,g
-3,unidad
+1,100g
+2,200g
+3,250g
+4,500g
+5,1kg
+6,250cm3
+7,500cm3
+8,750cm3
+9,1L
+10,1.5L
