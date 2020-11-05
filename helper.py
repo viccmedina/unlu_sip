@@ -16,7 +16,7 @@ from distribuidora.models.precio import Lista_precio, Lista_precio_producto
 from distribuidora.models.pedido import EstadoPedido, DetallePedido, TipoPedido, Pedido, \
 	EstadoPedido_PEDIDO
 from distribuidora.models.devolucion import EstadoDevolucion
-from distribuidora.models.stock import TipoMovimientoStock
+from distribuidora.models.stock import TipoMovimientoStock, DetalleStock
 
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -389,20 +389,6 @@ def insertar_lista_precio_producto():
 
 
 
-def insertar_detalle_pedido():
-	print('Importando Modelo de Detalle_pedido')
-	detalle_pedido = []
-	with open(DATOS_PATH + 'detalle_pedido.csv') as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		for row in csv_reader:
-			print('Producto: {}'.format(row['producto_id']))
-			print('Cantidad: {}'.format(row['cantidad']))
-			new_detalle_pedido = DetallePedido(producto_id=row['producto_id'],
-				cantidad=row['cantidad'])
-			detalle_pedido.append(new_detalle_pedido)
-		db.session.add_all(detalle_pedido)
-		db.session.commit()
-
 
 
 def insertar_estado_devolucion():
@@ -507,6 +493,30 @@ def insertar_detalle_pedido():
 		db.session.add_all(detalle_pedido)
 		db.session.commit()
 
+
+
+def insertar_detalle_stock():
+	print('Importando Modelo Detalle de Stock')
+	detalle_stock = []
+	with open(DATOS_PATH + 'detalle_stock.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('detalle: {}'.format(row['detalle_pedido_id']))
+			print('tipo_mov: {}'.format(row['tipo_movimiento_stock_id']))
+			print('user: {}'.format(row['usuario_id']))
+			print('desc: {}'.format(row['descripcion']))
+			print('prod: {}'.format(row['producto_id']))
+			print('cantidad: {}'.format(row['cantidad']))
+			print('-'*50)
+			new_detalle_stock = DetalleStock(descripcion=row['descripcion'],cantidad=row['cantidad'],detalle_pedido_id=row['detalle_pedido_id'],usuario_id=row['usuario_id'],producto_id=row['producto_id'],tipo_movimiento_stock_id=row['tipo_movimiento_stock_id'])
+			print(new_detalle_stock)
+			detalle_stock.append(new_detalle_stock)
+		db.session.add_all(detalle_stock)
+		db.session.commit()
+
+
+
+
 if __name__ == '__main__':
 	insertar_provincias()
 	print('#'*50)
@@ -545,8 +555,6 @@ if __name__ == '__main__':
 	insertar_producto_envase()
 	print('#'*50)
 	insertar_lista_precio_producto()
-	#print('#'*50)
-	#insertar_detalle_pedido()
 	print('#'*50)
 	insertar_estado_devolucion()
 	print('#'*50)
@@ -561,3 +569,5 @@ if __name__ == '__main__':
 	insertar_estadoPedido_PEDIDO()
 	print('#'*50)
 	insertar_detalle_pedido()
+	print('#'*50)
+	insertar_detalle_stock()
