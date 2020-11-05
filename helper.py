@@ -9,7 +9,7 @@ from distribuidora.models.gestion_usuario import Usuario, Rol, Permiso
 from distribuidora.models.domicilio import Domicilio
 from distribuidora.models.persona import Persona
 from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
-	CuentaCorriente, MovimientoCtaCorriente
+	CuentaCorriente, MovimientoCtaCorriente, EstadoCtaCorriente
 from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
 	Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
@@ -417,6 +417,21 @@ def insertar_estado_devolucion():
 	db.session.commit()
 
 
+def insertar_estado_cta_corriente():
+	print('Importando Modelo de Tipo de Estados de las cuentas corrientes')
+	estado_cta_corriente = []
+	with open(DATOS_PATH + 'estado_cta_corriente.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Estado Cuenta Corriente: {}'.format(row['descripcion']))
+			print('-'*50)
+			new_estado_cta_corriente = EstadoCtaCorriente(descripcion=row['descripcion'],
+			descripcion_corta=row['descripcion_corta'])
+			estado_cta_corriente.append(new_estado_cta_corriente)
+	db.session.add_all(estado_cta_corriente)
+	db.session.commit()
+
+
 
 
 
@@ -462,3 +477,5 @@ if __name__ == '__main__':
 	#insertar_detalle_pedido()
 	print('#'*50)
 	insertar_estado_devolucion()
+	print('#'*50)
+	insertar_estado_cta_corriente()
