@@ -13,7 +13,7 @@ from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
 	Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
-from distribuidora.models.pedido import PedidoEstado
+from distribuidora.models.pedido import PedidoEstado, DetallePedido
 
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -385,6 +385,22 @@ def insertar_lista_precio_producto():
 
 
 
+def insertar_detalle_pedido():
+	print('Importando Modelo de Detalle_pedido')
+	detalle_pedido = []
+	with open(DATOS_PATH + 'detalle_pedido.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Producto: {}'.format(row['producto_id']))
+			print('Cantidad: {}'.format(row['cantidad']))
+			new_detalle_pedido = DetallePedido(producto_id=row['producto_id'],
+				cantidad=row['cantidad'])
+			detalle_pedido.append(new_detalle_pedido)
+		db.session.add_all(detalle_pedido)
+		db.session.commit()
+
+
+
 
 if __name__ == '__main__':
 	insertar_provincias()
@@ -424,3 +440,5 @@ if __name__ == '__main__':
 	insertar_producto_envase()
 	print('#'*50)
 	insertar_lista_precio_producto()
+	print('#'*50)
+	insertar_detalle_pedido()

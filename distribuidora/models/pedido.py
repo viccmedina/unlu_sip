@@ -78,7 +78,7 @@ class DetallePedido(db.Model):
     # Atributos
     detalle_id = db.Column(db.Integer, primary_key=True)
     producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'),nullable=False)
-    pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
+    #pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
     cantidad = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
