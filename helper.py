@@ -13,7 +13,7 @@ from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
 	Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
-from distribuidora.models.pedido import PedidoEstado, DetallePedido, TipoPedido
+from distribuidora.models.pedido import PedidoEstado, DetallePedido, TipoPedido, Pedido
 from distribuidora.models.devolucion import EstadoDevolucion
 from distribuidora.models.stock import TipoMovimientoStock
 
@@ -466,6 +466,19 @@ def insertar_tipo_pedido():
 
 
 
+def insertar_pedido():
+	print('Importando Modelo Pedido')
+	pedido = []
+	with open(DATOS_PATH + 'pedido.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('-'*50)
+			new_pedido = Pedido(usuario_id=row['usuario_id'],tipo_pedido_id=row['tipo_pedido_id'])
+			pedido.append(new_pedido)
+		db.session.add_all(pedido)
+		db.session.commit()
+
+
 if __name__ == '__main__':
 	insertar_provincias()
 	print('#'*50)
@@ -514,3 +527,5 @@ if __name__ == '__main__':
 	insertar_tipo_movimiento_stock()
 	print('#'*50)
 	insertar_tipo_pedido()
+	print('#'*50)
+	insertar_pedido()
