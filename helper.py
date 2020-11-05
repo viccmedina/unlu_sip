@@ -14,6 +14,7 @@ from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMed
 	Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
 from distribuidora.models.pedido import PedidoEstado, DetallePedido
+from distribuidora.models.devolucion import EstadoDevolucion
 
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -401,6 +402,23 @@ def insertar_detalle_pedido():
 
 
 
+def insertar_estado_devolucion():
+	print('Importando Modelo de Tipo de Estados de la devolucion')
+	estado_devolucion = []
+	with open(DATOS_PATH + 'estado_devolucion.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Estado Devolucion: {}'.format(row['descripcion']))
+			print('-'*50)
+			new_estado_devolucion = EstadoDevolucion(descripcion=row['descripcion'])
+
+			estado_devolucion.append(new_estado_devolucion)
+	db.session.add_all(estado_devolucion)
+	db.session.commit()
+
+
+
+
 
 if __name__ == '__main__':
 	insertar_provincias()
@@ -440,5 +458,7 @@ if __name__ == '__main__':
 	insertar_producto_envase()
 	print('#'*50)
 	insertar_lista_precio_producto()
+	#print('#'*50)
+	#insertar_detalle_pedido()
 	print('#'*50)
-	insertar_detalle_pedido()
+	insertar_estado_devolucion()

@@ -1,0 +1,8 @@
+estado_devolucion_id,descripcion
+1,Rotura
+2,Defectuoso
+3,Vencimiento
+4,Falla embalaje
+5,Producto no solicitado
+6,cambio opinion cliente
+7,Producto comprometido
