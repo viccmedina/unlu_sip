@@ -15,6 +15,7 @@ from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMed
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
 from distribuidora.models.pedido import PedidoEstado, DetallePedido
 from distribuidora.models.devolucion import EstadoDevolucion
+from distribuidora.models.stock import TipoMovimientoStock
 
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -403,7 +404,7 @@ def insertar_detalle_pedido():
 
 
 def insertar_estado_devolucion():
-	print('Importando Modelo de Tipo de Estados de la devolucion')
+	print('Importando Modelo Estados de la devolucion')
 	estado_devolucion = []
 	with open(DATOS_PATH + 'estado_devolucion.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
@@ -418,7 +419,7 @@ def insertar_estado_devolucion():
 
 
 def insertar_estado_cta_corriente():
-	print('Importando Modelo de Tipo de Estados de las cuentas corrientes')
+	print('Importando Modelo de Estados de las cuentas corrientes')
 	estado_cta_corriente = []
 	with open(DATOS_PATH + 'estado_cta_corriente.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
@@ -431,6 +432,20 @@ def insertar_estado_cta_corriente():
 	db.session.add_all(estado_cta_corriente)
 	db.session.commit()
 
+
+def insertar_tipo_movimiento_stock():
+	print('Importando Modelo de Tipo de moviemientos de stock')
+	tipo_movimiento_stock = []
+	with open(DATOS_PATH + 'tipo_movimiento_stock.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Tipo Movimiento Stock: {}'.format(row['descripcion']))
+			print('-'*50)
+			new_tipo_movimiento_stock = TipoMovimientoStock(descripcion=row['descripcion'],
+			descripcion_corta=row['descripcion_corta'])
+			tipo_movimiento_stock.append(new_tipo_movimiento_stock)
+	db.session.add_all(tipo_movimiento_stock)
+	db.session.commit()
 
 
 
@@ -479,3 +494,5 @@ if __name__ == '__main__':
 	insertar_estado_devolucion()
 	print('#'*50)
 	insertar_estado_cta_corriente()
+	print('#'*50)
+	insertar_tipo_movimiento_stock()

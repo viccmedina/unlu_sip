@@ -17,7 +17,7 @@ class TipoMovimientoStock(db.Model):
     tipo_movimiento_stock_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
     descripcion_corta = db.Column(db.String(80), nullable=False)
-    detalle_stock = db.relationship('DetalleStock', backref='detalles_stocks', lazy=True)
+    #detalle_stock = db.relationship('DetalleStock', backref='detalles_stocks', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
     def __init__(self, descripcion, descripcion_corta):
