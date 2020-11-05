@@ -37,7 +37,7 @@ class TipoPedido(db.Model):
 
 
 
-class PedidoEstado(db.Model):
+class EstadoPedido(db.Model):
     """
     Este modelo representará los estados de pedidos.
     Contará con los siquientes campos:
@@ -48,10 +48,10 @@ class PedidoEstado(db.Model):
     """
 
     # Nombre de la tabla
-    __tablename__ = 'pedido_estado'
+    __tablename__ = 'estado_pedido'
 
     # Atributos
-    pedido_estado_id = db.Column(db.Integer, primary_key=True)
+    estado_pedido_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False, unique=True)
     descripcion_corta = db.Column(db.String(80), nullable=False, unique=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
@@ -70,21 +70,21 @@ class PedidoEstado(db.Model):
         return 'Estado de Pedido:  {}'.format(self.descripcion)
 
 
-class EstadoPedido(db.Model):
+class EstadoPedido_PEDIDO(db.Model):
     """
     Representa la relacion entre pedido y estado.
     La misma nos brinda el historial de los pedidos y todos los
     estados por los cuales un pedido pasó.
     """
-    __tablename__ = 'estado_pedido'
+    __tablename__ = 'estadoPedido_PEDIDO'
 
-    estado_pedido_id = db.Column(db.Integer, primary_key=True)
+    estadoPedido_PEDIDO_id = db.Column(db.Integer, primary_key=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
     pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
-    pedido_estado_id = db.Column(db.Integer, db.ForeignKey('pedido_estado.pedido_estado_id'),nullable=False)
+    estado_pedido_id = db.Column(db.Integer, db.ForeignKey('estado_pedido.estado_pedido_id'),nullable=False)
 
-    def __init__(self, pedido_estado_id, pedido_id):
-        self.pedido_estado_id = estado_pedido_id
+    def __init__(self, estado_pedido_id, pedido_id):
+        self.estado_pedido_id = estado_pedido_id
         self.pedido_id = pedido_id
 
     def __repr__(self):

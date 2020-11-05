@@ -13,7 +13,8 @@ from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
 	Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
-from distribuidora.models.pedido import PedidoEstado, DetallePedido, TipoPedido, Pedido
+from distribuidora.models.pedido import EstadoPedido, DetallePedido, TipoPedido, Pedido, \
+	EstadoPedido_PEDIDO
 from distribuidora.models.devolucion import EstadoDevolucion
 from distribuidora.models.stock import TipoMovimientoStock
 
@@ -230,15 +231,15 @@ def insertar_movimientos_cta_corriente():
 	db.session.commit()
 
 
-def insertar_pedido_estado():
-	print('Importando Modelo de Tipo de Estados de Pedidos')
+def insertar_estado_pedido():
+	print('Importando Modelo de Estados de Pedidos')
 	estados = []
 	with open(DATOS_PATH + 'tipo_estado_pedido.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('Estado Pedido: {}'.format(row['descripcion']))
 			print('-'*50)
-			tipos_estado_pedido = PedidoEstado(descripcion=row['descripcion'], \
+			tipos_estado_pedido = EstadoPedido(descripcion=row['descripcion'], \
 				descripcion_corta=row['descripcion_corta'])
 
 			estados.append(tipos_estado_pedido)
@@ -465,7 +466,6 @@ def insertar_tipo_pedido():
 		db.session.commit()
 
 
-
 def insertar_pedido():
 	print('Importando Modelo Pedido')
 	pedido = []
@@ -477,6 +477,21 @@ def insertar_pedido():
 			pedido.append(new_pedido)
 		db.session.add_all(pedido)
 		db.session.commit()
+
+
+
+def insertar_estadoPedido_PEDIDO():
+	print('Importando Modelo estadoPedido_pedido')
+	estadoP_pedido = []
+	with open(DATOS_PATH + 'estado_Pedido_PEDIDO.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('-'*50)
+			new_estadoP_pedido = EstadoPedido_PEDIDO(estado_pedido_id=row['estado_pedido_id'],pedido_id=row['pedido_id'])
+			estadoP_pedido.append(new_estadoP_pedido)
+		db.session.add_all(estadoP_pedido)
+		db.session.commit()
+
 
 
 if __name__ == '__main__':
@@ -494,7 +509,7 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_tipo_movimiento_cta_corriente()
 	print('#'*50)
-	insertar_pedido_estado()
+	insertar_estado_pedido()
 	print('#'*50)
 	insertar_tipo_dni()
 	print('#'*50)
@@ -529,3 +544,5 @@ if __name__ == '__main__':
 	insertar_tipo_pedido()
 	print('#'*50)
 	insertar_pedido()
+	print('#'*50)
+	insertar_estadoPedido_PEDIDO()
