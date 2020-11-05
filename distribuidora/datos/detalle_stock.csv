@@ -1,0 +1,6 @@
+detalle_pedido_id,tipo_movimiento_stock_id,usuario_id,descripcion,cantidad
+null,1,3,Carga-harina,50
+1,2,6	Saca-levadura	3
+2,2,6	Saca-harina-chacabuco	2
+3,2,6	Saca-azucar	2
+4,2,4	Saca-harina-blancaFlor	5

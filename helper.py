@@ -487,12 +487,25 @@ def insertar_estadoPedido_PEDIDO():
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('-'*50)
-			new_estadoP_pedido = EstadoPedido_PEDIDO(estado_pedido_id=row['estado_pedido_id'],pedido_id=row['pedido_id'])
+			new_estadoP_pedido = EstadoPedido_PEDIDO(estado_pedido_id=row['estado_pedido_id'],
+			pedido_id=row['pedido_id'])
 			estadoP_pedido.append(new_estadoP_pedido)
 		db.session.add_all(estadoP_pedido)
 		db.session.commit()
 
 
+def insertar_detalle_pedido():
+	print('Importando Modelo Detalle de Pedido')
+	detalle_pedido = []
+	with open(DATOS_PATH + 'detalle_pedido.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('-'*50)
+			new_detalle_pedido = DetallePedido(producto_id=row['producto_id'],pedido_id=row['pedido_id'],
+			cantidad=row['cantidad'])
+			detalle_pedido.append(new_detalle_pedido)
+		db.session.add_all(detalle_pedido)
+		db.session.commit()
 
 if __name__ == '__main__':
 	insertar_provincias()
@@ -546,3 +559,5 @@ if __name__ == '__main__':
 	insertar_pedido()
 	print('#'*50)
 	insertar_estadoPedido_PEDIDO()
+	print('#'*50)
+	insertar_detalle_pedido()
