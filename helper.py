@@ -9,7 +9,7 @@ from distribuidora.models.gestion_usuario import Usuario, Rol, Permiso
 from distribuidora.models.domicilio import Domicilio
 from distribuidora.models.persona import Persona
 from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
-	CuentaCorriente, MovimientoCtaCorriente, EstadoCtaCorriente
+	CuentaCorriente, MovimientoCtaCorriente, EstadoCtaCorriente, ComprobantePago
 from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
 	Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
@@ -508,12 +508,30 @@ def insertar_detalle_stock():
 			print('prod: {}'.format(row['producto_id']))
 			print('cantidad: {}'.format(row['cantidad']))
 			print('-'*50)
-			new_detalle_stock = DetalleStock(descripcion=row['descripcion'],cantidad=row['cantidad'],detalle_pedido_id=row['detalle_pedido_id'],usuario_id=row['usuario_id'],producto_id=row['producto_id'],tipo_movimiento_stock_id=row['tipo_movimiento_stock_id'])
+			new_detalle_stock = DetalleStock(descripcion=row['descripcion'],
+			cantidad=row['cantidad'],detalle_pedido_id=row['detalle_pedido_id'],
+			usuario_id=row['usuario_id'],producto_id=row['producto_id'],
+			tipo_movimiento_stock_id=row['tipo_movimiento_stock_id'])
 			print(new_detalle_stock)
 			detalle_stock.append(new_detalle_stock)
 		db.session.add_all(detalle_stock)
 		db.session.commit()
 
+
+
+def insertar_comprobante_pago():
+	print('Importando Modelo Comprobante de Pago')
+	comprobante_pago = []
+	with open(DATOS_PATH + 'comprobante_pago.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('-'*50)
+			f_pago = datetime.strptime(row['fecha_pago'], "%d/%m/%Y")
+			new_comprobante_pago = ComprobantePago(monto=row['monto'],
+			pedido_id=row['pedido_id'],movimiento=row['movimiento_cta_corriente_id'],fecha_pago=f_pago)
+			comprobante_pago.append(new_comprobante_pago)
+		db.session.add_all(comprobante_pago)
+		db.session.commit()
 
 
 
@@ -571,3 +589,5 @@ if __name__ == '__main__':
 	insertar_detalle_pedido()
 	print('#'*50)
 	insertar_detalle_stock()
+	print('#'*50)
+	insertar_comprobante_pago()

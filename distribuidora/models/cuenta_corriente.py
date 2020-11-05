@@ -82,8 +82,10 @@ class ComprobantePago(db.Model):
     movimiento = db.Column(db.Integer, db.ForeignKey('movimiento_cta_corriente.movimiento_id'),nullable=False)
     pedido = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
 
-    def __init__(self, monto, pedido_id):
+    def __init__(self, monto, pedido_id, movimiento,fecha_pago):
         self.monto = monto
+        self.movimiento = movimiento
+        self.fecha_pago = fecha_pago
         self.pedido = pedido_id
 
     def get_fecha_pago(self):
