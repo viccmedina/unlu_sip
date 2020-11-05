@@ -15,7 +15,7 @@ from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMed
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
 from distribuidora.models.pedido import EstadoPedido, DetallePedido, TipoPedido, Pedido, \
 	EstadoPedido_PEDIDO
-from distribuidora.models.devolucion import EstadoDevolucion, Devolucion
+from distribuidora.models.devolucion import EstadoDevolucion, Devolucion, DetalleDevolucion
 from distribuidora.models.stock import TipoMovimientoStock, DetalleStock
 
 # Importamos settings
@@ -550,6 +550,19 @@ def insertar_devolucion():
 
 
 
+def insertar_detalle_devolucion():
+	print('Importando Modelo Detalle de Devoluciones')
+	detalle_devolucion = []
+	with open(DATOS_PATH + 'detalle_devolucion.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('-'*50)
+			new_detalle_devolucion = DetalleDevolucion(devolucion_id=row['devolucion_id'],
+			producto_id=row['producto_id'],cantidad=row['cantidad'])
+			detalle_devolucion.append(new_detalle_devolucion)
+		db.session.add_all(detalle_devolucion)
+		db.session.commit()
+
 
 
 if __name__ == '__main__':
@@ -610,3 +623,5 @@ if __name__ == '__main__':
 	insertar_comprobante_pago()
 	print('#'*50)
 	insertar_devolucion()
+	print('#'*50)
+	insertar_detalle_devolucion()
