@@ -163,14 +163,16 @@ class CuentaCorriente(db.Model):
     # Atributos
     cuenta_corriente_id = db.Column(db.Integer, primary_key=True)
     persona_id = db.Column(db.Integer, db.ForeignKey('persona.persona_id'),nullable=False)
+    estado_cta_corriente_id = db.Column(db.Integer, db.ForeignKey('estado_cta_corriente.estado_cta_corriente_id'),nullable=False)
     movimientos = db.relationship('MovimientoCtaCorriente', backref='movimiento_ctacorriente', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
-    def __init__(self, persona_id):
+    def __init__(self, persona_id, estado_cta_corriente_id):
         """
         Constructor de la clase Cuenta_corriente
         """
         self.persona_id = persona_id
+        self.estado_cta_corriente_id = estado_cta_corriente_id
 
     def __repr__(self):
         """

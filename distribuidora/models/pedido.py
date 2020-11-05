@@ -1,6 +1,42 @@
 from distribuidora import db
 
 
+
+
+class TipoPedido(db.Model):
+    """
+    Este modelo representará el tipo de Pedido
+    Contará con los siquientes campos:
+    tipo_pedido_id --> clave primaria
+    descripcion --> describe el tipo de pedido
+    ts_created --> momento en que el registro fue creado
+    """
+
+    # Nombre de la tabla
+    __tablename__ = 'tipo_pedido'
+
+    # Atributos
+    tipo_pedido_id = db.Column(db.Integer, primary_key=True)
+    descripcion = db.Column(db.String(80), nullable=False)
+    ts_created = db.Column(db.DateTime, server_default=db.func.now())
+
+    pedidos = db.relationship('Pedido', backref='tipo_pedido', lazy=True)
+
+    def __init__(self, descripcion):
+        """
+        Constructor de la clase tipo_pedido
+        """
+        self.descripcion = descripcion
+
+    def __repr__(self):
+        """
+        Nos devolverá una representación del Modelo
+        """
+        return 'Tipo de Pedido:  {}'.format(self.descripcion)
+
+
+
+
 class PedidoEstado(db.Model):
     """
     Este modelo representará los estados de pedidos.
@@ -96,6 +132,13 @@ class DetallePedido(db.Model):
         return 'detalle:  {}'.format(self.producto_id, self.cantidad)
 
 
+
+
+
+
+
+
+
 class Pedido(db.Model):
     """
     Este modelo representará a pedido.
@@ -113,15 +156,16 @@ class Pedido(db.Model):
     # Atributos
     pedido_id = db.Column(db.Integer, primary_key=True)
     detalle = db.relationship('DetallePedido', uselist=False, backref='detalles_pedidos', lazy=True)
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    usuario_id =  db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    tipo_pedido_id = db.Column(db.Integer, db.ForeignKey('tipo_pedido.tipo_pedido_id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, usuario_id, estado_id):
+    def __init__(self, usuario_id, tipo_pedido_id):
         """
         Constructor de la clase pedido
         """
-        self.estado_pedido_id = estado_id
+        self.tipo_pedido_id = tipo_pedido_id
         self.usuario_id = usuario_id
 
 
@@ -129,4 +173,4 @@ class Pedido(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'pedido {}'.format(self.detalle_id, self.usuario_id, self.estado_pedido_id)
+        return 'pedido {}'.format(self.detalle_id, self.usuario_id, self.tipo_pedido_id)

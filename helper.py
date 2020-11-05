@@ -13,7 +13,7 @@ from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
 	Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
-from distribuidora.models.pedido import PedidoEstado, DetallePedido
+from distribuidora.models.pedido import PedidoEstado, DetallePedido, TipoPedido
 from distribuidora.models.devolucion import EstadoDevolucion
 from distribuidora.models.stock import TipoMovimientoStock
 
@@ -193,7 +193,8 @@ def insertar_cuenta_corriente():
 	with open(DATOS_PATH + 'cta_corriente.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			c = CuentaCorriente(persona_id=row['persona'])
+			c = CuentaCorriente(persona_id=row['persona_id'],
+			estado_cta_corriente_id=row['estado_cta_corriente_id'])
 			cuentas.append(c)
 	db.session.add_all(cuentas)
 	db.session.commit()
@@ -450,6 +451,21 @@ def insertar_tipo_movimiento_stock():
 
 
 
+def insertar_tipo_pedido():
+	print('Importando Modelo tipoPedido')
+	tipoPedido = []
+	with open(DATOS_PATH + 'tipo_pedido.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			print('Tipo Pedido: {}'.format(row['descripcion']))
+			print('-'*50)
+			new_tipoPedido = TipoPedido(descripcion=row['descripcion'])
+			tipoPedido.append(new_tipoPedido)
+		db.session.add_all(tipoPedido)
+		db.session.commit()
+
+
+
 if __name__ == '__main__':
 	insertar_provincias()
 	print('#'*50)
@@ -496,3 +512,5 @@ if __name__ == '__main__':
 	insertar_estado_cta_corriente()
 	print('#'*50)
 	insertar_tipo_movimiento_stock()
+	print('#'*50)
+	insertar_tipo_pedido()

@@ -1,5 +1,5 @@
 cta_corriente,tipo_movimiento_cta_corriente,usuario_registrador,saldo
-1,Deuda,2,100
-1,Deuda,2,50
-1,Pago,2,110
-1,Deuda,2,20
+1,Deuda,3,500
+1,Pago,3,100
+2,Deuda,3,250
+1,Pago,3,400
