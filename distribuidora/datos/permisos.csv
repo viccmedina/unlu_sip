@@ -1,0 +1,133 @@
+nombre,descripcion
+A.Pro,Alta Producto
+B.Pro,Baja Producto
+M.Pro,Modifica Producto
+*.Pro,All Producto
+A.Pe,Alta Pedido
+B.Pe,Baja Pedido
+M.Pe,Modifica Pedido
+*.Pe,All Pedido
+A.Cc,Alta Cta Corriente
+B.Cc,Baja Cta Corriente
+M.Cc,Modifica Cta Corriente
+*.Cc,All Cta Corriente
+A.Ds,Alta DetalleStock
+B.Ds,Baja DetalleStock
+M.Ds,Modifica DetalleStock
+*.Ds,All DetalleStock
+A.Us,Alta Usuario
+B.Us,Baja Usuario
+M.Us,Modifica Usuario
+*.Us,All Usuario
+A.TMS,Alta T Mov Stock
+B.TMS,Baja T Mov Stock
+M.TMS,Modifica T Mov Stock
+*.TMS,All T Mov Stock
+A.Dpe,Alta DetallePedido
+B.Dpe,Baja DetallePedido
+M.Dpe,Modifica DetallePedido
+*.Dpe,All DetallePedido
+A.CP,Alta Comprobante Pago
+B.CP,Baja Comprobante Pago
+M.CP,Modifica Comprobante Pago
+*.CP,All Comprobante Pago
+A.MCC,Alta Mov Cta Corriente
+B.MCC,Baja Mov Cta Corriente
+M.MCC,Modifica Mov Cta Corriente
+*.MCC,All Mov Cta Corriente
+A.TMCC,Alta Tipo Mov Cta Corriente
+B.TMCC,Baja Tipo Mov Cta Corriente
+M.TMCC,Modifica T Mov Cta Corriente
+*.TMCC,All Tipo Mov Cta Corriente
+A.ECC,Alta Estado Cta Corriente
+B:ECC,Baja Estado Cta Corriente
+M.ECC,Modifica Estado Cta Corriente
+*.ECC,All Estado Cta Corriente
+A.Ddev,Alta DetalleDevolucion
+B.Ddev,Baja DetalleDevolucion
+M.Ddev,Modifica DetalleDevolucion
+*.Ddev,All DetalleDevolucion
+A.D,Alta Devolucion
+B.D,Baja Devolucion
+M.D,Modifica Devolucion
+*.D,All Devolucion
+A.Edev,Alta Estado Devolucion
+B.Edev,Baja Estado Devolucion
+M.Edev,Modifica Estado Devolucion
+*.Edev,All Estado Devolucion
+A.Ep_P,Alta EstadoPedido_Pedido
+B.Ep_P,Baja EstadoPedido_Pedido
+M.Ep_P,Modifica EstadoPedido_Pedido
+*.Ep_p,All EstadoPedido_Pedido
+A.EP,Alta Estado Pedido
+B.EP,Baja Estado Pedido
+M.EP,Modifica Estado Pedido
+*.EP,All Estado Pedido
+A.TP,Alta Tipo Pedido
+B.TP,Baja Tipo Pedido
+M.TP,Modifica Tipo Pedido
+*.Tp,All Tipo Pedido
+A.Tpro,Alta Tipo Producto
+B.Tpro,Baja Tipo Producto
+M.Tpro,Modifica Tipo Producto
+*.Tpro,All Tipo Producto
+A.LP,Alta Lista Precio
+B.LP,Baja Lista Precio
+M.LP,Modifica Lista Precio
+*.LP,All Lista Precio
+A.LPPro,Alta Lista Precio Producto
+B.LPPro,Baja Lista Precio Producto
+M.LPPro,Modifica Lista Precio Producto
+*.LPPro,All Lista Precio Producto
+A.Penv,Alta Producto Envase
+B.Penv,Baja Producto Envase
+M.Penv,Modifica Producto Envase
+*.Penv,All Producto Envase
+A.Env,Alta Envase
+B.Env,Baja Envase
+M.Env,Modifica Envase
+*.Env,All Envase
+A.UM,Alta Unidad Medida
+B.UM,Baja Unidad Medida
+M.UM,Modifica Unidad Medida
+*.UM,All Unidad Medida
+A.Ma,Alta Marca
+B.Ma,Baja Marca
+M.Ma,Modifica Marca
+*.Ma,All Marca
+A.Per,Alta Persona
+B.Per,Baja Persona
+M.Per,Modifica Persona
+*.Per,All Persona
+A.Loc,Alta Localidad
+B.Loc,Baja Localidad
+M.Loc,Modifica Localidad
+*.Loc,All Localidad
+A.Dom,Alta Domicilio
+B.Dom,Baja Domicilio
+M.Dom,Modifica Domicilio
+*.Dom,All Domicilio
+A.Prov,Alta Provincia
+B.Prov,Baja Provincia
+M.Prov,Modifica Provincia
+*.Prov,All Provincia
+A.R,Alta Rol
+B.R,Baja Rol
+M.R,Modifica Rol
+*.R,All Rol
+A.Perm,Alta Permiso
+B.Perm,Baja Permiso
+M.Perm,Modifica Permiso
+*.Perm,All Permiso
+A.TD,Alta Tipo Dni
+B.TD,Baja Tipo Dni
+M.TD,Modifica Tipo Dni
+*.TD,All Tipo Dni
+A.UR,Alta Usuario Rol
+B.UR,Baja Usuario Rol
+M.UR,Modifica Usuario Rol
+*.UR,All Usuario Rol
+A.Prol,Alta Permiso Rol
+B.Prol,Baja Permiso Rol
+M.Prol,Modifica Permiso Rol
+*.Prol,All Permiso Rol

@@ -112,7 +112,7 @@ def insertar_roles():
 def insertar_permisos():
 	print('Importando Modelo Permiso')
 	lista_permiso =	[]
-	with open(DATOS_PATH + 'permiso.csv') as csv_file:
+	with open(DATOS_PATH + 'permiso_rol.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('Permiso: {}'.format(row['nombre']))
