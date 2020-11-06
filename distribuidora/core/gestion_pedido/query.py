@@ -23,8 +23,9 @@ CONSULTA_POR_ESTADO_PEDIDO_SEGUN_ID = """ SELECT pedido_estado_id FROM pedido_es
 INSERT_NUEVO_PEDIDO = """ INSERT INTO pedido (usuario_id)
     VALUES ('{usuario_id}')"""
 
-INSERT_NUEVO_ESTADO_PEDIDO = """ INSERT INTO estado_pedido (usuario_id, pedido_estado_id)
-    VALUES ('{pedido_id}', '{pedido_estado_id}')"""
+INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO = """ INSERT INTO historial_estado_pedido (pedido_estado_id, pedido_id)
+    VALUES ('{pedido_estado_id}', '{pedido_id}')"""
+
 SELECT_ULTIMO_PEDIDO_ID_POR_CLIENTE = """ SELECT pedido_id FROM pedido WHERE """
 
 SELECT_ID_ULTIMO_PEDIDO = """ SELECT pedido_id FROM pedido WHERE usuario_id='{usuario_id}'

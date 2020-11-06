@@ -47,8 +47,8 @@ class HistorialPedidoEstado(db.Model):
     pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
     pedido_estado_id = db.Column(db.Integer, db.ForeignKey('pedido_estado.pedido_estado_id'),nullable=False)
 
-    def __init__(self, estado_pedido_id, pedido_id):
-        self.estado_pedido_id = estado_pedido_id
+    def __init__(self, pedido_estado_id, pedido_id):
+        self.pedido_estado_id = estado_pedido_id
         self.pedido_id = pedido_id
 
     def __repr__(self):
