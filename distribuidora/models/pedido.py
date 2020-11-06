@@ -1,43 +1,7 @@
 from distribuidora import db
 
 
-
-
-class TipoPedido(db.Model):
-    """
-    Este modelo representará el tipo de Pedido
-    Contará con los siquientes campos:
-    tipo_pedido_id --> clave primaria
-    descripcion --> describe el tipo de pedido
-    ts_created --> momento en que el registro fue creado
-    """
-
-    # Nombre de la tabla
-    __tablename__ = 'tipo_pedido'
-
-    # Atributos
-    tipo_pedido_id = db.Column(db.Integer, primary_key=True)
-    descripcion = db.Column(db.String(80), nullable=False)
-    ts_created = db.Column(db.DateTime, server_default=db.func.now())
-
-    pedidos = db.relationship('Pedido', backref='tipo_pedido', lazy=True)
-
-    def __init__(self, descripcion):
-        """
-        Constructor de la clase tipo_pedido
-        """
-        self.descripcion = descripcion
-
-    def __repr__(self):
-        """
-        Nos devolverá una representación del Modelo
-        """
-        return 'Tipo de Pedido:  {}'.format(self.descripcion)
-
-
-
-
-class EstadoPedido(db.Model):
+class PedidoEstado(db.Model):
     """
     Este modelo representará los estados de pedidos.
     Contará con los siquientes campos:
@@ -48,10 +12,10 @@ class EstadoPedido(db.Model):
     """
 
     # Nombre de la tabla
-    __tablename__ = 'estado_pedido'
+    __tablename__ = 'pedido_estado'
 
     # Atributos
-    estado_pedido_id = db.Column(db.Integer, primary_key=True)
+    pedido_estado_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False, unique=True)
     descripcion_corta = db.Column(db.String(80), nullable=False, unique=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
@@ -70,18 +34,18 @@ class EstadoPedido(db.Model):
         return 'Estado de Pedido:  {}'.format(self.descripcion)
 
 
-class EstadoPedido_PEDIDO(db.Model):
+class HistorialPedidoEstado(db.Model):
     """
     Representa la relacion entre pedido y estado.
     La misma nos brinda el historial de los pedidos y todos los
     estados por los cuales un pedido pasó.
     """
-    __tablename__ = 'estadoPedido_PEDIDO'
+    __tablename__ = 'historial_estado_pedido'
 
-    estadoPedido_PEDIDO_id = db.Column(db.Integer, primary_key=True)
+    historial_estado_pedido_id = db.Column(db.Integer, primary_key=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
     pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
-    estado_pedido_id = db.Column(db.Integer, db.ForeignKey('estado_pedido.estado_pedido_id'),nullable=False)
+    pedido_estado_id = db.Column(db.Integer, db.ForeignKey('pedido_estado.pedido_estado_id'),nullable=False)
 
     def __init__(self, estado_pedido_id, pedido_id):
         self.estado_pedido_id = estado_pedido_id
@@ -130,14 +94,7 @@ class DetallePedido(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'detalle:  {}'.format(self.producto_id, self.pedido_id, self.cantidad)
-
-
-
-
-
-
-
+        return 'detalle:  {}'.format(self.producto_id, self.cantidad)
 
 
 class Pedido(db.Model):
@@ -157,16 +114,14 @@ class Pedido(db.Model):
     # Atributos
     pedido_id = db.Column(db.Integer, primary_key=True)
     detalle = db.relationship('DetallePedido', uselist=False, backref='detalles_pedidos', lazy=True)
-    usuario_id =  db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
-    tipo_pedido_id = db.Column(db.Integer, db.ForeignKey('tipo_pedido.tipo_pedido_id'), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, usuario_id, tipo_pedido_id):
+    def __init__(self, usuario_id):
         """
         Constructor de la clase pedido
         """
-        self.tipo_pedido_id = tipo_pedido_id
         self.usuario_id = usuario_id
 
 
@@ -174,4 +129,4 @@ class Pedido(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'pedido {}'.format(self.detalle_id, self.usuario_id, self.tipo_pedido_id)
+        return 'pedido {}'.format(self.usuario_id, self.ts_created)
