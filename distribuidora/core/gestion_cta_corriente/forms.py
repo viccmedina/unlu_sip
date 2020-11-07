@@ -48,3 +48,6 @@ class AgregarMovimiento(FlaskForm):
     cliente = StringField('NRO Cliente', validators=[DataRequired()])
     monto = FloatField('Monto', validators=[DataRequired()])
     submit = SubmitField('Agregar')
+
+class DescargarConsulta(FlaskForm):
+    submit = SubmitField('Descargar')

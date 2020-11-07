@@ -7,8 +7,9 @@ from distribuidora.core.gestion_cta_corriente.helper import get_consulta_movimie
 from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos, \
 	AgregarMovimiento
 from distribuidora.models.cuenta_corriente import MovimientoCtaCorriente
-
+from flask_weasyprint import HTML, render_pdf
 import datetime
+import json
 
 cta_corriente = Blueprint('cta_corriente', __name__, template_folder='templates')
 
@@ -96,3 +97,11 @@ def importar():
     is_authenticated=current_user.is_authenticated, \
     rol=ROL, \
 	site= TITULO + ' - Importar')
+
+
+@cta_corriente.route('/cta_corriente/descargar/consulta/<string:resultado>.pdf')
+@login_required
+def descargar_consulta(resultado):
+	resultado = json.loads(resultado.replace("'", '"'))
+	html = render_template('tabla_movimientos_cta_corriente.html', resultado=resultado)
+	return render_pdf(HTML(string=html))
