@@ -15,7 +15,7 @@ usuario_rol = db.Table('usuario_rol',
 
 # Relacionamos los roles con los permisos
 rol_permiso = db.Table('rol_permiso',
-    
+
     db.Column('permiso_id', db.Integer, db.ForeignKey('permiso.permiso_id'), primary_key=True),
     db.Column('rol_id', db.Integer, db.ForeignKey('rol.rol_id'), primary_key=True)
 )
@@ -41,7 +41,7 @@ class Rol(db.Model):
 	rol_id = db.Column(db.Integer, primary_key=True)
 	nombre = db.Column(db.String(50), nullable=False, unique=True)
 	descripcion = db.Column(db.String(80), nullable=False)
-	
+
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 	def __init__(self,nombre, descripcion):
@@ -50,7 +50,7 @@ class Rol(db.Model):
 		"""
 		self.descripcion = descripcion
 		self.nombre = nombre
-		
+
 
 	def __repr__(self):
 		"""
@@ -69,7 +69,7 @@ class Permiso(db.Model):
 	descripcion --> descipcion
 	ts_created --> momento en que el registro fue creado
 	"""
-	
+
 
 	# Nombre de la tabla
 	__tablename__ = 'permiso'
@@ -80,7 +80,7 @@ class Permiso(db.Model):
 	descripcion = db.Column(db.String(80), nullable=False)
 	rol_permiso = db.relationship('Rol', secondary=rol_permiso)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
-	
+
 	def __init__(self,nombre, descripcion):
 		"""
 
@@ -136,8 +136,6 @@ class Usuario(db.Model, UserMixin):
 		self.password_hash = password
 		self.persona_id = persona_id
 
-
-
 	def get_username(self):
 		"""
 		Devuelve el username.
@@ -147,6 +145,9 @@ class Usuario(db.Model, UserMixin):
 	def get_email(self):
 		print('persona id {}'.format(self.persona_id), flush=True)
 
+	def get_id(self):
+		return self.id
+		
 	def get_role(self):
 		"""
 		Devuelve el o los roles que tiene asociado el usuario.

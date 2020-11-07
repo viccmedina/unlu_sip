@@ -3,6 +3,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from distribuidora.models.pedido import PedidoEstado, Pedido, DetallePedido
 from distribuidora.core.gestion_pedido.helper import get_estado_pedido_id, crear_nuevo_pedido
+from distribuidora.core.gestion_pedido.forms import NuevoPedido
 
 
 pedido = Blueprint('pedido', __name__, template_folder='templates')
@@ -24,17 +25,21 @@ def nuevo_pedido():
 	tambien debo crear una entrada en la tbl que relaciona estado y pedido.
 	debo brindar ts para que sea posible ver el historial.
 	"""
-	#simulamos nro de Cliente
-	cliente = '3'
-	estado = 'PCC'
-	estado_id = get_estado_pedido_id(estado)
-	print(estado_id, flush=True)
-	print(estado_id[0]['pedido_estado_id'], flush=True)
-	print(crear_nuevo_pedido(cliente, estado_id[0]['pedido_estado_id']), flush=True)
+	form = NuevoPedido()
+	if form.validate_on_submit():
+		#simulamos nro de Cliente
+		cliente = current_user.get_id()
+		estado = 'PCC'
+		estado_id = get_estado_pedido_id(estado)
+		print(estado_id, flush=True)
+		print(estado_id[0]['pedido_estado_id'], flush=True)
+		crear_nuevo_pedido(cliente, estado_id[0]['pedido_estado_id'])
+		
 	return render_template('form_nuevo_pedido.html', \
 			datos=current_user.get_mis_datos(),\
 			is_authenticated=current_user.is_authenticated, \
 			rol=current_user.get_role(), \
+			form=form, \
             site='Gestión de Pedido')
 
 @pedido.route('/pedido/consultar', methods=['GET'])

@@ -4,8 +4,8 @@ from distribuidora import db
 from distribuidora.core.gestion_cta_corriente.constants import TITULO, ROL
 from distribuidora.core.gestion_cta_corriente.helper import get_consulta_movimientos, \
 	get_nro_cuenta_corriente
-#from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos, \
-	#AgregarMovimiento
+from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos, \
+	AgregarMovimiento
 from distribuidora.models.cuenta_corriente import MovimientoCtaCorriente
 
 import datetime
@@ -47,11 +47,7 @@ def consultar_cta_corriente():
 
 	return render_template('form_consultar_cta_corriente.html', \
 		datos=current_user.get_mis_datos(),	\
-		is_authenticated=current_user.is_authenticated, \
-		rol=ROL, \
-		form=form, \
-		resultado=resultado, \
-		site= TITULO + ' - Consulta')
+		is_authenticated=current_user.is_authenticated, rol=ROL, form=form, resultado=resultado, site= TITULO + ' - Consulta')
 
 @cta_corriente.route('/cta_corriente/agregar', methods=['GET', 'POST'])
 @login_required
