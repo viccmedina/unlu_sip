@@ -1,6 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora.core.gestion_producto.forms import ImportarProducto
+from distribuidora.core.gestion_producto.helper import get_lista_productos
 from distribuidora import db
 
 producto = Blueprint('producto', __name__, template_folder='templates')
@@ -69,3 +70,15 @@ def importar():
         rol='operador', \
         site='Importar Producto', \
         form=form)
+
+@producto.route('/producto/listar', methods=['GET'])
+@login_required 
+def listar_productos():
+    productos = get_lista_productos()
+    print(productos, flush=True)
+    return render_template('listar_productos.html', \
+    datos=current_user.get_mis_datos(), \
+    is_authenticated=current_user.is_authenticated, \
+    rol='operador', \
+    site='Listado de Productos', \
+    productos=productos)
