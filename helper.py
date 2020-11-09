@@ -13,10 +13,10 @@ from distribuidora.models.cuenta_corriente import TipoMovimientoCtaCorriente, \
 from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
 	Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
-from distribuidora.models.pedido import EstadoPedido, DetallePedido, TipoPedido, Pedido, \
-	EstadoPedido_PEDIDO
+from distribuidora.models.pedido import PedidoEstado, DetallePedido, Pedido, \
+	HistorialPedidoEstado
 from distribuidora.models.devolucion import EstadoDevolucion, Devolucion, DetalleDevolucion
-from distribuidora.models.stock import TipoMovimientoStock, DetalleStock
+from distribuidora.models.stock import TipoMovimientoStock, Movimiento_Stock
 
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -239,7 +239,7 @@ def insertar_estado_pedido():
 		for row in csv_reader:
 			print('Estado Pedido: {}'.format(row['descripcion']))
 			print('-'*50)
-			tipos_estado_pedido = EstadoPedido(descripcion=row['descripcion'], \
+			tipos_estado_pedido = PedidoEstado(descripcion=row['descripcion'], \
 				descripcion_corta=row['descripcion_corta'])
 
 			estados.append(tipos_estado_pedido)
@@ -438,18 +438,6 @@ def insertar_tipo_movimiento_stock():
 
 
 
-def insertar_tipo_pedido():
-	print('Importando Modelo tipoPedido')
-	tipoPedido = []
-	with open(DATOS_PATH + 'tipo_pedido.csv') as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		for row in csv_reader:
-			print('Tipo Pedido: {}'.format(row['descripcion']))
-			print('-'*50)
-			new_tipoPedido = TipoPedido(descripcion=row['descripcion'])
-			tipoPedido.append(new_tipoPedido)
-		db.session.add_all(tipoPedido)
-		db.session.commit()
 
 
 def insertar_pedido():
@@ -459,7 +447,7 @@ def insertar_pedido():
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('-'*50)
-			new_pedido = Pedido(usuario_id=row['usuario_id'],tipo_pedido_id=row['tipo_pedido_id'])
+			new_pedido = Pedido(usuario_id=row['usuario_id'])
 			pedido.append(new_pedido)
 		db.session.add_all(pedido)
 		db.session.commit()
@@ -473,8 +461,7 @@ def insertar_estadoPedido_PEDIDO():
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('-'*50)
-			new_estadoP_pedido = EstadoPedido_PEDIDO(estado_pedido_id=row['estado_pedido_id'],
-			pedido_id=row['pedido_id'])
+			new_estadoP_pedido = HistorialPedidoEstado(pedido_estado_id=row['estado_pedido_id'],pedido_id=row['pedido_id'])
 			estadoP_pedido.append(new_estadoP_pedido)
 		db.session.add_all(estadoP_pedido)
 		db.session.commit()
@@ -487,7 +474,7 @@ def insertar_detalle_pedido():
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('-'*50)
-			new_detalle_pedido = DetallePedido(producto_id=row['producto_id'],pedido_id=row['pedido_id'],
+			new_detalle_pedido = DetallePedido(pedido_id=row['pedido_id'],
 			cantidad=row['cantidad'])
 			detalle_pedido.append(new_detalle_pedido)
 		db.session.add_all(detalle_pedido)
@@ -495,10 +482,10 @@ def insertar_detalle_pedido():
 
 
 
-def insertar_detalle_stock():
-	print('Importando Modelo Detalle de Stock')
+def insertar_movimiento_stock():
+	print('Importando Modelo Movimiento de Stock')
 	detalle_stock = []
-	with open(DATOS_PATH + 'detalle_stock.csv') as csv_file:
+	with open(DATOS_PATH + 'movimiento_stock.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('detalle: {}'.format(row['detalle_pedido_id']))
@@ -508,7 +495,7 @@ def insertar_detalle_stock():
 			print('prod: {}'.format(row['producto_id']))
 			print('cantidad: {}'.format(row['cantidad']))
 			print('-'*50)
-			new_detalle_stock = DetalleStock(descripcion=row['descripcion'],
+			new_detalle_stock = Movimiento_Stock(detalle_devolucion_id=row['detalle_pedido_id'],descripcion=row['descripcion'],
 			cantidad=row['cantidad'],detalle_pedido_id=row['detalle_pedido_id'],
 			usuario_id=row['usuario_id'],producto_id=row['producto_id'],
 			tipo_movimiento_stock_id=row['tipo_movimiento_stock_id'])
@@ -557,8 +544,7 @@ def insertar_detalle_devolucion():
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('-'*50)
-			new_detalle_devolucion = DetalleDevolucion(devolucion_id=row['devolucion_id'],
-			producto_id=row['producto_id'],cantidad=row['cantidad'])
+			new_detalle_devolucion = DetalleDevolucion(devolucion_id=row['devolucion_id'],cantidad=row['cantidad'])
 			detalle_devolucion.append(new_detalle_devolucion)
 		db.session.add_all(detalle_devolucion)
 		db.session.commit()
@@ -610,15 +596,13 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_tipo_movimiento_stock()
 	print('#'*50)
-	insertar_tipo_pedido()
-	print('#'*50)
 	insertar_pedido()
 	print('#'*50)
 	insertar_estadoPedido_PEDIDO()
 	print('#'*50)
 	insertar_detalle_pedido()
 	print('#'*50)
-	insertar_detalle_stock()
+	insertar_movimiento_stock()
 	print('#'*50)
 	insertar_comprobante_pago()
 	print('#'*50)

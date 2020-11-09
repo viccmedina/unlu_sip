@@ -48,17 +48,17 @@ class HistorialPedidoEstado(db.Model):
     pedido_estado_id = db.Column(db.Integer, db.ForeignKey('pedido_estado.pedido_estado_id'),nullable=False)
 
     def __init__(self, pedido_estado_id, pedido_id):
-        self.pedido_estado_id = estado_pedido_id
+        self.pedido_estado_id = pedido_estado_id
         self.pedido_id = pedido_id
 
     def __repr__(self):
-        return "Relación estado pedido {} - {}".format(estado_pedido_id, pedido_id)
+        return "Relación estado pedido {} - {}".format(pedido_estado_id, pedido_id)
 
     def get_pedido_id(self):
         return self.pedido_id
 
     def get_estado_pedido_id(self):
-        return self.estado_pedido_id
+        return self.pedido_estado_id
 
 
 
@@ -77,16 +77,16 @@ class DetallePedido(db.Model):
 
     # Atributos
     detalle_id = db.Column(db.Integer, primary_key=True)
-    producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'),nullable=False)
+    #producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'),nullable=False)
     pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
     cantidad = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
-    def __init__(self, producto_id, pedido_id, cantidad):
+    def __init__(self, pedido_id, cantidad):
         """
         Constructor de la clase Detalle
         """
-        self.producto_id = producto_id
+        #self.producto_id = producto_id
         self.pedido_id = pedido_id
         self.cantidad = cantidad
 
@@ -94,7 +94,7 @@ class DetallePedido(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'detalle:  {}'.format(self.producto_id, self.cantidad)
+        return 'detalle:  {}'.format(self.pedido_id, self.cantidad)
 
 
 class Pedido(db.Model):

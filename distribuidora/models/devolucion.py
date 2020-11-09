@@ -49,23 +49,23 @@ class DetalleDevolucion(db.Model):
     # Atributos
     detalle_devolucion_id = db.Column(db.Integer, primary_key=True)
     devolucion_id = db.Column(db.Integer, db.ForeignKey('devolucion.devolucion_id'),nullable=False)
-    producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'),nullable=False)
+    #producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'),nullable=False)
     cantidad = db.Column(db.Integer, nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
-    def __init__(self, devolucion_id, producto_id,cantidad):
+    def __init__(self, devolucion_id,cantidad):
         """
         Constructor de la clase DetalleDevolucion
         """
         self.devolucion_id = devolucion_id
         self.cantidad = cantidad
-        self.producto_id = producto_id
+        #self.producto_id = producto_id
 
     def __repr__(self):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'DetalleDevolucion:  {}'.format(self.devolucion_id, self.producto_id)
+        return 'DetalleDevolucion:  {}'.format(self.devolucion_id)
 
 
 

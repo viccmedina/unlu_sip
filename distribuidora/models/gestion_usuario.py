@@ -3,7 +3,7 @@ from sqlalchemy import event
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from distribuidora.models.persona import Persona
-from distribuidora.models.stock import DetalleStock
+from distribuidora.models.stock import Movimiento_Stock
 
 # Establecemos las tablas pivot.
 
@@ -124,7 +124,7 @@ class Usuario(db.Model, UserMixin):
 	usuario_rol = db.relationship('Rol', secondary=usuario_rol)
 	# Son los movimientos que registra un usuario operador/gerente.
 	movientos = db.relationship('MovimientoCtaCorriente', uselist=False, backref='movimientos', lazy=True)
-	detalle_stock = db.relationship('DetalleStock', uselist=False, backref='detalles_stocks_usuarios', lazy=True)
+	movimiento_stock_id = db.relationship('Movimiento_Stock', uselist=False, backref='detalles_stocks_usuarios', lazy=True)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
@@ -147,7 +147,7 @@ class Usuario(db.Model, UserMixin):
 
 	def get_id(self):
 		return self.id
-		
+
 	def get_role(self):
 		"""
 		Devuelve el o los roles que tiene asociado el usuario.

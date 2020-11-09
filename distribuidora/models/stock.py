@@ -34,9 +34,9 @@ class TipoMovimientoStock(db.Model):
         return 'movimiento de stock:  {}'.format(self.descripcion)
 
 
-class DetalleStock(db.Model):
+class Movimiento_Stock(db.Model):
     """
-    Este modelo representará a stock.
+    Este modelo representará a los mov q recibira el stock stock.
     Contará con los siquientes campos:
     stock_id  --> clave primaria
     descripcion --> nombre del stock
@@ -48,24 +48,26 @@ class DetalleStock(db.Model):
     """
 
     # Nombre de la tabla
-    __tablename__ = 'detalle_stock'
+    __tablename__ = 'movimiento_stock'
 
     # Atributos
     stock_id = db.Column(db.Integer, primary_key=True)
-    descripcion = db.Column(db.String(80), nullable=False)
-    cantidad = db.Column(db.String(80), nullable=False)
+    detalle_devolucion_id = db.Column(db.Integer, db.ForeignKey('detalle_devolucion.detalle_devolucion_id'))
     detalle_pedido_id = db.Column(db.Integer, db.ForeignKey('detalle_pedido.detalle_id'))
     tipo_movimiento_stock_id = db.Column(db.Integer, db.ForeignKey('tipo_movimiento_stock.tipo_movimiento_stock_id'), nullable=False)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'), nullable=False)
+    descripcion = db.Column(db.String(80), nullable=False)
+    cantidad = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, descripcion, cantidad,detalle_pedido_id, usuario_id, producto_id,  tipo_movimiento_stock_id):
+    def __init__(self,detalle_devolucion_id, descripcion, cantidad, detalle_pedido_id, usuario_id, producto_id,  tipo_movimiento_stock_id):
         """
         Constructor de la clase stock
         """
         self.descripcion = descripcion
+        self.detalle_devolucion_id = detalle_devolucion_id
         self.cantidad = cantidad
         self.tipo_movimiento_stock_id = tipo_movimiento_stock_id
         self.usuario_id = usuario_id
@@ -76,4 +78,4 @@ class DetalleStock(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'Stock {}'.format(self.descripcion, self.cantidad, self.tipo_movimiento_stock_id, self.usuario_id, self.producto_id, self.detalle_pedido_id)
+        return 'Stock {}'.format(self.descripcion,self.detalle_devolucion_id, self.cantidad, self.tipo_movimiento_stock_id, self.usuario_id, self.producto_id, self.detalle_pedido_id)
