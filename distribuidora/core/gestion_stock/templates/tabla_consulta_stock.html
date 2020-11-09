@@ -1,0 +1,28 @@
+{% block tabla_movimientos %}
+<div class="container">
+  <h2>Resultado</h2>
+  <p>Stock del producto seleccionado:</p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Marca</th>
+        <th>Unidad Medida</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if resultado  %}
+      <tr>
+        <td>{{producto}}</td>
+        <td>{{marca}}</td>
+        <td>{{uMedida}}</td>
+        <td>{{resultado}}</td>
+      </tr>
+      {% endif %}
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
