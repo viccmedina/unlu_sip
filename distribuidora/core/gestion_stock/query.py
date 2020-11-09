@@ -9,8 +9,8 @@ CONSULTAR_ID_MARCA = """SELECT m.marca_id FROM marca m WHERE m.descripcion = ('{
 CONSULTAR_ID_UMEDIDA = """SELECT um.unidad_medida_id FROM unidad_medida um WHERE um.descripcion = ('{uMedida}')"""
 
 CONSULTAR_ID_PRODUCTO = """ SELECT DISTINCT (p.producto_id) FROM producto p INNER JOIN
-producto_envase pe WHERE p.descripcion = '{producto}' and pe.unidad_medida_id = {uMedida} and
-p.marca_id = {marca}"""
+producto_envase pe WHERE p.descripcion = ('{producto}') and pe.unidad_medida_id = {uMedida} and
+p.marca_id = {marca} """
 
 
 CONSULTA_ENTRADA_STOCK = """ SELECT sum(cantidad) FROM movimiento_stock WHERE tipo_movimiento_stock_id = 1 and producto_id = {producto_id} """

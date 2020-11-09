@@ -23,17 +23,20 @@ def index():
 @login_required
 def consultar_stock():
 	resultado = None
+	id_producto = None
+	id_marca = None
+	id_um = None
 	form = consultarStock()
+
 	if form.validate_on_submit():
-		#hacer la consulta por el id del product
-		p = form.producto.data
-		m = form.marca.data
-		um = form.uMedida.data
-		#formProducto = p +" marca "+ m + um
+		id_producto = form.producto.data
+		id_marca = form.marca.data
+		id_um = form.uMedida.data
 		print('#'*80, flush=True)
-		product = get_id_producto(p,m,um)
+		product = get_id_producto(id_producto,id_marca,id_um)
+		# hacer algo con los error de devolucine de id
 		print("Productooo: {} ".format(product) )
-		resultado = consulta_sotck(product[0]['producto_id'])
+		resultado = consulta_sotck(product)
 		print(resultado, flush=True)
 		print('#'*80, flush=True)
 	else:
@@ -42,9 +45,9 @@ def consultar_stock():
 		datos=current_user.get_mis_datos(),\
 		is_authenticated=current_user.is_authenticated, \
 		rol='operador', \
-		producto=p, \
-		marca=m, \
-		uMedida=um, \
+		producto=id_producto, \
+		marca=id_marca, \
+		uMedida=id_um, \
 		resultado=resultado, \
 		form=form, \
 		site=TITULO)

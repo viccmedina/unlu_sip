@@ -28,17 +28,25 @@ def get_id_producto(pro,mar,umed):
     """
     Dado un producto su marca y unidad de medida obtendremos el id.
     """
+    print("el producto es este " + pro)
+    valor = None
     mar_id = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=mar))
     for row in mar_id:
         marcaID = row['marca_id']
-        print("marcaaaaa: ", row['marca_id'])
+        print("marcaaasss: ", marcaID)
     umed_id = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=umed))
     for row in umed_id:
         umedidaID = row['unidad_medida_id']
-        print("unidad: ", row['unidad_medida_id'])
-    result = db.engine.execute(CONSULTAR_ID_PRODUCTO.format(producto=pro,marca=marcaID,uMedida=umedidaID))
+        print("unidaddddd: ", umedidaID)
 
-    resp = []
+
+    result = db.engine.execute(CONSULTAR_ID_PRODUCTO.format(marca=marcaID,uMedida=umedidaID,producto=pro))
+
     for row in result:
-        resp.append(dict(row))
-    return resp
+        valor = row['producto_id']
+        print("producto: ", valor)
+
+    if valor is None:
+        return -100
+    else:
+        return valor
