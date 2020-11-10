@@ -23,8 +23,10 @@ class consultarStock(FlaskForm):
 
 
 class agregarStock(FlaskForm):
-	choice_move = SelectField('Tipo movimiento', choices=[('', ''), ('alta', 'Alta'), ('baja', 'Baja')])
-	choice_producto = SelectField('producto', choices=[])
-	cantidad = IntegerField('Cantidad',[validators.Length(min=10, max=10, message="Ingrese cantidad >0")])
-	submit = SubmitField('Agregar')
+	tipo_movimiento = SelectField('Tipo Movimiento',[validators.Required()],choices=[])
+	producto = StringField('Ingrese El Nombre Producto', validators=[DataRequired()])
+	marca = StringField('Ingrese La Marca del Producto', validators=[DataRequired()])
+	uMedida = StringField('Ingrese La Unidad de Medida', validators=[DataRequired()])
+	cantidad = StringField('Cantidad',validators=[DataRequired()])
+	submit = SubmitField('Actuliazar')
 	cancelar = SubmitField('Cancelar')

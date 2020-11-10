@@ -1,6 +1,6 @@
 from distribuidora import db
 from flask import flash
-from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTA_ENTRADA_STOCK , CONSULTA_SALIDA_STOCK, CONSULTAR_ID_MARCA, CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO
+from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTA_ENTRADA_STOCK , CONSULTA_SALIDA_STOCK, CONSULTAR_ID_MARCA, CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK
 
 def consulta_sotck(producto):
     """
@@ -60,3 +60,19 @@ def get_id_producto(pro,mar,umed):
                 return valor
         return valor
     return valor
+
+
+
+
+def agregar_stock(usuario,producto,cantidad,desc):
+    """
+    Esta funcion agregara un nueva tupla en la tabla movimiento_stock
+    """
+    print("usuario {}".format(usuario))
+    print("producto {}".format(producto))
+    print("cantidad {}".format(cantidad))
+
+    descripcion = "Carga de {}".format(desc)
+    print("descripcion: "+ descripcion)
+    db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(usuario_id=usuario,producto_id=producto,cantidad=cantidad,descripcion=descripcion))
+    return "ok"
