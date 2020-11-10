@@ -37,8 +37,9 @@ class Envase(db.Model):
     """
     def __init__(self, descripcion):
         self.descripcion = descripcion
+
     def __repr__(self):
-        return "{descripcion} {undiad}".format(descripcion=self.descripcion)
+        return '{descripcion}'.format(descripcion=self.descripcion)
 
 
 
@@ -61,7 +62,7 @@ class ProductoEnvase(db.Model):
         self.unidad_medida_id = unidad_medida_id
 
     def __repr__(self):
-        return self.producto_id
+        return str(self.producto_id)
 
 
 class Marca(db.Model):
@@ -90,7 +91,7 @@ class Marca(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'Estado del Producto:  {}'.format(self.descripcion)
+        return self.descripcion
 
 
 class TipoProducto(db.Model):
@@ -109,7 +110,6 @@ class TipoProducto(db.Model):
     tipo_producto_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
-
     productos = db.relationship('Producto', backref='tipo_producto', lazy=True)
 
     def __init__(self, descripcion):
