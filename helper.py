@@ -371,16 +371,15 @@ def insertar_lista_precio_producto():
 	with open(DATOS_PATH + 'lista_precio_producto.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Producto: {}'.format(row['producto']))
+			print('producto_envase_id: {}'.format(row['producto_envase_id']))
 			print('Lista_precio : {}'.format(row['lista_id']))
 			print('Precio: {}'.format(row['precio']))
 			print('Fecha_inicio: {}'.format(row['fecha_inicio']))
 			print('fecha_Fin: {}'.format(row['fecha_fin']))
 			print('-'*50)
-			p = Producto.query.filter_by(descripcion=row['producto']).first()
 			f_inicio = datetime.strptime(row['fecha_inicio'], "%d/%m/%Y")
 			f_fin = datetime.strptime(row['fecha_fin'], "%d/%m/%Y")
-			new_lista_precio_producto = Lista_precio_producto(producto_id=p.producto_id,
+			new_lista_precio_producto = Lista_precio_producto(producto_envase_id=row['producto_envase_id'],
 				precio_id=row['lista_id'],precio=row['precio'],fecha_inicio=f_inicio,
 				fecha_fin=f_fin)
 			lista_precio_producto.append(new_lista_precio_producto)

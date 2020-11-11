@@ -55,7 +55,7 @@ class Lista_precio_producto(db.Model):
     __tablename__ = 'lista_precio_producto'
 
     # Atributos
-    producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'), nullable=False, primary_key=True)
+    producto_envase_id = db.Column(db.Integer, db.ForeignKey('producto_envase.producto_envase_id'), nullable=False, primary_key=True)
     precio_id = db.Column(db.Integer, db.ForeignKey('lista_precio.precio_id'), nullable=False, primary_key=True)
     precio = db.Column(db.Integer, nullable=False)
     fecha_inicio = db.Column(db.DateTime, nullable=True)
@@ -64,11 +64,11 @@ class Lista_precio_producto(db.Model):
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, producto_id, precio_id, precio, fecha_inicio, fecha_fin):
+    def __init__(self, producto_envase_id, precio_id, precio, fecha_inicio, fecha_fin):
         """
         Constructor de la clase precio
         """
-        self.producto_id = producto_id
+        self.producto_envase_id = producto_envase_id
         self.precio_id = precio_id
         self.precio = precio
         self.fecha_inicio = fecha_inicio
