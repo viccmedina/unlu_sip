@@ -1,7 +1,8 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora.core.gestion_producto.forms import ImportarProducto
-from distribuidora.core.gestion_producto.helper import get_lista_productos
+from distribuidora.core.gestion_producto.helper import get_lista_productos, \
+    get_producto_envase_by_producto_id
 from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase
 from distribuidora import db
 
@@ -96,4 +97,14 @@ def listar_productos():
 @producto.route('/producto/detalle', methods=['GET', 'POST'])
 @login_required
 def detalle_producto():
-    return render_template('detalle_producto.html')
+    p = request.args.get('producto', type=int)
+    print('#'*88, flush=True)
+
+    print(p, flush=True)
+    print('#'*88, flush=True)
+    productos = get_producto_envase_by_producto_id(p)
+    print('#'*88, flush=True)
+
+    print(productos, flush=True)
+    print('#'*88, flush=True)
+    return render_template('detalle_producto.html', productos=productos)
