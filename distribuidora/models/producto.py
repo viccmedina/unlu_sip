@@ -147,7 +147,7 @@ class Producto(db.Model):
     marca_id = db.Column(db.Integer, db.ForeignKey('marca.marca_id'), nullable=False)
     tipo_producto_id = db.Column(db.Integer, db.ForeignKey('tipo_producto.tipo_producto_id'), nullable=False)
     #detalle_pedido = db.relationship('DetallePedido', uselist=False, backref='detalle_pedido', lazy=True)
-    movimiento_stock_id = db.relationship('Movimiento_Stock', backref='movimiento_stock', lazy=True)
+    #movimiento_stock_id = db.relationship('Movimiento_Stock', backref='movimiento_stock', lazy=True)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 

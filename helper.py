@@ -491,12 +491,12 @@ def insertar_movimiento_stock():
 			print('tipo_mov: {}'.format(row['tipo_movimiento_stock_id']))
 			print('user: {}'.format(row['usuario_id']))
 			print('desc: {}'.format(row['descripcion']))
-			print('prod: {}'.format(row['producto_id']))
+			print('prod: {}'.format(row['producto_envase_id']))
 			print('cantidad: {}'.format(row['cantidad']))
 			print('-'*50)
 			new_detalle_stock = Movimiento_Stock(detalle_devolucion_id=row['detalle_pedido_id'],descripcion=row['descripcion'],
 			cantidad=row['cantidad'],detalle_pedido_id=row['detalle_pedido_id'],
-			usuario_id=row['usuario_id'],producto_id=row['producto_id'],
+			usuario_id=row['usuario_id'],producto_envase_id=row['producto_envase_id'],
 			tipo_movimiento_stock_id=row['tipo_movimiento_stock_id'])
 			print(new_detalle_stock)
 			detalle_stock.append(new_detalle_stock)

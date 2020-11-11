@@ -56,13 +56,13 @@ class Movimiento_Stock(db.Model):
     detalle_pedido_id = db.Column(db.Integer, db.ForeignKey('detalle_pedido.detalle_id'))
     tipo_movimiento_stock_id = db.Column(db.Integer, db.ForeignKey('tipo_movimiento_stock.tipo_movimiento_stock_id'), nullable=False)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
-    producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'), nullable=False)
+    producto_envase_id = db.Column(db.Integer, db.ForeignKey('producto_envase.producto_envase_id'), nullable=False)
     descripcion = db.Column(db.String(80), nullable=False)
     cantidad = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self,detalle_devolucion_id, descripcion, cantidad, detalle_pedido_id, usuario_id, producto_id,  tipo_movimiento_stock_id):
+    def __init__(self,detalle_devolucion_id, descripcion, cantidad, detalle_pedido_id, usuario_id, producto_envase_id,  tipo_movimiento_stock_id):
         """
         Constructor de la clase stock
         """
@@ -71,11 +71,11 @@ class Movimiento_Stock(db.Model):
         self.cantidad = cantidad
         self.tipo_movimiento_stock_id = tipo_movimiento_stock_id
         self.usuario_id = usuario_id
-        self.producto_id = producto_id
+        self.producto_envase_id = producto_envase_id
         self.detalle_pedido_id = detalle_pedido_id
 
     def __repr__(self):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'Stock {}'.format(self.descripcion,self.detalle_devolucion_id, self.cantidad, self.tipo_movimiento_stock_id, self.usuario_id, self.producto_id, self.detalle_pedido_id)
+        return 'Stock {}'.format(self.descripcion,self.detalle_devolucion_id, self.cantidad, self.tipo_movimiento_stock_id, self.usuario_id, self.producto_envase_id, self.detalle_pedido_id)
