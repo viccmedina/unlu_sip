@@ -13,6 +13,7 @@
 					        <h3 class="card-title">Consulta Cta. Corriente</h3>
 
 				              <form  method="POST">
+                        {% include "flash_errors.html" %}
 				                {{ form.hidden_tag() }}
 				                <div class="form-group">
         									<p>Usted esta a punto de confirmar la generación de un Nuevo Pedido.</p>

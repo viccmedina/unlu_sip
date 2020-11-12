@@ -19,27 +19,23 @@ def index():
 @pedido.route('/pedido/nuevo', methods=['GET', 'POST'])
 @login_required
 def nuevo_pedido():
-	"""
-	necesito crear un nuevo pedido con el estado:  Pendiente Confirmación Cliente
-	tambien debo crear una entrada en la tbl que relaciona estado y pedido.
-	debo brindar ts para que sea posible ver el historial.
-	"""
-	form = NuevoPedido()
-	if form.validate_on_submit():
-		#simulamos nro de Cliente
-		cliente = current_user.get_id()
-		estado = 'PCC'
-		estado_id = get_estado_pedido_id(estado)
-		print(estado_id, flush=True)
-		print(estado_id[0]['pedido_estado_id'], flush=True)
-		crear_nuevo_pedido(cliente, estado_id[0]['pedido_estado_id'])
-
-	return render_template('form_nuevo_pedido.html', \
-			datos=current_user.get_mis_datos(),\
-			is_authenticated=current_user.is_authenticated, \
-			rol=current_user.get_role(), \
-			form=form, \
-            site='Gestión de Pedido')
+    form = NuevoPedido()
+    if form.validate_on_submit():
+        #recuperamos el id del usuario
+        usuario_id = current_user.get_id()
+        pedido_id = get_ultimo_pedido_id(usuario_id)
+        #recupero la cantidad de estados de ese pedido
+        cantidad_estados = get_cantidad_estados_pedido(pedido_id)
+        if cantidad_estados > 1:
+            estado = 'PCC'
+            estado_id = get_estado_pedido_id(estado)
+            print(estado_id, flush=True)
+            print(estado_id[0]['pedido_estado_id'], flush=True)
+            crear_nuevo_pedido(usuario_id, estado_id[0]['pedido_estado_id'])
+        else:
+            flash('ERROOOOOR, ya existe un pedido en curso', 'error')
+            print('ERROOOOOR, ya existe un pedido en curso', flush=True)
+    return render_template('form_nuevo_pedido.html', datos=current_user.get_mis_datos(), is_authenticated=current_user.is_authenticated, rol=current_user.get_role(), form=form, site='Gestión de Pedido')
 
 @pedido.route('/pedido/consultar', methods=['GET'])
 @login_required
@@ -74,11 +70,3 @@ def confirmar_pedido_operador():
 	"""
 
 	pass
-
-@pedido.route('/pedido/agregar/producto', methods=['GET', 'POST'])
-def agregar_producto():
-    return render_template('home_pedido.html', \
-			datos=current_user.get_mis_datos(),\
-			is_authenticated=current_user.is_authenticated, \
-			rol=current_user.get_role(), \
-            site='Gestión de Pedido')
