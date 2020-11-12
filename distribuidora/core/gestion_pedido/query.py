@@ -26,10 +26,20 @@ INSERT_NUEVO_PEDIDO = """ INSERT INTO pedido (usuario_id)
 INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO = """ INSERT INTO historial_estado_pedido (pedido_estado_id, pedido_id)
     VALUES ('{pedido_estado_id}', '{pedido_id}')"""
 
-SELECT_ULTIMO_PEDIDO_ID_POR_CLIENTE = """ SELECT pedido_id FROM pedido WHERE """
+SELECT_ULTIMO_PEDIDO_ID_POR_CLIENTE = """ SELECT hpe.pedido_id, pe.descripcion_corta, max(hpe.ts_created)
+    FROM historial_estado_pedido AS hpe
+    INNER JOIN pedido AS p ON hpe.pedido_id = p.pedido_id
+    INNER JOIN pedido_estado AS pe ON pe.pedido_estado_id = hpe.pedido_estado_id
+    WHERE p.usuario_id = '{usuario_id}' AND pe.descripcion_corta = 'PCC'"""
+
+CANTIDAD_ESTADOS_DEL_PEDIDO = """ SELECT COUNT(*) AS cantidad FROM historial_estado_pedido
+    WHERE pedido_id='{pedido_id}'"""
 
 SELECT_ID_ULTIMO_PEDIDO = """ SELECT pedido_id FROM pedido WHERE usuario_id='{usuario_id}'
     ORDER BY ts_created DESC LIMIT 1 """
 
 INSERT_NUEVO_ESTADO_PEDIDO = """ INSERT INTO estado_pedido (pedido_id, pedido_estado_id)
     VALUES ('{pedido_id}', '{pedido_estado_id}')"""
+
+INSERT_INTO_DETALLE_PEDIDO = """ INSERT INTO detalle_pedido (pedido_id, producto_id, cantidad)
+    VALUES ('{pedido_id}', '{producto_id}', '{cantidad}')"""

@@ -44,10 +44,29 @@ def crear_nuevo_pedido(cliente, estado):
             pedido_estado_id=estado, pedido_id=pedido_id[0]['pedido_id']))
         return True
 
+def get_cantidad_estados_pedido(pedido_id):
+    result = db.engine.execute(CANTIDAD_ESTADOS_DEL_PEDIDO.format(\
+        pedido_id=pedido_id))
+    result = parser_result(result)
+    print(result, flush=True)
+    return result[0]['cantidad']
+
 def get_ultimo_pedido_id(usuario_id):
     """
     Dado un id de usuario, vamos a obtener el id del último pedido generado.
     """
-    result = db.engine.execute(SELECT_ID_ULTIMO_PEDIDO.format(\
-        usuario_id=cliente))
-    return parser_result(result)
+    result = db.engine.execute(SELECT_ULTIMO_PEDIDO_ID_POR_CLIENTE.format(\
+        usuario_id=usuario_id))
+    result = parser_result(result)
+    print('='*90, flush=True)
+    print(result, flush=True)
+    print('='*90, flush=True)
+    return result[0]['pedido_id']
+
+def insert_into_detalle_pedido(pedido_id, producto_id, cantidad=1):
+    """
+    Dado el nro de pedido, el producto y la cantidad insertamos dentro del
+    detalle del pedido.
+    """
+    result = db.engine.execute(INSERT_INTO_DETALLE_PEDIDO.format(\
+        pedido_id=pedido_id, producto_id=producto_id, cantidad=cantidad))

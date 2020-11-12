@@ -11,8 +11,9 @@ from flask_login import current_user
 class NuevoPedido(FlaskForm):
 	submit = SubmitField('Nuevo Pedido')
 
-	
-class AgregarProducto(FlaskForm):
+
+class FormAgregarProducto(FlaskForm):
+    producto_id = IntegerField('Producto:')
     cantidad = IntegerField('Cantidad:', validators=[DataRequired()])
     submit = SubmitField('Agregar')
 

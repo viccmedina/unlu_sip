@@ -2,9 +2,8 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from distribuidora.models.pedido import PedidoEstado, Pedido, DetallePedido
-from distribuidora.core.gestion_pedido.helper import get_estado_pedido_id, crear_nuevo_pedido
-from distribuidora.core.gestion_pedido.forms import NuevoPedido
-
+from distribuidora.core.gestion_pedido.helper import *
+from distribuidora.core.gestion_pedido.forms import NuevoPedido, FormAgregarProducto
 
 pedido = Blueprint('pedido', __name__, template_folder='templates')
 
@@ -34,7 +33,7 @@ def nuevo_pedido():
 		print(estado_id, flush=True)
 		print(estado_id[0]['pedido_estado_id'], flush=True)
 		crear_nuevo_pedido(cliente, estado_id[0]['pedido_estado_id'])
-		
+
 	return render_template('form_nuevo_pedido.html', \
 			datos=current_user.get_mis_datos(),\
 			is_authenticated=current_user.is_authenticated, \
@@ -78,9 +77,8 @@ def confirmar_pedido_operador():
 
 @pedido.route('/pedido/agregar/producto', methods=['GET', 'POST'])
 def agregar_producto():
-	"""
-	Necesito el nro de pedido, para recuperar el detalle del pedido
-	verificar si el usuario esta logueado
-	verificar si el estado del pedido es el correcto: Pendiente Confirmación Cliente
-	"""
-	pass
+    return render_template('home_pedido.html', \
+			datos=current_user.get_mis_datos(),\
+			is_authenticated=current_user.is_authenticated, \
+			rol=current_user.get_role(), \
+            site='Gestión de Pedido')

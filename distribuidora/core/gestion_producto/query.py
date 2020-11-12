@@ -4,7 +4,8 @@ LISTAR_PRODUCTOS = """ SELECT p.descripcion as descripcion ,
 	tp.tipo_producto_id=p.tipo_producto_id
 	LEFT JOIN marca AS m ON m.marca_id=p.marca_id"""
 
-PRODUCTO_ENVASE_BY_PRODUCTO_ID = """ SELECT p.descripcion, m.descripcion, lpp.precio, e.descripcion, u.descripcion, pe.ts_created
+PRODUCTO_ENVASE_BY_PRODUCTO_ID = """ SELECT pe.producto_envase_id, p.descripcion,
+    m.descripcion, lpp.precio, e.descripcion, u.descripcion, pe.ts_created
     FROM producto_envase AS pe
     INNER JOIN producto AS p ON p.producto_id = pe.producto_id
     INNER JOIN marca AS m ON m.marca_id = p.marca_id

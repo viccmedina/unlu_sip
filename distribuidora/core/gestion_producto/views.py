@@ -1,9 +1,14 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora.core.gestion_producto.forms import ImportarProducto
+from distribuidora.core.gestion_pedido.forms import FormAgregarProducto
+from distribuidora.core.gestion_pedido.helper import get_cantidad_estados_pedido, \
+    get_ultimo_pedido_id, insert_into_detalle_pedido
 from distribuidora.core.gestion_producto.helper import get_lista_productos, \
     get_producto_envase_by_producto_id
+
 from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase
+
 from distribuidora import db
 
 producto = Blueprint('producto', __name__, template_folder='templates')
@@ -97,14 +102,32 @@ def listar_productos():
 @producto.route('/producto/detalle', methods=['GET', 'POST'])
 @login_required
 def detalle_producto():
-    p = request.args.get('producto', type=int)
+    producto_id = request.args.get('producto', type=int)
     print('#'*88, flush=True)
-
-    print(p, flush=True)
+    productos = get_producto_envase_by_producto_id(producto_id)
     print('#'*88, flush=True)
-    productos = get_producto_envase_by_producto_id(p)
-    print('#'*88, flush=True)
-
     print(productos, flush=True)
     print('#'*88, flush=True)
-    return render_template('detalle_producto.html', productos=productos)
+    form = FormAgregarProducto()
+    if form.validate_on_submit():
+        #obtengo los datos del cliente
+        usuario_id = current_user.get_id()
+        print('^'*50, flush=True)
+        print(usuario_id, flush=True)
+        print('^'*50, flush=True)
+        #recupero el pedido en estado pcc
+        pedido_id = get_ultimo_pedido_id(usuario_id)
+        #recupero la cantidad de estados de ese pedido
+        cantidad_estados = get_cantidad_estados_pedido(pedido_id)
+        if cantidad_estados == 1:
+            producto_id = request.args.get("producto")
+            cantidad = form.cantidad.data
+            print('.'*88, flush=True)
+            print('cantidad: {}'.format(cantidad), flush=True)
+            print('producto: {}'.format(producto_id), flush=True)
+            print('.'*88, flush=True)
+            #insert_into_detalle_pedido(pedido_id=pedido_id, producto_id=producto_id)
+    else:
+        print(form.errors)
+
+    return render_template('detalle_producto.html', form=form, productos=productos)
