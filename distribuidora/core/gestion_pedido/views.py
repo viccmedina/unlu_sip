@@ -70,3 +70,10 @@ def confirmar_pedido_operador():
 	"""
 
 	pass
+
+@pedido.route('/pedido/listar/operador', methods=['GET'])
+def listar_pedido_operador():
+    pedidos = None
+    if current_user.has_role('Operador'):
+        pedidos = get_listado_pedidos_pco()
+    return render_template('listado_pedidos.html', pedidos = pedidos)

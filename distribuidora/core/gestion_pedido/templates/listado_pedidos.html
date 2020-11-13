@@ -1,0 +1,10 @@
+{% if pedidos is none%}
+  <p>NO HAY PEDIDOS</p>
+{% else %}
+  <h2>Pedidos a Confirmar</h2>
+  <ul>
+    {% for p in pedidos %}
+    <li>{{ p }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

@@ -70,3 +70,15 @@ def insert_into_detalle_pedido(pedido_id, producto_id, cantidad=1):
     """
     result = db.engine.execute(INSERT_INTO_DETALLE_PEDIDO.format(\
         pedido_id=pedido_id, producto_id=producto_id, cantidad=cantidad))
+
+def get_listado_pedidos_pco():
+    """
+    Devolvemos todos los pedidos cuyo estado sea PCO (Pendiente Confirmación
+    por Operador)
+    """
+    result = db.engine.execute(SELECT_PEDIDOS_ESTADO_PCC)
+    result = parser_result(result)
+    print('='*90, flush=True)
+    print(result, flush=True)
+    print('='*90, flush=True)
+    return result
