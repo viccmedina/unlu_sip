@@ -37,9 +37,6 @@ class Lista_precio(db.Model):
         return 'precio de {}'.format(self.fecha_desde,self.fecha_hasta)
 
 
-
-
-
 class Lista_precio_producto(db.Model):
     """
     Este modelo representará a la repacion lista de precio y producto.
