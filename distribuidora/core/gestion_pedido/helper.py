@@ -77,11 +77,23 @@ def get_detalle_pedido(pedido_id):
     print('='*90, flush=True)
     return result
 
+def check_estado_actual_pedido(pedido_id):
+    """
+    Dado un identificador de pedido, devolvemos su estado actual.
+    """
+    result = db.engine.execute(CANTIDAD_ESTADOS_DEL_PEDIDO.format(pedido_id=pedido_id))
+    result = parser_result(result)
+    print('7'*90, flush=True)
+    print(result, flush=True)
+    print('7'*90, flush=True)
+    return result
+
 def insert_into_detalle_pedido(pedido_id, producto_id, cantidad=1):
     """
     Dado el nro de pedido, el producto y la cantidad insertamos dentro del
     detalle del pedido.
     """
+
     result = db.engine.execute(INSERT_INTO_DETALLE_PEDIDO.format(\
         pedido_id=pedido_id, producto_id=producto_id, cantidad=cantidad))
     return check(result)
@@ -107,11 +119,14 @@ def get_listado_pedidos_pcc(usuario_id):
     print('='*90, flush=True)
     return result
 
-def update_detalle_producto(detalle, cantidad):
-    result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
-        detalle_id=detalle, cantidad=cantidad))
-    print(result.rowcount, flush=True)
-    return check(result)
+def update_detalle_producto(pedido_id, detalle, cantidad):
+    if get_cantidad_estados_pedido(pedido_id) < 3 :
+        result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
+            detalle_id=detalle, cantidad=cantidad))
+        print(result.rowcount, flush=True)
+        return check(result)
+    else:
+        return False
 
 def actualizar_estado_pedido(pedido, estado):
     """

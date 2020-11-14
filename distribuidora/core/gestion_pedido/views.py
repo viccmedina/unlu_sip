@@ -66,7 +66,7 @@ def modificar_detalle_producto():
         print('cantidad: {}'.format(cantidad), flush=True)
         print('producto: {}'.format(producto), flush=True)
         print('detalle_pedido: {}'.format(detalle), flush=True)
-        result = update_detalle_producto(detalle, cantidad)
+        result = update_detalle_producto(pedido, detalle, cantidad)
         if result:
             flash('Actualizado Correctamente !', 'success')
         else:
