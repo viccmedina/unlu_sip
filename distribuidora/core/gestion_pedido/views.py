@@ -84,4 +84,11 @@ def listar_pedido_operador():
     pedidos = None
     if current_user.has_role('Operador'):
         pedidos = get_listado_pedidos_pco()
-    return render_template('listado_pedidos.html', pedidos = pedidos)
+    return render_template('listado_pedidos.html', pedidos=pedidos)
+
+@pedido.route('/pedido/listar/detalle', methods=['GET'])
+def listar_detalle_pedido():
+    pedido = request.args.get('pedido', type=int)
+    print('pedido {}'.format(pedido), flush=True)
+    detalle = get_detalle_pedido(pedido)
+    return render_template('detalle_pedido.html', detalle=detalle)

@@ -126,7 +126,7 @@ def detalle_producto():
             print('cantidad: {}'.format(cantidad), flush=True)
             print('producto: {}'.format(producto_id), flush=True)
             print('.'*88, flush=True)
-            #insert_into_detalle_pedido(pedido_id=pedido_id, producto_id=producto_id)
+            insert_into_detalle_pedido(pedido_id=pedido_id, producto_id=producto_id)
     else:
         print(form.errors)
 

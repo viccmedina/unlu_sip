@@ -63,6 +63,14 @@ def get_ultimo_pedido_id(usuario_id):
     print('='*90, flush=True)
     return result[0]['pedido_id']
 
+def get_detalle_pedido(pedido_id):
+    result = db.engine.execute(LISTAR_DETALLE_PEDIDO.format(pedido_id=pedido_id))
+    result = parser_result(result)
+    print('='*90, flush=True)
+    print(result, flush=True)
+    print('='*90, flush=True)
+    return result
+
 def insert_into_detalle_pedido(pedido_id, producto_id, cantidad=1):
     """
     Dado el nro de pedido, el producto y la cantidad insertamos dentro del
@@ -103,4 +111,3 @@ def actualizar_estado_pedido(pedido, estado):
     print(estado_id, flush=True)
     result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
         pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
-    
