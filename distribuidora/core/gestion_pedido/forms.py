@@ -22,3 +22,8 @@ class EliminarProducto(FlaskForm):
 
 class CancelarPedido(FlaskForm):
     pass
+
+
+class ModificarDetallePedido(FlaskForm):
+    cantidad = IntegerField('Cantidad:', validators=[DataRequired()])
+    submit = SubmitField('Modificar')

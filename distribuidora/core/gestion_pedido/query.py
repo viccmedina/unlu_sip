@@ -55,3 +55,6 @@ SELECT_PEDIDOS_ESTADO_PCC = """ SELECT hep.pedido_id, pe.descripcion FROM histor
 
 INSERT_INTO_DETALLE_PEDIDO = """ INSERT INTO detalle_pedido (pedido_id, producto_id, cantidad)
     VALUES ('{pedido_id}', '{producto_id}', '{cantidad}')"""
+
+UPDATE_CANTIDAD_DETALLE_PEDIDO = """ UPDATE detalle_pedido set cantidad='{cantidad}'
+    WHERE detalle_id='{detalle_id}'"""

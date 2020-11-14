@@ -3,7 +3,8 @@ from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from distribuidora.models.pedido import PedidoEstado, Pedido, DetallePedido
 from distribuidora.core.gestion_pedido.helper import *
-from distribuidora.core.gestion_pedido.forms import NuevoPedido, FormAgregarProducto
+from distribuidora.core.gestion_pedido.forms import NuevoPedido, FormAgregarProducto, \
+    ModificarDetallePedido
 
 pedido = Blueprint('pedido', __name__, template_folder='templates')
 
@@ -43,7 +44,6 @@ def nuevo_pedido():
 def consultar_pedido():
     print(current_user.get_id(), flush=True)
     pedido_pcc = get_listado_pedidos_pcc(usuario_id=current_user.get_id())
-    print(type(pedido_pcc), flush=True)
     if not pedido_pcc:
         pedido_pcc = None
     print('-'*90, flush=True)
@@ -54,8 +54,28 @@ def consultar_pedido():
 def anular_pedido():
 	pass
 
-@pedido.route('/pedido/modificar', methods=['GET'])
-def modificar_pedido():
+@pedido.route('/pedido/detalle/modificar', methods=['GET', 'POST'])
+def modificar_detalle_producto():
+    form = ModificarDetallePedido()
+    pedido = request.args.get('pedido', type=int)
+    print('pedido: {}'.format(pedido), flush=True)
+    if form.validate_on_submit():
+        detalle = request.args.get('detalle_pedido', type=int)
+        producto = request.args.get('producto', type=int)
+        cantidad = form.cantidad.data
+        print('cantidad: {}'.format(cantidad), flush=True)
+        print('producto: {}'.format(producto), flush=True)
+        print('detalle_pedido: {}'.format(detalle), flush=True)
+        result = update_detalle_producto(detalle, cantidad)
+        if result:
+            flash('Actualizado Correctamente !', 'success')
+        else:
+            flash('Algo Salió mal :( !', 'error')
+    detalle = get_detalle_pedido(pedido)
+    return render_template('detalle_pedido.html', detalle=detalle, form=form)
+
+@pedido.route('/pedido/detalle/eliminar', methods=['GET'])
+def eliminar_producto_detalle():
 	pass
 
 @pedido.route('/pedido/confirmar/cliente', methods=['GET', 'POST'])
@@ -88,7 +108,8 @@ def listar_pedido_operador():
 
 @pedido.route('/pedido/listar/detalle', methods=['GET'])
 def listar_detalle_pedido():
+    form = ModificarDetallePedido()
     pedido = request.args.get('pedido', type=int)
     print('pedido {}'.format(pedido), flush=True)
     detalle = get_detalle_pedido(pedido)
-    return render_template('detalle_pedido.html', detalle=detalle)
+    return render_template('detalle_pedido.html', detalle=detalle, form=form)

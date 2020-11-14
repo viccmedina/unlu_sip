@@ -100,6 +100,15 @@ def get_listado_pedidos_pcc(usuario_id):
     print('='*90, flush=True)
     return result
 
+def update_detalle_producto(detalle, cantidad):
+    result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
+        detalle_id=detalle, cantidad=cantidad))
+    print(result.rowcount, flush=True)
+    if result.rowcount == 1 :
+        return True
+    else:
+        return False
+
 def actualizar_estado_pedido(pedido, estado):
     """
     Dado un nro de pedido y un estado, actualizamos

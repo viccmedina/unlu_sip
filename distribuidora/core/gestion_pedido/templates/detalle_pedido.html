@@ -1,0 +1,16 @@
+<h3>DETALLE DEL PEDIDO</h3>
+{% include "flash_errors.html" %}
+<ul>
+    {% for d in detalle %}
+      <li>{{ d }}</li>
+      <a href="#">Eliminar Producto</a>
+      <form  action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto=d.producto_id, detalle_pedido=d.detalle_id) }}" method="POST">
+
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{ form.cantidad.label }} {{ form.cantidad }}
+          <div class="form-group">
+            {{ form.submit() }}
+      </form>
+    {% endfor %}
+</ul>
