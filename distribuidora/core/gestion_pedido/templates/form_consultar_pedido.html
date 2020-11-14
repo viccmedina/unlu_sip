@@ -1,1 +1,7 @@
 <h3>CONSULTA DE PEDIDO</h3>
+{% if pedido_pcc is none %}
+  <p>No tiene pedidos sin confirmar</p>
+  {% else %}
+  <p> {{ pedido_pcc[0] }} </p>
+  <a href="{{ url_for('pedido.confirmar_pedido_cliente', pedido_pcc=pedido_pcc[0]['pedido_id']) }}">Confirmar Pedido</a>
+{% endif %}

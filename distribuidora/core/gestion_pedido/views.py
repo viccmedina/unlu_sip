@@ -40,11 +40,14 @@ def nuevo_pedido():
 @pedido.route('/pedido/consultar', methods=['GET'])
 @login_required
 def consultar_pedido():
-	return render_template('form_consultar_pedido.html', \
-			datos=current_user.get_mis_datos(),\
-			is_authenticated=current_user.is_authenticated, \
-			rol=current_user.get_role(), \
-            site='Gestión de Pedido')
+    print(current_user.get_id(), flush=True)
+    pedido_pcc = get_listado_pedidos_pcc(usuario_id=current_user.get_id())
+    print(type(pedido_pcc), flush=True)
+    if not pedido_pcc:
+        pedido_pcc = None
+    print('-'*90, flush=True)
+    print(pedido_pcc, flush=True)
+    return render_template('form_consultar_pedido.html', datos=current_user.get_mis_datos(), is_authenticated=current_user.is_authenticated, rol=current_user.get_role(), site='Gestión de Pedido', pedido_pcc=pedido_pcc)
 
 @pedido.route('/pedido/anular', methods=['GET'])
 def anular_pedido():
@@ -54,14 +57,18 @@ def anular_pedido():
 def modificar_pedido():
 	pass
 
-@pedido.route('/pedido/confirmar/cliente', methods=['GET'])
+@pedido.route('/pedido/confirmar/cliente', methods=['GET', 'POST'])
 def confirmar_pedido_cliente():
-	"""
-	necesito id del pedido
-	verificar que el estado del pedido sea: Pendiente Confirmación Cliente
-	luego pasarlo a:  Pendiente Confirmación Operador
-	"""
-	pass
+    pedido_pcc = request.args.get('pedido_pcc', type=int)
+    print('*'*90)
+    print(pedido_pcc, flush=True)
+    if pedido_pcc is not None:
+        print('PEDIDO PASADO X PARAMETRO QUE VAMOS A CONFIRMAR', flush=True)
+        print(pedido_pcc, flush=True)
+        actualizar_estado_pedido(pedido_pcc, 'PCO')
+        print('PEDIDO CONFIRMADO POR CLIENTE', flush=True)
+    return redirect(url_for('pedido.consultar_pedido'))
+
 
 @pedido.route('/pedido/confirmar/operador', methods=['GET'])
 def confirmar_pedido_operador():

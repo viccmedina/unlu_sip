@@ -76,9 +76,31 @@ def get_listado_pedidos_pco():
     Devolvemos todos los pedidos cuyo estado sea PCO (Pendiente Confirmación
     por Operador)
     """
-    result = db.engine.execute(SELECT_PEDIDOS_ESTADO_PCC)
+    result = db.engine.execute(SELECT_PEDIDOS_ESTADO_PCO)
     result = parser_result(result)
     print('='*90, flush=True)
     print(result, flush=True)
     print('='*90, flush=True)
     return result
+
+def get_listado_pedidos_pcc(usuario_id):
+    result = db.engine.execute(SELECT_PEDIDOS_ESTADO_PCC.format(\
+        usuario_id=usuario_id))
+    result = parser_result(result)
+    print('='*90, flush=True)
+    print(result, flush=True)
+    print('='*90, flush=True)
+    return result
+
+def actualizar_estado_pedido(pedido, estado):
+    """
+    Dado un nro de pedido y un estado, actualizamos
+    el estado de dicho pedido.
+    """
+    print('ACTUALIZAR!!', flush=True)
+    estado_id = db.engine.execute(CONSULTA_POR_ESTADO_PEDIDO_SEGUN_ID.format(descripcion_corta=estado))
+    estado_id = parser_result(estado_id)
+    print(estado_id, flush=True)
+    result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
+        pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
+    
