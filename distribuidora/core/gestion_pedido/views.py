@@ -32,6 +32,7 @@ def nuevo_pedido():
             print(estado_id, flush=True)
             print(estado_id[0]['pedido_estado_id'], flush=True)
             crear_nuevo_pedido(usuario_id, estado_id[0]['pedido_estado_id'])
+            flash('Pedido Creadooooo!', 'success')
         else:
             flash('ERROOOOOR, ya existe un pedido en curso', 'error')
             print('ERROOOOOR, ya existe un pedido en curso', flush=True)
