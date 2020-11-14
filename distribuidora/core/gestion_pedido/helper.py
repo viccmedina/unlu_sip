@@ -7,6 +7,12 @@ def parser_result(result):
         resp.append(dict(row))
     return resp
 
+def check(result):
+    if result.rowcount == 1 :
+        return True
+    else:
+        return False
+
 def get_estado_pedido_id(descripcion_corta):
     """
     Dado una descripción corta de uno de los estados de los pedidos,
@@ -78,6 +84,7 @@ def insert_into_detalle_pedido(pedido_id, producto_id, cantidad=1):
     """
     result = db.engine.execute(INSERT_INTO_DETALLE_PEDIDO.format(\
         pedido_id=pedido_id, producto_id=producto_id, cantidad=cantidad))
+    return check(result)
 
 def get_listado_pedidos_pco():
     """
@@ -104,10 +111,7 @@ def update_detalle_producto(detalle, cantidad):
     result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
         detalle_id=detalle, cantidad=cantidad))
     print(result.rowcount, flush=True)
-    if result.rowcount == 1 :
-        return True
-    else:
-        return False
+    return check(result)
 
 def actualizar_estado_pedido(pedido, estado):
     """
@@ -120,3 +124,4 @@ def actualizar_estado_pedido(pedido, estado):
     print(estado_id, flush=True)
     result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
         pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
+    return check(result)
