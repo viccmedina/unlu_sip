@@ -58,3 +58,6 @@ INSERT_INTO_DETALLE_PEDIDO = """ INSERT INTO detalle_pedido (pedido_id, producto
 
 UPDATE_CANTIDAD_DETALLE_PEDIDO = """ UPDATE detalle_pedido set cantidad='{cantidad}'
     WHERE detalle_id='{detalle_id}'"""
+
+DELETE_PRODUCTO_FROM_DETALLE_PEDIDO = """ DELETE FROM detalle_pedido
+    WHERE producto_id='{producto_id}' AND detalle_id='{detalle_id}' """

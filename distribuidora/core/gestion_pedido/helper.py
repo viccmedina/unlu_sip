@@ -140,3 +140,12 @@ def actualizar_estado_pedido(pedido, estado):
     result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
         pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
     return check(result)
+
+def eliminar_producto_detalle_pedido(producto_id, detalle_id, pedido_id):
+    if get_cantidad_estados_pedido(pedido_id) < 3 :
+        result = db.engine.execute(DELETE_PRODUCTO_FROM_DETALLE_PEDIDO.format(\
+            detalle_id=detalle_id, producto_id=producto_id))
+        print(result.rowcount, flush=True)
+        return check(result)
+    else:
+        return False

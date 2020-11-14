@@ -76,7 +76,22 @@ def modificar_detalle_producto():
 
 @pedido.route('/pedido/detalle/eliminar', methods=['GET'])
 def eliminar_producto_detalle():
-	pass
+    form = ModificarDetallePedido()
+    pedido = request.args.get('pedido', type=int)
+    producto_id = request.args.get('producto', type=int)
+    detalle_id = request.args.get('detalle_pedido', type=int)
+    print('3'*50, flush=True)
+    print('pedido: {}'.format(pedido), flush=True)
+    print('producto_id: {}'.format(producto_id), flush=True)
+    print('detalle_id: {}'.format(detalle_id), flush=True)
+    print('3'*50, flush=True)
+    result = eliminar_producto_detalle_pedido(producto_id, detalle_id, pedido)
+    if result:
+        flash('Producto Eliminado Correctamente !', 'success')
+    else:
+        flash('Algo Salió mal :( !', 'error')
+    detalle = get_detalle_pedido(pedido)
+    return render_template('detalle_pedido.html', detalle=detalle, form=form)
 
 @pedido.route('/pedido/confirmar/cliente', methods=['GET', 'POST'])
 def confirmar_pedido_cliente():
