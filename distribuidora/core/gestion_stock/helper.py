@@ -7,22 +7,16 @@ def consulta_sotck(producto):
     Realiza la consulta a la base para el stock del producto seleccionado.
     Nos devolverá la cantidad del producto seleccionado:
     """
+    resultado = None
     print("consultaStock {}".format(producto))
-    #result = db.engine.execute(CONSULTA_STOCK.format(producto_id=producto))
-    entrada = db.engine.execute(CONSULTA_ENTRADA_STOCK.format(producto_id=producto))
-    salida = db.engine.execute(CONSULTA_SALIDA_STOCK.format(producto_id=producto))
+    result = db.engine.execute(CONSULTA_STOCK.format(producto_id=producto))
+    #entrada = db.engine.execute(CONSULTA_ENTRADA_STOCK.format(producto_id=producto))
+    #salida = db.engine.execute(CONSULTA_SALIDA_STOCK.format(producto_id=producto))
 
-    for row in entrada:
-        e = row[0]
-    for row in salida:
-        s = row[0]
-    if e is None:
-        return 0 - s
-    else:
-        if s is None :
-            return e
-        else :
-            return e - s
+    for row in result:
+        resultado = row[0]
+
+    return resultado
 
 
 def get_id_producto(pro,mar,umed):

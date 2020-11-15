@@ -357,9 +357,10 @@ def insertar_producto_envase():
 			print('-'*50)
 			#p = Producto.query.filter_by(descripcion=row['producto']).first()
 			#e = Envase.query.filter_by(descripcion=row['envase']).first()
-			#um = UnidadMedida.query.filter_by(descripcion=row['unidad_medida']).first()
+			um = UnidadMedida.query.filter_by(descripcion=row['unidad_medida']).first()
+			print('Stock Real: {}'.format(um.unidad_medida_id))
 			new_producto_envase = ProductoEnvase(producto_id=row['producto'],
-				envase_id=row['envase'],unidad_medida_id=row['unidad_medida'],stock_real=row['stock_real'])
+				envase_id=row['envase'],unidad_medida_id=um.unidad_medida_id,stock_real=row['stock_real'])
 			producto_envase.append(new_producto_envase)
 		db.session.add_all(producto_envase)
 		db.session.commit()
