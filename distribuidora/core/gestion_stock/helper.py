@@ -1,6 +1,6 @@
 from distribuidora import db
 from flask import flash
-from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTA_ENTRADA_STOCK , CONSULTA_SALIDA_STOCK, CONSULTAR_ID_MARCA, CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK
+from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTAR_ID_MARCA, CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK,UPDATE_STOCK_REAL
 
 def consulta_sotck(producto):
     """
@@ -45,8 +45,8 @@ def get_id_producto(pro,mar,umed):
         else:
             result = db.engine.execute(CONSULTAR_ID_PRODUCTO.format(marca=marcaID,uMedida=umedidaID,producto=pro))
             for row in result:
-                valor = row['producto_id']
-                print("producto: ", valor)
+                valor = row['producto_envase_id']
+                print("producto-envase: ", valor)
 
             if valor is None:
                 return -777
@@ -68,5 +68,11 @@ def agregar_stock(usuario,producto,cantidad,desc):
 
     descripcion = "Carga de {}".format(desc)
     print("descripcion: "+ descripcion)
-    db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(usuario_id=usuario,producto_id=producto,cantidad=cantidad,descripcion=descripcion))
+    db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(tipo_movimiento=1,usuario_id=usuario,producto_envase_id=producto,cantidad=cantidad,descripcion=descripcion))
+    db.engine.execute(UPDATE_STOCK_REAL.format(producto_envase_id=producto,cantidad=cantidad))
     return "ok"
+
+
+def deolucion(usuario,producto,cantidad,desc):
+    descripcion = "Carga de {}".format(desc)
+    db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(tipo_movimiento=4,usuario_id=usuario,producto_envase_id=producto,cantidad=cantidad,descripcion=descripcion))
