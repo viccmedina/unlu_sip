@@ -38,11 +38,11 @@ CANTIDAD_ESTADOS_DEL_PEDIDO = """ SELECT COUNT(*) AS cantidad FROM historial_est
 SELECT_ID_ULTIMO_PEDIDO = """ SELECT pedido_id FROM pedido WHERE usuario_id='{usuario_id}'
     ORDER BY ts_created DESC LIMIT 1 """
 
-SELECT_PEDIDOS_ESTADO_PCO = """ SELECT hep.pedido_id, pe.descripcion FROM historial_estado_pedido AS hep
+SELECT_PEDIDOS_ESTADO_PCO = """ SELECT  hep.pedido_id, pe.descripcion, pe.orden FROM historial_estado_pedido AS hep
     INNER JOIN pedido_estado AS pe ON hep.pedido_estado_id = pe.pedido_estado_id
-    WHERE pe.descripcion_corta='PCO' AND hep.pedido_id IN
-    	(SELECT pedido_id FROM historial_estado_pedido
-    		GROUP BY pedido_id HAVING COUNT(pedido_id) = 2 )"""
+    WHERE pe.orden>1
+    GROUP by hep.pedido_id
+    HAVING MAX(hep.ts_created)"""
 
 SELECT_PEDIDOS_ESTADO_PCC = """ SELECT hep.pedido_id, pe.descripcion FROM historial_estado_pedido AS hep
     INNER JOIN pedido_estado AS pe ON hep.pedido_estado_id = pe.pedido_estado_id
