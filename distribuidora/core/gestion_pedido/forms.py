@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, EqualTo
 from wtforms import ValidationError
 # User Based Imports
 from flask_login import current_user
-
+from distribuidora.core.gestion_pedido.helper import get_estados_pedidos_para_operador
 
 class NuevoPedido(FlaskForm):
 	submit = SubmitField('Nuevo Pedido')
@@ -22,6 +22,12 @@ class EliminarProducto(FlaskForm):
 
 class CancelarPedido(FlaskForm):
     pass
+
+class ActualizarEstadoPedido(FlaskForm):
+    estados = get_estados_pedidos_para_operador()
+    estado = SelectField(u'Estado', choices=estados)
+    submit = SubmitField('Agregar')
+
 
 
 class ModificarDetallePedido(FlaskForm):

@@ -23,6 +23,20 @@ def get_estado_pedido_id(descripcion_corta):
         descripcion_corta=descripcion_corta))
     return parser_result(result)
 
+def get_estado_pedido_id_descripcion(descripcion):
+    result = db.engine.execute(SELECT_ESTADO_PEDIDO_DESCRIPCION.format(descripcion=descripcion))
+    result = parser_result(result)
+    return result[0]['pedido_estado_id']
+
+def get_estados_pedidos_para_operador():
+    result = db.engine.execute(SELECT_PEDIDOS_ESTADOS_FOR_OPERADOR)
+    result = parser_result(result)
+    print('estados: {}'.format(result), flush=True)
+    e = list()
+    for r in result:
+        e.append(r['descripcion'])
+    return e
+
 def check_nuevo_pedido(cliente, estado):
     """
     Dada la solicitud de un nuevo pedido vamos a verificar si no existen pedidos
@@ -127,6 +141,11 @@ def update_detalle_producto(pedido_id, detalle, cantidad):
         return check(result)
     else:
         return False
+        
+def actualizar_pedido_estado_por_operador(pedido, estado):
+    result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
+        pedido_id=pedido, pedido_estado_id=estado))
+    return check(result)
 
 def actualizar_estado_pedido(pedido, estado):
     """

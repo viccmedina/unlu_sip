@@ -61,3 +61,9 @@ UPDATE_CANTIDAD_DETALLE_PEDIDO = """ UPDATE detalle_pedido set cantidad='{cantid
 
 DELETE_PRODUCTO_FROM_DETALLE_PEDIDO = """ DELETE FROM detalle_pedido
     WHERE producto_id='{producto_id}' AND detalle_id='{detalle_id}' """
+
+SELECT_PEDIDOS_ESTADOS_FOR_OPERADOR = """ SELECT descripcion
+    FROM pedido_estado WHERE descripcion_corta NOT IN ('PCC', 'PCO')"""
+
+SELECT_ESTADO_PEDIDO_DESCRIPCION = """ SELECT pedido_estado_id FROM pedido_estado
+    WHERE descripcion = '{descripcion}' """

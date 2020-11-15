@@ -4,7 +4,7 @@ from distribuidora import db
 from distribuidora.models.pedido import PedidoEstado, Pedido, DetallePedido
 from distribuidora.core.gestion_pedido.helper import *
 from distribuidora.core.gestion_pedido.forms import NuevoPedido, FormAgregarProducto, \
-    ModificarDetallePedido
+    ModificarDetallePedido, ActualizarEstadoPedido
 
 pedido = Blueprint('pedido', __name__, template_folder='templates')
 
@@ -106,20 +106,35 @@ def confirmar_pedido_cliente():
     return redirect(url_for('pedido.consultar_pedido'))
 
 
-@pedido.route('/pedido/confirmar/operador', methods=['GET'])
-def confirmar_pedido_operador():
-	"""
-	necesito verificar que el estado del pedido sea :  Pendiente Confirmación Operador
-	"""
+@pedido.route('/pedido/modificar/estado/operador', methods=['GET', 'POST'])
+def modificar_estado_operador():
+    form = ActualizarEstadoPedido()
+    pedido = request.args.get('pedido', type=int)
+    if form.validate_on_submit():
+        estado = form.estado.data
+        print('^'*90, flush=True)
+        print(estado, flush=True)
 
-	pass
+        print('^'*90, flush=True)
+        pedido_estado_id = get_estado_pedido_id_descripcion(estado)
+        print(pedido_estado_id, flush=True)
+        result = actualizar_pedido_estado_por_operador(pedido, pedido_estado_id)
+        if result:
+            flash('ESTADO ACTUALIZADOOO !', 'success')
+        else:
+            flash('ALGO SALIO MAL :(', 'error')
+        print('^'*90, flush=True)
+
+    pedidos = get_listado_pedidos_pco()
+    return render_template('listado_pedidos.html', pedidos=pedidos, form=form)
 
 @pedido.route('/pedido/listar/operador', methods=['GET'])
 def listar_pedido_operador():
     pedidos = None
+    form = ActualizarEstadoPedido()
     if current_user.has_role('Operador'):
         pedidos = get_listado_pedidos_pco()
-    return render_template('listado_pedidos.html', pedidos=pedidos)
+    return render_template('listado_pedidos.html', pedidos=pedidos, form=form)
 
 @pedido.route('/pedido/listar/detalle', methods=['GET'])
 def listar_detalle_pedido():
