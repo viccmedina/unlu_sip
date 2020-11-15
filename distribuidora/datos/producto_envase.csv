@@ -1,6 +1,9 @@
-producto_envase_id,producto,envase,unidad_medida
-1,harina,paquete,1kg
-2,azucar,paquete,1kg
-3,dulce de leche,pote,500g
-4,levadura,caja,100g
-5,leche,sachet,1L
+producto_envase_id,producto,envase,unidad_medida,stock_real
+1,1,3,1kg,25
+2,2,3,1kg,35
+3,3,1,500g,27
+4,4,2,100g,11
+5,5,5,1L,55
+6,1,3,500g,33
+7,6,3,1kg,22
+8,7,1,500g,16
