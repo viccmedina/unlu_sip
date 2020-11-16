@@ -21,12 +21,13 @@ class PedidoEstado(db.Model):
     orden = db.Column(db.Integer)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
-    def __init__(self, descripcion, descripcion_corta):
+    def __init__(self, descripcion, descripcion_corta, orden):
         """
         Constructor de la clase EstadoPedido
         """
         self.descripcion = descripcion
         self.descripcion_corta = descripcion_corta
+        self.orden = orden
 
     def __repr__(self):
         """

@@ -240,7 +240,7 @@ def insertar_estado_pedido():
 			print('Estado Pedido: {}'.format(row['descripcion']))
 			print('-'*50)
 			tipos_estado_pedido = PedidoEstado(descripcion=row['descripcion'], \
-				descripcion_corta=row['descripcion_corta'])
+				descripcion_corta=row['descripcion_corta'], orden['orden'])
 
 			estados.append(tipos_estado_pedido)
 	db.session.add_all(estados)
