@@ -4,10 +4,9 @@ from distribuidora.core.gestion_producto.forms import ImportarProducto
 from distribuidora.core.gestion_pedido.forms import FormAgregarProducto
 from distribuidora.core.gestion_pedido.helper import get_cantidad_estados_pedido, \
     get_ultimo_pedido_id, insert_into_detalle_pedido
-from distribuidora.core.gestion_producto.helper import get_lista_productos, \
-    get_producto_envase_by_producto_id
+from distribuidora.core.gestion_producto.helper import *
 
-from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase
+from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase, TipoProducto
 
 from distribuidora import db
 
@@ -81,17 +80,15 @@ def importar():
 @producto.route('/producto/listar', methods=['GET', 'POST'])
 @login_required
 def listar_productos():
-    # productos = get_lista_productos()
     page = request.args.get('page', 1, type=int)
-    productos = db.session.query(Producto, Marca, ProductoEnvase, Envase).filter(\
+    productos = db.session.query(Producto, Marca, TipoProducto).filter(\
         Producto.marca_id == Marca.marca_id).filter(\
-        Producto.producto_id == ProductoEnvase.producto_id).filter(\
-        Envase.envase_id == ProductoEnvase.envase_id).paginate( page, 5, False)
-    #productos = Producto.query.join(Marca).paginate( page, 5, False)
+        Producto.tipo_producto_id == TipoProducto.tipo_producto_id).paginate( page, 5, False)
+
     print('-'*88, flush=True)
     print(productos.items, flush=True)
     print('-'*88, flush=True)
-    #productos = Producto.query.paginate( page, 5, False)
+
     return render_template('listar_productos.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
@@ -102,9 +99,18 @@ def listar_productos():
 @producto.route('/producto/detalle', methods=['GET', 'POST'])
 @login_required
 def detalle_producto():
-    producto_id = request.args.get('producto', type=int)
-    print('#'*88, flush=True)
-    productos = get_producto_envase_by_producto_id(producto_id)
+    producto = request.args.get('producto', type=str)
+    marca = request.args.get('marca', type=str)
+    if producto is not None and marca is not None:
+        print('producto {}'.format(producto), flush=True)
+        print('marca {}'.format(marca), flush=True)
+        print('#'*88, flush=True)
+        producto_id = get_producto_by_descripcion_marca(producto, marca)
+    else:
+        producto_envase_id = request.args.get('producto', type=int)
+        producto_id = get_producto_id_from_producto_envase(producto_envase_id)
+    print('productoooooooos {}'.format(producto_id), flush=True)
+    productos = get_producto_envase_by_producto_id(producto_id[0]['producto_id'])
     print('#'*88, flush=True)
     print(productos, flush=True)
     print('#'*88, flush=True)
@@ -126,7 +132,7 @@ def detalle_producto():
             print('cantidad: {}'.format(cantidad), flush=True)
             print('producto: {}'.format(producto_id), flush=True)
             print('.'*88, flush=True)
-            insert_into_detalle_pedido(pedido_id=pedido_id, producto_id=producto_id)
+            insert_into_detalle_pedido(pedido_id=pedido_id, producto_envase_id=producto_envase_id, cantidad=cantidad)
     else:
         print(form.errors)
 

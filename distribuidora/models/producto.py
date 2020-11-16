@@ -64,7 +64,7 @@ class ProductoEnvase(db.Model):
         self.unidad_medida_id = unidad_medida_id
 
     def __repr__(self):
-        return str(self.producto_id,stock_real)
+        return str(self.producto_envase_id)
 
 
 class Marca(db.Model):
@@ -124,7 +124,7 @@ class TipoProducto(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'Tipo de Producto:  {}'.format(self.descripcion)
+        return self.descripcion
 
 
 class Producto(db.Model):
@@ -166,7 +166,7 @@ class Producto(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'Producto: {}'.format(self.descripcion)
+        return self.descripcion
 
 
     def getProducto(self):

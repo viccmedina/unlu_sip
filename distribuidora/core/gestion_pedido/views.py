@@ -27,7 +27,7 @@ def nuevo_pedido():
         pedido_id = get_ultimo_pedido_id(usuario_id)
         #recupero la cantidad de estados de ese pedido
         cantidad_estados = get_cantidad_estados_pedido(pedido_id)
-        if cantidad_estados > 1:
+        if cantidad_estados > 1 or pedido_id is None:
             estado = 'PCC'
             estado_id = get_estado_pedido_id(estado)
             print(estado_id, flush=True)
@@ -78,14 +78,14 @@ def modificar_detalle_producto():
 def eliminar_producto_detalle():
     form = ModificarDetallePedido()
     pedido = request.args.get('pedido', type=int)
-    producto_id = request.args.get('producto', type=int)
+    producto_envase_id = request.args.get('producto_envase_id', type=int)
     detalle_id = request.args.get('detalle_pedido', type=int)
-    print('3'*50, flush=True)
+    print('`'*50, flush=True)
     print('pedido: {}'.format(pedido), flush=True)
-    print('producto_id: {}'.format(producto_id), flush=True)
+    print('producto_envase_id: {}'.format(producto_envase_id), flush=True)
     print('detalle_id: {}'.format(detalle_id), flush=True)
     print('3'*50, flush=True)
-    result = eliminar_producto_detalle_pedido(producto_id, detalle_id, pedido)
+    result = eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido)
     if result:
         flash('Producto Eliminado Correctamente !', 'success')
     else:
@@ -111,14 +111,15 @@ def modificar_estado_operador():
     form = ActualizarEstadoPedido()
     pedido = request.args.get('pedido', type=int)
     if form.validate_on_submit():
-        estado = form.estado.data
+        #nuevo estado, el que queremos insertar
+        estado_nuevo = form.estado.data
         print('^'*90, flush=True)
-        print(estado, flush=True)
-
+        print('estado nuevo {}'.format(estado_nuevo), flush=True)
+        #estado actual del pedido
+        estado_actual = request.args.get('estado_anterior', type=str)
+        print('estado_actual {}'.format(estado_actual), flush=True)
         print('^'*90, flush=True)
-        pedido_estado_id = get_estado_pedido_id_descripcion(estado)
-        print(pedido_estado_id, flush=True)
-        result = actualizar_pedido_estado_por_operador(pedido, pedido_estado_id)
+        result = actualizar_pedido_estado_por_operador(pedido, estado_nuevo, estado_actual)
         if result:
             flash('ESTADO ACTUALIZADOOO !', 'success')
         else:
@@ -134,6 +135,7 @@ def listar_pedido_operador():
     form = ActualizarEstadoPedido()
     if current_user.has_role('Operador'):
         pedidos = get_listado_pedidos_pco()
+        print('pedidos a confirmar {}'.format(pedidos), flush=True)
     return render_template('listado_pedidos.html', pedidos=pedidos, form=form)
 
 @pedido.route('/pedido/listar/detalle', methods=['GET'])

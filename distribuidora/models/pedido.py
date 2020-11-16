@@ -18,14 +18,16 @@ class PedidoEstado(db.Model):
     pedido_estado_id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(80), nullable=False, unique=True)
     descripcion_corta = db.Column(db.String(80), nullable=False, unique=True)
+    orden = db.Column(db.Integer)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
-    def __init__(self, descripcion, descripcion_corta):
+    def __init__(self, descripcion, descripcion_corta, orden):
         """
         Constructor de la clase EstadoPedido
         """
         self.descripcion = descripcion
         self.descripcion_corta = descripcion_corta
+        self.orden = orden
 
     def __repr__(self):
         """
@@ -77,7 +79,7 @@ class DetallePedido(db.Model):
 
     # Atributos
     detalle_id = db.Column(db.Integer, primary_key=True)
-    #producto_id = db.Column(db.Integer, db.ForeignKey('producto.producto_id'),nullable=False)
+    producto_envase_id = db.Column(db.Integer, db.ForeignKey('producto_envase.producto_envase_id'),nullable=False)
     pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
     cantidad = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
@@ -113,7 +115,7 @@ class Pedido(db.Model):
 
     # Atributos
     pedido_id = db.Column(db.Integer, primary_key=True)
-    detalle = db.relationship('DetallePedido', uselist=False, backref='detalles_pedidos', lazy=True)
+    #detalle = db.relationship('DetallePedido', uselist=False, backref='detalles_pedidos', lazy=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 

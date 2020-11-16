@@ -38,7 +38,7 @@ CANTIDAD_ESTADOS_DEL_PEDIDO = """ SELECT COUNT(*) AS cantidad FROM historial_est
 SELECT_ID_ULTIMO_PEDIDO = """ SELECT pedido_id FROM pedido WHERE usuario_id='{usuario_id}'
     ORDER BY ts_created DESC LIMIT 1 """
 
-SELECT_PEDIDOS_ESTADO_PCO = """ SELECT  hep.pedido_id, pe.descripcion, pe.orden FROM historial_estado_pedido AS hep
+SELECT_PEDIDOS_ESTADO_PCO = """ SELECT  hep.historial_estado_pedido_id, hep.pedido_id, pe.descripcion, pe.orden FROM historial_estado_pedido AS hep
     INNER JOIN pedido_estado AS pe ON hep.pedido_estado_id = pe.pedido_estado_id
     WHERE pe.orden>1
     GROUP by hep.pedido_id
@@ -53,17 +53,17 @@ SELECT_PEDIDOS_ESTADO_PCC = """ SELECT hep.pedido_id, pe.descripcion FROM histor
         		GROUP BY pedido_id HAVING COUNT(pedido_id) = 1 )"""
 
 
-INSERT_INTO_DETALLE_PEDIDO = """ INSERT INTO detalle_pedido (pedido_id, producto_id, cantidad)
-    VALUES ('{pedido_id}', '{producto_id}', '{cantidad}')"""
+INSERT_INTO_DETALLE_PEDIDO = """ INSERT INTO detalle_pedido (pedido_id, producto_envase_id, cantidad)
+    VALUES ('{pedido_id}', '{producto_envase_id}', '{cantidad}')"""
 
 UPDATE_CANTIDAD_DETALLE_PEDIDO = """ UPDATE detalle_pedido set cantidad='{cantidad}'
     WHERE detalle_id='{detalle_id}'"""
 
 DELETE_PRODUCTO_FROM_DETALLE_PEDIDO = """ DELETE FROM detalle_pedido
-    WHERE producto_id='{producto_id}' AND detalle_id='{detalle_id}' """
+    WHERE producto_envase_id='{producto_envase_id}' AND detalle_id='{detalle_id}' """
 
 SELECT_PEDIDOS_ESTADOS_FOR_OPERADOR = """ SELECT descripcion
     FROM pedido_estado WHERE descripcion_corta NOT IN ('PCC', 'PCO')"""
 
-SELECT_ESTADO_PEDIDO_DESCRIPCION = """ SELECT pedido_estado_id FROM pedido_estado
+SELECT_ESTADO_PEDIDO_DESCRIPCION = """ SELECT * FROM pedido_estado
     WHERE descripcion = '{descripcion}' """
