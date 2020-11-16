@@ -239,8 +239,7 @@ def insertar_estado_pedido():
 		for row in csv_reader:
 			print('Estado Pedido: {}'.format(row['descripcion']))
 			print('-'*50)
-			tipos_estado_pedido = PedidoEstado(descripcion=row['descripcion'], \
-				descripcion_corta=row['descripcion_corta'], orden['orden'])
+			tipos_estado_pedido = PedidoEstado(descripcion=row['descripcion'], descripcion_corta=row['descripcion_corta'], orden=row['orden'])
 
 			estados.append(tipos_estado_pedido)
 	db.session.add_all(estados)
@@ -357,10 +356,8 @@ def insertar_producto_envase():
 			print('-'*50)
 			#p = Producto.query.filter_by(descripcion=row['producto']).first()
 			#e = Envase.query.filter_by(descripcion=row['envase']).first()
-			um = UnidadMedida.query.filter_by(descripcion=row['unidad_medida']).first()
-			print('Stock Real: {}'.format(um.unidad_medida_id))
 			new_producto_envase = ProductoEnvase(producto_id=row['producto'],
-				envase_id=row['envase'],unidad_medida_id=um.unidad_medida_id,stock_real=row['stock_real'])
+				envase_id=row['envase'],unidad_medida_id=row['unidad_medida'],stock_real=row['stock_real'])
 			producto_envase.append(new_producto_envase)
 		db.session.add_all(producto_envase)
 		db.session.commit()
@@ -444,7 +441,7 @@ def insertar_pedido():
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('-'*50)
-			new_pedido = Pedido(usuario_id=row['usuario_id'])
+			new_pedido = Pedido(usuario_id=row['usuario_id'],estado_pedido_id=row['estado_pedido_id'])
 			pedido.append(new_pedido)
 		db.session.add_all(pedido)
 		db.session.commit()
@@ -563,7 +560,7 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_usuarios()
 	print('#'*50)
-	insertar_tipo_movimiento_cta_corriente()
+	#insertar_tipo_movimiento_cta_corriente()
 	print('#'*50)
 	insertar_estado_pedido()
 	print('#'*50)

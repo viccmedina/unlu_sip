@@ -1,7 +1,7 @@
 {% block tabla_movimientos %}
 <div class="container">
-  <h2>Resultado</h2>
-  <p>Stock del producto seleccionado:</p>
+  <h2>Resultado de la consulta</h2>
+  <p>Stock </p>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -12,14 +12,14 @@
       </tr>
     </thead>
     <tbody>
-      {% if resultado  %}
+      {% for r in resultado %}
       <tr>
-        <td>{{producto}}</td>
-        <td>{{marca}}</td>
-        <td>{{uMedida}}</td>
-        <td>{{resultado}}</td>
+        <td>{{r['descripcion_p']}}</td>
+        <td>{{r['descripcion_m']}}</td>
+        <td>{{r['descripcion']}}</td>
+        <td>{{r['stock_real']}}</td>
       </tr>
-      {% endif %}
+      {% endfor %}
 
     </tbody>
   </table>

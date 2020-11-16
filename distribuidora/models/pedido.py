@@ -115,15 +115,17 @@ class Pedido(db.Model):
 
     # Atributos
     pedido_id = db.Column(db.Integer, primary_key=True)
+    estado_pedido_id = db.Column(db.Integer, db.ForeignKey('pedido_estado.pedido_estado_id'), nullable=False)
     #detalle = db.relationship('DetallePedido', uselist=False, backref='detalles_pedidos', lazy=True)
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    usuario_id =  db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, usuario_id):
+    def __init__(self, usuario_id, estado_pedido_id):
         """
         Constructor de la clase pedido
         """
+        self.estado_pedido_id = estado_pedido_id
         self.usuario_id = usuario_id
 
 

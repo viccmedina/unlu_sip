@@ -1,8 +1,5 @@
 from distribuidora import db
-from distribuidora.core.gestion_cta_corriente.query import \
-    SELECT_TIPO_MOVIMIENTOS, \
-    CONSULTA_MOVIMIENTOS_CTA_CORRIENTE, CONSULTAR_NRO_CUENTA_CORRIENTE, \
-    SELECT_ID_TIPO_MOVIMIENTO
+from distribuidora.core.gestion_cta_corriente.query import SELECT_TIPO_MOVIMIENTOS, CONSULTA_MOVIMIENTOS_CTA_CORRIENTE, CONSULTAR_NRO_CUENTA_CORRIENTE, SELECT_ID_TIPO_MOVIMIENTO
 
 def get_tipos_movimientos():
     """
@@ -10,11 +7,12 @@ def get_tipos_movimientos():
     Nos devolverá una lista del tipo:
     ['Deuda', 'Pago', 'Reembolso']
     """
-    result = db.engine.execute(SELECT_TIPO_MOVIMIENTOS)
-    resp = []
-    for row in result:
-        resp.append(row[0])
-    return resp
+    #result = db.engine.execute(SELECT_TIPO_MOVIMIENTOS)
+    #resp = []
+    #for row in result:
+    #    resp.append(row[0])
+    #return resp
+    pass
 
 def get_id_tipos_movimientos(descripcion):
     """
@@ -32,8 +30,7 @@ def get_nro_cuenta_corriente(nro_cliente):
     """
     Dado un nro de cliente nos devolverá su nro de cuenta corriente.
     """
-    result = db.engine.execute(CONSULTAR_NRO_CUENTA_CORRIENTE.format(\
-        nro_cliente=nro_cliente))
+    #result = db.engine.execute(CONSULTAR_NRO_CUENTA_CORRIENTE.format(nro_cliente=nro_cliente))
     resp = []
     for row in result:
         resp.append(dict(row))

@@ -1,11 +1,13 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from distribuidora.core.gestion_stock.forms import agregarStock,consultarStock
+from distribuidora.core.gestion_stock.forms import agregarStock,consultarStock, exportarStock
 from distribuidora.models.stock import TipoMovimientoStock
 from distribuidora.core.gestion_stock.constants import TITULO, ROL
 from distribuidora.core.gestion_stock.helper import get_id_producto, consulta_sotck, agregar_stock, salida
 from distribuidora.models.gestion_usuario import Usuario
 from distribuidora import db
+from flask_weasyprint import HTML, render_pdf
+import json
 
 stock = Blueprint('stock', __name__, template_folder='templates')
 
@@ -20,7 +22,7 @@ def index():
             site='Gestión de Stock')
 
 
-@stock.route('/consultar', methods=['POST', 'GET'])
+@stock.route('/stock/consultar', methods=['POST', 'GET'])
 @login_required
 def consultar_stock():
 	resultado = None
@@ -67,7 +69,7 @@ def consultar_stock():
 
 
 
-@stock.route('/agregar', methods=['POST', 'GET'])
+@stock.route('/stock/agregar', methods=['POST', 'GET'])
 @login_required
 def agregar():
 	resultado = None
@@ -96,7 +98,8 @@ def agregar():
 						if product == -999 :
 							flash("La marca ingresada es incorrecta", 'error')
 						else:
-							user = Usuario.query.filter_by(username='operador').first()
+							usuario_id = current_user.get_id()
+							user = Usuario.query.filter_by(id=usuario_id).first()
 							if user.has_role('Operador'):
 								if tipo_mov == 'entrada':
 									resultado = agregar_stock(user.id,product,cantidad,id_producto)
@@ -128,19 +131,52 @@ def agregar():
 	site=TITULO ,\
 	form=form)
 
-@stock.route('/exportar', methods=['GET'])
+@stock.route('/stock/exportar', methods=['GET'])
 @login_required
 def exportar():
+
+
 	return render_template('exportar_movimientos.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
     rol='operador')
 
-@stock.route('/importar', methods=['GET'])
+
+
+@stock.route('/stock/importar', methods=['GET'])
 @login_required
 def importar():
+	resultado = None
+	form = exportarStock()
+	if form.validate_on_submit():
+		fecha_desde = form.fecha_desde.data
+		fecha_hasta = form.fecha_hasta.data
+		if fecha_hasta is None:
+			fecha_hasta = datetime.datetime.now()
 
+
+		print('#'*80, flush=True)
+		nro_cta = get_nro_cuenta_corriente(cliente)
+		resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, \
+			nro_cta[0]['cuenta_corriente_id'])
+		print(resultado, flush=True)
+		print('#'*80, flush=True)
+	else:
+		print(form.errors, flush=True)
 	return render_template('importar_movimientos.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
     rol='operador')
+
+
+@stock.route('/stock/descargar/consulta/<string:resultado>.pdf')
+@login_required
+def descargar_consulta(resultado):
+	resultado = json.loads(resultado.replace("'", '"'))
+	html = render_template('tabla_consulta_stock.html', resultado=resultado)
+	return render_pdf(HTML(string=html))
+
+
+###########
+
+#is_authenticated=current_user.is_authenticated, rol=ROL, form=form, resultado=resultado, site= TITULO + ' - Consulta')

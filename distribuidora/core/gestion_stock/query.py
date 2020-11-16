@@ -1,5 +1,9 @@
 # consulta la suma cantidad de producto "Cargados" en detalle_stock
-CONSULTA_STOCK = """ SELECT pe.stock_real FROM producto_envase pe WHERE pe.producto_envase_id = {producto_id}  """
+CONSULTA_STOCK = """ SELECT p.descripcion as descripcion_p,m.descripcion as descripcion_m,um.descripcion, pe.stock_real
+FROM (((producto_envase pe INNER JOIN producto p on p.producto_id=pe.producto_id )
+INNER JOIN marca m on p.marca_id=m.marca_id)
+INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id)
+WHERE pe.producto_envase_id = {producto_id}  """
 
 CONSULTAR_ID_MARCA = """SELECT m.marca_id FROM marca m WHERE m.descripcion = ('{marca}')"""
 
