@@ -12,4 +12,12 @@ PRODUCTO_ENVASE_BY_PRODUCTO_ID = """ SELECT pe.producto_envase_id, p.descripcion
     INNER JOIN lista_precio_producto AS lpp ON lpp.producto_envase_id = pe.producto_envase_id
     INNER JOIN envase AS e ON e.envase_id = pe.envase_id
     INNER JOIN unidad_medida AS u ON u.unidad_medida_id = pe.unidad_medida_id
-    WHERE pe.producto_id = ('{producto_id}')"""
+    WHERE p.producto_id = '{producto_id}'"""
+
+PRODUCTO_BY_DESCRIPCION_MARCA = """ SELECT p.producto_id FROM producto AS p
+    INNER JOIN marca AS m ON p.marca_id=m.marca_id
+    WHERE p.descripcion='{producto}' AND m.descripcion='{marca}'"""
+
+
+PRODUCTO_ID_FROM_PRODUCTO_ENVASE = """ SELECT producto_id FROM producto_envase
+    WHERE producto_envase_id='{producto_envase_id}'"""

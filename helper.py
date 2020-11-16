@@ -437,10 +437,6 @@ def insertar_tipo_movimiento_stock():
 	db.session.commit()
 
 
-
-
-
-
 def insertar_pedido():
 	print('Importando Modelo Pedido')
 	pedido = []
@@ -455,14 +451,16 @@ def insertar_pedido():
 
 
 
-def insertar_estadoPedido_PEDIDO():
+def insertar_historial_estado_pedido():
 	print('Importando Modelo estadoPedido_pedido')
 	estadoP_pedido = []
 	with open(DATOS_PATH + 'estado_Pedido_PEDIDO.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('-'*50)
-			new_estadoP_pedido = HistorialPedidoEstado(pedido_estado_id=row['estado_pedido_id'],pedido_id=row['pedido_id'])
+			print(row['estado_pedido_id'])
+			print(row['pedido_id'])
+			new_estadoP_pedido =HistorialPedidoEstado(estado_pedido_id=row['estado_pedido_id'], pedido_id=row['pedido_id'])
 			estadoP_pedido.append(new_estadoP_pedido)
 		db.session.add_all(estadoP_pedido)
 		db.session.commit()
@@ -475,18 +473,17 @@ def insertar_detalle_pedido():
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('-'*50)
-			new_detalle_pedido = DetallePedido(pedido_id=row['pedido_id'],
-			cantidad=row['cantidad'])
+			new_detalle_pedido = DetallePedido(producto_id=row['producto_id'],pedido_id=row['pedido_id'], cantidad=row['cantidad'])
 			detalle_pedido.append(new_detalle_pedido)
 		db.session.add_all(detalle_pedido)
 		db.session.commit()
 
 
 
-def insertar_movimiento_stock():
-	print('Importando Modelo Movimiento de Stock')
+def insertar_detalle_stock():
+	print('Importando Modelo Detalle de Stock')
 	detalle_stock = []
-	with open(DATOS_PATH + 'movimiento_stock.csv') as csv_file:
+	with open(DATOS_PATH + 'detalle_stock.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('detalle: {}'.format(row['detalle_pedido_id']))
@@ -496,7 +493,7 @@ def insertar_movimiento_stock():
 			print('prod: {}'.format(row['producto_envase_id']))
 			print('cantidad: {}'.format(row['cantidad']))
 			print('-'*50)
-			new_detalle_stock = Movimiento_Stock(detalle_devolucion_id=row['detalle_pedido_id'],descripcion=row['descripcion'],
+			new_detalle_stock = DetalleStock(descripcion=row['descripcion'],
 			cantidad=row['cantidad'],detalle_pedido_id=row['detalle_pedido_id'],
 			usuario_id=row['usuario_id'],producto_envase_id=row['producto_envase_id'],
 			tipo_movimiento_stock_id=row['tipo_movimiento_stock_id'])
@@ -545,7 +542,8 @@ def insertar_detalle_devolucion():
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			print('-'*50)
-			new_detalle_devolucion = DetalleDevolucion(devolucion_id=row['devolucion_id'],cantidad=row['cantidad'])
+			new_detalle_devolucion = DetalleDevolucion(devolucion_id=row['devolucion_id'],
+			producto_id=row['producto_id'],cantidad=row['cantidad'])
 			detalle_devolucion.append(new_detalle_devolucion)
 		db.session.add_all(detalle_devolucion)
 		db.session.commit()
@@ -573,7 +571,7 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_cuenta_corriente()
 	print('#'*50)
-	insertar_movimientos_cta_corriente()
+	#insertar_movimientos_cta_corriente()
 	print('#'*50)
 	insertar_marca()
 	print('#'*50)
@@ -597,16 +595,16 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_tipo_movimiento_stock()
 	print('#'*50)
-	insertar_pedido()
+	#insertar_pedido()
 	print('#'*50)
-	insertar_estadoPedido_PEDIDO()
+	#insertar_historial_estado_pedido()
 	print('#'*50)
-	insertar_detalle_pedido()
+	#insertar_detalle_pedido()
 	print('#'*50)
-	insertar_movimiento_stock()
+	#insertar_detalle_stock()
 	print('#'*50)
-	insertar_comprobante_pago()
+	#insertar_comprobante_pago()
 	print('#'*50)
-	insertar_devolucion()
+	#insertar_devolucion()
 	print('#'*50)
-	insertar_detalle_devolucion()
+	#insertar_detalle_devolucion()

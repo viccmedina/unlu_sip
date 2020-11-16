@@ -1,12 +1,15 @@
+{% include "flash_errors.html" %}
 {% if pedidos is none%}
   <p>NO HAY PEDIDOS</p>
 {% else %}
   <h2>Pedidos a Confirmar</h2>
   {% include "flash_errors.html" %}
+
   <ul>
     {% for p in pedidos %}
     <li>{{ p }}</li>
-    <form  action="{{ url_for('pedido.modificar_estado_operador', pedido=p.pedido_id) }}" method="POST">
+
+    <form  action="{{ url_for('pedido.modificar_estado_operador', estado_anterior=p.descripcion, pedido=p.pedido_id) }}" method="POST">
       {{ form.hidden_tag() }}
         <div class="form-group">
           {{ form.estado.label(class="form-control-label") }}

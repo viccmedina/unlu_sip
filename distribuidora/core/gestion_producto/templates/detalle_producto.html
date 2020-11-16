@@ -1,7 +1,7 @@
 <h2>ESTE ES EL DETALLE DEL PRODUCTO</h2>
 {% for p in productos %}
   <p>{{ p }}</p>
-  <form  action="{{ url_for('pedido.detalle_producto', producto=p.producto_envase_id) }}" method="POST">
+  <form  action="{{ url_for('producto.detalle_producto', producto=p.producto_envase_id) }}" method="POST">
     {{ form.hidden_tag() }}
     <div class="form-group">
       {{ form.producto_id.label }} {{ form.producto_id(value= p.producto_envase_id, disabled=True ) }}

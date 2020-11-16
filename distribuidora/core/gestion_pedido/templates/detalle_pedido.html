@@ -3,8 +3,8 @@
 <ul>
     {% for d in detalle %}
       <li>{{ d }}</li>
-      <a href="{{ url_for('pedido.eliminar_producto_detalle', pedido=d.pedido_id, producto=d.producto_id, detalle_pedido=d.detalle_id) }}">Eliminar Producto</a>
-      <form  action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto=d.producto_id, detalle_pedido=d.detalle_id) }}" method="POST">
+      <a href="{{ url_for('pedido.eliminar_producto_detalle', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}">Eliminar Producto</a>
+      <form  action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}" method="POST">
 
         {{ form.hidden_tag() }}
         <div class="form-group">

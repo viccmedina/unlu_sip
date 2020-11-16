@@ -26,7 +26,7 @@ def get_estado_pedido_id(descripcion_corta):
 def get_estado_pedido_id_descripcion(descripcion):
     result = db.engine.execute(SELECT_ESTADO_PEDIDO_DESCRIPCION.format(descripcion=descripcion))
     result = parser_result(result)
-    return result[0]['pedido_estado_id']
+    return result
 
 def get_estados_pedidos_para_operador():
     result = db.engine.execute(SELECT_PEDIDOS_ESTADOS_FOR_OPERADOR)
@@ -102,14 +102,14 @@ def check_estado_actual_pedido(pedido_id):
     print('7'*90, flush=True)
     return result
 
-def insert_into_detalle_pedido(pedido_id, producto_id, cantidad=1):
+def insert_into_detalle_pedido(pedido_id, producto_envase_id, cantidad=1):
     """
     Dado el nro de pedido, el producto y la cantidad insertamos dentro del
     detalle del pedido.
     """
 
     result = db.engine.execute(INSERT_INTO_DETALLE_PEDIDO.format(\
-        pedido_id=pedido_id, producto_id=producto_id, cantidad=cantidad))
+        pedido_id=pedido_id, producto_envase_id=producto_envase_id, cantidad=cantidad))
     return check(result)
 
 def get_listado_pedidos_pco():
@@ -141,11 +141,32 @@ def update_detalle_producto(pedido_id, detalle, cantidad):
         return check(result)
     else:
         return False
-        
-def actualizar_pedido_estado_por_operador(pedido, estado):
-    result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
-        pedido_id=pedido, pedido_estado_id=estado))
-    return check(result)
+
+def actualizar_pedido_estado_por_operador(pedido, estado_nuevo, estado_actual):
+    estado_id_nuevo = get_estado_pedido_id_descripcion(estado_nuevo)[0]
+    print('estado_id_nuevo --> {}'.format(estado_id_nuevo), flush=True)
+    estado_id_actual = get_estado_pedido_id_descripcion(estado_actual)[0]
+    execute = True
+    if estado_id_actual['descripcion_corta'] == 'PCO' and estado_id_nuevo['descripcion_corta'] in ['EP', 'RPO']:
+        print('ESTADO VALIDO, PODEMOS ACTUALIZAR', flush=True)
+    elif estado_id_actual['descripcion_corta'] == 'EP' and estado_id_nuevo['descripcion_corta'] == 'EC':
+        print('ESTADO VALIDO, PODEMOS ACTUALIZAR', flush=True)
+    elif estado_id_actual['descripcion_corta'] == 'EC' and estado_id_nuevo['descripcion_corta'] in ['D', 'E']:
+        print('ESTADO VALIDO, PODEMOS ACTUALIZAR', flush=True)
+    else:
+        print('ERROR', flush=True)
+        execute = False
+    if execute:
+        result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
+            pedido_id=pedido, pedido_estado_id=estado_id_nuevo['pedido_estado_id']))
+        if estado_id_nuevo['descripcion_corta'] == 'EP':
+            pass
+            #agregar movimiento cta corriente
+            #descontar del stock
+
+        return check(result)
+    else:
+        return execute
 
 def actualizar_estado_pedido(pedido, estado):
     """
@@ -160,10 +181,10 @@ def actualizar_estado_pedido(pedido, estado):
         pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
     return check(result)
 
-def eliminar_producto_detalle_pedido(producto_id, detalle_id, pedido_id):
+def eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido_id):
     if get_cantidad_estados_pedido(pedido_id) < 3 :
         result = db.engine.execute(DELETE_PRODUCTO_FROM_DETALLE_PEDIDO.format(\
-            detalle_id=detalle_id, producto_id=producto_id))
+            detalle_id=detalle_id, producto_envase_id=producto_envase_id))
         print(result.rowcount, flush=True)
         return check(result)
     else:

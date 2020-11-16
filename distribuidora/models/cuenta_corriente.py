@@ -37,8 +37,6 @@ class EstadoCtaCorriente(db.Model):
         return 'Estado de Pedido:  {}'.format(self.descripcion)
 
 
-
-
 class TipoMovimientoCtaCorriente(db.Model):
     __tablename__ = 'tipo_movimiento_cta_corriente'
 
@@ -96,7 +94,6 @@ class ComprobantePago(db.Model):
 
     def get_movimiento_asociado(self):
         return self.movimiento
-
 
 
 class MovimientoCtaCorriente(db.Model):
