@@ -135,6 +135,7 @@ def listar_pedido_operador():
     form = ActualizarEstadoPedido()
     if current_user.has_role('Operador'):
         pedidos = get_listado_pedidos_pco()
+        print('pedidos a confirmar {}'.format(pedidos), flush=True)
     return render_template('listado_pedidos.html', pedidos=pedidos, form=form)
 
 @pedido.route('/pedido/listar/detalle', methods=['GET'])
