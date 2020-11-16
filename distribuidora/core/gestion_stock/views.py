@@ -3,7 +3,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora.core.gestion_stock.forms import agregarStock,consultarStock
 from distribuidora.models.stock import TipoMovimientoStock
 from distribuidora.core.gestion_stock.constants import TITULO, ROL
-from distribuidora.core.gestion_stock.helper import get_id_producto, consulta_sotck, agregar_stock, deolucion
+from distribuidora.core.gestion_stock.helper import get_id_producto, consulta_sotck, agregar_stock, salida
 from distribuidora.models.gestion_usuario import Usuario
 from distribuidora import db
 
@@ -75,7 +75,8 @@ def agregar():
 	id_marca = None
 	id_um = None
 	form = agregarStock()
-	form.tipo_movimiento.choices = [(descripcion.descripcion) for descripcion in TipoMovimientoStock.query.all()]
+	#form.tipo_movimiento.choices = [(descripcion.descripcion) for descripcion in TipoMovimientoStock.query.all()]
+
 	if form.validate_on_submit():
 		tipo_mov = form.tipo_movimiento.data
 		id_producto = form.producto.data
@@ -103,10 +104,10 @@ def agregar():
 									print('#'*80, flush=True)
 									flash("El producto se ha cargado correctamente", 'warning')
 								else:
-									resultado = deolucion(user.id,product,cantidad,id_producto)
+									resultado = salida(user.id,product,cantidad,id_producto)
 									print(resultado, flush=True)
 									print('#'*80, flush=True)
-									flash("Devolucion registrada con exito", 'warning')
+									flash("Se ha descontado el stock con exito", 'warning')
 							else:
 								flash("Usuario incorrecto, contacte al administrador", 'error')
 			else:

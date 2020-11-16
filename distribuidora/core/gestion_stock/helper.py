@@ -1,6 +1,6 @@
 from distribuidora import db
 from flask import flash
-from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTAR_ID_MARCA, CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK,UPDATE_STOCK_REAL
+from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTAR_ID_MARCA, CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK,UPDATE_STOCK_REAL,BAJA_PRODUCTO
 
 def consulta_sotck(producto):
     """
@@ -62,9 +62,7 @@ def agregar_stock(usuario,producto,cantidad,desc):
     """
     Esta funcion agregara un nueva tupla en la tabla movimiento_stock
     """
-    print("usuario {}".format(usuario))
-    print("producto {}".format(producto))
-    print("cantidad {}".format(cantidad))
+
 
     descripcion = "Carga de {}".format(desc)
     print("descripcion: "+ descripcion)
@@ -73,6 +71,8 @@ def agregar_stock(usuario,producto,cantidad,desc):
     return "ok"
 
 
-def deolucion(usuario,producto,cantidad,desc):
-    descripcion = "Carga de {}".format(desc)
-    db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(tipo_movimiento=4,usuario_id=usuario,producto_envase_id=producto,cantidad=cantidad,descripcion=descripcion))
+
+def salida(usuario,producto,cantidad,desc):
+    descripcion = "Se quita {} por mal estado".format(desc)
+    db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(tipo_movimiento=2,usuario_id=usuario,producto_envase_id=producto,cantidad=cantidad,descripcion=descripcion))
+    db.engine.execute(BAJA_PRODUCTO.format(producto_envase_id=producto,cantidad=cantidad))

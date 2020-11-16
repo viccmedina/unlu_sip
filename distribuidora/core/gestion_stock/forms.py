@@ -23,7 +23,8 @@ class consultarStock(FlaskForm):
 
 
 class agregarStock(FlaskForm):
-	tipo_movimiento = SelectField('Tipo Movimiento',[validators.Required()],choices=[])
+	tipo_movimiento = SelectField(u'Tipo Movimiento', choices=[('entrada', 'entrada'), ('salida', 'salida')])
+	#tipo_movimiento = SelectField('Tipo Movimiento',[validators.Required()],choices=[])
 	producto = StringField('Ingrese El Nombre Producto', validators=[DataRequired()])
 	marca = StringField('Ingrese La Marca del Producto', validators=[DataRequired()])
 	uMedida = StringField('Ingrese La Unidad de Medida', validators=[DataRequired()])
