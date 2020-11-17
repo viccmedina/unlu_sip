@@ -1,6 +1,8 @@
 from distribuidora import db
 from flask import flash
-from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTAR_ID_MARCA, CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK,UPDATE_STOCK_REAL,BAJA_PRODUCTO
+from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTAR_ID_MARCA, \
+CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK,UPDATE_STOCK_REAL, \
+BAJA_PRODUCTO, CONSULTAR_MOVIMIENTOS
 
 def consulta_sotck(producto):
     """
@@ -15,10 +17,6 @@ def consulta_sotck(producto):
     for row in result:
         resultado.append(dict(row))
     print(resultado)
-    print ("1 {}".format(resultado[0]['descripcion']))
-    print ("2 {}".format(resultado[0]['descripcion']))
-    print ("3 {}".format(resultado[0]['descripcion']))
-    print ("4 {}".format(resultado[0]['stock_real']))
     return resultado
 
 
@@ -76,6 +74,18 @@ def agregar_stock(usuario,producto,cantidad,desc):
 
 
 def salida(usuario,producto,cantidad,desc):
+    """ Esta funcion insetara una tupla en la tabla movimientos, reflejando
+    la baja de un producto y se descontara del stock real en la tabla proudcto_envase
+    ojo es baja por rotura o vto, no es devolucion
+    """
     descripcion = "Se quita {} por mal estado".format(desc)
     db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(tipo_movimiento=2,usuario_id=usuario,producto_envase_id=producto,cantidad=cantidad,descripcion=descripcion))
     db.engine.execute(BAJA_PRODUCTO.format(producto_envase_id=producto,cantidad=cantidad))
+
+def consultaMovimientosExportar(desde,hasta):
+    result = db.engine.execute(CONSULTAR_MOVIMIENTOS.format(f_desde=desde,f_hasta=hasta))
+    resp = []
+    print(result)
+    for row in result:
+        resp.append(dict(row))
+    return resp

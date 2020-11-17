@@ -1,9 +1,10 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from distribuidora.core.gestion_stock.forms import agregarStock,consultarStock, exportarStock
+from distribuidora.core.gestion_stock.forms import AgregarStock,ConsultarStock, ExportarStock
 from distribuidora.models.stock import TipoMovimientoStock
 from distribuidora.core.gestion_stock.constants import TITULO, ROL
-from distribuidora.core.gestion_stock.helper import get_id_producto, consulta_sotck, agregar_stock, salida
+from distribuidora.core.gestion_stock.helper import get_id_producto, \
+consulta_sotck, agregar_stock, salida, consultaMovimientosExportar
 from distribuidora.models.gestion_usuario import Usuario
 from distribuidora import db
 from flask_weasyprint import HTML, render_pdf
@@ -29,7 +30,7 @@ def consultar_stock():
 	id_producto = None
 	id_marca = None
 	id_um = None
-	form = consultarStock()
+	form = ConsultarStock()
 
 	if form.validate_on_submit():
 
@@ -59,9 +60,6 @@ def consultar_stock():
 		datos=current_user.get_mis_datos(),\
 		is_authenticated=current_user.is_authenticated, \
 		rol='operador', \
-		producto=id_producto, \
-		marca=id_marca, \
-		uMedida=id_um, \
 		resultado=resultado, \
 		form=form, \
 		site=TITULO)
@@ -76,7 +74,7 @@ def agregar():
 	id_producto = None
 	id_marca = None
 	id_um = None
-	form = agregarStock()
+	form = AregarStock()
 	#form.tipo_movimiento.choices = [(descripcion.descripcion) for descripcion in TipoMovimientoStock.query.all()]
 
 	if form.validate_on_submit():
@@ -131,14 +129,35 @@ def agregar():
 	site=TITULO ,\
 	form=form)
 
-@stock.route('/stock/exportar', methods=['GET'])
+@stock.route('/stock/exportar', methods=['POST', 'GET'])
 @login_required
 def exportar():
+	resultado = None
+	form = ExportarStock()
 
+	if form.validate_on_submit():
+		fecha_desde = form.fecha_desde.data
+		fecha_hasta = form.fecha_hasta.data
+		if fecha_hasta is None:
+			fecha_hasta = datetime.datetime.now()
+
+		print("desde  {}".format(fecha_desde))
+		print("hasta  {}".format(fecha_hasta))
+		resultado = consultaMovimientosExportar(fecha_desde,fecha_hasta)
+
+		print('#'*80, flush=True)
+		#nro_cta = get_nro_cuenta_corriente(cliente)
+		#resultado = get_consulta_movimientos(fecha_desde, fecha_hasta,nro_cta[0]['cuenta_corriente_id'])
+		#print(resultado, flush=True)
+		print('#'*80, flush=True)
+	else:
+		print(form.errors, flush=True)
 
 	return render_template('exportar_movimientos.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
+	resultado=resultado, \
+	form=form, \
     rol='operador')
 
 
@@ -146,23 +165,7 @@ def exportar():
 @stock.route('/stock/importar', methods=['GET'])
 @login_required
 def importar():
-	resultado = None
-	form = exportarStock()
-	if form.validate_on_submit():
-		fecha_desde = form.fecha_desde.data
-		fecha_hasta = form.fecha_hasta.data
-		if fecha_hasta is None:
-			fecha_hasta = datetime.datetime.now()
 
-
-		print('#'*80, flush=True)
-		nro_cta = get_nro_cuenta_corriente(cliente)
-		resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, \
-			nro_cta[0]['cuenta_corriente_id'])
-		print(resultado, flush=True)
-		print('#'*80, flush=True)
-	else:
-		print(form.errors, flush=True)
 	return render_template('importar_movimientos.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \

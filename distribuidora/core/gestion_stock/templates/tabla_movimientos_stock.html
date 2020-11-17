@@ -1,0 +1,30 @@
+{% block tabla_movimientos %}
+<div class="container">
+  <h2>Resultado de la consulta</h2>
+  <p>Movimientos del stock </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Marca</th>
+        <th>Unidad Medida</th>
+        <th>Cantidad</th>
+        <th>Usuario</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in resultado %}
+      <tr>
+        <td>{{r['descripcion_p']}}</td>
+        <td>{{r['descripcion_m']}}</td>
+        <td>{{r['descripcion']}}</td>
+        <td>{{r['stock_real']}}</td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

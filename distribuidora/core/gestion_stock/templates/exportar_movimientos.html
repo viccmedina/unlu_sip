@@ -1,5 +1,72 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<div class="container-fluid">
+			<div class="row">
+		    {% include "acordeon_perfil_usuario.html" %}
 
-{% endblock%}
+				<div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+					<div class="row row-cols-9 row-cols-md-3">
+					  <div class="col mb-9" >
+					    <div class="card h-100" style="width: 50rem;">
+
+					      <div class="card-body">
+					        <h3 class="card-title">Exportar Movimientos Stock</h3>
+
+				              <form  method="POST">
+
+												{% with messages = get_flashed_messages(with_categories=true) %}
+														{% if messages %}
+																<ul class=flashes>
+																		{% for category, message in messages %}
+																				{% if category == "error" %}
+																						<div class="alert alert-danger alert-dismissible fade show" role="alert">
+																								{{ message }}
+																								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+																										<span aria-hidden="true">&times;</span>
+																								</button>
+																						</div>
+																				{% else %}
+																						<div class="alert alert-warning alert-dismissible fade show" role="alert">
+																										{{ message }}
+																										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+																												<span aria-hidden="true">&times;</span>
+																										</button>
+																								</div>
+																				{% endif%}
+																		{% endfor %}
+																</ul>
+														{% endif %}
+												{% endwith %}
+
+
+
+
+												{{ form.hidden_tag() }}
+				                <div class="form-group">
+				                  {{ form.fecha_desde.label(class="form-control-label") }}
+				                  {{ form.fecha_desde(class="form-control form-control-md") }}
+													{{ form.fecha_hasta.label(class="form-control-label") }}
+													{{ form.fecha_hasta(class="form-control form-control-md") }}
+				                </div>
+				                <div class="form-group">
+				                  {{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
+				                  {{ form.submit(class="btn btn-success mb-2") }}
+				                </div>
+				              </form>
+					     		</div>
+				     		</div>
+			     		</div>
+		     		</div>
+			 		</div>
+					{% if resultado is not none %}
+						<div class="form-group">
+							{% include "tabla_movimientos_stock.html" %}
+							<a class="btn btn-success mb-2 mb-2" href="{{ url_for('stock.descargar_consulta', resultado=resultado) }}" role="button">Descargar</a>
+						</div>
+					{% endif %}
+				</div>
+ 		</div>
+
+
+{% endblock %}
