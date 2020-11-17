@@ -141,10 +141,8 @@ def exportar():
 		if fecha_hasta is None:
 			fecha_hasta = datetime.datetime.now()
 
-		print("desde  {}".format(fecha_desde))
-		print("hasta  {}".format(fecha_hasta))
 		resultado = consultaMovimientosExportar(fecha_desde,fecha_hasta)
-
+		#print("lengt {}".format(resultado.length))
 		print('#'*80, flush=True)
 		#nro_cta = get_nro_cuenta_corriente(cliente)
 		#resultado = get_consulta_movimientos(fecha_desde, fecha_hasta,nro_cta[0]['cuenta_corriente_id'])

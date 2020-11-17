@@ -24,17 +24,27 @@ producto_envase_id = {producto_envase_id}"""
 
 CONSULTAR_MOVIMIENTOS = """
     SELECT p.descripcion as descripcion_p, m.descripcion as descripcion_m, um.descripcion, u.username,
-    mov.ts_created, mov.cantidad FROM
+    mov.ts_created as fecha, mov.cantidad FROM
     (((((movimiento_stock mov INNER JOIN producto_envase pe on mov.producto_envase_id=pe.producto_envase_id)
     INNER JOIN producto p on p.producto_id= pe.producto_id)
     INNER JOIN marca m on p.marca_id= m.marca_id)
     INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id)
     INNER JOIN usuario u on u.id=mov.usuario_id)
-	WHERE mov.ts_created >= DATETIME('{f_desde}') and mov.ts_created <= ('{f_hasta}')
+    WHERE mov.ts_created >= DATETIME('{f_desde}') and mov.ts_created <= ('{f_hasta}');
+
 """
 #""" INSERT INTO movimiento_stock (tipo_movimiento_stock_id,usuario_id,producto_id,descripcion,cantidad) VALUES (1,3,1,'cargaHarina',50); """
 
 
 
+"""
+SELECT p.descripcion as descripcion_p, m.descripcion as descripcion_m, um.descripcion, u.username,
+mov.ts_created, mov.cantidad FROM ((((movimiento_stock mov INNER JOIN producto_envase pe
+on mov.producto_envase_id=pe.producto_envase_id) INNER JOIN producto p
+on p.producto_id= pe.producto_id) INNER JOIN marca m on p.marca_id= m.marca_id)
+INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id
+INNER JOIN usuario u on u.id=mov.usuario_id)
+WHERE mov.ts_created >= DATETIME('2020-11-10') and mov.ts_created <= ('2020-11-18');
 
-#SELECT p.descripcion as descripcion_p, m.descripcion as descripcion_m, um.descripcion, u.username, mov.ts_created, mov.cantidad FROM ((((movimiento_stock mov INNER JOIN producto_envase pe on mov.producto_envase_id=producto_envase_id) INNER JOIN producto p on p.producto_id= pe.producto_id) INNER JOIN marca m on p.marca_id= m.marca_id) INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id INNER JOIN usuario u on u.id=mov.usuario_id) WHERE mov.ts_created>=DATETIME('2020/11/10') and mov.ts_created<=('2020/11/17');
+
+"""

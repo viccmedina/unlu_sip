@@ -84,11 +84,11 @@ class DetallePedido(db.Model):
     cantidad = db.Column(db.String(80), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
-    def __init__(self, pedido_id, cantidad):
+    def __init__(self, pedido_id, producto_envase_id, cantidad):
         """
         Constructor de la clase Detalle
         """
-        #self.producto_id = producto_id
+        self.producto_envase_id = producto_envase_id
         self.pedido_id = pedido_id
         self.cantidad = cantidad
 

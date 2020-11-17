@@ -83,9 +83,13 @@ def salida(usuario,producto,cantidad,desc):
     db.engine.execute(BAJA_PRODUCTO.format(producto_envase_id=producto,cantidad=cantidad))
 
 def consultaMovimientosExportar(desde,hasta):
-    result = db.engine.execute(CONSULTAR_MOVIMIENTOS.format(f_desde=desde,f_hasta=hasta))
+    print("fecha_desde {}".format(desde) )
+    print("fecha_hasta {}".format(hasta) )
+    #result = db.engine.execute(CONSULTAR_MOVIMIENTOS.format(f_desde=desde,f_hasta=hasta))
+    result = db.engine.execute("SELECT p.descripcion as descripcion_p, m.descripcion as descripcion_m, um.descripcion, u.username, mov.ts_created as fecha, mov.cantidad FROM ((((movimiento_stock mov INNER JOIN producto_envase pe on mov.producto_envase_id=pe.producto_envase_id) INNER JOIN producto p on p.producto_id= pe.producto_id) INNER JOIN marca m on p.marca_id= m.marca_id) INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id INNER JOIN usuario u on u.id=mov.usuario_id) WHERE mov.ts_created >= DATETIME('2020-11-10') and mov.ts_created <= ('2020-11-18');")
+
+    #print("ROWS {}".format(result.fetchall()))
     resp = []
-    print(result)
     for row in result:
         resp.append(dict(row))
     return resp
