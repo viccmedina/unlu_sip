@@ -74,7 +74,7 @@ def agregar():
 	id_producto = None
 	id_marca = None
 	id_um = None
-	form = AregarStock()
+	form = AgregarStock()
 	#form.tipo_movimiento.choices = [(descripcion.descripcion) for descripcion in TipoMovimientoStock.query.all()]
 
 	if form.validate_on_submit():

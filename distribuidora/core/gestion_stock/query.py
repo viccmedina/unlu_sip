@@ -1,9 +1,24 @@
 # consulta la suma cantidad de producto "Cargados" en detalle_stock
-CONSULTA_STOCK = """ SELECT p.descripcion as descripcion_p,m.descripcion as descripcion_m,um.descripcion, pe.stock_real
-FROM (((producto_envase pe INNER JOIN producto p on p.producto_id=pe.producto_id )
-INNER JOIN marca m on p.marca_id=m.marca_id)
-INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id)
-WHERE pe.producto_envase_id = {producto_id}  """
+CONSULTA_STOCK = """ SELECT p.descripcion AS descripcion_p,m.descripcion as descripcion_m,
+um.descripcion, pe.stock_real - (select sum(dp.cantidad) from producto_envase pee
+INNER JOIN detalle_pedido dp ON pee.producto_envase_id=dp.producto_envase_id
+INNER JOIN pedido p ON p.pedido_id= dp.pedido_id WHERE pee.producto_envase_id = {producto_id}
+AND p.estado_pedido_id = 1) AS cantidad FROM (((producto_envase pe INNER JOIN producto p
+ON p.producto_id=pe.producto_id )
+INNER JOIN marca m ON p.marca_id=m.marca_id)
+INNER JOIN unidad_medida um ON um.unidad_medida_id=pe.unidad_medida_id)
+WHERE pe.producto_envase_id = {producto_id}
+
+ """
+
+
+CONSULTA_STOCK1 = """ SELECT p.descripcion AS descripcion_p,m.descripcion as descripcion_m,
+um.descripcion, pe.stock_real AS cantidad FROM (((producto_envase pe INNER JOIN producto p
+ON p.producto_id=pe.producto_id )
+INNER JOIN marca m ON p.marca_id=m.marca_id)
+INNER JOIN unidad_medida um ON um.unidad_medida_id=pe.unidad_medida_id)
+WHERE pe.producto_envase_id = {producto_id}
+"""
 
 CONSULTAR_ID_MARCA = """SELECT m.marca_id FROM marca m WHERE m.descripcion = ('{marca}')"""
 
@@ -33,6 +48,43 @@ CONSULTAR_MOVIMIENTOS = """
     WHERE mov.ts_created >= DATETIME('{f_desde}') and mov.ts_created <= ('{f_hasta}');
 
 """
+
+
+
+
+
+
+
+#SELECT p.descripcion AS descripcion_p,m.descripcion as descripcion_m, um.descripcion, pe.stock_real - (select sum(dp.cantidad) from producto_envase pee INNER JOIN detalle_pedido dp ON pee.producto_envase_id=dp.producto_envase_id INNER JOIN pedido p ON p.pedido_id= dp.pedido_id WHERE pee.producto_envase_id = 1 AND p.estado_pedido_id = 1) AS cantidad FROM (((producto_envase pe INNER JOIN producto p ON p.producto_id=pe.producto_id ) INNER JOIN marca m ON p.marca_id=m.marca_id) INNER JOIN unidad_medida um ON um.unidad_medida_id=pe.unidad_medida_id) WHERE pe.producto_envase_id = 1;
+
+
+
+
+""" SELECT p.descripcion AS descripcion_p,m.descripcion as descripcion_m,
+um.descripcion, pe.stock_real - (select sum(dp.cantidad) from producto_envase pee
+INNER JOIN detalle_pedido dp ON pee.producto_envase_id=dp.producto_envase_id
+INNER JOIN pedido p ON p.pedido_id= dp.pedido_id WHERE pee.producto_envase_id = {producto_id}
+AND p.estado_pedido_id = 1) AS cantidad FROM (((producto_envase pe INNER JOIN producto p
+ON p.producto_id=pe.producto_id )
+INNER JOIN marca m ON p.marca_id=m.marca_id)
+INNER JOIN unidad_medida um ON um.unidad_medida_id=pe.unidad_medida_id)
+WHERE pe.producto_envase_id = {producto_id}  """
+
+"""
+
+
+
+select pe.stock_real - (select sum(dp.cantidad) from producto_envase pee inner join
+detalle_pedido dp on pee.producto_envase_id=dp.producto_envase_id
+inner join pedido p on p.pedido_id= dp.pedido_id where pee.producto_envase_id = 1
+and p.estado_pedido_id = 1) as cantidad from producto_envase pe where pe.producto_envase_id = 1;"""
+
+"""
+select pe.stock_real - (select sum(dp.cantidad) from producto_envase pee inner join
+detalle_pedido dp on pee.producto_envase_id=dp.producto_envase_id
+inner join pedido p on p.pedido_id= dp.pedido_id where pee.producto_envase_id = {producto_id}
+and p.estado_pedido_id = 1) as cantidad from producto_envase pe where pe.producto_envase_id = {producto_id}
+"""
 #""" INSERT INTO movimiento_stock (tipo_movimiento_stock_id,usuario_id,producto_id,descripcion,cantidad) VALUES (1,3,1,'cargaHarina',50); """
 
 
@@ -48,3 +100,17 @@ WHERE mov.ts_created >= DATETIME('2020-11-10') and mov.ts_created <= ('2020-11-1
 
 
 """
+
+
+
+
+
+
+
+
+# andaba consulta stock
+""" SELECT p.descripcion as descripcion_p,m.descripcion as descripcion_m,
+um.descripcion, pe.stock_real as cantidad FROM (((producto_envase pe INNER JOIN producto p on p.producto_id=pe.producto_id )
+INNER JOIN marca m on p.marca_id=m.marca_id)
+INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id)
+WHERE pe.producto_envase_id = {producto_id}  """

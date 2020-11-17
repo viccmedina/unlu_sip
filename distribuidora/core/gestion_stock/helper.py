@@ -2,7 +2,7 @@ from distribuidora import db
 from flask import flash
 from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTAR_ID_MARCA, \
 CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK,UPDATE_STOCK_REAL, \
-BAJA_PRODUCTO, CONSULTAR_MOVIMIENTOS
+BAJA_PRODUCTO, CONSULTAR_MOVIMIENTOS, CONSULTA_STOCK1
 
 def consulta_sotck(producto):
     """
@@ -11,11 +11,17 @@ def consulta_sotck(producto):
     """
     print("consultaStock {}".format(producto))
     result = db.engine.execute(CONSULTA_STOCK.format(producto_id=producto))
-    #entrada = db.engine.execute(CONSULTA_ENTRADA_STOCK.format(producto_id=producto))
-    #salida = db.engine.execute(CONSULTA_SALIDA_STOCK.format(producto_id=producto))
     resultado = []
     for row in result:
+        a = row['cantidad']
         resultado.append(dict(row))
+
+    if(a == None):
+        resultado = []
+        result = db.engine.execute(CONSULTA_STOCK1.format(producto_id=producto))
+        for row in result:
+            resultado.append(dict(row))
+
     print(resultado)
     return resultado
 
@@ -64,7 +70,6 @@ def agregar_stock(usuario,producto,cantidad,desc):
     Esta funcion agregara un nueva tupla en la tabla movimiento_stock
     """
 
-
     descripcion = "Carga de {}".format(desc)
     print("descripcion: "+ descripcion)
     db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(tipo_movimiento=1,usuario_id=usuario,producto_envase_id=producto,cantidad=cantidad,descripcion=descripcion))
@@ -82,11 +87,11 @@ def salida(usuario,producto,cantidad,desc):
     db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(tipo_movimiento=2,usuario_id=usuario,producto_envase_id=producto,cantidad=cantidad,descripcion=descripcion))
     db.engine.execute(BAJA_PRODUCTO.format(producto_envase_id=producto,cantidad=cantidad))
 
+
 def consultaMovimientosExportar(desde,hasta):
     print("fecha_desde {}".format(desde) )
     print("fecha_hasta {}".format(hasta) )
-    #result = db.engine.execute(CONSULTAR_MOVIMIENTOS.format(f_desde=desde,f_hasta=hasta))
-    result = db.engine.execute("SELECT p.descripcion as descripcion_p, m.descripcion as descripcion_m, um.descripcion, u.username, mov.ts_created as fecha, mov.cantidad FROM ((((movimiento_stock mov INNER JOIN producto_envase pe on mov.producto_envase_id=pe.producto_envase_id) INNER JOIN producto p on p.producto_id= pe.producto_id) INNER JOIN marca m on p.marca_id= m.marca_id) INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id INNER JOIN usuario u on u.id=mov.usuario_id) WHERE mov.ts_created >= DATETIME('2020-11-10') and mov.ts_created <= ('2020-11-18');")
+    result = db.engine.execute(CONSULTAR_MOVIMIENTOS.format(f_desde=desde,f_hasta=hasta))
 
     #print("ROWS {}".format(result.fetchall()))
     resp = []
