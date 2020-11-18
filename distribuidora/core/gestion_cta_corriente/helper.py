@@ -66,13 +66,25 @@ def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
         t_movimiento = row['id']
 
     desc = "Es un/a {}".format(tipo_mov)
-    db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(n_cta=nro_cta, \
-    t_mov=t_movimiento, user=user,descripcion=desc,monto=monto))
+    #si es deuda ingreso negativo
+
+    print(" t mov : {}".format(t_movimiento))
+    if t_movimiento == 2 :
+        saldo = float(monto * (-1))
+        db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(n_cta=nro_cta, t_mov=t_movimiento, \
+        user=user,descripcion=desc,monto=saldo))
+    else:
+        print("agregamos movimientos")
+        db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(n_cta=nro_cta, t_mov=t_movimiento, \
+        user=user,descripcion=desc,monto=monto))
 
 
 def consulta_saldo(nro_cta):
     saldo = db.engine.execute(CONSULTAR_SALDO.format(nro_cta=nro_cta))
+
     resp = []
     for row in saldo:
+        a = row['saldo']
+        print("asdsasdasdasdasdasdadsa {}".format(a))
         resp.append(dict(row))
     return resp

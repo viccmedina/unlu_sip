@@ -1,0 +1,28 @@
+{% block tabla_movimientos %}
+<div class="container">
+  <h2>Resultado</h2>
+  <p>Saldo: </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Nro Cuenta</th>
+        <th>Saldo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in resultado %}
+      <tr>
+        <td>{{ r.nombre }}</td>
+        <td>{{ r.email }}</td>
+        <td>{{ r.cta_corriente }}</td>
+        <td>{{ r.saldo }}</td>
+
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

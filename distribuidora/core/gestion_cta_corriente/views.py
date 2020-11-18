@@ -90,6 +90,7 @@ def agregar():
 @cta_corriente.route('/cta_corriente/consultarSaldo', methods=['GET', 'POST'])
 @login_required
 def consultar_saldo():
+	resultado = None
 	form = ConsultarSaldo()
 
 	if form.validate_on_submit():
@@ -98,15 +99,16 @@ def consultar_saldo():
 		if nro_cta == -999 :
 			flash("La cuenta ingresada es incorrecta", 'error')
 		else:
-			saldo = consulta_saldo(nro_cta)
-			flash("La transaccion se ha registrado con exito", 'warning')
+			print("estoy en viex 102")
+			resultado = consulta_saldo(nro_cta)
 	else:
 		print(form.errors, flush=True)
 
 	return render_template('consultar_saldo_cta_corriente.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
-	saldo=saldo,\
+	resultado=resultado,\
+	form=form,\
     rol=ROL, \
 	site= TITULO + ' - Consultar Saldo')
 
