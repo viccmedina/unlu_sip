@@ -49,5 +49,14 @@ class AgregarMovimiento(FlaskForm):
     monto = FloatField('Monto', validators=[DataRequired()])
     submit = SubmitField('Agregar')
 
+class ConsultarSaldo(FlaskForm):
+    """
+        Este Formulario permitira consultar el saldo de una cta determinada
+    """
+    cliente = StringField('NRO Cliente', validators=[DataRequired()])
+    submit = SubmitField('Consultar')
+    cancelar = SubmitField('Cancelar')
+
+
 class DescargarConsulta(FlaskForm):
     submit = SubmitField('Descargar')

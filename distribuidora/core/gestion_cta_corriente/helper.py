@@ -1,5 +1,6 @@
 from distribuidora import db
-from distribuidora.core.gestion_cta_corriente.query import SELECT_TIPO_MOVIMIENTOS, CONSULTA_MOVIMIENTOS_CTA_CORRIENTE, CONSULTAR_NRO_CUENTA_CORRIENTE, SELECT_ID_TIPO_MOVIMIENTO
+from distribuidora.core.gestion_cta_corriente.query import SELECT_TIPO_MOVIMIENTOS, CONSULTA_MOVIMIENTOS_CTA_CORRIENTE, \
+CONSULTAR_NRO_CUENTA_CORRIENTE, SELECT_ID_TIPO_MOVIMIENTO, INSERT_MOV_CTA_CORRIENTE, CONSULTAR_SALDO
 
 def get_tipos_movimientos():
     """
@@ -30,11 +31,16 @@ def get_nro_cuenta_corriente(nro_cliente):
     """
     Dado un nro de cliente nos devolverá su nro de cuenta corriente.
     """
+    nro_cta = None
     result = db.engine.execute(CONSULTAR_NRO_CUENTA_CORRIENTE.format(nro_cliente=nro_cliente))
     resp = []
     for row in result:
-        resp.append(dict(row))
-    return resp
+        nro_cta = row['cuenta_corriente_id']
+
+    if nro_cta is None:
+        nro_cta = -999
+
+    return nro_cta
 
 def get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cliente):
     """
@@ -51,5 +57,22 @@ def get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cliente):
         nro_cliente=nro_cliente))
     resp = []
     for row in result:
+        resp.append(dict(row))
+    return resp
+
+def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
+    id_t_mov = db.engine.execute(SELECT_ID_TIPO_MOVIMIENTO.format(tipo_movimiento=tipo_mov))
+    for row in id_t_mov:
+        t_movimiento = row['id']
+
+    desc = "Es un/a {}".format(tipo_mov)
+    db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(n_cta=nro_cta, \
+    t_mov=t_movimiento, user=user,descripcion=desc,monto=monto))
+
+
+def consulta_saldo(nro_cta):
+    saldo = db.engine.execute(CONSULTAR_SALDO.format(nro_cta=nro_cta))
+    resp = []
+    for row in saldo:
         resp.append(dict(row))
     return resp
