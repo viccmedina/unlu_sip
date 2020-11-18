@@ -20,8 +20,8 @@ LISTAR_PEDIDO_SEGUN_FECHA = """ SELECT * FROM pedido WHERE ts_created BETWEEN
 CONSULTA_POR_ESTADO_PEDIDO_SEGUN_ID = """ SELECT pedido_estado_id FROM pedido_estado
     WHERE descripcion_corta='{descripcion_corta}'"""
 
-INSERT_NUEVO_PEDIDO = """ INSERT INTO pedido (usuario_id)
-    VALUES ('{usuario_id}')"""
+INSERT_NUEVO_PEDIDO = """ INSERT INTO pedido (usuario_id, estado_pedido_id)
+    VALUES ('{usuario_id}', '{estado_pedido_id}')"""
 
 INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO = """ INSERT INTO historial_estado_pedido (pedido_estado_id, pedido_id)
     VALUES ('{pedido_estado_id}', '{pedido_id}')"""
@@ -67,3 +67,12 @@ SELECT_PEDIDOS_ESTADOS_FOR_OPERADOR = """ SELECT descripcion
 
 SELECT_ESTADO_PEDIDO_DESCRIPCION = """ SELECT * FROM pedido_estado
     WHERE descripcion = '{descripcion}' """
+
+UPDATE_PEDIDO_ESTADO = """ UPDATE pedido set estado_pedido_id='{estado_pedido_id}'
+    WHERE pedido_id='{pedido_id}'"""
+
+DELETE_PEDIDO_BY_CLIENTE = """ DELETE FROM pedido WHERE pedido_id='{pedido_id}' """
+
+SELECT_PEDIDO = """ SELECT p.pedido_id, pe.descripcion_corta, pe.descripcion, p.estado_pedido_id
+    FROM pedido as p INNER JOIN pedido_estado AS pe ON p.estado_pedido_id=pe.pedido_estado_id
+    WHERE p.pedido_id = '{pedido_id}' """

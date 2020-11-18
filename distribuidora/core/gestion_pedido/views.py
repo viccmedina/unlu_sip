@@ -37,7 +37,11 @@ def nuevo_pedido():
         else:
             flash('ERROOOOOR, ya existe un pedido en curso', 'error')
             print('ERROOOOOR, ya existe un pedido en curso', flush=True)
-    return render_template('form_nuevo_pedido.html', datos=current_user.get_mis_datos(), is_authenticated=current_user.is_authenticated, rol=current_user.get_role(), form=form, site='Gestión de Pedido')
+    return render_template('form_nuevo_pedido.html',\
+         datos=current_user.get_mis_datos(),\
+         is_authenticated=current_user.is_authenticated,\
+         rol=current_user.get_role(),\
+         form=form, site='Gestión de Pedido')
 
 @pedido.route('/pedido/consultar', methods=['GET'])
 @login_required
@@ -48,11 +52,32 @@ def consultar_pedido():
         pedido_pcc = None
     print('-'*90, flush=True)
     print(pedido_pcc, flush=True)
-    return render_template('form_consultar_pedido.html', datos=current_user.get_mis_datos(), is_authenticated=current_user.is_authenticated, rol=current_user.get_role(), site='Gestión de Pedido', pedido_pcc=pedido_pcc)
+    return render_template('form_consultar_pedido.html',\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated,\
+        rol=current_user.get_role(),\
+        site='Gestión de Pedido',\
+        pedido_pcc=pedido_pcc)
 
-@pedido.route('/pedido/anular', methods=['GET'])
+@pedido.route('/pedido/anular', methods=['GET', 'POST'])
 def anular_pedido():
-	pass
+    form = ModificarDetallePedido()
+    pedido_id = request.args.get('pedido_id', None)
+    print('pedido a anular: {}'.format(pedido_id), flush=True)
+    result = anular_pedido_por_cliente(pedido_id)
+    if result:
+        flash('PEDIDO ANULADO', 'success')
+    else:
+        flash('ALGO SALIO MAL', 'error')
+    pedido_pcc = get_listado_pedidos_pcc(usuario_id=current_user.get_id())
+    if not pedido_pcc:
+        pedido_pcc = None
+    return render_template('form_consultar_pedido.html',\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated,\
+        rol=current_user.get_role(),\
+        site='Gestión de Pedido',\
+        pedido_pcc=pedido_pcc)
 
 @pedido.route('/pedido/detalle/modificar', methods=['GET', 'POST'])
 def modificar_detalle_producto():

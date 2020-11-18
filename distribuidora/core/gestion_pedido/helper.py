@@ -45,6 +45,16 @@ def check_nuevo_pedido(cliente, estado):
     """
     return True
 
+def update_estado_pedido_tbl_pedido(pedido_id, estado_pedido_id):
+    """
+    Cada vez que se actualiza el estado del pedido mandamos a actualizar el estado
+    tanto en la tbl de historial como en la tbl de pedido.
+    """
+    result = db.engine.execute(UPDATE_PEDIDO_ESTADO.format(pedido_id=pedido_id,\
+        estado_pedido_id=estado_pedido_id))
+    return check(result)
+
+
 def crear_nuevo_pedido(cliente, estado):
     """
     Dado un id de cliente y un estado, vamos a crear un nuevo pedido con el
@@ -55,7 +65,7 @@ def crear_nuevo_pedido(cliente, estado):
     else:
 
         result = db.engine.execute(INSERT_NUEVO_PEDIDO.format(\
-            usuario_id=cliente))
+            usuario_id=cliente, estado_pedido_id=estado))
         pedido_id = db.engine.execute(SELECT_ID_ULTIMO_PEDIDO.format(\
             usuario_id=cliente))
         print('#'*80)
@@ -159,10 +169,13 @@ def actualizar_pedido_estado_por_operador(pedido, estado_nuevo, estado_actual):
     if execute:
         result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
             pedido_id=pedido, pedido_estado_id=estado_id_nuevo['pedido_estado_id']))
-        if estado_id_nuevo['descripcion_corta'] == 'EP':
-            pass
-            #agregar movimiento cta corriente
-            #descontar del stock
+        update_detalle_producto(pedido, estado_id_nuevo['pedido_estado_id'])
+        query = check(result)
+        if query:
+            if estado_id_nuevo['descripcion_corta'] == 'EP':
+                pass
+                #agregar movimiento cta corriente
+                #descontar del stock
 
         return check(result)
     else:
@@ -187,5 +200,21 @@ def eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido_id):
             detalle_id=detalle_id, producto_envase_id=producto_envase_id))
         print(result.rowcount, flush=True)
         return check(result)
+    else:
+        return False
+
+def anular_pedido_por_cliente(pedido_id):
+    """
+    Dado un identificador de pedido, vamos a eliminarlo.
+    Primero debemos comprobar que tiene el estado PCC. Caso contrario no se podrá
+    eliminar.
+    """
+    pedido = db.engine.execute(SELECT_PEDIDO.format(pedido_id=pedido_id))
+    pedido = parser_result(pedido)
+    print(pedido, flush=True)
+    if pedido[0]['descripcion_corta'] == 'PCC':
+        print('PODEMOS ANULAR EL PEDIDO', flush=True)
+        delete = db.engine.execute(DELETE_PEDIDO_BY_CLIENTE.format(pedido_id=pedido_id))
+        return check(delete)
     else:
         return False
