@@ -10,6 +10,12 @@ CONSULTA_POR_CLIENTE_PEDIDO = """ SELECT * FROM pedido WHERE
 LISTAR_DETALLE_PEDIDO = """ SELECT * FROM detalle_pedido WHERE
     pedido_id='{pedido_id}' """
 
+# Vamos a devolver el detalle pero con mas informaciónote
+DETALLE_INFORMACION_FULL = """ SELECT dp.detalle_id, dp.producto_envase_id,
+    dp.pedido_id, pe.stock_real, dp.cantidad, lpp.precio FROM detalle_pedido AS dp
+    INNER JOIN producto_envase AS pe ON dp.producto_envase_id=pe.producto_envase_id
+    INNER JOIN lista_precio_producto AS lpp ON dp.producto_envase_id=lpp.producto_envase_id
+    WHERE dp.pedido_id = '{pedido_id}' """
 # Actualizamos el estado del pedido
 UPDATE_ESTADO_PEDIDO = """ UPDATE pedido SET estado_pedido='{estado_pedido}'
     WHERE id_pedido='{id_pedido}' """

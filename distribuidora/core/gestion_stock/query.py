@@ -31,11 +31,11 @@ p.marca_id = {marca} """
 INSERT_MOVIMIENTO_STOCK = """ INSERT INTO movimiento_stock (tipo_movimiento_stock_id,usuario_id,
 producto_envase_id,descripcion,cantidad) VALUES ({tipo_movimiento},{usuario_id},{producto_envase_id},'{descripcion}',{cantidad}); """
 
-UPDATE_STOCK_REAL = """UPDATE producto_envase SET stock_real = stock_real + {cantidad}  WHERE
+UPDATE_STOCK_REAL = """UPDATE producto_envase SET stock_real = stock_real + '{cantidad}'  WHERE
 producto_envase_id = {producto_envase_id}"""
 
-BAJA_PRODUCTO = """UPDATE producto_envase SET stock_real = stock_real - {cantidad}  WHERE
-producto_envase_id = {producto_envase_id}"""
+BAJA_PRODUCTO = """UPDATE producto_envase SET stock_real = stock_real - '{cantidad}'  WHERE
+producto_envase_id = '{producto_envase_id}' AND (stock_real - '{cantidad}' >= 0) """
 
 CONSULTAR_MOVIMIENTOS = """
     SELECT p.descripcion as descripcion_p, m.descripcion as descripcion_m, um.descripcion, u.username,
