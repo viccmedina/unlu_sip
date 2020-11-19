@@ -133,4 +133,4 @@ class Pedido(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'pedido {}'.format(self.usuario_id, self.ts_created)
+        return '{}'.format(self.pedido_id)

@@ -46,12 +46,17 @@ def consultar_pedido():
     pedido_pcc = get_listado_pedidos_pcc(usuario_id=current_user.get_id())
     if not pedido_pcc:
         pedido_pcc = None
+    page = request.args.get('page', 1, type=int)
+    pedidos_todos = db.session.query(Pedido).filter(\
+        Pedido.usuario_id==current_user.get_id(), Pedido.estado_pedido_id!=1).paginate( page, 5, False)
+    print(pedidos_todos.items, flush=True)
     return render_template('form_consultar_pedido.html',\
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated,\
         rol=current_user.get_role(),\
         site='Gestión de Pedido',\
-        pedido_pcc=pedido_pcc)
+        pedido_pcc=pedido_pcc,
+        pedidos_todos=pedidos_todos)
 
 @pedido.route('/pedido/anular', methods=['GET', 'POST'])
 def anular_pedido():
@@ -151,3 +156,12 @@ def listar_detalle_pedido():
     pedido = request.args.get('pedido', type=int)
     detalle = get_detalle_pedido(pedido)
     return render_template('detalle_pedido.html', detalle=detalle, form=form)
+
+@pedido.route('/pedido/repetir', methods=['GET', 'POST'])
+def repetir_pedido():
+    pedido = request.args.get('pedido')
+    print('¬'*70, flush=True)
+    print(pedido, flush=True)
+    print('¬'*70, flush=True)
+    nuevo_pedido_desde_pedido_anterior(current_user.get_id(), pedido)
+    return None

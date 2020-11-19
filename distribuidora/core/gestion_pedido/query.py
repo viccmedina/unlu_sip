@@ -90,3 +90,7 @@ CALCULO_COSTO_PEDIDO =  """ SELECT SUM(dp.cantidad*lpp.precio) AS total
     WHERE dp.pedido_id='{pedido_id}'  """
 
 SELECT_PEDIDO_BY_PEDIDO_ID = """ SELECT * FROM pedido WHERE pedido_id='{pedido_id}' """
+
+JOIN_PEDIDO_DETALLE = """ SELECT dp.producto_envase_id, dp.cantidad FROM pedido AS p
+    INNER JOIN detalle_pedido AS dp ON dp.pedido_id=p.pedido_id
+    WHERE dp.pedido_id='{pedido_id}'"""

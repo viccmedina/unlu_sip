@@ -158,7 +158,7 @@ def actualizar_pedido_estado_por_operador(usuario_registrador, pedido, estado_nu
     if execute:
         result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
             pedido_id=pedido, pedido_estado_id=estado_id_nuevo['pedido_estado_id']))
-        actualizo el estado del pedido
+        #actualizo el estado del pedido
         update_estado_pedido_tbl_pedido(pedido, estado_id_nuevo['pedido_estado_id'])
         query = check(result)
         if True:
@@ -222,3 +222,23 @@ def anular_pedido_por_cliente(pedido_id):
         return check(delete)
     else:
         return False
+
+
+def nuevo_pedido_desde_pedido_anterior(usuario, pedido):
+    """
+    A partir de un pedido anteriormente realizado, procedemos a generar una copia.
+    """
+
+    #me traigo la union entre pedido y detalle del pedido
+    result = db.engine.execute(JOIN_PEDIDO_DETALLE.format(pedido_id=pedido))
+    result = parser_result(result)
+    print(result, flush=True)
+    estado = get_estado_pedido_id('PCC')
+    estado = parser_result(estado)[0]['pedido_estado_id']
+    print('ESTADO --> {}'.format(estado), flush=True)
+    execute = crear_nuevo_pedido(usuario, estado)
+    pedido = get_ultimo_pedido_id(usuario)
+    if execute:
+        for r in result:
+            insert_into_detalle_pedido(pedido, r['producto_envase_id'], r['cantidad'])
+    return execute
