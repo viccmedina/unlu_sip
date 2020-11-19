@@ -68,7 +68,7 @@ SELECT_PEDIDOS_ESTADOS_FOR_OPERADOR = """ SELECT descripcion
 SELECT_ESTADO_PEDIDO_DESCRIPCION = """ SELECT * FROM pedido_estado
     WHERE descripcion = '{descripcion}' """
 
-UPDATE_PEDIDO_ESTADO = """ UPDATE pedido set estado_pedido_id='{estado_pedido_id}'
+UPDATE_PEDIDO_ESTADO = """ UPDATE pedido SET estado_pedido_id='{estado_pedido_id}'
     WHERE pedido_id='{pedido_id}'"""
 
 DELETE_PEDIDO_BY_CLIENTE = """ DELETE FROM pedido WHERE pedido_id='{pedido_id}' """
@@ -76,3 +76,11 @@ DELETE_PEDIDO_BY_CLIENTE = """ DELETE FROM pedido WHERE pedido_id='{pedido_id}' 
 SELECT_PEDIDO = """ SELECT p.pedido_id, pe.descripcion_corta, pe.descripcion, p.estado_pedido_id
     FROM pedido as p INNER JOIN pedido_estado AS pe ON p.estado_pedido_id=pe.pedido_estado_id
     WHERE p.pedido_id = '{pedido_id}' """
+
+CALCULO_COSTO_PEDIDO =  """ SELECT SUM(dp.cantidad*lpp.precio) AS total
+    FROM detalle_pedido AS dp
+    INNER JOIN lista_precio_producto AS lpp
+    ON dp.producto_envase_id=lpp.producto_envase_id
+    WHERE dp.pedido_id='{pedido_id}'  """
+
+SELECT_PEDIDO_BY_PEDIDO_ID = """ SELECT * FROM pedido WHERE pedido_id='{pedido_id}' """

@@ -1,5 +1,8 @@
 from distribuidora import db
 from distribuidora.core.gestion_pedido.query import *
+from distribuidora.core.gestion_cta_corriente.query import CONSULTAR_NRO_CUENTA_CORRIENTE,\
+    SELECT_ID_TIPO_MOVIMIENTO, INSERT_MOV_CTA_CORRIENTE
+from distribuidora.core.gestion_usuario.query import JOIN_PERSONA_USER
 
 def parser_result(result):
     resp = []
@@ -88,28 +91,21 @@ def get_ultimo_pedido_id(usuario_id):
     result = db.engine.execute(SELECT_ULTIMO_PEDIDO_ID_POR_CLIENTE.format(\
         usuario_id=usuario_id))
     result = parser_result(result)
-    print('='*90, flush=True)
-    print(result, flush=True)
-    print('='*90, flush=True)
     return result[0]['pedido_id']
 
 def get_detalle_pedido(pedido_id):
-    result = db.engine.execute(LISTAR_DETALLE_PEDIDO.format(pedido_id=pedido_id))
+    result = db.engine.execute(LISTAR_DETALLE_PEDIDO.format(\
+        pedido_id=pedido_id))
     result = parser_result(result)
-    print('='*90, flush=True)
-    print(result, flush=True)
-    print('='*90, flush=True)
     return result
 
 def check_estado_actual_pedido(pedido_id):
     """
     Dado un identificador de pedido, devolvemos su estado actual.
     """
-    result = db.engine.execute(CANTIDAD_ESTADOS_DEL_PEDIDO.format(pedido_id=pedido_id))
+    result = db.engine.execute(CANTIDAD_ESTADOS_DEL_PEDIDO.format(\
+        pedido_id=pedido_id))
     result = parser_result(result)
-    print('7'*90, flush=True)
-    print(result, flush=True)
-    print('7'*90, flush=True)
     return result
 
 def insert_into_detalle_pedido(pedido_id, producto_envase_id, cantidad=1):
@@ -119,7 +115,9 @@ def insert_into_detalle_pedido(pedido_id, producto_envase_id, cantidad=1):
     """
 
     result = db.engine.execute(INSERT_INTO_DETALLE_PEDIDO.format(\
-        pedido_id=pedido_id, producto_envase_id=producto_envase_id, cantidad=cantidad))
+        pedido_id=pedido_id,\
+        producto_envase_id=producto_envase_id,\
+        cantidad=cantidad))
     return check(result)
 
 def get_listado_pedidos_pco():
@@ -152,7 +150,7 @@ def update_detalle_producto(pedido_id, detalle, cantidad):
     else:
         return False
 
-def actualizar_pedido_estado_por_operador(pedido, estado_nuevo, estado_actual):
+def actualizar_pedido_estado_por_operador(usuario_registrador, pedido, estado_nuevo, estado_actual):
     estado_id_nuevo = get_estado_pedido_id_descripcion(estado_nuevo)[0]
     print('estado_id_nuevo --> {}'.format(estado_id_nuevo), flush=True)
     estado_id_actual = get_estado_pedido_id_descripcion(estado_actual)[0]
@@ -171,10 +169,31 @@ def actualizar_pedido_estado_por_operador(pedido, estado_nuevo, estado_actual):
             pedido_id=pedido, pedido_estado_id=estado_id_nuevo['pedido_estado_id']))
         update_detalle_producto(pedido, estado_id_nuevo['pedido_estado_id'])
         query = check(result)
-        if query:
+        if True:
             if estado_id_nuevo['descripcion_corta'] == 'EP':
-                pass
-                #agregar movimiento cta corriente
+                #calculo el costo del pedido
+                costo = db.engine.execute(CALCULO_COSTO_PEDIDO.format(\
+                    pedido_id=pedido))
+                costo = parser_result(costo)
+                datos_pedido = db.engine.execute(SELECT_PEDIDO_BY_PEDIDO_ID.format(\
+                    pedido_id=pedido))
+                datos_pedido = parser_result(datos_pedido)
+                #necesito el persona_id ya que la cta corriente esta asociada a persona
+                persona_usuario = db.engine.execute(JOIN_PERSONA_USER.format(\
+                    usuario_id=datos_pedido[0]['usuario_id']))
+                persona_usuario = parser_result(persona_usuario)
+                cta_corriente_id = db.engine.execute(CONSULTAR_NRO_CUENTA_CORRIENTE.format(\
+                    nro_cliente=persona_usuario[0]['persona_id']))
+                cta_corriente_id = parser_result(cta_corriente_id)
+                tipo_movimiento = db.engine.execute(SELECT_ID_TIPO_MOVIMIENTO.format(\
+                    tipo_movimiento='Deuda'))
+                tipo_movimiento = parser_result(tipo_movimiento)
+                result = db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(\
+                    n_cta=cta_corriente_id[0]['cuenta_corriente_id'],\
+                    t_mov=tipo_movimiento[0]['id'],\
+                    user=usuario_registrador,\
+                    monto=costo[0]['total'],\
+                    descripcion='Deuda'))
                 #descontar del stock
 
         return check(result)
@@ -186,10 +205,8 @@ def actualizar_estado_pedido(pedido, estado):
     Dado un nro de pedido y un estado, actualizamos
     el estado de dicho pedido.
     """
-    print('ACTUALIZAR!!', flush=True)
     estado_id = db.engine.execute(CONSULTA_POR_ESTADO_PEDIDO_SEGUN_ID.format(descripcion_corta=estado))
     estado_id = parser_result(estado_id)
-    print(estado_id, flush=True)
     result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
         pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
     return check(result)
