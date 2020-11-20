@@ -24,16 +24,13 @@ def nuevo_pedido():
     if form.validate_on_submit():
         #recuperamos el id del usuario
         usuario_id = current_user.get_id()
-        pedido_id = get_ultimo_pedido_id(usuario_id)
-        #recupero la cantidad de estados de ese pedido
-        cantidad_estados = get_cantidad_estados_pedido(pedido_id)
-        if cantidad_estados > 1 or pedido_id is None:
+        if validar_nuevo_pedido(usuario_id):
             estado = 'PCC'
             estado_id = get_estado_pedido_id(estado)
             crear_nuevo_pedido(usuario_id, estado_id[0]['pedido_estado_id'])
-            flash('Pedido Creadooooo!', 'success')
+            flash('Pedido creado satisfactoriamente!', 'success')
         else:
-            flash('ERROOOOOR, ya existe un pedido en curso', 'error')
+            flash('ERROR, ya existe un pedido en curso', 'error')
     return render_template('form_nuevo_pedido.html',\
          datos=current_user.get_mis_datos(),\
          is_authenticated=current_user.is_authenticated,\
@@ -165,9 +162,14 @@ def listar_detalle_pedido_anterior():
 
 @pedido.route('/pedido/repetir', methods=['GET', 'POST'])
 def repetir_pedido():
-    pedido = request.args.get('pedido')
-    print('¬'*70, flush=True)
-    print(pedido, flush=True)
-    print('¬'*70, flush=True)
-    nuevo_pedido_desde_pedido_anterior(current_user.get_id(), pedido)
-    return None
+    usuario_id = current_user.get_id()
+    if validar_nuevo_pedido(usuario_id):
+        pedido = request.args.get('pedido')
+        nuevo_pedido_desde_pedido_anterior(usuario_id, pedido)
+        form = ModificarDetallePedido()
+        detalle = get_detalle_pedido(pedido)
+        flash('Pedido creado satisfactoriamente', 'success')
+        return render_template('detalle_pedido.html', detalle=detalle, form=form)
+    else:
+        flash('ERROR! Ya existe un pedido en curso', 'error')
+        return redirect(url_for('pedido.consultar_pedido'))

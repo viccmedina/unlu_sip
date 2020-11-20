@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 
 {% block content %}
+  {% include "flash_errors.html" %}
   <h3>CONSULTA DE PEDIDO</h3>
   {% if pedido_pcc is none %}
     <p>No tiene pedidos sin confirmar</p>

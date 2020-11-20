@@ -18,6 +18,15 @@ def check(result):
     else:
         return False
 
+def validar_nuevo_pedido(usuario_id):
+    pedido_id = get_ultimo_pedido_id(usuario_id)
+    #recupero la cantidad de estados de ese pedido
+    cantidad_estados = get_cantidad_estados_pedido(pedido_id)
+    if cantidad_estados > 1 or pedido_id is None:
+        return True
+    else:
+        return False
+
 def get_estado_pedido_id(descripcion_corta):
     """
     Dado una descripción corta de uno de los estados de los pedidos,
