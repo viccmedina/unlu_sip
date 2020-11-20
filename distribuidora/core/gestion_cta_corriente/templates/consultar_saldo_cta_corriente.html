@@ -45,10 +45,9 @@
 				                </div>
 
 												{% if resultado is not none %}
-													<div class="form-group">
 														{% include "tabla_consulta_saldo.html" %}
-
-														<a class="btn btn-success " href="{{ url_for('cta_corriente.descargar_consulta', resultado=resultado) }}" role="button">Descargar</a>
+                          <div class="form-group">
+													    <a class="btn btn-success " href="{{ url_for('cta_corriente.descargar_consulta_saldo', resultado=resultado) }}" role="button">Descargar</a>
 													</div>
 												{% endif %}
 

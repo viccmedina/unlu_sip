@@ -8,7 +8,7 @@ from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos,
 	AgregarMovimiento, ConsultarSaldo
 from distribuidora.models.cuenta_corriente import MovimientoCtaCorriente, TipoMovimientoCtaCorriente
 from distribuidora.models.gestion_usuario import Usuario
-from flask_weasyprint import HTML, render_pdf
+# from flask_weasyprint import HTML, render_pdf
 import datetime
 import json
 
@@ -99,7 +99,6 @@ def consultar_saldo():
 		if nro_cta == -999 :
 			flash("La cuenta ingresada es incorrecta", 'error')
 		else:
-			print("estoy en viex 102")
 			resultado = consulta_saldo(nro_cta)
 	else:
 		print(form.errors, flush=True)
@@ -131,7 +130,7 @@ def importar():
 	site= TITULO + ' - Importar')
 
 
-@cta_corriente.route('/stock/descargar/consulta/<string:resultado>.pdf')
+@cta_corriente.route('/cta_corriente/consultar/descargar/consulta/<string:resultado>.pdf')
 @login_required
 def descargar_consulta(resultado):
 	resultado = json.loads(resultado.replace("'", '"'))

@@ -6,17 +6,18 @@
 		{% include "acordeon_perfil_usuario.html" %}
 		<div class="col-sm-5 offset-sm-2 col-md-9 offset-md-0">
 			<div class="card-deck">
+
 				<div class="card" style="height: 20rem;">
 					<img src="static/img/gestion_pedido.svg" class="card-img-top" alt="gestión de pedidos" width="100%" height="100">
 					<div class="card-body">
 						<h5 class="card-title">Gestión de Pedidos</h5>
 						<p class="card-text">Aquí podrás confirmar pedidos o devoluciones, consultar los pedidos actuales y demás.</p>
-
 					</div>
 					<div class="card-footer">
 						<a class="btn btn-primary btn-sm" href="{{ url_for('pedido.index') }}" role="button">Ver Más</a>
-    				</div>
+    			</div>
 				</div>
+
 				<div class="card" style="height: 20rem;">
 					<img src="static/img/gestion_stock.svg" class="card-img-top" alt="gestión de stock" width="100%" height="100">
 					<div class="card-body">
@@ -25,8 +26,9 @@
 					</div>
 					<div class="card-footer">
 						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.index') }}" role="button">Ver Más</a>
-    				</div>
+    			</div>
 				</div>
+
 				<div class="card" style="height: 20rem;">
 					<img src="static/img/gestion_ctas_corrientes.svg" class="card-img-top" alt="gestión de ctas corrientes" width="100%" height="100">
 					<div class="card-body">
@@ -35,9 +37,11 @@
 					</div>
 					<div class="card-footer">
 						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.index') }}" role="button">Ver Más</a>
-    				</div>
+    			</div>
 				</div>
 			</div>
+
+
 		<br>
 			<div class="card-deck">
 				<div class="card" style="height: 20rem;">
