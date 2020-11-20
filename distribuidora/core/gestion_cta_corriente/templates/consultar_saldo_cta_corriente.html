@@ -39,10 +39,16 @@
 				                <div class="form-group">
 				                  {{ form.cliente.label(class="form-control-label") }}
 				                  {{ form.cliente(class="form-control form-control-md") }}
-				                <div class="form-group">
-				                  {{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
-				                  {{ form.submit(class="btn btn-success mb-2") }}
-				                </div>
+													<br>
+													<div class="form-group">
+					                  <span style="float:left">
+																{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
+														</span>
+														<span style="float:right">
+																{{ form.submit(class="btn btn-success mb-2") }}
+														</span>
+					                </div>
+													<br><br><br>
 
 												{% if resultado is not none %}
 														{% include "tabla_consulta_saldo.html" %}

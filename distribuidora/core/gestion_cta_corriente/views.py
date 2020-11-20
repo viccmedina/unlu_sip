@@ -44,8 +44,6 @@ def consultar_cta_corriente():
 			flash("La cuenta ingresada es incorrecta", 'error')
 		else:
 			resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cta)
-		print(resultado, flush=True)
-		print('#'*80, flush=True)
 	else:
 		print(form.errors, flush=True)
 

@@ -49,17 +49,31 @@
 				                  {{ form.fecha_hasta(class="form-control form-control-md") }}
 				                </div>
 				                <div class="form-group">
-				                  {{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
-				                  {{ form.submit(class="btn btn-success mb-2") }}
+				                  <span style="float:left">
+															{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
+													</span>
+													<span style="float:right">
+															{{ form.submit(class="btn btn-success mb-2") }}
+													</span>
 				                </div>
+												<br><br><br>
+											{% if resultado is not none %}
 
-												{% if resultado is not none %}
-													<div class="form-group">
-														{% include "tabla_movimientos_cta_corriente.html" %}
+													{% if resultado %}
+														<div class="form-group">
+															{% include "tabla_movimientos_cta_corriente.html" %}
+															<div align="right">
+																<a align="right" class="btn btn-success " href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
+															</div>
 
-														<a class="btn btn-success " href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
-													</div>
+														</div>
+														{% else %}
+															<h3 align="center">RESULTADO</h3>
+															<h5 align="center">No se han encontrado movimientos para este cliente</h5>
+													{% endif %}
+
 												{% endif %}
+
 
 				              </form>
 					     		</div>
