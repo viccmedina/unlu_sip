@@ -13,7 +13,7 @@
     <a href="{{ url_for('pedido.anular_pedido', pedido_id=pedido_pcc[0]['pedido_id']) }}">Anular Pedido</a>
   {% endif %}
 
-
+  <h4>Pedidos Anteriores</h4>
   <div class="row">
     {% for pt in pedidos_todos.items %}
     <p>{{pt}}</p>
@@ -22,7 +22,7 @@
           <img src="..." class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title">{{ pt }}</h5>
-            <a href="{{ url_for('pedido.listar_detalle_pedido', pedido=pt) }}">Ver Detalle Pedido</a>
+            <a href="{{ url_for('pedido.listar_detalle_pedido_anterior', pedido=pt) }}">Ver Detalle Pedido</a>
           </div>
         </div>
       </div>

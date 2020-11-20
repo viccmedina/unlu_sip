@@ -157,6 +157,12 @@ def listar_detalle_pedido():
     detalle = get_detalle_pedido(pedido)
     return render_template('detalle_pedido.html', detalle=detalle, form=form)
 
+@pedido.route('/pedido/listar/detalle/anterior', methods=['GET'])
+def listar_detalle_pedido_anterior():
+    pedido = request.args.get('pedido', type=int)
+    detalle = get_detalle_pedido(pedido)
+    return render_template('detalle_pedidos_anteriores.html', detalle=detalle)
+
 @pedido.route('/pedido/repetir', methods=['GET', 'POST'])
 def repetir_pedido():
     pedido = request.args.get('pedido')
