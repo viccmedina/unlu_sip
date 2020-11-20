@@ -10,7 +10,6 @@ CONSULTA_MOVIMIENTOS_CTA_CORRIENTE = """
 	"""
 
 SELECT_TIPO_MOVIMIENTOS = """
-
 	SELECT descripcion FROM tipo_movimiento_cta_corriente
 	"""
 

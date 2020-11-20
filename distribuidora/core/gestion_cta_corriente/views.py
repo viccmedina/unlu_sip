@@ -74,7 +74,7 @@ def agregar():
 			user = Usuario.query.filter_by(id=usuario_id).first()
 			if user.has_role('Operador'):
 				new_mov_cta_corriente(nro_cta,tipo_movimiento,user.id,monto)
-				flash("La transaccion se ha registrado con exito", 'warning')
+				flash("La transaccion se ha registrado con exito", 'success')
 			else:
 				flash("Usuario incorrecto, contacte al administrador", 'error')
 	else:
@@ -131,9 +131,9 @@ def importar():
 	site= TITULO + ' - Importar')
 
 
-@cta_corriente.route('/stock/descargar/consulta/<string:resultado>.pdf')
+@cta_corriente.route('/cta_corriente/descargar/consulta/<string:resultado>.pdf')
 @login_required
-def descargar_consulta(resultado):
+def descargar_consulta_cta_corriente(resultado):
 	resultado = json.loads(resultado.replace("'", '"'))
 	html = render_template('tabla_movimientos_cta_corriente.html', resultado=resultado)
 	return render_pdf(HTML(string=html))
