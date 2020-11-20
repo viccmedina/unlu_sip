@@ -1,8 +1,22 @@
 from distribuidora import db
 from flask import flash
 from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTAR_ID_MARCA, \
-CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK,UPDATE_STOCK_REAL, \
-BAJA_PRODUCTO, CONSULTAR_MOVIMIENTOS, CONSULTA_STOCK1
+    CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK,UPDATE_STOCK_REAL, \
+    BAJA_PRODUCTO, CONSULTAR_MOVIMIENTOS, CONSULTA_STOCK1
+from distribuidora.core.gestion_pedido.query import LISTAR_DETALLE_PEDIDO, DETALLE_INFORMACION_FULL
+#from distribuidora.core.gestion_pedido.helper import parser_result
+
+def parser_result(result):
+    resp = []
+    for row in result:
+        resp.append(dict(row))
+    return resp
+
+def check(result):
+    if result.rowcount == 1 :
+        return True
+    else:
+        return False
 
 def consulta_sotck(producto):
     """
@@ -98,3 +112,22 @@ def consultaMovimientosExportar(desde,hasta):
     for row in result:
         resp.append(dict(row))
     return resp
+
+def actualizar_stock_real(pedido_id):
+    """
+    Dado un pedido, vamos a descontar las cantidades afectadas al pedido.
+    En sqlite no tenemos stored procedure asi que vamos a improvisar.
+    """
+
+    detalle_pedido = db.engine.execute(DETALLE_INFORMACION_FULL.format(\
+        pedido_id=pedido_id))
+    detalle_pedido = parser_result(detalle_pedido)
+    costo = 0
+    for dp in detalle_pedido:
+        stock_descontar = int(dp['cantidad']) - int(dp['stock_real'])
+        if stock_descontar >= 0:
+            costo += int(dp['cantidad']) * int(dp['precio'])
+            detalle_pedido = db.engine.execute(BAJA_PRODUCTO.format(\
+                producto_envase_id=pd['producto_envase_id'],\
+                cantidad=dp['cantidad']))
+    return costo

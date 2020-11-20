@@ -59,6 +59,23 @@ class TipoMovimientoCtaCorriente(db.Model):
     def get_descripcion_corta(self):
         return self.descripcion_corta
 
+class EstadoComprobantePago(db.Model):
+    """
+    Debemos asignar un estado a los comprobantes de pago para que en el momento
+    en que se da de alta un pago, podamos dar como tal al pedido.
+    """
+    __tablename__ = 'estado_comprobante_pago'
+
+    estado_comprobante_pago_id = db.Column(db.Integer, primary_key=True)
+    descripcion = db.Column(db.String(80), nullable=False, unique=True)
+    descripcion_corta = db.Column(db.String(80), nullable=False, unique=True)
+    ts_created = db.Column(db.DateTime, server_default=db.func.now())
+
+    def __init__(self, descripcion, descripcion_corta):
+        self.descripcion=descripcion
+        self.descripcion_corta=descripcion_corta
+
+
 class ComprobantePago(db.Model):
     """
     Representa a un documento similar a una factura pero que no tiene todo
@@ -72,6 +89,7 @@ class ComprobantePago(db.Model):
         es suficiente para pagar el costo del pedido.
     - monto: hace referencia al valor del
     """
+    __tablename__ = 'comprobante_pago'
 
     comprobante_id = db.Column(db.Integer, primary_key=True)
     fecha_pago = db.Column(db.DateTime, nullable=True)
@@ -79,12 +97,13 @@ class ComprobantePago(db.Model):
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
     movimiento = db.Column(db.Integer, db.ForeignKey('movimiento_cta_corriente.movimiento_id'),nullable=False)
     pedido = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
+    estado_comprobante_pago_id = db.Column(db.Integer, db.ForeignKey('estado_comprobante_pago.estado_comprobante_pago_id'),nullable=False)
 
-    def __init__(self, monto, pedido_id, movimiento,fecha_pago):
+    def __init__(self, monto, pedido_id, movimiento, estado_comprobante_pago_id):
         self.monto = monto
         self.movimiento = movimiento
-        self.fecha_pago = fecha_pago
         self.pedido = pedido_id
+        self.estado_comprobante_pago_id = estado_comprobante_pago_id
 
     def get_fecha_pago(self):
         return self.fecha_pago

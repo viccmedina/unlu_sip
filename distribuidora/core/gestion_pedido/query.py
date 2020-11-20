@@ -10,6 +10,12 @@ CONSULTA_POR_CLIENTE_PEDIDO = """ SELECT * FROM pedido WHERE
 LISTAR_DETALLE_PEDIDO = """ SELECT * FROM detalle_pedido WHERE
     pedido_id='{pedido_id}' """
 
+# Vamos a devolver el detalle pero con mas informaciónote
+DETALLE_INFORMACION_FULL = """ SELECT dp.detalle_id, dp.producto_envase_id,
+    dp.pedido_id, pe.stock_real, dp.cantidad, lpp.precio FROM detalle_pedido AS dp
+    INNER JOIN producto_envase AS pe ON dp.producto_envase_id=pe.producto_envase_id
+    INNER JOIN lista_precio_producto AS lpp ON dp.producto_envase_id=lpp.producto_envase_id
+    WHERE dp.pedido_id = '{pedido_id}' """
 # Actualizamos el estado del pedido
 UPDATE_ESTADO_PEDIDO = """ UPDATE pedido SET estado_pedido='{estado_pedido}'
     WHERE id_pedido='{id_pedido}' """
@@ -68,7 +74,7 @@ SELECT_PEDIDOS_ESTADOS_FOR_OPERADOR = """ SELECT descripcion
 SELECT_ESTADO_PEDIDO_DESCRIPCION = """ SELECT * FROM pedido_estado
     WHERE descripcion = '{descripcion}' """
 
-UPDATE_PEDIDO_ESTADO = """ UPDATE pedido set estado_pedido_id='{estado_pedido_id}'
+UPDATE_PEDIDO_ESTADO = """ UPDATE pedido SET estado_pedido_id='{estado_pedido_id}'
     WHERE pedido_id='{pedido_id}'"""
 
 DELETE_PEDIDO_BY_CLIENTE = """ DELETE FROM pedido WHERE pedido_id='{pedido_id}' """
@@ -76,3 +82,15 @@ DELETE_PEDIDO_BY_CLIENTE = """ DELETE FROM pedido WHERE pedido_id='{pedido_id}' 
 SELECT_PEDIDO = """ SELECT p.pedido_id, pe.descripcion_corta, pe.descripcion, p.estado_pedido_id
     FROM pedido as p INNER JOIN pedido_estado AS pe ON p.estado_pedido_id=pe.pedido_estado_id
     WHERE p.pedido_id = '{pedido_id}' """
+
+CALCULO_COSTO_PEDIDO =  """ SELECT SUM(dp.cantidad*lpp.precio) AS total
+    FROM detalle_pedido AS dp
+    INNER JOIN lista_precio_producto AS lpp
+    ON dp.producto_envase_id=lpp.producto_envase_id
+    WHERE dp.pedido_id='{pedido_id}'  """
+
+SELECT_PEDIDO_BY_PEDIDO_ID = """ SELECT * FROM pedido WHERE pedido_id='{pedido_id}' """
+
+JOIN_PEDIDO_DETALLE = """ SELECT dp.producto_envase_id, dp.cantidad FROM pedido AS p
+    INNER JOIN detalle_pedido AS dp ON dp.pedido_id=p.pedido_id
+    WHERE dp.pedido_id='{pedido_id}'"""

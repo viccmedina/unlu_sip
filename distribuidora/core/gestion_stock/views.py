@@ -173,7 +173,7 @@ def importar():
 
 @stock.route('/stock/descargar/consulta/<string:resultado>.pdf')
 @login_required
-def descargar_consulta(resultado):
+def descargar_consulta_stock(resultado):
 	resultado = json.loads(resultado.replace("'", '"'))
 	html = render_template('tabla_consulta_stock.html', resultado=resultado)
 	return render_pdf(HTML(string=html))

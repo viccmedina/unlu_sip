@@ -4,16 +4,12 @@ CONSULTAR_NRO_CUENTA_CORRIENTE = """
 """
 
 CONSULTA_MOVIMIENTOS_CTA_CORRIENTE = """
-
 	SELECT * FROM movimiento_cta_corriente
 	WHERE ts_created>=DATETIME('{fecha_desde}') and
 		ts_created<=('{fecha_hasta}') and cta_corriente=('{nro_cliente}')
-
-
 	"""
 
 SELECT_TIPO_MOVIMIENTOS = """
-
 	SELECT descripcion FROM tipo_movimiento_cta_corriente
 	"""
 
@@ -23,12 +19,12 @@ SELECT_ID_TIPO_MOVIMIENTO = """
 """
 
 INSERT_MOV_CTA_CORRIENTE = """ INSERT INTO movimiento_cta_corriente
-(cta_corriente,tipo_movimiento_cta_corriente,usuario,saldo,descripcion)
-VALUES ( {n_cta},{t_mov},{user},{monto},'{descripcion}' ) """
+(cta_corriente, tipo_movimiento_cta_corriente, usuario, saldo, descripcion)
+VALUES ('{n_cta}', '{t_mov}', '{user}', '{monto}', '{descripcion}') """
 
 # primero sumo todas las deudas(id= 2) y desp le resto los pagos y reembolsos (id= 1 y3 )
 
-CONSULTAR_SALDO = """SELECT DISTINCT mcc.cta_corriente AS cta_corriente, p.email AS email, p.nombre as nombre, 
+CONSULTAR_SALDO = """SELECT DISTINCT mcc.cta_corriente AS cta_corriente, p.email AS email, p.nombre as nombre,
 	((SELECT sum(mov.saldo) FROM movimiento_cta_corriente mov WHERE cta_corriente = {nro_cta}
 	and tipo_movimiento_cta_corriente = 2)
 	-

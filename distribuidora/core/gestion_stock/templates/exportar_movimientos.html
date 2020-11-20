@@ -62,7 +62,7 @@
 					{% if resultado is not none %}
 						<div class="form-group">
 							{% include "tabla_movimientos_stock.html" %}
-							<a class="btn btn-success mb-2 mb-2" href="{{ url_for('stock.descargar_consulta', resultado=resultado) }}" role="button">Descargar</a>
+							<a class="btn btn-success mb-2 mb-2" href="{{ url_for('stock.descargar_consulta_stock', resultado=resultado) }}" role="button">Descargar</a>
 						</div>
 					{% endif %}
 				</div>

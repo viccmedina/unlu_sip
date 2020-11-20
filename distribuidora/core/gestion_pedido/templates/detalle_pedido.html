@@ -13,4 +13,7 @@
             {{ form.submit() }}
       </form>
     {% endfor %}
+    <br>
+    <br>
+    <a href="{{ url_for('pedido.repetir_pedido', pedido=detalle[0]['pedido_id']) }}">Repetir Pedido</a>
 </ul>
