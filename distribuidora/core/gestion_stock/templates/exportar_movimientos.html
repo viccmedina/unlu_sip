@@ -49,22 +49,39 @@
 													{{ form.fecha_hasta.label(class="form-control-label") }}
 													{{ form.fecha_hasta(class="form-control form-control-md") }}
 				                </div>
-				                <div class="form-group">
-				                  {{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
-				                  {{ form.submit(class="btn btn-success mb-2") }}
+												<div class="form-group">
+				                  <span style="float:left">
+															{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
+													</span>
+													<span style="float:right">
+															{{ form.submit(class="btn btn-success mb-2") }}
+													</span>
 				                </div>
+												<br><br><br>
+												{% if resultado is not none %}
+														{% if resultado %}
+															<div class="form-group">
+																	{% include "tabla_movimientos_stock.html" %}
+																<div align="right">
+																	<a align="right" class="btn btn-success " href="{{ url_for('stock.descargar_consulta_stock', resultado=resultado) }}" role="button">Descargar</a>
+																</div>
+															</div>
+															{% else %}
+																<h3 align="center">RESULTADO</h3>
+																<h5 align="center">Aun no hay movimientos insertados</h5>
+														{% endif %}
+
+													{% endif %}
 				              </form>
 					     		</div>
 				     		</div>
 			     		</div>
 		     		</div>
 			 		</div>
-					{% if resultado is not none %}
-						<div class="form-group">
-							{% include "tabla_movimientos_stock.html" %}
-							<a class="btn btn-success mb-2 mb-2" href="{{ url_for('stock.descargar_consulta_stock', resultado=resultado) }}" role="button">Descargar</a>
-						</div>
-					{% endif %}
+
+
+
+
 				</div>
  		</div>
 
