@@ -3,11 +3,22 @@
   <div class="accordion" id="accordionExample">
     <div class="card">
       <div class="card-header" id="headingOne">
-        <h2 class="mb-0">
-          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            Mis Datos
-          </button>
-        </h2>
+        <h6 align = "center">
+          {% if datos.username == 'operador' %}
+            <a align="right" href="{{ url_for('gestion_usuario.home_operador') }}" role="button">HOME</a>
+          {% else %}
+            <a align="right" href="{{ url_for('gestion_usuario.home_cliente') }}" role="button">HOME</a>
+          {% endif %}
+        </h6>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h6 align = "center">
+          <a align="right" href="#" role="button">Mis Datos</a>
+
+        </h6>
       </div>
 
       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
