@@ -1,6 +1,13 @@
 from distribuidora import db
 from distribuidora.core.gestion_cta_corriente.query import SELECT_TIPO_MOVIMIENTOS, CONSULTA_MOVIMIENTOS_CTA_CORRIENTE, \
-CONSULTAR_NRO_CUENTA_CORRIENTE, SELECT_ID_TIPO_MOVIMIENTO, INSERT_MOV_CTA_CORRIENTE, CONSULTAR_SALDO
+    CONSULTAR_NRO_CUENTA_CORRIENTE, SELECT_ID_TIPO_MOVIMIENTO, INSERT_MOV_CTA_CORRIENTE, CONSULTAR_SALDO
+
+def parser_result(result):
+    resp = []
+    for row in result:
+        resp.append(dict(row))
+    return resp
+
 
 def get_tipos_movimientos():
     """
@@ -9,11 +16,7 @@ def get_tipos_movimientos():
     ['Deuda', 'Pago', 'Reembolso']
     """
     result = db.engine.execute(SELECT_TIPO_MOVIMIENTOS)
-    resp = []
-    for row in result:
-       resp.append(row[0])
-    return resp
-    pass
+    return parser_result(result)
 
 def get_id_tipos_movimientos(descripcion):
     """
@@ -22,10 +25,7 @@ def get_id_tipos_movimientos(descripcion):
     """
     result = db.engine.execute(SELECT_ID_TIPO_MOVIMIENTO.format(\
         tipo_movimiento=descripcion))
-    resp = []
-    for row in result:
-        resp.append(dict(row))
-    return resp
+    return parser_result(result)
 
 def get_nro_cuenta_corriente(nro_cliente):
     """
@@ -56,9 +56,7 @@ def get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cliente):
         fecha_desde=fecha_desde, fecha_hasta=fecha_hasta, \
         nro_cliente=nro_cliente))
     resp = []
-    for row in result:
-        resp.append(dict(row))
-    return resp
+    return parser_result(result)
 
 def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
     id_t_mov = db.engine.execute(SELECT_ID_TIPO_MOVIMIENTO.format(tipo_movimiento=tipo_mov))
@@ -81,10 +79,4 @@ def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
 
 def consulta_saldo(nro_cta):
     saldo = db.engine.execute(CONSULTAR_SALDO.format(nro_cta=nro_cta))
-
-    resp = []
-    for row in saldo:
-        a = row['saldo']
-        print("asdsasdasdasdasdasdadsa {}".format(a))
-        resp.append(dict(row))
-    return resp
+    return parser_result(result)
