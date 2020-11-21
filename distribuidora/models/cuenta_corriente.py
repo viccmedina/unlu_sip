@@ -95,7 +95,7 @@ class ComprobantePago(db.Model):
     fecha_pago = db.Column(db.DateTime, nullable=True)
     monto = db.Column(db.Float(), nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
-    movimiento = db.Column(db.Integer, db.ForeignKey('movimiento_cta_corriente.movimiento_id'),nullable=False)
+    movimiento = db.Column(db.Integer, db.ForeignKey('movimiento_cta_corriente.movimiento_id'), nullable=True)
     pedido = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'),nullable=False)
     estado_comprobante_pago_id = db.Column(db.Integer, db.ForeignKey('estado_comprobante_pago.estado_comprobante_pago_id'),nullable=False)
 
