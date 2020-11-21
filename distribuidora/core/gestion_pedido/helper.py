@@ -1,9 +1,11 @@
-from distribuidora import db
+from distribuidora import db, app
 from distribuidora.core.gestion_pedido.query import *
+from distribuidora.core.gestion_stock.query import UPDATE_NUEVO_PEDIDO_STOCK_REAL
 from distribuidora.core.gestion_cta_corriente.query import CONSULTAR_NRO_CUENTA_CORRIENTE,\
     SELECT_ID_TIPO_MOVIMIENTO, INSERT_MOV_CTA_CORRIENTE
 from distribuidora.core.gestion_usuario.query import JOIN_PERSONA_USER
 from distribuidora.core.gestion_stock.query import BAJA_PRODUCTO
+from distribuidora.models.producto import ProductoEnvase
 from distribuidora.core.gestion_stock.helper import actualizar_stock_real
 
 def parser_result(result):
@@ -151,7 +153,16 @@ def update_detalle_producto(pedido_id, detalle, cantidad):
     else:
         return False
 
-def actualizar_pedido_estado_por_operador(usuario_registrador, pedido, estado_nuevo, estado_actual):
+def get_id_estado_comprobante_pago(descripcion_corta):
+    """
+    Dada una descripcion corta de un estado de comprobante de pago, vamos a devolver
+    su ID.
+    """
+    result = db.engine.execute(SELECT_ID_FROM_ESTADO_COMPROBANTE_PAGO.format(\
+        descripcion_corta=descripcion_corta))
+    return parser_result(result)
+
+def actualizar_pedido_estado_por_operador(usuario_registrador, pedido, estado_nuevo, estado_actual, costo):
     estado_id_nuevo = get_estado_pedido_id_descripcion(estado_nuevo)[0]
     estado_id_actual = get_estado_pedido_id_descripcion(estado_actual)[0]
     execute = True
@@ -170,7 +181,7 @@ def actualizar_pedido_estado_por_operador(usuario_registrador, pedido, estado_nu
         #actualizo el estado del pedido
         update_estado_pedido_tbl_pedido(pedido, estado_id_nuevo['pedido_estado_id'])
         query = check(result)
-        if True:
+        if query:
             result = False
             if estado_id_nuevo['descripcion_corta'] == 'EP':
                 datos_pedido = db.engine.execute(SELECT_PEDIDO_BY_PEDIDO_ID.format(\
@@ -185,7 +196,6 @@ def actualizar_pedido_estado_por_operador(usuario_registrador, pedido, estado_nu
                 cta_corriente_id = parser_result(cta_corriente_id)
                 tipo_movimiento = db.engine.execute(SELECT_ID_TIPO_MOVIMIENTO.format(\
                     tipo_movimiento='Deuda'))
-                costo = actualizar_stock_real(pedido)
                 tipo_movimiento = parser_result(tipo_movimiento)
                 result = db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(\
                     n_cta=cta_corriente_id[0]['cuenta_corriente_id'],\
@@ -193,9 +203,16 @@ def actualizar_pedido_estado_por_operador(usuario_registrador, pedido, estado_nu
                     user=usuario_registrador,\
                     monto=costo,\
                     descripcion='Deuda'))
+                # debo generar el comprobante de pago con su estado "Adeuda"
+                estado_comprobante = get_id_estado_comprobante_pago('A')
+                print(estado_comprobante, flush=True)
+                result = db.engine.execute(INSERT_NUEVO_COMPROBANTE_PAGO.format(\
+                    monto=costo,\
+                    estado_comprobante_pago_id=estado_comprobante[0]['estado_comprobante_pago_id'],\
+                    pedido=pedido))
                 result = check(result)
 
-            return result
+            return execute
     else:
         return execute
 

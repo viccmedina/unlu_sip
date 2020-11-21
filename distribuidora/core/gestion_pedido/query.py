@@ -95,6 +95,12 @@ JOIN_PEDIDO_DETALLE = """ SELECT dp.producto_envase_id, dp.cantidad FROM pedido 
     INNER JOIN detalle_pedido AS dp ON dp.pedido_id=p.pedido_id
     WHERE dp.pedido_id='{pedido_id}'"""
 
+INSERT_NUEVO_COMPROBANTE_PAGO = """ INSERT INTO comprobante_pago (monto,
+    estado_comprobante_pago_id, pedido)
+    VALUES ('{monto}', '{estado_comprobante_pago_id}', '{pedido}')"""
+
+SELECT_ID_FROM_ESTADO_COMPROBANTE_PAGO = """ SELECT * FROM estado_comprobante_pago
+	WHERE descripcion_corta='{descripcion_corta}' """
 
 """
     CREATE TRIGGER BI_Pedido

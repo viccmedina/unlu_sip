@@ -1,9 +1,8 @@
-from distribuidora import db
+from distribuidora import db, app
 from flask import flash
-from distribuidora.core.gestion_stock.query import CONSULTA_STOCK, CONSULTAR_ID_MARCA, \
-    CONSULTAR_ID_UMEDIDA, CONSULTAR_ID_PRODUCTO, INSERT_MOVIMIENTO_STOCK,UPDATE_STOCK_REAL, \
-    BAJA_PRODUCTO, CONSULTAR_MOVIMIENTOS, CONSULTA_STOCK1
+from distribuidora.core.gestion_stock.query import *
 from distribuidora.core.gestion_pedido.query import LISTAR_DETALLE_PEDIDO, DETALLE_INFORMACION_FULL
+from distribuidora.models.producto import ProductoEnvase
 #from distribuidora.core.gestion_pedido.helper import parser_result
 
 def parser_result(result):
@@ -118,16 +117,22 @@ def actualizar_stock_real(pedido_id):
     Dado un pedido, vamos a descontar las cantidades afectadas al pedido.
     En sqlite no tenemos stored procedure asi que vamos a improvisar.
     """
-
     detalle_pedido = db.engine.execute(DETALLE_INFORMACION_FULL.format(\
         pedido_id=pedido_id))
     detalle_pedido = parser_result(detalle_pedido)
+    print('detalle_pedido ---- {}'.format(detalle_pedido), flush=True)
     costo = 0
+    save = list()
     for dp in detalle_pedido:
-        stock_descontar = int(dp['cantidad']) - int(dp['stock_real'])
+        stock_descontar = int(dp['stock_real'])- int(dp['cantidad'])
+        print('stock a descontar ---> {}'.format(stock_descontar), flush=True)
         if stock_descontar >= 0:
             costo += int(dp['cantidad']) * int(dp['precio'])
-            detalle_pedido = db.engine.execute(BAJA_PRODUCTO.format(\
-                producto_envase_id=pd['producto_envase_id'],\
-                cantidad=dp['cantidad']))
+            #detalle_pedido = db.engine.execute(UPDATE_NUEVO_PEDIDO_STOCK_REAL.format(producto_envase_id=dp['producto_envase_id'], stock_real=stock_descontar))
+            pe = ProductoEnvase.query.get(dp['producto_envase_id'])
+            print(pe, flush=True)
+            pe.stock_real = stock_descontar
+            save.append(pe)
+    db.session.add_all(save)
+    db.session.commit()
     return costo

@@ -124,8 +124,14 @@ def modificar_estado_operador():
         estado_nuevo = form.estado.data
         #estado actual del pedido
         estado_actual = request.args.get('estado_anterior', type=str)
+        costo = None
+        if estado_nuevo == 'EN PREPARACION':
+            costo = actualizar_stock_real(pedido)
+        print('¬'*90, flush=True)
         result = actualizar_pedido_estado_por_operador(current_user.get_id(),\
-            pedido, estado_nuevo, estado_actual)
+            pedido, estado_nuevo, estado_actual, costo)
+        print('¬'*90, flush=True)
+        print(estado_nuevo, flush=True)
         if result:
             flash('Estado de pedido actualizado !', 'success')
         else:

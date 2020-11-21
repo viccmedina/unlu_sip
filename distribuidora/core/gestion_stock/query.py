@@ -34,8 +34,8 @@ producto_envase_id,descripcion,cantidad) VALUES ({tipo_movimiento},{usuario_id},
 UPDATE_STOCK_REAL = """UPDATE producto_envase SET stock_real = stock_real + '{cantidad}'  WHERE
 producto_envase_id = {producto_envase_id}"""
 
-BAJA_PRODUCTO = """UPDATE producto_envase SET stock_real = stock_real - '{cantidad}'  WHERE
-producto_envase_id = '{producto_envase_id}' AND (stock_real - '{cantidad}' >= 0) """
+BAJA_PRODUCTO = """UPDATE producto_envase SET stock_real='{stock_real}'  WHERE
+producto_envase_id='{producto_envase_id}' """
 
 CONSULTAR_MOVIMIENTOS = """
     SELECT p.descripcion as descripcion_p, m.descripcion as descripcion_m, um.descripcion, u.username,
@@ -50,7 +50,8 @@ CONSULTAR_MOVIMIENTOS = """
 """
 
 
-
+UPDATE_NUEVO_PEDIDO_STOCK_REAL = """ UPDATE producto_envase SET stock_real='{stock_real}'
+    WHERE producto_envase_id='{producto_envase_id}'""" 
 
 """
 CREATE TRIGGER BU_Pedido

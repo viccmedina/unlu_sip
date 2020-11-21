@@ -55,35 +55,39 @@ def consultar_cta_corriente():
 @cta_corriente.route('/cta_corriente/agregar', methods=['GET', 'POST'])
 @login_required
 def agregar():
-	form = AgregarMovimiento()
-	form.tipo_movimiento.choices = [(descripcion.descripcion) for descripcion in TipoMovimientoCtaCorriente.query.all()]
+    form = AgregarMovimiento()
+    form.tipo_movimiento.choices = [(descripcion.descripcion) for descripcion in TipoMovimientoCtaCorriente.query.all()]
+    if form.validate_on_submit():
+        tipo_movimiento = form.tipo_movimiento.data
+        cliente = form.cliente.data
+        monto = form.monto.data
+        print('#'*80, flush=True)
+        nro_cta = get_nro_cuenta_corriente(cliente)
+        print(nro_cuenta, flush=True)
+        #ni bien se inserta el pago, debo ir a verificar el el monto ingresado
+        #mas el monto actual me alcanza para dar como pagado un pedido
+        # para esto, me tengo que traer todos los comprobantes de pagos con estado
+        #A (Adeuda), y ver el monto ahi, recorrer hasta encontrar uno para el que me
+        #alcance.
+        if nro_cta == -999 :
+            flash("La cuenta ingresada es incorrecta", 'error')
+        else:
+            usuario_id = current_user.get_id()
+            user = Usuario.query.filter_by(id=usuario_id).first()
+            if user.has_role('Operador'):
+                new_mov_cta_corriente(nro_cta,tipo_movimiento,user.id,monto)
+                flash("La transaccion se ha registrado con exito", 'success')
+            else:
+                flash("Usuario incorrecto, contacte al administrador", 'error')
+    else:
+        print(form.errors, flush=True)
 
-
-	if form.validate_on_submit():
-		tipo_movimiento = form.tipo_movimiento.data
-		cliente = form.cliente.data
-		monto = form.monto.data
-		print('#'*80, flush=True)
-		nro_cta = get_nro_cuenta_corriente(cliente)
-		if nro_cta == -999 :
-			flash("La cuenta ingresada es incorrecta", 'error')
-		else:
-			usuario_id = current_user.get_id()
-			user = Usuario.query.filter_by(id=usuario_id).first()
-			if user.has_role('Operador'):
-				new_mov_cta_corriente(nro_cta,tipo_movimiento,user.id,monto)
-				flash("La transaccion se ha registrado con exito", 'success')
-			else:
-				flash("Usuario incorrecto, contacte al administrador", 'error')
-	else:
-		print(form.errors, flush=True)
-
-	return render_template('form_agregar_movimiento_cta_corriente.html', \
+    return render_template('form_agregar_movimiento_cta_corriente.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
     rol=ROL, \
-	site=TITULO + ' - Nuevo Movimiento', \
-	form=form)
+    site=TITULO + ' - Nuevo Movimiento', \
+    form=form)
 
 @cta_corriente.route('/cta_corriente/consultarSaldo', methods=['GET', 'POST'])
 @login_required
