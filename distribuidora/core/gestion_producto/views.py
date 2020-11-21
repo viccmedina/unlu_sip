@@ -92,7 +92,7 @@ def listar_productos():
     return render_template('listar_productos.html', \
     datos=current_user.get_mis_datos(), \
     is_authenticated=current_user.is_authenticated, \
-    rol='operador', \
+    rol=current_user.get_role(), \
     site='Listado de Productos', \
     producto=productos)
 
