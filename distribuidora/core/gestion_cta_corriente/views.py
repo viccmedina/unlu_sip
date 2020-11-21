@@ -2,8 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from distribuidora.core.gestion_cta_corriente.constants import TITULO, ROL
-from distribuidora.core.gestion_cta_corriente.helper import get_consulta_movimientos, \
-	get_nro_cuenta_corriente, new_mov_cta_corriente, consulta_saldo
+from distribuidora.core.gestion_cta_corriente.helper import *
 from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos, \
 	AgregarMovimiento, ConsultarSaldo
 from distribuidora.models.cuenta_corriente import MovimientoCtaCorriente, TipoMovimientoCtaCorriente
@@ -63,24 +62,24 @@ def agregar():
         monto = form.monto.data
         print('#'*80, flush=True)
         nro_cta = get_nro_cuenta_corriente(cliente)
-        print(nro_cuenta, flush=True)
+        print(nro_cta, flush=True)
         #ni bien se inserta el pago, debo ir a verificar el el monto ingresado
         #mas el monto actual me alcanza para dar como pagado un pedido
         # para esto, me tengo que traer todos los comprobantes de pagos con estado
         #A (Adeuda), y ver el monto ahi, recorrer hasta encontrar uno para el que me
         #alcance.
-        if nro_cta == -999 :
-            flash("La cuenta ingresada es incorrecta", 'error')
-        else:
-            usuario_id = current_user.get_id()
-            user = Usuario.query.filter_by(id=usuario_id).first()
-            if user.has_role('Operador'):
-                new_mov_cta_corriente(nro_cta,tipo_movimiento,user.id,monto)
-                flash("La transaccion se ha registrado con exito", 'success')
-            else:
-                flash("Usuario incorrecto, contacte al administrador", 'error')
+
+        usuario_id = current_user.get_id()
+        user = Usuario.query.filter_by(id=usuario_id).first()
+        print('movimiento ---> {}'.format(tipo_movimiento), flush=True)
+        #new_mov_cta_corriente(nro_cta,tipo_movimiento,user.id,monto)
+        saldo = obtener_saldo_cta_corriente(nro_cta)
+        if tipo_movimiento == 'Pago':
+            actualizar_estado_comprobante_pago(saldo, monto, cliente)
+        flash("La transacción se ha registrado con éxito", 'success')
     else:
         print(form.errors, flush=True)
+        flash("Algo salió mal, verifique los datos ingresados", 'error')
 
     return render_template('form_agregar_movimiento_cta_corriente.html', \
     datos=current_user.get_mis_datos(), \

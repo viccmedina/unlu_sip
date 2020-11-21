@@ -35,6 +35,20 @@ CONSULTAR_SALDO = """SELECT DISTINCT mcc.cta_corriente AS cta_corriente, p.email
 
 """
 
+SELECT_COMPROBANTES_PAGO_ADEUDA = """ SELECT ecp.descripcion_corta, cp.comprobante_id, p.usuario_id, cp.monto
+    FROM comprobante_pago AS cp
+    INNER JOIN pedido AS p ON cp.pedido=p.pedido_id
+    INNER JOIN estado_comprobante_pago AS ecp ON
+    ecp.estado_comprobante_pago_id=cp.estado_comprobante_pago_id
+    WHERE ecp.descripcion='{estado}' AND p.usuario_id='{usuario_id}' AND
+    cp.monto='{monto}' LIMIT 1"""
+
+
+UPDATE_ESTADO_COMPROBANTE = """ UPDATE comprobante_pago
+    SET estado_comprobante_pago_id='{estado}'
+    WHERE comprobante_id='{comprobante_id}'
+"""
+
 """
 SELECT DISTINCT mcc.cta_corriente AS cta_corriente, p.email AS user,
 ((SELECT sum(mov1.saldo) FROM movimiento_cta_corriente mov1 WHERE mov1.cta_corriente = 1 and

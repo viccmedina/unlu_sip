@@ -1,7 +1,5 @@
 from distribuidora import db
-from distribuidora.core.gestion_cta_corriente.query import SELECT_TIPO_MOVIMIENTOS, CONSULTA_MOVIMIENTOS_CTA_CORRIENTE, \
-    CONSULTAR_NRO_CUENTA_CORRIENTE, SELECT_ID_TIPO_MOVIMIENTO, INSERT_MOV_CTA_CORRIENTE, CONSULTAR_SALDO
-
+from distribuidora.core.gestion_cta_corriente.query import *
 def parser_result(result):
     resp = []
     for row in result:
@@ -80,3 +78,18 @@ def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
 def consulta_saldo(nro_cta):
     saldo = db.engine.execute(CONSULTAR_SALDO.format(nro_cta=nro_cta))
     return parser_result(result)
+
+def actualizar_estado_comprobante_pago(monto, cliente):
+    """
+    Dado un nro de usuario y el monto asociado a un movimiento de cuenta corriente,
+    vamos a comprobar si podemos dar como pago un comprobante de pago.
+    """
+    comprobantes = db.engine.execute(SELECT_COMPROBANTES_PAGO_ADEUDA.format(\
+        estado='Adeuda', usuario_id=cliente, monto=monto))
+    comprobantes = parser_result(comprobantes)
+    print(type(comprobantes), flush=True)
+    print(comprobantes, flush=True)
+    if len(comprobantes) > 0:
+        update_comprobante = db.engine.execute(UPDATE_ESTADO_COMPROBANTE.format(\
+            estado=2,comprobante_id=comprobantes[0]['comprobante_id']))
+    return True
