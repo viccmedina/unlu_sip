@@ -122,22 +122,22 @@ def modificar_estado_operador():
     if form.validate_on_submit():
         #nuevo estado, el que queremos insertar
         estado_nuevo = form.estado.data
-        print('^'*90, flush=True)
-        print('estado nuevo {}'.format(estado_nuevo), flush=True)
         #estado actual del pedido
         estado_actual = request.args.get('estado_anterior', type=str)
-        print('estado_actual {}'.format(estado_actual), flush=True)
-        print('^'*90, flush=True)
         result = actualizar_pedido_estado_por_operador(current_user.get_id(),\
             pedido, estado_nuevo, estado_actual)
         if result:
-            flash('ESTADO ACTUALIZADOOO !', 'success')
+            flash('Estado de pedido actualizado !', 'success')
         else:
-            flash('ALGO SALIO MAL :(', 'error')
-        print('^'*90, flush=True)
+            flash('ERROR! El nuevo estado no es posible :(', 'error')
 
     pedidos = get_listado_pedidos_pco()
-    return render_template('listado_pedidos.html', pedidos=pedidos, form=form)
+    return render_template('listado_pedidos.html',\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated,\
+        rol=current_user.get_role(),\
+        site='Gestión de Pedido',\
+        pedidos=pedidos, form=form)
 
 @pedido.route('/pedido/listar/operador', methods=['GET'])
 def listar_pedido_operador():
@@ -145,7 +145,12 @@ def listar_pedido_operador():
     form = ActualizarEstadoPedido()
     if current_user.has_role('Operador'):
         pedidos = get_listado_pedidos_pco()
-    return render_template('listado_pedidos.html', pedidos=pedidos, form=form)
+    return render_template('listado_pedidos.html',\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated,\
+        rol=current_user.get_role(),\
+        site='Gestión de Pedido', \
+        pedidos=pedidos, form=form)
 
 @pedido.route('/pedido/listar/detalle', methods=['GET'])
 def listar_detalle_pedido():
