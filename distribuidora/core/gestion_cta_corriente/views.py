@@ -72,7 +72,7 @@ def agregar():
         usuario_id = current_user.get_id()
         user = Usuario.query.filter_by(id=usuario_id).first()
         print('movimiento ---> {}'.format(tipo_movimiento), flush=True)
-        #new_mov_cta_corriente(nro_cta,tipo_movimiento,user.id,monto)
+        new_mov_cta_corriente(nro_cta,tipo_movimiento,user.id,monto)
         saldo = obtener_saldo_cta_corriente(nro_cta)
         if tipo_movimiento == 'Pago':
             actualizar_estado_comprobante_pago(saldo, monto, cliente)
