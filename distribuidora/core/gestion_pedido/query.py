@@ -94,3 +94,65 @@ SELECT_PEDIDO_BY_PEDIDO_ID = """ SELECT * FROM pedido WHERE pedido_id='{pedido_i
 JOIN_PEDIDO_DETALLE = """ SELECT dp.producto_envase_id, dp.cantidad FROM pedido AS p
     INNER JOIN detalle_pedido AS dp ON dp.pedido_id=p.pedido_id
     WHERE dp.pedido_id='{pedido_id}'"""
+
+
+"""
+    CREATE TRIGGER BI_Pedido
+    BEFORE INSERT ON pedidos
+    BEGIN
+    SELECT CASE
+        WHEN ((select p.pedido_id from pedido p where new.usuario_id = old.usuario_id and
+        estado_pedido_id = 1 ) ISNOTNULL) THEN
+        RAISE(ABORT, 'Error - Cliente con pedido pendiente de confirmacion ')
+    END;
+    END;
+
+
+
+    CREATE TRIGGER BU_Pedido
+    BEFORE UPDATE ON pedidos
+    BEGIN
+    SELECT CASE      pco(pend. conf. operador)
+        WHEN (old.estado_pedido_id = 2 and new.estado_pedido_id = 1 or
+        old.estado_pedido_id = 2 and new.estado_pedido_id = 4 or
+        old.estado_pedido_id = 2 and new.estado_pedido_id = 5 or
+        old.estado_pedido_id = 2 and new.estado_pedido_id = 6 or
+        old.estado_pedido_id = 2 and new.estado_pedido_id = 8)THEN
+        RAISE(ABORT, 'Error - Cambio de estado del pedido incorrecto ')
+    END;
+    SELECT CASE       ep(en preparacion)
+        WHEN (old.estado_pedido_id = 3 and new.estado_pedido_id = 1 or
+        old.estado_pedido_id = 3 and new.estado_pedido_id = 2 or
+        old.estado_pedido_id = 3 and new.estado_pedido_id = 5 or
+        old.estado_pedido_id = 3 and new.estado_pedido_id = 6 or
+        old.estado_pedido_id = 3 and new.estado_pedido_id = 7 or
+        old.estado_pedido_id = 3 and new.estado_pedido_id = 8)THEN
+        RAISE(ABORT, 'Error - Cambio de estado del pedido incorrecto ')
+    END;
+    SELECT CASE      ec(en camino)
+        WHEN (old.estado_pedido_id = 4 and new.estado_pedido_id = 1 or
+        old.estado_pedido_id = 4 and new.estado_pedido_id = 2 or
+        old.estado_pedido_id = 4 and new.estado_pedido_id = 3 or
+        old.estado_pedido_id = 4 and new.estado_pedido_id = 7 or
+        old.estado_pedido_id = 4 and new.estado_pedido_id = 8)THEN
+        RAISE(ABORT, 'Error - Cambio de estado del pedido incorrecto ')
+    END;
+    SELECT CASE     e(entregado)
+        WHEN (old.estado_pedido_id = 5 and new.estado_pedido_id = 1 or
+        old.estado_pedido_id = 5 and new.estado_pedido_id = 2 or
+        old.estado_pedido_id = 5 and new.estado_pedido_id = 3 or
+        old.estado_pedido_id = 5 and new.estado_pedido_id = 4 or
+        old.estado_pedido_id = 5 and new.estado_pedido_id = 7)THEN
+        RAISE(ABORT, 'Error - Cambio de estado del pedido incorrecto ')
+    END;
+    SELECT CASE     d(demorado)
+        WHEN (old.estado_pedido_id = 6 and new.estado_pedido_id = 1 or
+        old.estado_pedido_id = 6 and new.estado_pedido_id = 2 or
+        old.estado_pedido_id = 6 and new.estado_pedido_id = 3 or
+        old.estado_pedido_id = 6 and new.estado_pedido_id = 4 or
+        old.estado_pedido_id = 6 and new.estado_pedido_id = 7 )THEN
+        RAISE(ABORT, 'Error - Cambio de estado del pedido incorrecto ')
+    END;
+
+    END;
+"""

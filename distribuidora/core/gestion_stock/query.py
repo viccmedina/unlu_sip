@@ -52,65 +52,13 @@ CONSULTAR_MOVIMIENTOS = """
 
 
 
-
-
-
-#SELECT p.descripcion AS descripcion_p,m.descripcion as descripcion_m, um.descripcion, pe.stock_real - (select sum(dp.cantidad) from producto_envase pee INNER JOIN detalle_pedido dp ON pee.producto_envase_id=dp.producto_envase_id INNER JOIN pedido p ON p.pedido_id= dp.pedido_id WHERE pee.producto_envase_id = 1 AND p.estado_pedido_id = 1) AS cantidad FROM (((producto_envase pe INNER JOIN producto p ON p.producto_id=pe.producto_id ) INNER JOIN marca m ON p.marca_id=m.marca_id) INNER JOIN unidad_medida um ON um.unidad_medida_id=pe.unidad_medida_id) WHERE pe.producto_envase_id = 1;
-
-
-
-
-""" SELECT p.descripcion AS descripcion_p,m.descripcion as descripcion_m,
-um.descripcion, pe.stock_real - (select sum(dp.cantidad) from producto_envase pee
-INNER JOIN detalle_pedido dp ON pee.producto_envase_id=dp.producto_envase_id
-INNER JOIN pedido p ON p.pedido_id= dp.pedido_id WHERE pee.producto_envase_id = {producto_id}
-AND p.estado_pedido_id = 1) AS cantidad FROM (((producto_envase pe INNER JOIN producto p
-ON p.producto_id=pe.producto_id )
-INNER JOIN marca m ON p.marca_id=m.marca_id)
-INNER JOIN unidad_medida um ON um.unidad_medida_id=pe.unidad_medida_id)
-WHERE pe.producto_envase_id = {producto_id}  """
-
 """
-
-
-
-select pe.stock_real - (select sum(dp.cantidad) from producto_envase pee inner join
-detalle_pedido dp on pee.producto_envase_id=dp.producto_envase_id
-inner join pedido p on p.pedido_id= dp.pedido_id where pee.producto_envase_id = 1
-and p.estado_pedido_id = 1) as cantidad from producto_envase pe where pe.producto_envase_id = 1;"""
-
+CREATE TRIGGER BU_Pedido
+BEFORE UPDATE ON pedidos
+BEGIN
+SELECT CASE
+    WHEN (NEW.stock_real < 0 )THEN
+    RAISE(ABORT, 'Error - El stock no puedo ser menor a 0 ')
+END;
+END;
 """
-select pe.stock_real - (select sum(dp.cantidad) from producto_envase pee inner join
-detalle_pedido dp on pee.producto_envase_id=dp.producto_envase_id
-inner join pedido p on p.pedido_id= dp.pedido_id where pee.producto_envase_id = {producto_id}
-and p.estado_pedido_id = 1) as cantidad from producto_envase pe where pe.producto_envase_id = {producto_id}
-"""
-#""" INSERT INTO movimiento_stock (tipo_movimiento_stock_id,usuario_id,producto_id,descripcion,cantidad) VALUES (1,3,1,'cargaHarina',50); """
-
-
-
-"""
-SELECT p.descripcion as descripcion_p, m.descripcion as descripcion_m, um.descripcion, u.username,
-mov.ts_created, mov.cantidad FROM ((((movimiento_stock mov INNER JOIN producto_envase pe
-on mov.producto_envase_id=pe.producto_envase_id) INNER JOIN producto p
-on p.producto_id= pe.producto_id) INNER JOIN marca m on p.marca_id= m.marca_id)
-INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id
-INNER JOIN usuario u on u.id=mov.usuario_id)
-WHERE mov.ts_created >= DATETIME('2020-11-10') and mov.ts_created <= ('2020-11-18');
-
-
-"""
-
-
-
-
-
-
-
-
-# andaba consulta stock
-""" SELECT p.descripcion as descripcion_p,m.descripcion as descripcion_m,
-um.descripcion, pe.stock_real as cantidad FROM (((producto_envase pe INNER JOIN producto p on p.producto_id=pe.producto_id )
-INNER JOIN marca m on p.marca_id=m.marca_id)
-INNER JOIN unidad_medida um on um.unidad_medida_id=pe.unidad_medida_id)
-WHERE pe.producto_envase_id = {producto_id}  """

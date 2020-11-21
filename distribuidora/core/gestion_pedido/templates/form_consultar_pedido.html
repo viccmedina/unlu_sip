@@ -1,68 +1,97 @@
 {% extends "index.html" %}
 
 {% block content %}
-  {% include "flash_errors.html" %}
-  <h3>CONSULTA DE PEDIDO</h3>
-  {% if pedido_pcc is none %}
-    <p>No tiene pedidos sin confirmar</p>
-    {% else %}
+<div class="container-fluid">
+    <div class="row">
+      {% include "acordeon_perfil_usuario.html" %}
 
-    <p> {{ pedido_pcc[0] }} </p>
+      <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+        <div class="row row-cols-1 row-cols-md-3">
+          <div class="col mb-9" >
+            <div class="card h-100" style="width: 40rem;">
 
-    <a href="{{ url_for('pedido.listar_detalle_pedido', pedido=pedido_pcc[0]['pedido_id']) }}">Ver Detalle Pedido</a>
-    <a href="{{ url_for('pedido.confirmar_pedido_cliente', pedido_pcc=pedido_pcc[0]['pedido_id']) }}">Confirmar Pedido</a>
-    <a href="{{ url_for('pedido.anular_pedido', pedido_id=pedido_pcc[0]['pedido_id']) }}">Anular Pedido</a>
-  {% endif %}
+              <div class="card-body">
+                {% include "flash_errors.html" %}
+                <h3 align= "center" class="card-title">CONSULTA DE PEDIDO</h3>
+                  {% if pedido_pcc is none %}
+                    <p>No tiene pedidos sin confirmar</p>
+                  {% else %}
+                    <h5>Numero De Pedido:   {{ pedido_pcc[0]['pedido_id'] }} , {{ pedido_pcc[0]['descripcion'] }}</h5>
+                    <section align= "center">
+                      <a align="left" class="btn btn-primary " href="{{ url_for('pedido.listar_detalle_pedido', pedido=pedido_pcc[0]['pedido_id']) }}" role="button">Ver Detalle Pedido</a>
+                      <a align="center" class="btn btn-success " href="{{ url_for('pedido.confirmar_pedido_cliente', pedido_pcc=pedido_pcc[0]['pedido_id']) }}" role="button">Confirmar Pedido</a>
+                      <a align="right" class="btn btn-danger "href="{{ url_for('pedido.anular_pedido', pedido_id=pedido_pcc[0]['pedido_id']) }}" role="button">Anular Pedido</a>
+                    </section>
 
-  <h4>Pedidos Anteriores</h4>
-  <div class="row">
-    {% for pt in pedidos_todos.items %}
-    <p>{{pt}}</p>
-      <div class="col-sm-3">
-        <div class="card" style="width: 18rem; padding: 0px 5px; margin: 10px 5px;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">{{ pt }}</h5>
-            <a href="{{ url_for('pedido.listar_detalle_pedido_anterior', pedido=pt) }}">Ver Detalle Pedido</a>
+
+
+
+
+                    <!--<a href="{{ url_for('pedido.listar_detalle_pedido', pedido=pedido_pcc[0]['pedido_id']) }}">Ver Detalle Pedido</a>-->
+                    <!--<a href="{{ url_for('pedido.confirmar_pedido_cliente', pedido_pcc=pedido_pcc[0]['pedido_id']) }}">Confirmar Pedido</a>-->
+                    <!--<a href="{{ url_for('pedido.anular_pedido', pedido_id=pedido_pcc[0]['pedido_id']) }}">Anular Pedido</a>-->
+                  {% endif %}
+<br>
+                    <h4>Pedidos Anteriores</h4>
+                    <div class="row">
+                        {% for pt in pedidos_todos.items %}
+                        <p>{{pt}}</p>
+                          <div class="col-sm-3">
+                            <div class="card" style="width: 18rem; padding: 0px 5px; margin: 10px 5px;">
+                              <img src="..." class="card-img-top" alt="...">
+                              <div class="card-body">
+                                <h5 class="card-title">{{ pt }}</h5>
+                                <a href="{{ url_for('pedido.listar_detalle_pedido_anterior', pedido=pt) }}">Ver Detalle Pedido</a>
+                              </div>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+
+
+
+                <!-- Pagination Links-->
+                <div class="text-right">
+                    <a href="{{ url_for('pedido.consultar_pedido', page=pedidos_todos.prev_num) }}"
+                       class="btn btn-outline-dark
+                       {% if pedidos_todos.page == 1 %}disabled{% endif %}">
+                        &laquo;
+                    </a>
+                    <!-- Loop through the number of pages to display a link for each-->
+                    {% for page_num in pedidos_todos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                      {% if page_num %}
+                      <!-- Check for the active page and set the link to "Active"-->
+                            {% if pedidos_todos.page == page_num %}
+                              <a href="{{ url_for('pedido.consultar_pedido', page=page_num) }}"
+                                class="btn btn-dark">
+                                  {{ page_num }}
+                              </a>
+                            {% else %}
+                              <a href="{{ url_for('pedido.consultar_pedido', page=page_num) }}"
+                                class="btn btn-outline-dark">
+                                  {{ page_num }}
+                                </a>
+                            {% endif %}
+                      {% else %}
+                        ...
+                      {% endif %}
+                    {% endfor %}
+                    <a href="{{ url_for('pedido.consultar_pedido', page=pedidos_todos.next_num) }}"
+                       class="btn btn-outline-dark
+                       {% if pedidos_todos.page == pedidos_todos.pages %}disabled{% endif %}">
+                        &raquo;
+                    </a>
+                </div>
+                <p class="text-right mt-3">
+                   Página  {{ pedidos_todos.pages }} de {{ pedidos_todos.page }}
+                </p>
+
+            </div>
           </div>
         </div>
       </div>
-    {% endfor %}
-  </div>
+    </div>
 
-  <!-- Pagination Links-->
-  <div class="text-right">
-      <a href="{{ url_for('pedido.consultar_pedido', page=pedidos_todos.prev_num) }}"
-         class="btn btn-outline-dark
-         {% if pedidos_todos.page == 1 %}disabled{% endif %}">
-          &laquo;
-      </a>
-      <!-- Loop through the number of pages to display a link for each-->
-      {% for page_num in pedidos_todos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-        <!-- Check for the active page and set the link to "Active"-->
-              {% if pedidos_todos.page == page_num %}
-                <a href="{{ url_for('pedido.consultar_pedido', page=page_num) }}"
-                  class="btn btn-dark">
-                    {{ page_num }}
-                </a>
-              {% else %}
-                <a href="{{ url_for('pedido.consultar_pedido', page=page_num) }}"
-                  class="btn btn-outline-dark">
-                    {{ page_num }}
-                  </a>
-              {% endif %}
-        {% else %}
-          ...
-        {% endif %}
-      {% endfor %}
-      <a href="{{ url_for('pedido.consultar_pedido', page=pedidos_todos.next_num) }}"
-         class="btn btn-outline-dark
-         {% if pedidos_todos.page == pedidos_todos.pages %}disabled{% endif %}">
-          &raquo;
-      </a>
   </div>
-  <p class="text-right mt-3">
-     Página {{ pedidos_todos.page }} de {{ pedidos_todos.pages }}
-  </p>
+</div>
 {% endblock %}
