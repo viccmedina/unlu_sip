@@ -131,9 +131,9 @@ def importar():
 	site= TITULO + ' - Importar')
 
 
-@cta_corriente.route('/cta_corriente/descargar/consulta/<string:resultado>.pdf')
+@cta_corriente.route('/cta_corriente/descargar/consulta')
 @login_required
-def descargar_consulta_cta_corriente(resultado):
-	resultado = json.loads(resultado.replace("'", '"'))
+def descargar_consulta_cta_corriente():
+	resultado = request.args.get('resultado')
 	html = render_template('tabla_movimientos_cta_corriente.html', resultado=resultado)
 	return render_pdf(HTML(string=html))
