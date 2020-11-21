@@ -14,7 +14,9 @@
 				        <p class="card-text">Podrás consular el Stock disponible de cada producto.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.consultar_stock') }}" role="button">Consultar</a>
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('stock.consultar_stock') }}" role="button">Consultar</a>
+							</center>
     				</div>
 				    </div>
 				  </div>
@@ -26,7 +28,9 @@
 				        <p class="card-text">Podrás dar de entrada a un producto o dar de baja una cantidad determinada.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.agregar') }}" role="button">Nuevo Movimiento</a>
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('stock.agregar') }}" role="button">Nuevo Movimiento</a>
+							</center>
     				</div>
 				    </div>
 				  </div>
@@ -38,7 +42,9 @@
 				        <p class="card-text">Podrás importar de forma masiva movimientos anteriores por medio de un archivo csv/xlsx.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.importar') }}" role="button">Importar Movimientos</a>
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('stock.importar') }}" role="button">Importar Movimientos</a>
+							</center>
     				</div>
 				    </div>
 				  </div>
@@ -50,9 +56,12 @@
 				        <p class="card-text">Podras exportar a un archivo csv/xlsx la consulta de movimientos.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.exportar') }}" role="button">Exportar Movimientos</a>
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('stock.exportar') }}" role="button">Exportar Movimientos</a>
+							</center>
     				</div>
 				    </div>
+						
 				  </div>
 				</div>
 </div>

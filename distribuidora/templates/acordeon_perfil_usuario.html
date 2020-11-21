@@ -5,9 +5,10 @@
       <div class="card-header" id="headingOne">
         <h6 align = "center">
           {% if datos.username == 'operador' %}
-            <a align="right" href="{{ url_for('gestion_usuario.home_operador') }}" role="button">HOME</a>
-          {% else %}
-            <a align="right" href="{{ url_for('gestion_usuario.home_cliente') }}" role="button">HOME</a>
+            <a align="right" href="{{ url_for('gestion_usuario.home_operador') }}" role="button">Home</a>
+          {% endif %}
+          {% if datos.username == 'cliente' %}
+            <a align="right" href="{{ url_for('gestion_usuario.home_cliente') }}" role="button">Home</a>
           {% endif %}
         </h6>
       </div>

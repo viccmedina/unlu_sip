@@ -14,7 +14,9 @@
 				        <p class="card-text">Podrás consular los movimientos de cada Cuenta Corriente.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.consultar_cta_corriente') }}" role="button">Consultar</a>
+								<center>
+									<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.consultar_cta_corriente') }}" role="button">Consultar</a>
+								</center>
     				</div>
 				    </div>
 				  </div>
@@ -26,7 +28,9 @@
 				        <p class="card-text">Podrás dar entrada a un nuevo movimiento a una Cuenta Corriente determinada.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.agregar') }}" role="button">Nuevo Movimiento</a>
+								<center>
+									<a align = "center" class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.agregar') }}" role="button">Nuevo Movimiento</a>
+								</center>
     				</div>
 				    </div>
 				  </div>
@@ -38,7 +42,9 @@
 							 <p class="card-text">Podrás Consultar El Saldo De Una Cuenta Corriente determinada.</p>
 						 </div>
 						 <div class="card-footer">
-					 <a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.consultar_saldo') }}" role="button">Consultar</a>
+							 <center>
+					 		 		<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.consultar_saldo') }}" role="button">Consultar</a>
+							</center>
 					 </div>
 					 </div>
 				 </div>
@@ -50,7 +56,9 @@
 				        <p class="card-text">Podrás importar de forma masiva movimientos anteriores por medio de un archivo csv/xlsx.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.importar') }}" role="button">Importar Movimientos</a>
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.importar') }}" role="button">Importar Movimientos</a>
+							</center>
     				</div>
 				    </div>
 				  </div>
@@ -62,9 +70,12 @@
 				        <p class="card-text">Podras exportar a un archivo csv/xlsx la consulta de movimientos.</p>
 				      </div>
 				      <div class="card-footer">
-						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.exportar') }}" role="button">Exportar Movimientos</a>
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.exportar') }}" role="button">Exportar Movimientos</a>
+							</center>
     				</div>
 				    </div>
+						</div>
 				  </div>
 				</div>
 </div>
