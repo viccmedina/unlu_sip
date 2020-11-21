@@ -1,4 +1,3 @@
-# Reperamos todos los pedidos según estado
 CONSULTA_POR_ESTADO_PEDIDO = """ SELECT * FROM pedido WHERE
     estado_pedido_id='{estado_pedido}' """
 
