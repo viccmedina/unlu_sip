@@ -2,60 +2,75 @@
 
 {% block content %}
 
-
+  <div class="container-fluid">
     <div class="row">
-      {% for p in producto.items %}
-      <p>{{p}}</p>
-        <div class="col-sm-3">
-          <div class="card" style="width: 18rem; padding: 0px 5px; margin: 10px 5px;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">{{ p[0] }}</h5>
-              <p class="card-text">{{ p[1] }}</p>
-              <p class="card-text">{{ p[3] }}</p>
-              <a href="{{ url_for('producto.detalle_producto', producto=p[0], marca=p[1])}}" class="btn btn-primary">Ver Detalle</a>
+      {% include "acordeon_perfil_usuario.html" %}
+
+      <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+        	<div class="row row-cols-9 row-cols-md-3">
+            {% for p in producto.items %}
+            <div class="col mb-9" style="padding:5px">
+               <div class="card h-100" ">
+                  <img src="..." class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ p[0] }}</h5>
+                    <p class="card-text">{{ p[1] }}</p>
+                    <p class="card-text">{{ p[3] }}</p>
+                    <p>{{p}}</p>
+                    <center>
+                      <a href="{{ url_for('producto.detalle_producto', producto=p[0], marca=p[1])}}" class="btn btn-primary">Ver Detalle</a>
+                    </center>
+                  </div>
+              </div>
             </div>
-          </div>
+          {% endfor %}
         </div>
-      {% endfor %}
-    </div>
 
-  <!-- Pagination Links-->
-  <div class="text-right">
-      <a href="{{ url_for('producto.listar_productos', page=producto.prev_num) }}"
-         class="btn btn-outline-dark
-         {% if producto.page == 1 %}disabled{% endif %}">
-          &laquo;
-      </a>
-      <!-- Loop through the number of pages to display a link for each-->
-      {% for page_num in producto.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-        <!-- Check for the active page and set the link to "Active"-->
-              {% if producto.page == page_num %}
-                <a href="{{ url_for('producto.listar_productos', page=page_num) }}"
-                  class="btn btn-dark">
-                    {{ page_num }}
+    <!-- Pagination Links-->
+
+
+          <div align = "center">
+              <a href="{{ url_for('producto.listar_productos', page=producto.prev_num) }}"
+                 class="btn btn-outline-dark
+                 {% if producto.page == 1 %}disabled{% endif %}">
+                  &laquo;
+              </a>
+              <!-- Loop through the number of pages to display a link for each-->
+
+                {% for page_num in producto.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                  {% if page_num %}
+                  <!-- Check for the active page and set the link to "Active"-->
+                        {% if producto.page == page_num %}
+                          <a href="{{ url_for('producto.listar_productos', page=page_num) }}"
+                            class="btn btn-dark">
+                              {{ page_num }}
+                          </a>
+                        {% else %}
+                          <a href="{{ url_for('producto.listar_productos', page=page_num) }}"
+                            class="btn btn-outline-dark">
+                              {{ page_num }}
+                            </a>
+                        {% endif %}
+                  {% else %}
+                    ...
+                  {% endif %}
+                {% endfor %}
+
+                <a href="{{ url_for('producto.listar_productos', page=producto.next_num) }}"
+                   class="btn btn-outline-dark
+                   {% if producto.page == producto.pages %}disabled{% endif %}">
+                    &raquo;
                 </a>
-              {% else %}
-                <a href="{{ url_for('producto.listar_productos', page=page_num) }}"
-                  class="btn btn-outline-dark">
-                    {{ page_num }}
-                  </a>
-              {% endif %}
-        {% else %}
-          ...
-        {% endif %}
-      {% endfor %}
-      <a href="{{ url_for('producto.listar_productos', page=producto.next_num) }}"
-         class="btn btn-outline-dark
-         {% if producto.page == producto.pages %}disabled{% endif %}">
-          &raquo;
-      </a>
-  </div>
-  <p class="text-right mt-3">
-     Página {{ producto.page }} de {{ producto.pages }}
-  </p>
+                <p >
+                   Página {{ producto.page }} de {{ producto.pages }}
+                </p>
+            </div>
 
+
+
+    </div>
+  </div>
+</div>
 
 
 {% endblock %}
