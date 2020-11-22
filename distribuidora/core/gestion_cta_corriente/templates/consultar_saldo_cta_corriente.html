@@ -1,71 +1,40 @@
 {% extends "base.html" %}
-{% block content %}
-	<div class="container-fluid">
+	{% block content %}
+		<div class="container-fluid">
 			<div class="row">
-		    {% include "acordeon_perfil_usuario.html" %}
-
+				{% include "acordeon_perfil_usuario.html" %}
 				<div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
 					<div class="row row-cols-9 row-cols-md-3">
-					  <div class="col mb-9" >
-					    <div class="card h-100" style="width: 50rem;">
+						<div class="col mb-9" >
+							<div class="card h-100" style="width: 50rem;">
 
-					      <div class="card-body">
-					        <h3 class="card-title">Consultar Saldo Cta. Corriente</h3>
-									{% with messages = get_flashed_messages(with_categories=true) %}
-											{% if messages %}
-													<ul class=flashes>
-															{% for category, message in messages %}
-																	{% if category == "error" %}
-																			<div class="alert alert-danger alert-dismissible fade show" role="alert">
-																					{{ message }}
-																					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-																							<span aria-hidden="true">&times;</span>
-																					</button>
-																			</div>
-																	{% else %}
-																			<div class="alert alert-warning alert-dismissible fade show" role="alert">
-																							{{ message }}
-																							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-																									<span aria-hidden="true">&times;</span>
-																							</button>
-																					</div>
-																	{% endif%}
-															{% endfor %}
-													</ul>
-											{% endif %}
-									{% endwith %}
-				              <form  method="POST">
-				                {{ form.hidden_tag() }}
-				                <div class="form-group">
-				                  {{ form.cliente.label(class="form-control-label") }}
-				                  {{ form.cliente(class="form-control form-control-md") }}
-													<br>
-													<div class="form-group">
-					                  <span style="float:left">
-																{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
-														</span>
-														<span style="float:right">
-																{{ form.submit(class="btn btn-success mb-2") }}
-														</span>
-					                </div>
-													<br><br><br>
-
-												{% if resultado is not none %}
-														{% include "tabla_consulta_saldo.html" %}
-
-														<a class="btn btn-success " href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
-													</div>
-												{% endif %}
-
-				              </form>
-					     		</div>
-				     		</div>
-			     		</div>
-		     		</div>
-			 		</div>
-
-				</div>
- 		</div>
-
-
+								<div class="card-body">
+									<h3 class="card-title">Consultar Saldo Cta. Corriente</h3>
+									{% include "flash_errors.html" %}
+									<form  method="POST">
+										{{ form.hidden_tag() }}
+										<div class="form-group">
+											{{ form.cliente.label(class="form-control-label") }}
+											{{ form.cliente(class="form-control form-control-md") }}
+											<br>
+										</div>
+										<div class="form-group">
+											<span style="float:right">
+												{{ form.submit(class="btn btn-success mb-2") }}
+											</span>
+										</div>
+									</form>
+								</div>
+								<br><br><br>
+							</div>
+						</div>	
+					</div>	
+				{% if resultado is not none %}
+					{% include "tabla_consulta_saldo.html" %}
+					<a class="btn btn-success mb-2 offset-md-9" href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
+				{% endif %}
+						
+			</div>
+		</div>
+	</div>
 {% endblock %}
