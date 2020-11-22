@@ -77,7 +77,7 @@ def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
 
 def consulta_saldo(nro_cta):
     saldo = db.engine.execute(CONSULTAR_SALDO.format(nro_cta=nro_cta))
-    return parser_result(result)
+    return parser_result(saldo)
 
 def actualizar_estado_comprobante_pago(monto, cliente):
     """
