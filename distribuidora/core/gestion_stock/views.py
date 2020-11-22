@@ -21,8 +21,8 @@ def index():
         is_authenticated=current_user.is_authenticated, \
         rol='operador', \
         site='Gestión de Stock')
-    else:
-        abort(403)
+    
+    abort(403)
 
 @stock.route('/stock/consultar', methods=['POST', 'GET'])
 @login_required
@@ -65,120 +65,127 @@ def consultar_stock():
     		resultado=resultado, \
     		form=form, \
     		site=TITULO)
-    else:
-        abort(403)
+    
+    abort(403)
 
 
 @stock.route('/stock/agregar', methods=['POST', 'GET'])
 @login_required
 def agregar():
-	resultado = None
-	id_producto = None
-	id_marca = None
-	id_um = None
-	form = AgregarStock()
-	#form.tipo_movimiento.choices = [(descripcion.descripcion) for descripcion in TipoMovimientoStock.query.all()]
+	if current_user.has_role('Operador'):
+		resultado = None
+		id_producto = None
+		id_marca = None
+		id_um = None
+		form = AgregarStock()
+		#form.tipo_movimiento.choices = [(descripcion.descripcion) for descripcion in TipoMovimientoStock.query.all()]
 
-	if form.validate_on_submit():
-		tipo_mov = form.tipo_movimiento.data
-		id_producto = form.producto.data
-		id_marca = form.marca.data
-		id_um = form.uMedida.data
-		cantidad = form.cantidad.data
-		try:
-			cantidad = int(cantidad)
-			if (cantidad >= 0) and (cantidad <= 1000000):
-				product = get_id_producto(id_producto,id_marca,id_um)
-				if product == -777 :
-					flash("el producto ingresado es incorrecto", 'error')
-				else:
-					if product == -888 :
-						flash('La unidad de medida ingresada es incorrecta', 'error')
+		if form.validate_on_submit():
+			tipo_mov = form.tipo_movimiento.data
+			id_producto = form.producto.data
+			id_marca = form.marca.data
+			id_um = form.uMedida.data
+			cantidad = form.cantidad.data
+			try:
+				cantidad = int(cantidad)
+				if (cantidad >= 0) and (cantidad <= 1000000):
+					product = get_id_producto(id_producto,id_marca,id_um)
+					if product == -777 :
+						flash("el producto ingresado es incorrecto", 'error')
 					else:
-						if product == -999 :
-							flash("La marca ingresada es incorrecta", 'error')
+						if product == -888 :
+							flash('La unidad de medida ingresada es incorrecta', 'error')
 						else:
-							usuario_id = current_user.get_id()
-							user = Usuario.query.filter_by(id=usuario_id).first()
-							if user.has_role('Operador'):
-								if tipo_mov == 'entrada':
-									resultado = agregar_stock(user.id,product,cantidad,id_producto)
-									print(resultado, flush=True)
-									print('#'*80, flush=True)
-									flash("El producto se ha cargado correctamente", 'warning')
-								else:
-									resultado = salida(user.id,product,cantidad,id_producto)
-									print(resultado, flush=True)
-									print('#'*80, flush=True)
-									flash("Se ha descontado el stock con exito", 'warning')
+							if product == -999 :
+								flash("La marca ingresada es incorrecta", 'error')
 							else:
-								flash("Usuario incorrecto, contacte al administrador", 'error')
-			else:
+								usuario_id = current_user.get_id()
+								user = Usuario.query.filter_by(id=usuario_id).first()
+								if user.has_role('Operador'):
+									if tipo_mov == 'entrada':
+										resultado = agregar_stock(user.id,product,cantidad,id_producto)
+										print(resultado, flush=True)
+										print('#'*80, flush=True)
+										flash("El producto se ha cargado correctamente", 'warning')
+									else:
+										resultado = salida(user.id,product,cantidad,id_producto)
+										print(resultado, flush=True)
+										print('#'*80, flush=True)
+										flash("Se ha descontado el stock con exito", 'warning')
+								else:
+									flash("Usuario incorrecto, contacte al administrador", 'error')
+				else:
+					flash("La cantidad ingresada es incorrecta", 'error')
+			except ValueError as e:
 				flash("La cantidad ingresada es incorrecta", 'error')
-		except ValueError as e:
-			flash("La cantidad ingresada es incorrecta", 'error')
-	else:
-		print(form.errors, flush=True)
+		else:
+			print(form.errors, flush=True)
 
-	return render_template('form_agregar_movimiento.html', \
-	datos=current_user.get_mis_datos(), \
-	is_authenticated=current_user.is_authenticated, \
-	rol='operador',\
-	producto=id_producto, \
-	marca=id_marca, \
-	uMedida=id_um, \
-	resultado=resultado, \
-	site=TITULO ,\
-	form=form)
+		return render_template('form_agregar_movimiento.html', \
+		datos=current_user.get_mis_datos(), \
+		is_authenticated=current_user.is_authenticated, \
+		rol='operador',\
+		producto=id_producto, \
+		marca=id_marca, \
+		uMedida=id_um, \
+		resultado=resultado, \
+		site=TITULO ,\
+		form=form)
+	abort(403)
 
 @stock.route('/stock/exportar', methods=['POST', 'GET'])
 @login_required
 def exportar():
-	resultado = None
-	form = ExportarStock()
+	if current_user.has_role('Operador'):
+		resultado = None
+		form = ExportarStock()
 
-	if form.validate_on_submit():
-		fecha_desde = form.fecha_desde.data
-		fecha_hasta = form.fecha_hasta.data
-		if fecha_hasta is None:
-			fecha_hasta = datetime.datetime.now()
+		if form.validate_on_submit():
+			fecha_desde = form.fecha_desde.data
+			fecha_hasta = form.fecha_hasta.data
+			if fecha_hasta is None:
+				fecha_hasta = datetime.datetime.now()
 
-		resultado = consultaMovimientosExportar(fecha_desde,fecha_hasta)
-		#print("lengt {}".format(resultado.length))
-		print('#'*80, flush=True)
-		#nro_cta = get_nro_cuenta_corriente(cliente)
-		#resultado = get_consulta_movimientos(fecha_desde, fecha_hasta,nro_cta[0]['cuenta_corriente_id'])
-		#print(resultado, flush=True)
-		print('#'*80, flush=True)
-	else:
-		print(form.errors, flush=True)
+			resultado = consultaMovimientosExportar(fecha_desde,fecha_hasta)
+			#print("lengt {}".format(resultado.length))
+			print('#'*80, flush=True)
+			#nro_cta = get_nro_cuenta_corriente(cliente)
+			#resultado = get_consulta_movimientos(fecha_desde, fecha_hasta,nro_cta[0]['cuenta_corriente_id'])
+			#print(resultado, flush=True)
+			print('#'*80, flush=True)
+		else:
+			print(form.errors, flush=True)
 
-	return render_template('exportar_movimientos.html', \
-    datos=current_user.get_mis_datos(), \
-    is_authenticated=current_user.is_authenticated, \
-	resultado=resultado, \
-	form=form, \
-	site=TITULO,\
-    rol='operador')
+		return render_template('exportar_movimientos.html', \
+			datos=current_user.get_mis_datos(), \
+			is_authenticated=current_user.is_authenticated, \
+			resultado=resultado, \
+			form=form, \
+			site=TITULO,\
+			rol='operador')
+	abort(403)
 
 
 
 @stock.route('/stock/importar', methods=['GET'])
 @login_required
 def importar():
-
-	return render_template('importar_movimientos.html', \
-    datos=current_user.get_mis_datos(), \
-    is_authenticated=current_user.is_authenticated, \
-    rol='operador')
+	if current_user.has_role('Operador'):
+		return render_template('importar_movimientos.html', \
+		datos=current_user.get_mis_datos(), \
+		is_authenticated=current_user.is_authenticated, \
+		rol='operador')
+	abort(403)
 
 
 @stock.route('/stock/descargar/consulta/<string:resultado>.pdf')
 @login_required
 def descargar_consulta_stock(resultado):
-	resultado = json.loads(resultado.replace("'", '"'))
-	html = render_template('tabla_consulta_stock.html', resultado=resultado)
-	return render_pdf(HTML(string=html))
+	if current_user.has_role('Operador'):
+		resultado = json.loads(resultado.replace("'", '"'))
+		html = render_template('tabla_consulta_stock.html', resultado=resultado)
+		return render_pdf(HTML(string=html))
+	abort(403)
 
 
 ###########
