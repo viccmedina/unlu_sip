@@ -26,9 +26,7 @@ class MyAdminIndexView(AdminIndexView):
 class LogoutMenuLink(MenuLink):
 
     def is_accessible(self):
-        return current_user.is_authenticated             
-
-
+        return current_user.is_authenticated
 
 
 admin=Admin(app, index_view=MyAdminIndexView())

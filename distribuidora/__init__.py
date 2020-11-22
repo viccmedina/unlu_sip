@@ -25,8 +25,9 @@ from distribuidora.core.gestion_cta_corriente.views import cta_corriente
 from distribuidora.core.gestion_producto.views import producto
 from distribuidora.core.gestion_lista_precio.views import lista_precio
 from distribuidora.core.gestion_pedido.views import pedido
+from distribuidora.core.error_handler.handler import error_pages
 
-
+app.register_blueprint(error_pages)
 app.register_blueprint(stock)
 app.register_blueprint(core_blueprint, url_prefix='/')
 app.register_blueprint(gestion_usuario)
