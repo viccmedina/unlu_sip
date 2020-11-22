@@ -18,6 +18,8 @@ from distribuidora.models.pedido import PedidoEstado, DetallePedido, Pedido, \
 	HistorialPedidoEstado
 from distribuidora.models.devolucion import EstadoDevolucion, Devolucion, DetalleDevolucion
 from distribuidora.models.stock import TipoMovimientoStock, Movimiento_Stock
+from distribuidora.query import CREATE_TRIGGER_BUmov_stock, CREATE_TRIGGER_BIPedido, \
+CREATE_TRIGGER_BU_Pedido, CREATE_TRIGGER_BU_Pedido2
 
 # Importamos settings
 from distribuidora.settings import DB_PATH, DATOS_PATH
@@ -56,9 +58,9 @@ def insertar_tipo_dni():
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			tipo_dni = TipoDNI(descripcion=row['descripcion'])
-			tipos.append(tipo_dni)
-		db.session.add_all(tipos)
-		db.session.commit()
+	tipos.append(tipo_dni)
+	db.session.add_all(tipos)
+	db.session.commit()
 
 
 def insertar_provincias():
@@ -76,9 +78,9 @@ def insertar_provincias():
 			print('-'*50)
 			# Creamos el objeto Provincia y lo guardamos
 			new_provincia = Provincia(descripcion=row['descripcion'])
-			lista_prov.append(new_provincia)
-		db.session.add_all(lista_prov)
-		db.session.commit()
+	lista_prov.append(new_provincia)
+	db.session.add_all(lista_prov)
+	db.session.commit()
 
 
 def insertar_localidades():
@@ -92,8 +94,8 @@ def insertar_localidades():
 			print('-'*50)
 			new_localidad = Localidad(descripcion=row['descripcion'], provincia_id=row['provincia_id'])
 			lista_loc.append(new_localidad)
-		db.session.add_all(lista_loc)
-		db.session.commit()
+	db.session.add_all(lista_loc)
+	db.session.commit()
 
 
 def insertar_roles():
@@ -106,8 +108,8 @@ def insertar_roles():
 			print('-'*50)
 			new_rol = Rol(nombre=row['nombre'], descripcion=row['descripcion'])
 			lista_rol.append(new_rol)
-		db.session.add_all(lista_rol)
-		db.session.commit()
+	db.session.add_all(lista_rol)
+	db.session.commit()
 
 
 def insertar_permisos():
@@ -137,7 +139,7 @@ def insertar_personas():
 			print('-'*50)
 
 			new_persona = Persona(nombre=row['nombre'], apellido=row['apellido'], \
-			 email=row['email'], telefono_ppal=row['telefono_principal'])
+			email=row['email'], telefono_ppal=row['telefono_principal'])
 
 			lista_persona.append(new_persona)
 	db.session.add_all(lista_persona)
@@ -158,7 +160,7 @@ def insertar_usuarios():
 			print(rol)
 			print(persona.persona_id)
 			new_usuario = Usuario(username=row['username'], password=row['password'], \
-				persona_id=persona.persona_id)
+			persona_id=persona.persona_id)
 			new_usuario.usuario_rol.append(rol)
 			lista_usuario.append(new_usuario)
 	db.session.add_all(lista_usuario)
@@ -179,7 +181,7 @@ def insertar_tipo_movimiento_cta_corriente():
 			print('Tipo Movimiento: {}'.format(row['descripcion']))
 			print('-'*50)
 			tm = TipoMovimientoCtaCorriente(descripcion=row['descripcion'], \
-				descripcion_corta=row['descripcion_corta'])
+			descripcion_corta=row['descripcion_corta'])
 			tipos_movimientos.append(tm)
 	db.session.add_all(tipos_movimientos)
 	db.session.commit()
@@ -226,7 +228,7 @@ def insertar_movimientos_cta_corriente():
 			else:
 				saldo = float(row['saldo'])
 			m = MovimientoCtaCorriente(descripcion=descripcion, usuario=usuario.id, tipo_movimiento_cta_corriente=tm.id, \
-				cta_corriente=cta_corriente.cuenta_corriente_id, saldo=saldo)
+			cta_corriente=cta_corriente.cuenta_corriente_id, saldo=saldo)
 			movimientos.append(m)
 	db.session.add_all(movimientos)
 	db.session.commit()
@@ -276,8 +278,8 @@ def insertar_tipo_producto():
 			print('-'*50)
 			new_tipo_producto = TipoProducto(descripcion=row['descripcion'])
 			tipoProd.append(new_tipo_producto)
-		db.session.add_all(tipoProd)
-		db.session.commit()
+	db.session.add_all(tipoProd)
+	db.session.commit()
 
 
 def insertar_unidad_medida():
@@ -290,8 +292,8 @@ def insertar_unidad_medida():
 			print('-'*50)
 			new_unidad_medida = UnidadMedida(descripcion=row['descripcion'])
 			unidad_medida.append(new_unidad_medida)
-		db.session.add_all(unidad_medida)
-		db.session.commit()
+	db.session.add_all(unidad_medida)
+	db.session.commit()
 
 
 def insertar_lista_precio():
@@ -307,8 +309,8 @@ def insertar_lista_precio():
 			f_hasta = datetime.strptime(row['fecha_hasta'], "%d/%m/%Y")
 			new_lista_precio = Lista_precio(f_desde,f_hasta)
 			lista_precio.append(new_lista_precio)
-		db.session.add_all(lista_precio)
-		db.session.commit()
+	db.session.add_all(lista_precio)
+	db.session.commit()
 
 
 def insertar_envase():
@@ -321,8 +323,8 @@ def insertar_envase():
 			print('-'*50)
 			new_envase = Envase(descripcion=row['descripcion'])
 			envase.append(new_envase)
-		db.session.add_all(envase)
-		db.session.commit()
+	db.session.add_all(envase)
+	db.session.commit()
 
 
 def insertar_producto():
@@ -338,10 +340,10 @@ def insertar_producto():
 			tp = TipoProducto.query.filter_by(descripcion=row['tipo_producto_id']).first()
 			m = Marca.query.filter_by(descripcion=row['marca_id']).first()
 			new_producto = Producto(descripcion=row['descripcion'],
-				tipo_producto_id=tp.tipo_producto_id,marca_id=m.marca_id)
+			tipo_producto_id=tp.tipo_producto_id,marca_id=m.marca_id)
 			producto.append(new_producto)
-		db.session.add_all(producto)
-		db.session.commit()
+	db.session.add_all(producto)
+	db.session.commit()
 
 
 def insertar_producto_envase():
@@ -358,10 +360,10 @@ def insertar_producto_envase():
 			#p = Producto.query.filter_by(descripcion=row['producto']).first()
 			#e = Envase.query.filter_by(descripcion=row['envase']).first()
 			new_producto_envase = ProductoEnvase(producto_id=row['producto'],
-				envase_id=row['envase'],unidad_medida_id=row['unidad_medida'],stock_real=row['stock_real'])
+			envase_id=row['envase'],unidad_medida_id=row['unidad_medida'],stock_real=row['stock_real'])
 			producto_envase.append(new_producto_envase)
-		db.session.add_all(producto_envase)
-		db.session.commit()
+	db.session.add_all(producto_envase)
+	db.session.commit()
 
 
 
@@ -380,11 +382,11 @@ def insertar_lista_precio_producto():
 			f_inicio = datetime.strptime(row['fecha_inicio'], "%d/%m/%Y")
 			f_fin = datetime.strptime(row['fecha_fin'], "%d/%m/%Y")
 			new_lista_precio_producto = Lista_precio_producto(producto_envase_id=row['producto_envase_id'],
-				precio_id=row['lista_id'],precio=row['precio'],fecha_inicio=f_inicio,
-				fecha_fin=f_fin)
+			precio_id=row['lista_id'],precio=row['precio'],fecha_inicio=f_inicio,
+			fecha_fin=f_fin)
 			lista_precio_producto.append(new_lista_precio_producto)
-		db.session.add_all(lista_precio_producto)
-		db.session.commit()
+	db.session.add_all(lista_precio_producto)
+	db.session.commit()
 
 
 
@@ -444,8 +446,8 @@ def insertar_pedido():
 			print('-'*50)
 			new_pedido = Pedido(usuario_id=row['usuario_id'],estado_pedido_id=row['estado_pedido_id'])
 			pedido.append(new_pedido)
-		db.session.add_all(pedido)
-		db.session.commit()
+	db.session.add_all(pedido)
+	db.session.commit()
 
 
 
@@ -460,9 +462,9 @@ def insertar_historial_estado_pedido():
 			print(row['pedido_id'])
 			new_estadoP_pedido = HistorialPedidoEstado(pedido_estado_id=row['estado_pedido_id'],\
 			pedido_id=row['pedido_id'])
-			estadoP_pedido.append(new_estadoP_pedido)
-		db.session.add_all(estadoP_pedido)
-		db.session.commit()
+	estadoP_pedido.append(new_estadoP_pedido)
+	db.session.add_all(estadoP_pedido)
+	db.session.commit()
 
 
 def insertar_detalle_pedido():
@@ -475,8 +477,8 @@ def insertar_detalle_pedido():
 			new_detalle_pedido = DetallePedido(pedido_id=row['pedido_id'],\
 			producto_envase_id = row['producto_envase_id'],cantidad = row['cantidad'])
 			detalle_pedido.append(new_detalle_pedido)
-		db.session.add_all(detalle_pedido)
-		db.session.commit()
+	db.session.add_all(detalle_pedido)
+	db.session.commit()
 
 
 
@@ -499,8 +501,8 @@ def insertar_movimiento_stock():
 			producto_envase_id=row['producto_envase_id'],descripcion=row['descripcion'],
 			cantidad=row['cantidad'])
 			movimiento_stock.append(new_movimiento_stock)
-		db.session.add_all(movimiento_stock)
-		db.session.commit()
+	db.session.add_all(movimiento_stock)
+	db.session.commit()
 
 
 
@@ -515,8 +517,8 @@ def insertar_comprobante_pago():
 			new_comprobante_pago = ComprobantePago(monto=row['monto'],
 			pedido_id=row['pedido_id'],movimiento=row['movimiento_cta_corriente_id'],fecha_pago=f_pago)
 			comprobante_pago.append(new_comprobante_pago)
-		db.session.add_all(comprobante_pago)
-		db.session.commit()
+	db.session.add_all(comprobante_pago)
+	db.session.commit()
 
 
 
@@ -530,8 +532,15 @@ def insertar_devolucion():
 			new_devolucion = Devolucion(descripcion=row['descripcion'],
 			pedido_id=row['pedido_id'],estado_devolucion_id=row['estado_devolucion_id'])
 			devolucion.append(new_devolucion)
-		db.session.add_all(devolucion)
-		db.session.commit()
+	db.session.add_all(devolucion)
+	db.session.commit()
+
+
+def insertar_triggers():
+	db.engine.execute(CREATE_TRIGGER_BUmov_stock)
+	db.engine.execute(CREATE_TRIGGER_BIPedido)
+	db.engine.execute(CREATE_TRIGGER_BU_Pedido)
+
 
 
 
@@ -545,76 +554,82 @@ def insertar_detalle_devolucion():
 			new_detalle_devolucion = DetalleDevolucion(devolucion_id=row['devolucion_id'],
 			producto_id=row['producto_id'],cantidad=row['cantidad'])
 			detalle_devolucion.append(new_detalle_devolucion)
-		db.session.add_all(detalle_devolucion)
-		db.session.commit()
+	db.session.add_all(detalle_devolucion)
+	db.session.commit()
+
 
 def insertar_estado_comprobante_pago():
-    print('Insertando estados para el comprobante de pago')
-    estados = list()
-    e = EstadoComprobantePago('Adeuda', 'A')
-    estados.append(e)
-    e = EstadoComprobantePago('Pagado', 'P')
-    estados.append(e)
-    db.session.add_all(estados)
-    db.session.commit()
+	print('Insertando estados para el comprobante de pago')
+	estados = list()
+	e = EstadoComprobantePago('Adeuda', 'A')
+	estados.append(e)
+	e = EstadoComprobantePago('Pagado', 'P')
+	estados.append(e)
+	db.session.add_all(estados)
+	db.session.commit()
+
+
+
 
 if __name__ == '__main__':
-    insertar_provincias()
-    print('#'*50)
-    insertar_localidades()
-    print('#'*50)
-    insertar_roles()
-    print('#'*50)
-    insertar_permisos()
-    print('#'*50)
-    insertar_personas()
-    print('#'*50)
-    insertar_usuarios()
-    print('#'*50)
-    insertar_tipo_movimiento_cta_corriente()
-    print('#'*50)
-    insertar_estado_pedido()
-    print('#'*50)
-    insertar_tipo_dni()
-    print('#'*50)
-    insertar_cuenta_corriente()
-    print('#'*50)
-    #insertar_movimientos_cta_corriente()
-    print('#'*50)
-    insertar_marca()
-    print('#'*50)
-    insertar_tipo_producto()
-    print('#'*50)
-    insertar_envase()
-    print('#'*50)
-    insertar_unidad_medida()
-    print('#'*50)
-    insertar_lista_precio()
-    print('#'*50)
-    insertar_producto()
-    print('#'*50)
-    insertar_producto_envase()
-    print('#'*50)
-    insertar_lista_precio_producto()
-    print('#'*50)
-    insertar_estado_devolucion()
-    print('#'*50)
-    insertar_estado_cta_corriente()
-    print('#'*50)
-    insertar_tipo_movimiento_stock()
-    print('#'*50)
-    #insertar_pedido()
-    print('#'*50)
-    #insertar_historial_estado_pedido()
-    print('#'*50)
-    #insertar_detalle_pedido()
-    print('#'*50)
-    insertar_movimiento_stock()
-    print('#'*50)
-    #insertar_comprobante_pago()
-    print('#'*50)
-    #insertar_devolucion()
-    print('#'*50)
-    #insertar_detalle_devolucion()
-    #print('#'*50)
-    insertar_estado_comprobante_pago()
+
+	insertar_provincias()
+	print('#'*50)
+	insertar_localidades()
+	print('#'*50)
+	insertar_roles()
+	print('#'*50)
+	insertar_permisos()
+	print('#'*50)
+	insertar_personas()
+	print('#'*50)
+	insertar_usuarios()
+	print('#'*50)
+	insertar_tipo_movimiento_cta_corriente()
+	print('#'*50)
+	insertar_estado_pedido()
+	print('#'*50)
+	insertar_tipo_dni()
+	print('#'*50)
+	insertar_cuenta_corriente()
+	print('#'*50)
+	#insertar_movimientos_cta_corriente()
+	print('#'*50)
+	insertar_marca()
+	print('#'*50)
+	insertar_tipo_producto()
+	print('#'*50)
+	insertar_envase()
+	print('#'*50)
+	insertar_unidad_medida()
+	print('#'*50)
+	insertar_lista_precio()
+	print('#'*50)
+	insertar_producto()
+	print('#'*50)
+	insertar_producto_envase()
+	print('#'*50)
+	insertar_lista_precio_producto()
+	print('#'*50)
+	insertar_estado_devolucion()
+	print('#'*50)
+	insertar_estado_cta_corriente()
+	print('#'*50)
+	insertar_tipo_movimiento_stock()
+	print('#'*50)
+	insertar_pedido()
+	print('#'*50)
+	#insertar_historial_estado_pedido()
+	print('#'*50)
+	#insertar_detalle_pedido()
+	print('#'*50)
+	insertar_movimiento_stock()
+	print('#'*50)
+	insertar_triggers()
+	#insertar_comprobante_pago()
+	print('#'*50)
+	#insertar_devolucion()
+	print('#'*50)
+	#insertar_detalle_devolucion()
+	#print('#'*50)
+	insertar_estado_comprobante_pago()

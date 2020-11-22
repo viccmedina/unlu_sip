@@ -51,15 +51,4 @@ CONSULTAR_MOVIMIENTOS = """
 
 
 UPDATE_NUEVO_PEDIDO_STOCK_REAL = """ UPDATE producto_envase SET stock_real='{stock_real}'
-    WHERE producto_envase_id='{producto_envase_id}'""" 
-
-"""
-CREATE TRIGGER BU_Pedido
-BEFORE UPDATE ON pedidos
-BEGIN
-SELECT CASE
-    WHEN (NEW.stock_real < 0 )THEN
-    RAISE(ABORT, 'Error - El stock no puedo ser menor a 0 ')
-END;
-END;
-"""
+    WHERE producto_envase_id='{producto_envase_id}'"""
