@@ -538,7 +538,7 @@ def insertar_devolucion():
 
 def insertar_triggers():
 	db.engine.execute(CREATE_TRIGGER_BUmov_stock)
-	db.engine.execute(CREATE_TRIGGER_BIPedido)
+	#db.engine.execute(CREATE_TRIGGER_BIPedido)
 	db.engine.execute(CREATE_TRIGGER_BU_Pedido)
 
 
@@ -617,7 +617,7 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_tipo_movimiento_stock()
 	print('#'*50)
-	insertar_pedido()
+	#insertar_pedido()
 	print('#'*50)
 	#insertar_historial_estado_pedido()
 	print('#'*50)

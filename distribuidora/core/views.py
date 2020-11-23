@@ -78,4 +78,5 @@ def como_comprar():
 	return render_template('como_comprar.html', \
 		is_authenticated=current_user.is_authenticated, \
 		rol=rol, \
-		site='Cómo Comparar')
+		datos=current_user.get_mis_datos(),\
+		site='¿ Cómo Comparar ? ')
