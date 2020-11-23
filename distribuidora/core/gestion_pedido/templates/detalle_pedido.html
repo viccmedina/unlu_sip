@@ -1,16 +1,53 @@
-<h3>DETALLE DEL PEDIDO</h3>
-{% include "flash_errors.html" %}
-<ul>
-    {% for d in detalle %}
-      <li>{{ d }}</li>
-      <a href="{{ url_for('pedido.eliminar_producto_detalle', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}">Eliminar Producto</a>
-      <form  action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}" method="POST">
+{% extends "base.html" %}
 
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-          {{ form.cantidad.label }} {{ form.cantidad }}
-          <div class="form-group">
-            {{ form.submit() }}
-      </form>
-    {% endfor %}
-</ul>
+{% block content %}
+<div class="container-fluid">
+      <div class="row">
+        {% include "acordeon_perfil_usuario.html" %}
+        <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+          {% include "flash_errors.html" %}
+          <div>
+              <h3>DETALLE DEL PEDIDO</h3>
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Detalle ID</th>
+                    <th scope="col">Producto Envase</th>
+                    <th scope="col">Pedido</th>
+                    <th scope="col">Cantidad</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for d in detalle %}
+                  <tr>
+                    <td>{{ d.detalle_id }}</td>
+                    <td>{{ d.producto_envase_id }}</td>
+                    <td>{{ d.pedido_id }}</td>
+                    <td>{{ d.cantidad }}</td>
+                    <td>
+                      <a href="{{ url_for('pedido.eliminar_producto_detalle', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                    </td>
+                    <td>
+                      <form class="form-inline" action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}" method="POST">
+
+                        {{ form.hidden_tag() }}
+                        <div class="form-group mx-sm-3 mb-4">
+                          {{ form.cantidad(class="form-control") }}
+                          {{ form.submit(class="btn btn-danger mb-6") }}
+                        </div>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+</div>
+    
+  
+
+
+{% endblock %}

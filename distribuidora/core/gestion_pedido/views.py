@@ -90,8 +90,17 @@ def modificar_detalle_producto():
             flash('Actualizado Correctamente !', 'success')
         else:
             flash('Algo Salió mal !', 'error')
+    else:
+        flash('Algo Salió mal !', 'error')
     detalle = get_detalle_pedido(pedido)
-    return render_template('detalle_pedido.html', detalle=detalle, form=form)
+    print('detalle_pedido ---> {}'.format(detalle), flush=True)
+    return render_template('detalle_pedido.html',\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated,\
+        rol=current_user.get_role(),\
+        site='Gestión de Pedido', \
+        detalle=detalle,\
+        form=form)
 
 @pedido.route('/pedido/detalle/eliminar', methods=['GET'])
 @login_required
@@ -106,7 +115,13 @@ def eliminar_producto_detalle():
     else:
         flash('Algo Salió mal :( !', 'error')
     detalle = get_detalle_pedido(pedido)
-    return render_template('detalle_pedido.html', detalle=detalle, form=form)
+    return render_template('detalle_pedido.html',\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated,\
+        rol=current_user.get_role(),\
+        site='Gestión de Pedido', \
+        detalle=detalle,\
+        form=form)
 
 @pedido.route('/pedido/confirmar/cliente', methods=['GET', 'POST'])
 @login_required
@@ -177,7 +192,13 @@ def listar_detalle_pedido():
     form = ModificarDetallePedido()
     pedido = request.args.get('pedido', type=int)
     detalle = get_detalle_pedido(pedido)
-    return render_template('detalle_pedido.html', detalle=detalle, form=form)
+    return render_template('detalle_pedido.html',\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated,\
+        rol=current_user.get_role(),\
+        site='Gestión de Pedido', \
+        detalle=detalle, \
+        form=form)
 
 
 @pedido.route('/pedido/listar/detalle/anterior', methods=['GET'])

@@ -153,6 +153,7 @@ def update_detalle_producto(pedido_id, detalle, cantidad):
     else:
         return False
 
+
 def get_id_estado_comprobante_pago(descripcion_corta):
     """
     Dada una descripcion corta de un estado de comprobante de pago, vamos a devolver
