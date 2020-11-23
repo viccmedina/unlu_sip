@@ -67,6 +67,7 @@ def nosotros():
 	return render_template('nosotros.html', \
 		is_authenticated=current_user.is_authenticated, \
 		rol=rol, \
+		datos=current_user.get_mis_datos(),\
 		site='Nosotros')
 
 @core_blueprint.route('/como_comprar')

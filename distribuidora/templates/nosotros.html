@@ -1,5 +1,70 @@
 {% extends 'base.html'%}
 
 {% block content %}
-	
+<div class="container-fluid">
+	<div class="row">
+
+		{% include "acordeon_perfil_usuario.html" %}
+		<div class="col-sm-5 offset-sm-2 col-md-9 offset-md-0">
+
+				<div class="col mb-4" style="height:15rem">
+					<div class="card h-100" style="width: 55rem; ">
+						<div class="card-body"  >
+
+							<h3 align="center" class="card-title">
+								<img src="./static/img/mision.svg" alt="pic mision" width="50" height="50">
+								Misión </h3>
+
+							<div class="card-body">
+
+								<p>	Somos una empresa familiar con trayectoria en la distribución de insumos para la industria
+									panadera y repostera, cuya mision es ofrecer productos de panadería, repostería y refrigerios
+									en general de la más alta calidad con un excelente sabor y aun precio accesible.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col mb-4" style="height:15rem">
+						<div class="card h-100" style="width: 55rem;">
+							<div class="card-body">
+								<h3 align="center" class="card-title">
+									<img src="./static/img/vision.svg" alt="pic mision" width="50" height="50">
+									 Visión </h3>
+								<div class="card-body">
+
+									<p>	Ser una empresa líder en el negocio de  panadería y repostería reconocida en la zona
+										toda la zona. Promovemos y acompañamos el crecimiento y desarrollo de nuestros clientes,
+										brindando un servicio confiable.Hacemos llegar a nuestros clientes productos innovadores que respetan
+										la tradición artesana y les permiten adoptar las nuevas tendencias dentro de un mercado exigente.
+
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col mb-4" style="height:10rem">
+							<div class="card h-100" style="width: 55rem;">
+								<div class="card-body">
+
+									<div class="card-body">
+
+										<p align="center">	“Calidad, artesanía e innovación en un solo lugar”</p>
+										<h4 align="center">Veni a vicitarnos!!!</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+		</div>
+	</div>
+</div>
+
+
+
 {% endblock %}
