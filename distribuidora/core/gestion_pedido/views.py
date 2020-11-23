@@ -170,6 +170,7 @@ def listar_pedido_operador():
             pedidos=pedidos, form=form)
     abort(403)
 
+
 @pedido.route('/pedido/listar/detalle', methods=['GET'])
 @login_required
 def listar_detalle_pedido():
@@ -177,6 +178,7 @@ def listar_detalle_pedido():
     pedido = request.args.get('pedido', type=int)
     detalle = get_detalle_pedido(pedido)
     return render_template('detalle_pedido.html', detalle=detalle, form=form)
+
 
 @pedido.route('/pedido/listar/detalle/anterior', methods=['GET'])
 @login_required

@@ -17,7 +17,7 @@
                 <div class="card-body">
                   <h5 class="card-title">Pedido Nro: # {{p.pedido_id}}</h5>
                   <p class="card-text">Estado actual: {{ p.descripcion }}</p>
-                  <a href="#" class="btn btn-primary">Ver Detalle</a>
+                  <a href="{{ url_for('pedido.listar_detalle_pedido', pedido=p.pedido_id) }}" class="btn btn-primary">Ver Detalle</a>
                 </div>
             
                 {% include "flash_errors.html" %}
