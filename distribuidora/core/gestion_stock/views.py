@@ -21,51 +21,48 @@ def index():
         is_authenticated=current_user.is_authenticated, \
         rol='operador', \
         site='Gestión de Stock')
-    
+
     abort(403)
 
 @stock.route('/stock/consultar', methods=['POST', 'GET'])
 @login_required
 def consultar_stock():
     if current_user.has_role('Operador'):
-    	resultado = None
-    	id_producto = None
-    	id_marca = None
-    	id_um = None
-    	form = ConsultarStock()
+        id_producto = None
+        id_marca = None
+        id_um = None
+        form = ConsultarStock()
 
-    	if form.validate_on_submit():
+        if form.validate_on_submit():
+            id_producto = form.producto.data
+            id_marca = form.marca.data
+            id_um = form.uMedida.data
 
-    		id_producto = form.producto.data
-    		id_marca = form.marca.data
-    		id_um = form.uMedida.data
-    		print('#'*80, flush=True)
-    		product = get_id_producto(id_producto,id_marca,id_um)
-    		# hacer algo con los error de devolucine de id
-    		print("Productooo: {} ".format(product))
-    		if product == -777 :
-    			flash("el producto ingresado es incorrecto", 'error')
-    		else:
-    			if product == -888 :
-    				flash('La unidad de medida ingresada es incorrecta', 'error')
-    			else:
-    				if product == -999 :
-    					flash("La marca ingresada es incorrecta", 'error')
-    				else:
-    					resultado = consulta_sotck(product)
-    					print(resultado, flush=True)
-    					print('#'*80, flush=True)
-    	else:
-    		print(form.errors, flush=True)
+            products = consulta_sotck(id_producto,id_marca,id_um)
+            # hacer algo con los error de devolucine de id
+            #print("Productooo: {} ".format(product))
+            if products == -777 :
+                flash("el producto ingresado es incorrecto", 'error')
+            else:
+                if products == -888 :
+                    flash('La unidad de medida ingresada es incorrecta', 'error')
+                else:
+                    if products == -999 :
+                        flash("La marca ingresada es incorrecta", 'error')
+                    else:
+                        for row in products:
+                            print("alooo")
+        else:
+            print(form.errors, flush=True)
 
-    	return render_template('form_consultar_stock.html', \
-    		datos=current_user.get_mis_datos(),\
-    		is_authenticated=current_user.is_authenticated, \
-    		rol='operador', \
-    		resultado=resultado, \
-    		form=form, \
-    		site=TITULO)
-    
+        return render_template('form_consultar_stock.html', \
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated, \
+        rol='operador', \
+        products=products, \
+        form=form, \
+        site=TITULO)
+
     abort(403)
 
 
