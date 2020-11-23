@@ -14,73 +14,44 @@
 					        <h3 class="card-title">Exportar Movimientos Stock</h3>
 
 				              <form  method="POST">
-
-												{% with messages = get_flashed_messages(with_categories=true) %}
-														{% if messages %}
-																<ul class=flashes>
-																		{% for category, message in messages %}
-																				{% if category == "error" %}
-																						<div class="alert alert-danger alert-dismissible fade show" role="alert">
-																								{{ message }}
-																								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-																										<span aria-hidden="true">&times;</span>
-																								</button>
-																						</div>
-																				{% else %}
-																						<div class="alert alert-warning alert-dismissible fade show" role="alert">
-																										{{ message }}
-																										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-																												<span aria-hidden="true">&times;</span>
-																										</button>
-																								</div>
-																				{% endif%}
-																		{% endfor %}
-																</ul>
-														{% endif %}
-												{% endwith %}
-
-
-
-
-												{{ form.hidden_tag() }}
+				              	{% include "flash_errors.html" %}
+								{{ form.hidden_tag() }}
 				                <div class="form-group">
-				                  {{ form.fecha_desde.label(class="form-control-label") }}
-				                  {{ form.fecha_desde(class="form-control form-control-md") }}
-													{{ form.fecha_hasta.label(class="form-control-label") }}
-													{{ form.fecha_hasta(class="form-control form-control-md") }}
+				                  	{{ form.fecha_desde.label(class="form-control-label") }}
+				                  	{{ form.fecha_desde(class="form-control form-control-md") }}
+									{{ form.fecha_hasta.label(class="form-control-label") }}
+									{{ form.fecha_hasta(class="form-control form-control-md") }}
 				                </div>
-												<div class="form-group">
-				                  <span style="float:left">
-															{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
-													</span>
-													<span style="float:right">
-															{{ form.submit(class="btn btn-success mb-2") }}
-													</span>
-				                </div>
-												<br><br><br>
-												{% if resultado is not none %}
-														{% if resultado %}
-															<div class="form-group">
-																	{% include "tabla_movimientos_stock.html" %}
-																<div align="right">
-																	<a align="right" class="btn btn-success " href="{{ url_for('stock.descargar_consulta_stock', resultado=resultado) }}" role="button">Descargar</a>
-																</div>
-															</div>
-															{% else %}
-																<h3 align="center">RESULTADO</h3>
-																<h5 align="center">Aun no hay movimientos insertados</h5>
-														{% endif %}
+								<div class="form-group">
+                  					<span style="float:left">
+											{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
+									</span>
+									<span style="float:right">
+											{{ form.submit(class="btn btn-success mb-2") }}
+									</span>
+                				</div>
+                				 </form>
+								<br><br><br>
+								{% if resultado is not none %}
+										{% if resultado %}
+											<div class="form-group">
+													{% include "tabla_movimientos_stock.html" %}
+												<div align="right">
+													<a align="right" class="btn btn-success " href="{{ url_for('stock.descargar_consulta_stock', resultado=resultado) }}" role="button">Descargar</a>
+												</div>
+											</div>
+											{% else %}
+												<h3 align="center">RESULTADO</h3>
+												<h5 align="center">Aun no hay movimientos insertados</h5>
+										{% endif %}
 
-													{% endif %}
-				              </form>
+									{% endif %}
+				             
 					     		</div>
 				     		</div>
 			     		</div>
 		     		</div>
 			 		</div>
-
-
-
 
 				</div>
  		</div>
