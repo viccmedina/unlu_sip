@@ -6,7 +6,9 @@ from distribuidora.core.gestion_pedido.helper import get_cantidad_estados_pedido
     get_ultimo_pedido_id, insert_into_detalle_pedido
 from distribuidora.core.gestion_producto.helper import *
 
-from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase, TipoProducto
+from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase, TipoProducto, \
+UnidadMedida
+from distribuidora.models.precio import Lista_precio_producto
 
 from distribuidora import db
 
@@ -84,13 +86,19 @@ def importar():
             form=form)
     abort(403)
 
+
 @producto.route('/producto/listar', methods=['GET', 'POST'])
 @login_required
 def listar_productos():
     page = request.args.get('page', 1, type=int)
-    productos = db.session.query(Producto, Marca, TipoProducto).filter(\
+    #productos = lista_de_productos().paginate(page,5,False)
+    productos = db.session.query(Producto, Marca, TipoProducto,Lista_precio_producto, UnidadMedida, ProductoEnvase).filter(\
+        ProductoEnvase.producto_id == Producto.producto_id).filter(\
+        Producto.tipo_producto_id == TipoProducto.tipo_producto_id).filter(\
+        ProductoEnvase.unidad_medida_id == UnidadMedida.unidad_medida_id).filter(\
         Producto.marca_id == Marca.marca_id).filter(\
-        Producto.tipo_producto_id == TipoProducto.tipo_producto_id).paginate( page, 5, False)
+        ProductoEnvase.producto_envase_id == Lista_precio_producto.producto_envase_id).paginate( page, 5, False)
+
 
     return render_template('listar_productos.html', \
     datos=current_user.get_mis_datos(), \

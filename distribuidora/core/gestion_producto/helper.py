@@ -7,7 +7,9 @@ def parser_result(result):
         resp.append(dict(row))
     return resp
 
-
+def lista_de_productos():
+    resultado = db.engine.execute(LISTAR_ALL_PRODUCTOS)
+    return parser_result(resultado)
 
 def get_lista_productos():
 	"""

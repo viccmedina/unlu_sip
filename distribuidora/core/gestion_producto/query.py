@@ -21,3 +21,12 @@ PRODUCTO_BY_DESCRIPCION_MARCA = """ SELECT p.producto_id FROM producto AS p
 
 PRODUCTO_ID_FROM_PRODUCTO_ENVASE = """ SELECT producto_id FROM producto_envase
     WHERE producto_envase_id='{producto_envase_id}'"""
+
+
+LISTAR_ALL_PRODUCTOS = """
+select pe.producto_envase_id as peid, p.descripcion as desc, m.descripcion as descm, um.descripcion as descum,
+lpp.precio as precio from producto_envase pe inner join producto p on p.producto_id= pe.producto_id
+inner join marca m on m.marca_id = p.marca_id inner join unidad_medida um on
+pe.unidad_medida_id = um.unidad_medida_id inner join lista_precio_producto lpp on
+pe.producto_envase_id = lpp.producto_envase_id ;
+"""
