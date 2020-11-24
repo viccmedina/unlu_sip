@@ -83,35 +83,48 @@ def consulta_sotck(pro,mar,umed):
     """
     valor = None
     marcaID = None
+    a = None
     umedidaID = None
     result = None
     r = []
     resultado = None
-    print("Producto: {}".format(pro))
-    print("Marca: {}".format(mar))
-    print("UMEDIDAD: {}".format(umed))
+    #buscar por producto solo
     if mar == '' and umed == '' :
         result = db.engine.execute(CONSULTAR_ID_PRODUCTO.format(producto=pro))
         for row in result:
-            print(row['producto_envase_id'])
-            resultado = db.engine.execute(CONSULTA_STOCK_POR_PRODUCTO.format(producto_id=row['producto_envase_id']))
-            for rows in resultado:
-                r.append(dict(rows))
+            a = row['producto_envase_id']
+            if a is None:
+                valor = -666
+            else:
+                resultado = db.engine.execute(CONSULTA_STOCK_POR_PRODUCTO.format(producto_id=row['producto_envase_id']))
+                for rows in resultado:
+                    r.append(dict(rows))
     else:
+        #Buscar por marca sola
         if pro == '' and umed == '' :
             result = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=mar))
             for row in result:
-                resultado = db.engine.execute(CONSULTA_STOCK_POR_MARCA.format(marca=row['marca_id']))
-                for rows in resultado:
-                    r.append(dict(rows))
+                a = row['marca_id']
+                if a is None:
+                    valor=-999
+                else:
+                    resultado = db.engine.execute(CONSULTA_STOCK_POR_MARCA.format(marca=row['marca_id']))
+                    for rows in resultado:
+                        r.append(dict(rows))
         else:
+            #Buscar por unidad de medida solo
             if pro =='' and mar == '':
                 result = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=umed))
                 for row in result:
-                    resultado = db.engine.execute(CONSULTA_STOCK_POR_UMEDIDA.format(uMedida=row['unidad_medida_id']))
-                    for rows in resultado:
-                        r.append(dict(rows))
+                    a = row['unidad_medida_id']
+                    if a is None:
+                        valor= -888
+                    else:
+                        resultado = db.engine.execute(CONSULTA_STOCK_POR_UMEDIDA.format(uMedida=row['unidad_medida_id']))
+                        for rows in resultado:
+                            r.append(dict(rows))
             else:
+                #Buscar por producto-marca
                 if umed == '':
                     mar_id = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=mar))
                     for row in mar_id:
@@ -122,11 +135,16 @@ def consulta_sotck(pro,mar,umed):
                     else:
                         result = db.engine.execute(CONSULTA_ID_POR_PRODUCTO_MARCA.format(producto=pro,marca=marcaID))
                         for row in result:
-                            resultado = db.engine.execute(CONSULTA_STOCK_POR_PRODUCTO_MARCA.format(\
-                            producto=row['producto_envase_id']))
-                            for rows in resultado:
-                                r.append(dict(rows))
+                            a = row['producto_envase_id']
+                            if a is None:
+                                valor= -666
+                            else:
+                                resultado = db.engine.execute(CONSULTA_STOCK_POR_PRODUCTO_MARCA.format(\
+                                producto=row['producto_envase_id']))
+                                for rows in resultado:
+                                    r.append(dict(rows))
                 else:
+                    #Buscar por producto-unidad de medida
                     if mar == '' :
                         umed_id = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=umed))
                         for row in umed_id:
@@ -137,33 +155,43 @@ def consulta_sotck(pro,mar,umed):
                         else:
                             result = db.engine.execute(CONSULTA_ID_POR_PRODUCTO_UMEDIDA.format(producto=pro,uMedida=umedidaID))
                             for row in result:
-                                resultado = db.engine.execute(CONSULTA_STOCK_POR_PRODUCTO_UMEDIDA.format(\
-                                producto=row['producto_envase_id']))
-                                for rows in resultado:
-                                    r.append(dict(rows))
+                                a = row['producto_envase_id']
+                                if a is None:
+                                    valor= -666
+                                else:
+                                    resultado = db.engine.execute(CONSULTA_STOCK_POR_PRODUCTO_UMEDIDA.format(\
+                                    producto=row['producto_envase_id']))
+                                    for rows in resultado:
+                                        r.append(dict(rows))
                     else:
+                        #Buscar por marca-unidad de medida
                         if pro == '':
                             umed_id = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=umed))
                             for row in umed_id:
                                 umedidaID = row['unidad_medida_id']
-                                print("unidaddddd: ", umedidaID)
+                                print("unid: ", umedidaID)
                             if umedidaID is None:
                                 valor = -888
                             else:
                                 mar_id = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=mar))
                                 for row in mar_id:
                                     marcaID = row['marca_id']
-                                    print("marcaaasss: ", marcaID)
+                                    print("marcapapa: ", marcaID)
                                 if marcaID is None:
                                     valor = -999
                                 else:
                                     result = db.engine.execute(CONSULTA_ID_POR_MARCA_UMEDIDA.format(marca=marcaID,uMedida=umedidaID))
                                     for row in result:
-                                        resultado = db.engine.execute(CONSULTA_STOCK_POR_MARCA_UMEDIDA.format(\
-                                        producto=row['producto_envase_id']))
-                                        for rows in resultado:
-                                            r.append(dict(rows))
+                                        a = row['producto_envase_id']
+                                        if a is None:
+                                            valor = -555
+                                        else:
+                                            resultado = db.engine.execute(CONSULTA_STOCK_POR_MARCA_UMEDIDA.format(\
+                                            producto=row['producto_envase_id']))
+                                            for rows in resultado:
+                                                r.append(dict(rows))
                         else:
+                            #Buscar por producto-marca-unidad de medida
                             umed_id = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=umed))
                             for row in umed_id:
                                 umedidaID = row['unidad_medida_id']
@@ -179,34 +207,20 @@ def consulta_sotck(pro,mar,umed):
                                 if marcaID is None:
                                     valor = -999
                                 else:
-                                    mar_id = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=mar))
-                                    for row in mar_id:
-                                        marcaID = row['marca_id']
-                                        print("marcaaasss: ", marcaID)
-                                    if marcaID is None:
-                                        valor = -999
-                                    else:
-                                        umed_id = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=umed))
-                                        for row in umed_id:
-                                            umedidaID = row['unidad_medida_id']
-                                            print("unidaddddd: ", umedidaID)
-                                        if umedidaID is None:
-                                            valor = -888
-                                        else:
-                                            result = db.engine.execute(CONSULTA_ID_PRODUCTO_MARCA_UMEDIDA.format(\
-                                            marca=marcaID,uMedida=umedidaID,producto=pro))
-                                            for row in result:
-                                                valor = row['producto_envase_id']
-                                                print("producto-envase: ", valor)
+                                    result = db.engine.execute(CONSULTA_ID_PRODUCTO_MARCA_UMEDIDA.format(\
+                                    marca=marcaID,uMedida=umedidaID,producto=pro))
+                                    for row in result:
+                                        valor = row['producto_envase_id']
+                                        print("producto-envase: ", valor)
 
-                                            if valor is None:
-                                                return -777
-    if valor is None:
-        for row in r:
-            print(r)
-        return r
-    else:
+                                    if valor is None:
+                                        return -777
+    if valor is not None or valor == -999 or valor == -888 or valor == -777 or valor == -666 or valor == -555:
+        print("valor es sssss{}".format(valor) )
         return valor
+    else:
+        return r
+
 
 
 

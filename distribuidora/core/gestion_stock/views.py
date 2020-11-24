@@ -31,6 +31,7 @@ def consultar_stock():
         id_producto = None
         id_marca = None
         id_um = None
+        products = None
         form = ConsultarStock()
 
         if form.validate_on_submit():
@@ -40,19 +41,27 @@ def consultar_stock():
 
             products = consulta_sotck(id_producto,id_marca,id_um)
             # hacer algo con los error de devolucine de id
-            #print("Productooo: {} ".format(product))
+            print("Productooo: {} ".format(products))
             if products == -777 :
                 flash("el producto ingresado es incorrecto", 'error')
+                products = None
             else:
                 if products == -888 :
                     flash('La unidad de medida ingresada es incorrecta', 'error')
+                    products = None
                 else:
                     if products == -999 :
                         flash("La marca ingresada es incorrecta", 'error')
+                        products = None
                     else:
-                        for row in products:
-                            print("alooo")
-        else:
+                        if products == -666:
+                            flash("El nombre de producto ingresado es incorrecto", 'error')
+                            products = None
+                        else:
+                            if products == -555:
+                                flash("No se han encontrados registros para los valores ingresados", 'warning')
+                                products = None
+
             print(form.errors, flush=True)
 
         return render_template('form_consultar_stock.html', \
