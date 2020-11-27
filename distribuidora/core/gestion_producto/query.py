@@ -30,3 +30,68 @@ inner join marca m on m.marca_id = p.marca_id inner join unidad_medida um on
 pe.unidad_medida_id = um.unidad_medida_id inner join lista_precio_producto lpp on
 pe.producto_envase_id = lpp.producto_envase_id ;
 """
+
+PRODUCTOS_P_PRODUCTO="""
+SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
+tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
+p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
+pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+WHERE p.descripcion = '{producto}'
+"""
+
+PRODUCTOS_P_MARCA = """
+SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
+tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
+p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
+pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+WHERE m.descripcion = '{marca}'
+"""
+
+
+PRODUCTOS_P_UMEDIDA = """
+SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
+tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
+p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
+pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+WHERE um.descripcion = '{uMedida}'
+"""
+
+PRODUCTOS_P_PRODUCTO_MARCA = """
+SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
+tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
+p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
+pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+WHERE p.descripcion = '{producto}' and m.descripcion = '{marca}'
+"""
+
+PRODUCTOS_P_PRODUCTO_UMEDIDA = """
+SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
+tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
+p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
+pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+WHERE p.descripcion = '{producto}' and um.descripcion = '{uMedida}'
+"""
+
+PRODUCTOS_P_MARCA_UMEDIDA = """
+SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
+tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
+p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
+pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+WHERE m.descripcion = '{marca}' and um.descripcion = '{uMedida}'
+"""
+
+
+PRODUCTOS_P_PRODUCTO_MARCA_UMEDIDA  = """
+SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
+tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
+p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
+pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+WHERE p.descripcion = '{producto}' m.descripcion = '{marca}' and um.descripcion = '{uMedida}'
+"""

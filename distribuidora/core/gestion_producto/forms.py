@@ -7,6 +7,13 @@ from wtforms import ValidationError
 from flask_login import current_user
 
 
-class ImportarProducto(FlaskForm):    
+class ConsultarProducto(FlaskForm):
+	producto = StringField('Ingrese El Nombre Producto')
+	marca = StringField('Ingrese La Marca del Producto')
+	uMedida = StringField('Ingrese La Unidad de Medida')
+	submit = SubmitField('Consultar')
+	cancelar = SubmitField('Cancelar')
+
+class ImportarProducto(FlaskForm):
 	file = FileField('Archivo')
 	submit = SubmitField('Importar')

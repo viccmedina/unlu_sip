@@ -39,7 +39,45 @@ def get_producto_envase_by_producto_id(producto_id):
         producto_id=producto_id))
     return parser_result(result)
 
+
+
 def get_producto_id_from_producto_envase(producto_envase_id):
     result = db.engine.execute(PRODUCTO_ID_FROM_PRODUCTO_ENVASE.format(\
         producto_envase_id=producto_envase_id))
     return parser_result(result)
+
+
+
+
+
+def consulta_producto_pProducto(producto):
+    resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO.format(producto=producto))
+    return parser_result(resultado)
+
+def consulta_producto_pMarca(marca):
+    resultado = db.engine.execute(PRODUCTOS_P_MARCA.format(marca=marca))
+    return parser_result(resultado)
+
+def consulta_producto_pUMedida(uMedida):
+    resultado = db.engine.execute(PRODUCTOS_P_UMEDIDA.format(uMedida=uMedida))
+    return parser_result(resultado)
+
+def consulta_producto_pProductoMarca(producto,marca):
+    resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO_MARCA.format(producto=producto,\
+    marca=marca))
+    return parser_result(resultado)
+
+def consulta_producto_pProductoUMedida(producto,uMedida):
+    resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO_UMEDIDA.format(producto=producto,\
+    uMedida=uMedida))
+    return parser_result(resultado)
+
+def consulta_producto_pMarcaUMedida(marca,uMedida):
+    resultado = db.engine.execute(PRODUCTOS_P_MARCA_UMEDIDA.format(marca=marca,\
+    uMedida=uMedida))
+    return parser_result(resultado)
+
+def consulta_producto_pProductoMarcaUMedida(producto,marca,uMedida):
+    resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO_MARCA_UMEDIDA.format(producto=producto,\
+    marca=marca,uMedida=uMedida))
+    return parser_result(resultado)

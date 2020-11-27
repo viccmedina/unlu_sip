@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from distribuidora.core.gestion_producto.forms import ImportarProducto
+from distribuidora.core.gestion_producto.forms import *
 from distribuidora.core.gestion_pedido.forms import FormAgregarProducto
 from distribuidora.core.gestion_pedido.helper import get_cantidad_estados_pedido, \
     get_ultimo_pedido_id, insert_into_detalle_pedido
@@ -25,13 +25,46 @@ def index():
         site='Gestión de Productos')
     abort(403)
 
-@producto.route('/consultar', methods=['GET'])
+@producto.route('/consultar', methods=['POST', 'GET'])
 @login_required
+
 def consultar_producto():
-    return render_template('form_consultar_producto.html', \
-    datos=current_user.get_mis_datos(), \
-    is_authenticated=current_user.is_authenticated, \
-    rol='operador')
+    if current_user.has_role('Operador'):
+        id_producto = None
+        id_marca = None
+        id_um = None
+        products = None
+        form = ConsultarProducto()
+
+        if form.validate_on_submit():
+            id_producto = form.producto.data
+            id_marca = form.marca.data
+            id_um = form.uMedida.data
+            # hacer algo con los error de devolucine de id
+            print("Productooo: {} ".format(products))
+            # lo que voy a hacer un function boolean para validar q sean datis correcto consultando por el id
+            if id_um == '' and id_marca == '':
+                products = consulta_producto_pProducto(id_producto)
+            elif id_um == '' and id_producto == '':
+                products = consulta_producto_pMarca(id_marca)
+            elif id_marca == '' and id_producto == '':
+                products = consulta_producto_pUMedida(id_um)
+            elif id_um == '':
+                products = consulta_producto_pProductoMarca(id_producto,id_marca)
+            elif id_marca == '':
+                products = consulta_producto_pProductoUMedida(id_producto,id_um)
+            elif id_producto == '':
+                products = consulta_producto_pMarcaUMedida(id_marca,id_um)
+            else:
+                products = consulta_producto_pProductoMarcaUMedida(id_producto,id_marca,id_um)
+
+        return render_template('form_consulta_producto.html', \
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated,\
+        rol='operador',\
+        products=products,\
+        form=form)
+    abort(403)
 
 
 @producto.route('/agregar', methods=['GET'])
