@@ -7,7 +7,7 @@ from distribuidora.core.gestion_stock.helper import get_id_producto, \
 consulta_sotck, agregar_stock, salida, consultaMovimientosExportar
 from distribuidora.models.gestion_usuario import Usuario
 from distribuidora import db
-from flask_weasyprint import HTML, render_pdf
+from flask_weasyprint import HTML, render_pdf, CSS
 import json
 
 stock = Blueprint('stock', __name__, template_folder='templates')
@@ -189,7 +189,7 @@ def importar():
 def descargar_consulta_stock(resultado):
 	if current_user.has_role('Operador'):
 		resultado = json.loads(resultado.replace("'", '"'))
-		html = render_template('tabla_consulta_stock.html', resultado=resultado)
+		html = render_template('tabla_consulta_stock_css.html', products=resultado)
 		return render_pdf(HTML(string=html))
 	abort(403)
 

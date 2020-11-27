@@ -1,0 +1,61 @@
+{% block tabla_movimientos %}
+<div class="container">
+    <h2 style="margin-left:6em;">Resultado de la consulta:</h2>
+    <p style="margin-left:18em;font-weight:bold;font-style:italic;">Stock </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>
+          <div style="margin-left:0.5em;font-style:italic;">
+            Producto
+          </div>
+        </th>
+        <th>
+          <div style="margin-left:4em;font-style:italic;">
+            Marca
+          </div>
+        </th>
+        <th>
+          <div style="margin-left:4em;font-style:italic;">
+            Unidad Medida
+          </div>
+        </th>
+        <th>
+          <div style="margin-left:3.5em;font-style:italic;">
+            Cantidad
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for r in products %}
+      <tr>
+        <td>
+          <div style="margin-left:0.5em;">
+            {{r['descripcion_p']}}
+          </div>
+        </td>
+        <td>
+          <div style="margin-left:3.5em;">
+            {{r['descripcion_m']}}
+          </div>
+        </td>
+        <td>
+          <div style="margin-left:7em;">
+            {{r['descripcion']}}
+          </div>
+        </td>
+        <td>
+          <div style="margin-left:5.5em;">
+            {{r['cantidad']}}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

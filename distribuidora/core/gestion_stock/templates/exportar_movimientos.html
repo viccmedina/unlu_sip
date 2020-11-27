@@ -15,22 +15,22 @@
 
 				              <form  method="POST">
 				              	{% include "flash_errors.html" %}
-								{{ form.hidden_tag() }}
+												{{ form.hidden_tag() }}
 				                <div class="form-group">
 				                  	{{ form.fecha_desde.label(class="form-control-label") }}
 				                  	{{ form.fecha_desde(class="form-control form-control-md") }}
-									{{ form.fecha_hasta.label(class="form-control-label") }}
-									{{ form.fecha_hasta(class="form-control form-control-md") }}
+														{{ form.fecha_hasta.label(class="form-control-label") }}
+														{{ form.fecha_hasta(class="form-control form-control-md") }}
 				                </div>
-								<div class="form-group">
+												<div class="form-group">
                   					<span style="float:left">
-											{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
-									</span>
-									<span style="float:right">
-											{{ form.submit(class="btn btn-success mb-2") }}
-									</span>
+															{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
+														</span>
+														<span style="float:right">
+															{{ form.submit(class="btn btn-success mb-2") }}
+														</span>
                 				</div>
-                				 </form>
+                			</form>
 								<br><br><br>
 								{% if resultado is not none %}
 										{% if resultado %}
@@ -46,7 +46,7 @@
 										{% endif %}
 
 									{% endif %}
-				             
+
 					     		</div>
 				     		</div>
 			     		</div>
