@@ -1,91 +1,63 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<div class="container-fluid">
-			<div class="row">
-		    {% include "acordeon_perfil_usuario.html" %}
+    <div class="container-fluid">
+        <div class="row">
+            {% include "acordeon_perfil_usuario.html" %}
 
-				<div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
-					<div class="row row-cols-9 row-cols-md-3">
-					  <div class="col mb-9" >
-					    <div class="card h-100" style="width: 50rem;">
+            <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+                <div class="row row-cols-9 row-cols-md-3">
+                    <div class="col mb-9" >
+                        <div class="card h-100" style="width: 50rem;">
 
-					      <div class="card-body">
-					        <h3 class="card-title">Consultar Stock</h3>
+                            <div class="card-body">
+                                <h3 class="card-title">Consultar Stock</h3>
 
-				              <form  method="POST">
+                                <form  method="POST">
 
-												{% with messages = get_flashed_messages(with_categories=true) %}
-														{% if messages %}
-																<ul class=flashes>
-																		{% for category, message in messages %}
-																				{% if category == "error" %}
-																						<div class="alert alert-danger alert-dismissible fade show" role="alert">
-																								{{ message }}
-																								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-																										<span aria-hidden="true">&times;</span>
-																								</button>
-																						</div>
-																				{% else %}
-																						<div class="alert alert-warning alert-dismissible fade show" role="alert">
-																										{{ message }}
-																										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-																												<span aria-hidden="true">&times;</span>
-																										</button>
-																						</div>
-																				{% endif%}
-																		{% endfor %}
-																</ul>
-														{% endif %}
-												{% endwith %}
+                                  {% include "flash_errors.html" %}
+
+                                    {{ form.hidden_tag() }}
+                                    <div class="form-group">
+                                        {{ form.producto.label(class="form-control-label") }}
+                                        {{ form.producto(class="form-control form-control-md") }}
+                                        {{ form.marca.label(class="form-control-label") }}
+                                        {{ form.marca(class="form-control form-control-md") }}
+                                        {{ form.uMedida.label(class="form-control-label") }}
+                                        {{ form.uMedida(class="form-control form-control-md") }}
+                                    </div>
+                                    <div class="form-group">
+                                   
+                                        <span style="float:right">
+                                            {{ form.submit(class="btn btn-success mb-2") }}
+                                        </span>
+                                    </div>
 
 
+                                    {% if resultado is not none %}
+
+                                        {% if resultado %}
+                                            <div class="form-group">
+                                                {% include "tabla_consulta_stock.html"%}
+                                            </div>
+                                        {% else %}
+                                            <h3 align="center">RESULTADO</h3>
+                                            <h5 align="center">No se han encontrado movimientos para este producto</h5>
+                                        {% endif %}
+
+                                    {% endif %}
 
 
-												{{ form.hidden_tag() }}
-				                <div class="form-group">
-				                  {{ form.producto.label(class="form-control-label") }}
-				                  {{ form.producto(class="form-control form-control-md") }}
-													{{ form.marca.label(class="form-control-label") }}
-													{{ form.marca(class="form-control form-control-md") }}
-													{{ form.uMedida.label(class="form-control-label") }}
-													{{ form.uMedida(class="form-control form-control-md") }}
-				                </div>
-												<div class="form-group">
-				                  <span style="float:left">
-															{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
-													</span>
-													<span style="float:right">
-															{{ form.submit(class="btn btn-success mb-2") }}
-													</span>
-				                </div>
+                                </form>
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<br><br><br>
-												{% if products is not none %}
-
-														{% if products %}
-															<div class="form-group">
-																{% include "tabla_consulta_stock.html"%}
-															</div>
-															{% else %}
-																<h3 align="center">RESULTADO</h3>
-																<h5 align="center">No se han encontrado movimientos para este producto</h5>
-														{% endif %}
-
-													{% endif %}
-
-
-				              </form>
-					     		</div>
-
-				     		</div>
-			     		</div>
-		     		</div>
-			 		</div>
-
-				</div>
- 		</div>
+        </div>
+</div>
 
 
 {% endblock %}
