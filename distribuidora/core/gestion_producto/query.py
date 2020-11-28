@@ -43,6 +43,14 @@ CONSULTAR_ID_MARCA = """
 SELECT * FROM marca m WHERE m.descripcion = '{marca}'
 """
 
+CONSULTAR_ID_TPRODUCTO = """
+SELECT tp.tipo_producto_id FROM tipo_producto tp WHERE tp.descripcion = '{tProd}'
+"""
+
+CONSULT_ID_MARCA = """
+SELECT m.marca_id FROM marca m WHERE m.descripcion = '{marca}'
+"""
+
 PRODUCTOS_P_PRODUCTO="""
 SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
 tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
@@ -107,3 +115,21 @@ pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_
 INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
 WHERE p.descripcion = '{producto}' and m.descripcion = '{marca}' and um.descripcion = '{uMedida}'
 """
+UNIDADMEDIDA_IDE = """
+SELECT um.unidad_medida_id FROM unidad_medida um WHERE um.descripcion = '{uMedida}'
+"""
+
+ENVASE_IDE = """
+SELECT e.envase_id FROM envase e WHERE e.descripcion = '{envase}'
+"""
+
+PRODUCTO_IDE ="""
+	SELECT p.producto_id FROM producto p INNER JOIN marca m WHERE p.descripcion ='{producto}' and m.descripcion = '{marca}'
+"""
+
+INSERT_T_PRODUCTO = """ INSERT INTO producto (descripcion,marca_id,tipo_producto_id)
+VALUES ('{producto}',{marca},{tProd}); """
+
+
+INSERT_T_PRODUCTO_ENVASE = """ INSERT INTO producto_envase (producto_id,envase_id,unidad_medida_id,stock_real)
+VALUES ({producto},{envase},{uMedida},0); """

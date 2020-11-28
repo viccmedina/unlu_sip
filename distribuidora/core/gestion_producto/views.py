@@ -5,6 +5,7 @@ from distribuidora.core.gestion_pedido.forms import FormAgregarProducto
 from distribuidora.core.gestion_pedido.helper import get_cantidad_estados_pedido, \
     get_ultimo_pedido_id, insert_into_detalle_pedido
 from distribuidora.core.gestion_producto.helper import *
+from distribuidora.models.producto import TipoProducto,Envase
 
 from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase, TipoProducto, \
 UnidadMedida
@@ -99,13 +100,32 @@ def consultar_producto():
     abort(403)
 
 
-@producto.route('/agregar', methods=['GET'])
+@producto.route('/agregar', methods=['POST', 'GET'])
 @login_required
 def agregar():
-	return render_template('form_agregar_producto.html', \
-    datos=current_user.get_mis_datos(), \
-    is_authenticated=current_user.is_authenticated, \
-    rol='operador')
+    if current_user.has_role('Operador'):
+        id_producto = None
+        id_marca = None
+        id_um = None
+        products = None
+        form = AgregarProducto()
+        form.tipo_producto.choices = [(descripcion.descripcion) for descripcion in TipoProducto.query.all()]
+        form.envase.choices = [(descripcion.descripcion) for descripcion in Envase.query.all()]
+        if form.validate_on_submit():
+            if insert_new_producto(form.producto.data,form.marca.data,form.uMedida.data,\
+            form.tipo_producto.data,form.envase.data):
+                flash("Se ha ingresado un nuevo producto", 'warning')
+            else:
+                flash("No se ha podido crear el nuevo producto, ha surgido un error",'error')
+
+
+        return render_template('form_agregar_producto.html',\
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated, \
+        rol='operador',\
+        products=products,\
+        form=form)
+    abort(403)
 
 
 @producto.route('/modificar', methods=['GET'])
