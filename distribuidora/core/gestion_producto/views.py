@@ -43,20 +43,52 @@ def consultar_producto():
             # hacer algo con los error de devolucine de id
             print("Productooo: {} ".format(products))
             # lo que voy a hacer un function boolean para validar q sean datis correcto consultando por el id
+            #
             if id_um == '' and id_marca == '':
-                products = consulta_producto_pProducto(id_producto)
+                if consultar_id_producto(id_producto):
+                    products = consulta_producto_pProducto(id_producto)
+                else:
+                    flash("Producto invalido ", 'warning')
             elif id_um == '' and id_producto == '':
-                products = consulta_producto_pMarca(id_marca)
+                if consultar_id_marca(id_marca):
+                    products = consulta_producto_pMarca(id_marca)
+                else:
+                    flash("La marca ingresada es incorrecta",'warning')
             elif id_marca == '' and id_producto == '':
-                products = consulta_producto_pUMedida(id_um)
+                if consultar_id_umedida(id_um):
+                    products = consulta_producto_pUMedida(id_um)
+                else:
+                    flash("La unidad de medida es incorrecta", 'warning')
             elif id_um == '':
-                products = consulta_producto_pProductoMarca(id_producto,id_marca)
+                if consultar_id_producto(id_producto) and consultar_id_marca(id_marca):
+                    products = consulta_producto_pProductoMarca(id_producto,id_marca)
+                elif not consultar_id_producto(id_producto):
+                    flash("El producto seleccionado es incorrecto" , 'warning')
+                else:
+                    flash("La marca ingresada es incorrecta",'warning')
             elif id_marca == '':
-                products = consulta_producto_pProductoUMedida(id_producto,id_um)
+                if consultar_id_producto(id_producto) and consultar_id_umedida(id_um):
+                    products = consulta_producto_pProductoUMedida(id_producto,id_um)
+                elif not consultar_id_producto(id_producto):
+                    flash("El producto ingresado es incorrecto",'warning')
+                else:
+                    flash("La unidad de medida es incorrecta",'warning')
             elif id_producto == '':
-                products = consulta_producto_pMarcaUMedida(id_marca,id_um)
+                if  consultar_id_marca(id_marca) and consultar_id_umedida(id_um):
+                    products = consulta_producto_pMarcaUMedida(id_marca,id_um)
+                elif not consultar_id_marca(id_marca):
+                    flash("La marca ingresada es incorrecta",'warning')
+                else:
+                    flash("La unidad de medida ingresada es incorrecta",'warning')
             else:
-                products = consulta_producto_pProductoMarcaUMedida(id_producto,id_marca,id_um)
+                if consultar_id_producto(id_producto) and consultar_id_marca(id_marca) and consultar_id_umedida(id_um):
+                    products = consulta_producto_pProductoMarcaUMedida(id_producto,id_marca,id_um)
+                elif not consultar_id_producto(id_producto):
+                    flash("El producto ingresado es incorrecto",'warning')
+                elif not consultar_id_marca(id_marca):
+                    flash("La marca ingresada es incorrecta",'warning')
+                else:
+                    flash("La unidad de medida ingresada es incorrecta",'warning')
 
         return render_template('form_consulta_producto.html', \
         datos=current_user.get_mis_datos(), \

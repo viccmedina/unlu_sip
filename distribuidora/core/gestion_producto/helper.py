@@ -48,6 +48,27 @@ def get_producto_id_from_producto_envase(producto_envase_id):
 
 
 
+def consultar_id_producto(producto):
+    b = False
+    result = db.engine.execute(CONSULTAR_ID_PRODUCTO.format(producto=producto))
+    for row in result:
+        b = True
+
+    return b
+
+def consultar_id_umedida(uMedida):
+    b = False
+    result = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=uMedida))
+    for row in result:
+        b = True
+    return b
+
+def consultar_id_marca(marca):
+    b = False
+    result = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=marca))
+    for row in result:
+        b = True
+    return b
 
 
 def consulta_producto_pProducto(producto):

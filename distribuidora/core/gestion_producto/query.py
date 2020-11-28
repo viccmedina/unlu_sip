@@ -31,6 +31,18 @@ pe.unidad_medida_id = um.unidad_medida_id inner join lista_precio_producto lpp o
 pe.producto_envase_id = lpp.producto_envase_id ;
 """
 
+CONSULTAR_ID_PRODUCTO = """
+SELECT * FROM producto p WHERE p.descripcion = '{producto}'
+"""
+
+CONSULTAR_ID_UMEDIDA = """
+SELECT * FROM unidad_medida um WHERE um.descripcion = '{uMedida}'
+"""
+
+CONSULTAR_ID_MARCA = """
+SELECT * FROM marca m WHERE m.descripcion = '{marca}'
+"""
+
 PRODUCTOS_P_PRODUCTO="""
 SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
 tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
@@ -93,5 +105,5 @@ tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN pro
 p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
 pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
 INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
-WHERE p.descripcion = '{producto}' m.descripcion = '{marca}' and um.descripcion = '{uMedida}'
+WHERE p.descripcion = '{producto}' and m.descripcion = '{marca}' and um.descripcion = '{uMedida}'
 """
