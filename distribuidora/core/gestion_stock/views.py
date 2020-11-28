@@ -189,13 +189,9 @@ def importar():
 def descargar_consulta_stock(resultado):
 	if current_user.has_role('Operador'):
 		resultado = json.loads(resultado.replace("'", '"'))
+		print(resultado, flush=True)
 		html = render_template('tabla_consulta_stock.html', resultado=resultado)
 
 		stylesheets = ['static/estilos.css']
-		return render_pdf(HTML(string=html), stylesheets=["https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"])
+		return render_pdf(HTML(string=html), stylesheets=["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"])
 	abort(403)
-
-
-###########
-
-#is_authenticated=current_user.is_authenticated, rol=ROL, form=form, resultado=resultado, site= TITULO + ' - Consulta')
