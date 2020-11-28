@@ -10,7 +10,7 @@ from distribuidora import db
 from flask_weasyprint import HTML, render_pdf, CSS
 import json
 
-stock = Blueprint('stock', __name__, template_folder='templates')
+stock = Blueprint('stock', __name__, template_folder='templates', static_folder='static')
 
 @stock.route('/stock', methods=['GET'])
 @login_required
@@ -189,8 +189,10 @@ def importar():
 def descargar_consulta_stock(resultado):
 	if current_user.has_role('Operador'):
 		resultado = json.loads(resultado.replace("'", '"'))
-		html = render_template('tabla_consulta_stock_css.html', products=resultado)
-		return render_pdf(HTML(string=html))
+		html = render_template('tabla_consulta_stock.html', resultado=resultado)
+
+		stylesheets = ['static/estilos.css']
+		return render_pdf(HTML(string=html), stylesheets=["https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"])
 	abort(403)
 
 

@@ -29,12 +29,12 @@
                       <a href="{{ url_for('pedido.eliminar_producto_detalle', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
                     </td>
                     <td>
-                      <form class="form-inline" action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}" method="POST">
+                      <form id="myForm" class="form-inline" action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}" method="POST">
 
                         {{ form.hidden_tag() }}
                         <div class="form-group mx-sm-3 mb-4">
                           {{ form.cantidad(class="form-control") }}
-                          {{ form.submit(class="btn btn-danger mb-6") }}
+                          <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger"> Modificar </button>
                         </div>
                       </form>
                     </td>
@@ -47,7 +47,6 @@
         </div>
 </div>
     
-  
-
+{% include "modal_confirmacion.html" %}
 
 {% endblock %}
