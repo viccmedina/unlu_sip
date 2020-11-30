@@ -3,24 +3,18 @@
 {% block content %}
   <div class="container-fluid">
     <div class="row">
-      {% include "acordeon_perfil_usuario.html" %}
-
-      <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
-        	<div class="row row-cols-9 row-cols-md-3">
+      <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-2">
+        	<div class="row row-cols-9 row-cols-md-4">
             {% for p in producto.items %}
             <div class="col mb-9" style="padding:5px">
                <div class="card h-100">
-                  <img src="..." class="card-img-top" alt="...">
+                  <img src="/static/img/productos/default.svg" class="card-img-top" alt="producto" width="45%" height="100">
                   <div class="card-body">
-                    <h5 class="card-title">{{ p[0] }}</h5>
-                    <p class="card-text">{{ p[1] }}</p>
+                    <h5 class="card-title">Producto: {{ p[0] }}</h5>
+                    <p class="card-text">Marca: {{ p[1] }}</p>
                     <p class="card-text">{{ p[4] }}</p>
-                    <p class="card-text">$ {{ p[3].precio }}</p>
 
-
-                    <center>
-                      <a href="{{ url_for('producto.detalle_producto', producto=p[0], marca=p[1])}}" class="btn btn-primary">Ver Detalle</a>
-                    </center>
+                    <a href="{{ url_for('producto.detalle_producto', producto=p[0], marca=p[1])}}" class="btn btn-primary">Ver Detalle</a>
                   </div>
               </div>
             </div>
@@ -30,7 +24,7 @@
     <!-- Pagination Links-->
 
 
-          <div align = "center">
+          <div align = "right">
               <a href="{{ url_for('producto.listar_productos', page=producto.prev_num) }}"
                  class="btn btn-outline-dark
                  {% if producto.page == 1 %}disabled{% endif %}">
