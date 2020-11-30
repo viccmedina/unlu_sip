@@ -223,4 +223,10 @@ def detalle_producto():
         print(form.errors)
         flash(form.errors, 'errors')
 
-    return render_template('detalle_producto.html', form=form, productos=productos)
+    return render_template('detalle_producto.html',\
+        form=form,\
+        productos=productos,\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated, \
+        rol=current_user.get_role(), \
+        site='Detalle Producto')
