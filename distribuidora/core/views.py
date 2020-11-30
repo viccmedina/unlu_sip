@@ -1,4 +1,4 @@
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, url_for, redirect
 from flask_login import  current_user
 from distribuidora import db
 from distribuidora.models.producto import Producto, Marca, UnidadMedida, ProductoEnvase
@@ -33,19 +33,7 @@ def productos():
 	"""
 	Nos devolverá la sección Productos.
 	"""
-
-	page = request.args.get('page', 1, type=int)
-	productos = db.session.query(Producto, Marca,UnidadMedida).filter(\
-	ProductoEnvase.producto_id == Producto.producto_id).filter(\
-	Producto.marca_id == Marca.marca_id).filter(\
-	ProductoEnvase.unidad_medida_id == UnidadMedida.unidad_medida_id).paginate(page, 5, False)
-	rol = obtener_rol()
-	return render_template('productos.html', \
-		is_authenticated=current_user.is_authenticated, \
-		datos=current_user.get_mis_datos(),\
-		rol=rol, \
-		site='Nuestros Productos', \
-		producto=productos)
+	return redirect(url_for('producto.listar_productos'))
 
 @core_blueprint.route('/contacto')
 def contacto():
