@@ -85,7 +85,8 @@ def modificar_detalle_producto():
         detalle = request.args.get('detalle_pedido', type=int)
         producto = request.args.get('producto', type=int)
         cantidad = form.cantidad.data
-        result = update_detalle_producto(pedido, detalle, cantidad)
+        result = update_detalle_producto(pedido, detalle,\
+            cantidad, usuario=current_user.has_role('Operador'))
         if result:
             flash('Actualizado Correctamente !', 'success')
         else:
@@ -110,6 +111,9 @@ def eliminar_producto_detalle():
     producto_envase_id = request.args.get('producto_envase_id', type=int)
     detalle_id = request.args.get('detalle_pedido', type=int)
     result = eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido)
+    print('#'*100, flush=True)
+    print(result, flush=True)
+    print('#'*100, flush=True)
     if result:
         flash('Producto Eliminado Correctamente !', 'success')
     else:

@@ -26,7 +26,7 @@
                     <td>{{ d.pedido_id }}</td>
                     <td>{{ d.cantidad }}</td>
                     <td>
-                      <a href="{{ url_for('pedido.eliminar_producto_detalle', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                      <a id="l_delete" data-toggle="modal" data-target="#exampleModal" href="{{ url_for('pedido.eliminar_producto_detalle', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
                     </td>
                     <td>
                       <form id="myForm" class="form-inline" action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}" method="POST">
