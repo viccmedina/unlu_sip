@@ -152,7 +152,7 @@ def eliminar():
 @login_required
 def exportar():
     if current_user.has_role('Operador'):
-    	return render_template('exportar_productos.html', \
+    	return render_template('exportar_producto.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
         rol='operador')
