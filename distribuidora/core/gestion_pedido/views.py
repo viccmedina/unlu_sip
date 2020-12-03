@@ -111,9 +111,6 @@ def eliminar_producto_detalle():
     producto_envase_id = request.args.get('producto_envase_id', type=int)
     detalle_id = request.args.get('detalle_pedido', type=int)
     result = eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido)
-    print('#'*100, flush=True)
-    print(result, flush=True)
-    print('#'*100, flush=True)
     if result:
         flash('Producto Eliminado Correctamente !', 'success')
     else:
@@ -196,6 +193,8 @@ def listar_detalle_pedido():
     form = ModificarDetallePedido()
     pedido = request.args.get('pedido', type=int)
     detalle = get_detalle_pedido(pedido)
+    print('DETALLE FULL PEDIDO', flush=True)
+    print(detalle, flush=True)
     return render_template('detalle_pedido.html',\
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated,\

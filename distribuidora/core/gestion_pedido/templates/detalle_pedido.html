@@ -11,20 +11,24 @@
               <table class="table">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col">Detalle ID</th>
-                    <th scope="col">Producto Envase</th>
-                    <th scope="col">Pedido</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Envase</th>
                     <th scope="col">Cantidad</th>
+                    <th scope="col">Precio Unitario</th>
+                    <th scope="col">Total</th>
                   </tr>
                 </thead>
                 <tbody>
 
                   {% for d in detalle %}
                   <tr>
-                    <td>{{ d.detalle_id }}</td>
-                    <td>{{ d.producto_envase_id }}</td>
-                    <td>{{ d.pedido_id }}</td>
+                    <td>{{ d.desc_producto }}</td>
+                    <td>{{ d.desc_marca }}</td>
+                    <td>{{ d.desc_envase }} {{ d.desc_unidad_medida}}</td>
                     <td>{{ d.cantidad }}</td>
+                    <td>$ {{ d.precio }}</td>
+                    <td>$ {{ d.total }}</td>
                     <td>
                       <a id="l_delete" data-toggle="modal" data-target="#exampleModal" href="{{ url_for('pedido.eliminar_producto_detalle', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
                     </td>
@@ -32,9 +36,9 @@
                       <form id="myForm" class="form-inline" action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}" method="POST">
 
                         {{ form.hidden_tag() }}
-                        <div class="form-group mx-sm-3 mb-4">
-                          {{ form.cantidad(class="form-control") }}
-                          <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger"> Modificar </button>
+                        <div class="form-group mb-2">
+                          {{ form.cantidad(class="form-control w-25") }}
+                          <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="margin-left: 5%;"> Modificar </button>
                         </div>
                       </form>
                     </td>

@@ -10,11 +10,20 @@ LISTAR_DETALLE_PEDIDO = """ SELECT * FROM detalle_pedido WHERE
     pedido_id='{pedido_id}' """
 
 # Vamos a devolver el detalle pero con mas informaciónote
-DETALLE_INFORMACION_FULL = """ SELECT dp.detalle_id, dp.producto_envase_id,
-    dp.pedido_id, pe.stock_real, dp.cantidad, lpp.precio FROM detalle_pedido AS dp
+DETALLE_INFORMACION_FULL = """ SELECT dp.pedido_id, dp.detalle_id, dp.producto_envase_id, 
+    e.descripcion AS desc_envase, dp.pedido_id, pe.stock_real, dp.cantidad, lpp.precio,
+    (lpp.precio * dp.cantidad) AS total, pr.descripcion AS desc_producto, m.descripcion AS desc_marca,
+    um.descripcion AS desc_unidad_medida
+    FROM detalle_pedido AS dp
     INNER JOIN producto_envase AS pe ON dp.producto_envase_id=pe.producto_envase_id
     INNER JOIN lista_precio_producto AS lpp ON dp.producto_envase_id=lpp.producto_envase_id
+    INNER JOIN envase AS e ON dp.producto_envase_id=e.envase_id
+    INNER JOIN pedido AS p ON p.pedido_id=dp.pedido_id
+    INNER JOIN producto AS pr ON pr.producto_id = pe.producto_id
+    INNER JOIN marca AS m ON m.marca_id = pr.marca_id
+    INNER JOIN unidad_medida AS um ON um.unidad_medida_id = pe.unidad_medida_id
     WHERE dp.pedido_id = '{pedido_id}' """
+
 # Actualizamos el estado del pedido
 UPDATE_ESTADO_PEDIDO = """ UPDATE pedido SET estado_pedido='{estado_pedido}'
     WHERE id_pedido='{id_pedido}' """

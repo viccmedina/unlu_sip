@@ -104,7 +104,7 @@ def get_ultimo_pedido_id(usuario_id):
     return result[0]['pedido_id']
 
 def get_detalle_pedido(pedido_id):
-    result = db.engine.execute(LISTAR_DETALLE_PEDIDO.format(\
+    result = db.engine.execute(DETALLE_INFORMACION_FULL.format(\
         pedido_id=pedido_id))
     result = parser_result(result)
     return result
