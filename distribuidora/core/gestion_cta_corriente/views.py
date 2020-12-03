@@ -59,23 +59,30 @@ def consultar_cta_corriente():
 def agregar():
     if current_user.has_role('Operador'):
         form = AgregarMovimiento()
-        form.tipo_movimiento.choices = [(descripcion.descripcion) for descripcion in TipoMovimientoCtaCorriente.query.all()]
+        form.tipo_movimiento.choices = [\
+            (descripcion.descripcion) for descripcion in TipoMovimientoCtaCorriente.query.all()\
+            ]
         if form.validate_on_submit():
             tipo_movimiento = form.tipo_movimiento.data
             cliente = form.cliente.data
             monto = form.monto.data
-            print('#'*80, flush=True)
             nro_cta = get_nro_cuenta_corriente(cliente)
-
+            nro_cta = nro_cta[0]['cuenta_corriente_id']
             usuario_id = current_user.get_id()
             user = Usuario.query.filter_by(id=usuario_id).first()
-            new_mov_cta_corriente(nro_cta,tipo_movimiento,user.id,monto)
-            saldo = obtener_saldo_cta_corriente(nro_cta)
+            resultado = new_mov_cta_corriente(nro_cta, tipo_movimiento, user.id, monto)
+            saldo = consulta_saldo(nro_cta)
             if tipo_movimiento == 'Pago':
-                actualizar_estado_comprobante_pago(saldo, monto, cliente)
-            flash("La transacción se ha registrado con éxito", 'success')
-        else:
-            flash("Algo salió mal, verifique los datos ingresados", 'error')
+                #actualizar_estado_comprobante_pago(saldo, monto, cliente)
+                flash("Pago agregar correctamente", 'success')
+            else:
+                flash("Algo salió mal, verifique los datos ingresados", 'error')
+
+            if resultado:
+                flash("La transacción se ha registrado con éxito", 'success')
+            else:
+                flash("Algo salió mal, verifique los datos ingresados", 'error')
+
 
         return render_template('form_agregar_movimiento_cta_corriente.html', \
         datos=current_user.get_mis_datos(), \
@@ -89,26 +96,26 @@ def agregar():
 @login_required
 def consultar_saldo():
     if current_user.has_role('Operador'):
-    	resultado = None
-    	form = ConsultarSaldo()
+        resultado = None
+        form = ConsultarSaldo()
 
-    	if form.validate_on_submit():
-    		cliente = form.cliente.data
-    		nro_cta = get_nro_cuenta_corriente(cliente)
-    		if nro_cta == -999 :
-    			flash("La cuenta ingresada es incorrecta", 'error')
-    		else:
-    			resultado = consulta_saldo(nro_cta)
-    	else:
-    		print(form.errors, flush=True)
+        if form.validate_on_submit():
+            cliente = form.cliente.data
+            nro_cta = get_nro_cuenta_corriente(cliente)
+            nro_cta = nro_cta[0]['cuenta_corriente_id']
+            if nro_cta:
+                resultado = consulta_saldo(nro_cta)
+                print(resultado, flush=True)
+            else:
+                flash("La cuenta ingresada es incorrecta", 'error')
 
-    	return render_template('consultar_saldo_cta_corriente.html', \
-        datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated, \
-    	resultado=resultado,\
-    	form=form,\
-        rol=ROL, \
-    	site= TITULO + ' - Consultar Saldo')
+        return render_template('consultar_saldo_cta_corriente.html', \
+            datos=current_user.get_mis_datos(), \
+            is_authenticated=current_user.is_authenticated, \
+            resultado=resultado,\
+            form=form,\
+            rol=ROL, \
+            site= TITULO + ' - Consultar Saldo')
     abort(403)
 
 @cta_corriente.route('/cta_corriente/exportar', methods=['GET'])

@@ -26,13 +26,13 @@
 									</form>
 								</div>
 								<br><br><br>
+								{% if resultado is not none %}
+									{% include "tabla_consulta_saldo.html" %}
+									<a class="btn btn-success mb-2 offset-md-9" target="_blank" href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
+								{% endif %}
 							</div>
 						</div>	
 					</div>	
-				{% if resultado is not none %}
-					{% include "tabla_consulta_saldo.html" %}
-					<a class="btn btn-success mb-2 offset-md-9" target="_blank" href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
-				{% endif %}
 			</div>
 		</div>
 	</div>
