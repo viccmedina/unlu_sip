@@ -93,7 +93,9 @@ def actualizar_estado_comprobante_pago(monto, cliente):
     comprobantes = parser_result(comprobantes)
     print(type(comprobantes), flush=True)
     print(comprobantes, flush=True)
+    query = False
     if len(comprobantes) > 0:
         update_comprobante = db.engine.execute(UPDATE_ESTADO_COMPROBANTE.format(\
             estado=2,comprobante_id=comprobantes[0]['comprobante_id']))
-    return True
+        query = check(update_comprobante)
+    return query

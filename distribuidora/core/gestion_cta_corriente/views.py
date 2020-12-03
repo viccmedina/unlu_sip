@@ -73,8 +73,8 @@ def agregar():
             resultado = new_mov_cta_corriente(nro_cta, tipo_movimiento, user.id, monto)
             saldo = consulta_saldo(nro_cta)
             if tipo_movimiento == 'Pago':
-                #actualizar_estado_comprobante_pago(saldo, monto, cliente)
-                flash("Pago agregar correctamente", 'success')
+                if actualizar_estado_comprobante_pago(monto, cliente):
+                    flash("Pago agregar correctamente", 'success')
             else:
                 flash("Algo salió mal, verifique los datos ingresados", 'error')
 
