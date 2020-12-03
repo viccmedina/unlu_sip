@@ -209,7 +209,12 @@ def listar_detalle_pedido():
 def listar_detalle_pedido_anterior():
     pedido = request.args.get('pedido', type=int)
     detalle = get_detalle_pedido(pedido)
-    return render_template('detalle_pedidos_anteriores.html', detalle=detalle)
+    return render_template('detalle_pedidos_anteriores.html',\
+        detalle=detalle,\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated,\
+        rol=current_user.get_role(),\
+        site='Gestión de Pedido')
 
 @pedido.route('/pedido/repetir', methods=['GET', 'POST'])
 @login_required
