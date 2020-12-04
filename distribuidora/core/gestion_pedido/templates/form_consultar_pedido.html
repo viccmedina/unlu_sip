@@ -30,13 +30,14 @@
                   <div class="container-fluid">
                     <div class="row">
                       <div class="col-sm-5 col-md-9">
-                        <div class="row row-cols-9 row-cols-md-3">
+                        <div class="row row-cols-9 row-cols-md-1">
                           {% for pt in pedidos_todos.items %}
                             <div class="col mb-9" style="padding:5px">
                               <div class="card h-100">
                                 <img src="/static/img/pedidos/recipient.svg" class="card-img-top" alt="producto" width="45%" height="100">
                                 <div class="card-body">
-                                  <p>Número de Pedido: {{ pt }}</p>
+                                  <p>Número de Pedido: {{ pt[0] }}</p>
+                                  <p> <strong>{{ pt[1] }}</strong></p>
                                   <a class="btn btn-primary btn-sm" role="button" href="{{ url_for('pedido.listar_detalle_pedido_anterior', pedido=pt) }}">Ver Detalle Pedido</a>
                                 </div>
                               </div>

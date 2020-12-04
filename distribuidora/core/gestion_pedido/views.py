@@ -8,6 +8,15 @@ from distribuidora.core.gestion_pedido.forms import NuevoPedido, FormAgregarProd
 
 pedido = Blueprint('pedido', __name__, template_folder='templates')
 
+def paginado(page):
+    pedidos_todos = db.session.query(Pedido, PedidoEstado).filter(\
+    Pedido.usuario_id==current_user.get_id(), Pedido.estado_pedido_id!=1).paginate(page, 5, False)
+    print('-'*100, flush=True)
+    print(pedidos_todos.items, flush=True)
+    print('-'*100, flush=True)
+    return pedidos_todos
+
+
 @pedido.route('/pedido', methods=['GET'])
 @login_required
 def index():
@@ -45,15 +54,15 @@ def consultar_pedido():
         if not pedido_pcc:
             pedido_pcc = None
         page = request.args.get('page', 1, type=int)
-        pedidos_todos = db.session.query(Pedido).filter(\
-            Pedido.usuario_id==current_user.get_id(), Pedido.estado_pedido_id!=1).paginate( page, 5, False)
+        
+
         return render_template('form_consultar_pedido.html',\
             datos=current_user.get_mis_datos(),\
             is_authenticated=current_user.is_authenticated,\
             rol=current_user.get_role(),\
             site='Gestión de Pedido',\
             pedido_pcc=pedido_pcc,
-            pedidos_todos=pedidos_todos)
+            pedidos_todos=paginado(page))
     abort(403)
 
 @pedido.route('/pedido/anular', methods=['GET', 'POST'])
@@ -69,12 +78,14 @@ def anular_pedido():
     pedido_pcc = get_listado_pedidos_pcc(usuario_id=current_user.get_id())
     if not pedido_pcc:
         pedido_pcc = None
+    page = request.args.get('page', 1, type=int)
     return render_template('form_consultar_pedido.html',\
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated,\
         rol=current_user.get_role(),\
         site='Gestión de Pedido',\
-        pedido_pcc=pedido_pcc)
+        pedido_pcc=pedido_pcc,\
+        pedidos_todos=paginado(page))
 
 @pedido.route('/pedido/detalle/modificar', methods=['GET', 'POST'])
 @login_required
@@ -94,7 +105,6 @@ def modificar_detalle_producto():
     else:
         flash('Algo Salió mal !', 'error')
     detalle = get_detalle_pedido(pedido)
-    print('detalle_pedido ---> {}'.format(detalle), flush=True)
     return render_template('detalle_pedido.html',\
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated,\
@@ -129,6 +139,7 @@ def eliminar_producto_detalle():
 def confirmar_pedido_cliente():
     if current_user.has_role('Cliente'):
         pedido_pcc = request.args.get('pedido_pcc', type=int)
+        detalle = get_detalle_pedido(pedido)
         if pedido_pcc is not None:
             if actualizar_estado_pedido(pedido_pcc, 'PCO'):
                 flash('Pedido confirmado correctamente', 'success')
@@ -208,7 +219,9 @@ def listar_detalle_pedido():
 @login_required
 def listar_detalle_pedido_anterior():
     pedido = request.args.get('pedido', type=int)
+    print('PEDIDO ANTERIOR ------ {}'.format(pedido), flush=True)
     detalle = get_detalle_pedido(pedido)
+    print('DETALLE PEDIDO ANTERIOR ---- {}'.format(detalle))
     return render_template('detalle_pedidos_anteriores.html',\
         detalle=detalle,\
         datos=current_user.get_mis_datos(),\

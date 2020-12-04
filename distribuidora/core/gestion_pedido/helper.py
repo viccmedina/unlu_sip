@@ -230,11 +230,19 @@ def actualizar_estado_pedido(pedido, estado):
     Dado un nro de pedido y un estado, actualizamos
     el estado de dicho pedido.
     """
-    estado_id = db.engine.execute(CONSULTA_POR_ESTADO_PEDIDO_SEGUN_ID.format(descripcion_corta=estado))
-    estado_id = parser_result(estado_id)
-    result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
-        pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
-    return check(result)
+    cantidad_productos = get_detalle_pedido(pedido)
+    print('*'*100, flush=True)
+    print(cantidad_productos, flush=True)
+    print('*'*100, flush=True)
+    if not cantidad_productos:
+        return False
+    else:
+        estado_id = db.engine.execute(CONSULTA_POR_ESTADO_PEDIDO_SEGUN_ID.format(descripcion_corta=estado))
+        estado_id = parser_result(estado_id)
+        db.engine.execute(UPDATE_ESTADO_PEDIDO.format(estado_pedido=estado_id[0]['pedido_estado_id'], id_pedido=pedido))
+        result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
+            pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
+        return check(result)
 
 def eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido_id):
     if get_cantidad_estados_pedido(pedido_id) < 3 :

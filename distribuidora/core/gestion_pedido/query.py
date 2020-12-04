@@ -25,8 +25,8 @@ DETALLE_INFORMACION_FULL = """ SELECT dp.pedido_id, dp.detalle_id, dp.producto_e
     WHERE dp.pedido_id = '{pedido_id}' """
 
 # Actualizamos el estado del pedido
-UPDATE_ESTADO_PEDIDO = """ UPDATE pedido SET estado_pedido='{estado_pedido}'
-    WHERE id_pedido='{id_pedido}' """
+UPDATE_ESTADO_PEDIDO = """ UPDATE pedido SET estado_pedido_id='{estado_pedido}'
+    WHERE pedido_id='{id_pedido}' """
 
 LISTAR_PEDIDO_SEGUN_FECHA = """ SELECT * FROM pedido WHERE ts_created BETWEEN
     '{fecha_desde}' AND '{fecha_hasta}'"""
