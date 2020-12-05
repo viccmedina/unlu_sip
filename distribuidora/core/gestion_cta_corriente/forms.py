@@ -2,11 +2,14 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, FloatField
 from wtforms.fields.html5 import DateTimeLocalField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms.validators import DataRequired, EqualTo, Length, NumberRange
 from wtforms import ValidationError
 from distribuidora.core.gestion_cta_corriente.helper import get_tipos_movimientos
 # User Based Imports
 from flask_login import current_user
+from distribuidora.core.gestion_cta_corriente.constants import MSG_ERR_MONTO_VALIDO, MSG_ERR_MONTO_LEN, \
+    MSG_NRO_CLIENTE_VALIDO
+
 
 class ConsultarMovimientos(FlaskForm):
     """
@@ -43,16 +46,20 @@ class AgregarMovimiento(FlaskForm):
     Formulario para que el usuario de tipo operador pueda ingresar un nuevo movimiento dentro
     de la Cta Corriente del usuario.
     """
+
     tp = get_tipos_movimientos()
     tipo_movimiento = SelectField(u'Tipo Mov', choices=tp)
-    cliente = StringField('NRO Cliente', validators=[DataRequired()])
-    monto = FloatField('Monto', validators=[DataRequired()])
+    cliente = StringField('NRO Cliente', validators=[DataRequired(MSG_NRO_CLIENTE_VALIDO)])
+    monto = FloatField('Monto', validators=[DataRequired(MSG_ERR_MONTO_VALIDO),\
+        NumberRange(max=3000000, min=1, message=MSG_ERR_MONTO_LEN) ])
     submit = SubmitField('Agregar')
 
 class ConsultarSaldo(FlaskForm):
     """
         Este Formulario permitira consultar el saldo de una cta determinada
     """
+
+
     cliente = StringField('NRO Cliente', validators=[DataRequired()])
     submit = SubmitField('Consultar')
     cancelar = SubmitField('Cancelar')

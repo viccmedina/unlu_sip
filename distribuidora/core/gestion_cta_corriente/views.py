@@ -14,6 +14,13 @@ import json
 
 cta_corriente = Blueprint('cta_corriente', __name__, template_folder='templates')
 
+def cargar_errores(errores):
+    """
+    Pasamos el diccionario con todos los errores levantados por Flask
+    """
+    for key, value in errores.items():
+        for v in value:
+            flash(v, 'error')
 
 @cta_corriente.route('/cta_corriente', methods=['GET'])
 @login_required
@@ -38,7 +45,7 @@ def consultar_cta_corriente():
             if fecha_hasta is None:
                 fecha_hasta = datetime.datetime.now()
             cliente = form.cliente.data
-            print('#'*80, flush=True)
+            
             nro_cta = get_nro_cuenta_corriente(cliente)
             nro_cta = nro_cta[0]['cuenta_corriente_id']
             if nro_cta:
@@ -56,7 +63,7 @@ def consultar_cta_corriente():
 @login_required
 def agregar():
     if current_user.has_role('Operador'):
-        form = AgregarMovimiento()
+        form = AgregarMovimiento(request.form, meta={'locales': ['es_ES', 'es']})
         form.tipo_movimiento.choices = [\
             (descripcion.descripcion) for descripcion in TipoMovimientoCtaCorriente.query.all()\
             ]
@@ -84,7 +91,8 @@ def agregar():
                     flash("Algo salió mal, verifique los datos ingresados", 'error')
             else:
                 flash("La cuenta ingresada no existe.", 'error')
-
+        else:
+            cargar_errores(form.errors)
 
         return render_template('form_agregar_movimiento_cta_corriente.html', \
         datos=current_user.get_mis_datos(), \
@@ -104,12 +112,15 @@ def consultar_saldo():
         if form.validate_on_submit():
             cliente = form.cliente.data
             nro_cta = get_nro_cuenta_corriente(cliente)
-            nro_cta = nro_cta[0]['cuenta_corriente_id']
-            if nro_cta:
-                resultado = consulta_saldo(nro_cta)
-                print(resultado, flush=True)
+              
+            if not nro_cta:
+                flash("El cliente no posee una Cta Corriente", 'error')
             else:
-                flash("La cuenta ingresada es incorrecta", 'error')
+                nro_cta = nro_cta[0]['cuenta_corriente_id']
+                resultado = consulta_saldo(nro_cta)
+        else:
+            cargar_errores(form.errors)
+
 
         return render_template('consultar_saldo_cta_corriente.html', \
             datos=current_user.get_mis_datos(), \
@@ -147,7 +158,6 @@ def importar():
 @cta_corriente.route('/cta_corriente/descargar/consulta')
 @login_required
 def descargar_consulta_cta_corriente():
-    print('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
     if current_user.has_role('Operador'):
         resultado = request.args.get('resultado')
         print(resultado, flush=True)
