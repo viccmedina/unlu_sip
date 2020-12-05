@@ -293,3 +293,8 @@ def nuevo_pedido_desde_pedido_anterior(usuario, pedido):
         for r in result:
             insert_into_detalle_pedido(pedido, r['producto_envase_id'], r['cantidad'])
     return execute
+
+def get_estado_actual_pedido(pedido_id):
+    result = db.engine.execute(SELECT_PEDIDO.format(pedido_id=pedido_id))
+    estado_actual = parser_result(result)
+    return estado_actual

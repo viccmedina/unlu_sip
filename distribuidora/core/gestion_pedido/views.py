@@ -210,8 +210,6 @@ def listar_detalle_pedido():
     form = ModificarDetallePedido()
     pedido = request.args.get('pedido', type=int)
     detalle = get_detalle_pedido(pedido)
-    print('DETALLE FULL PEDIDO', flush=True)
-    print(detalle, flush=True)
     return render_template('detalle_pedido.html',\
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated,\
@@ -225,9 +223,11 @@ def listar_detalle_pedido():
 @login_required
 def listar_detalle_pedido_anterior():
     pedido = request.args.get('pedido', type=int)
-    print('PEDIDO ANTERIOR ------ {}'.format(pedido), flush=True)
+    estado_pedido = get_estado_actual_pedido(pedido)
+    if estado_pedido[0]['descripcion_corta'] in ['PCO']:
+        return redirect(url_for('pedido.listar_detalle_pedido', pedido=pedido))
+    
     detalle = get_detalle_pedido(pedido)
-    print('DETALLE PEDIDO ANTERIOR ---- {}'.format(detalle))
     return render_template('detalle_pedidos_anteriores.html',\
         detalle=detalle,\
         datos=current_user.get_mis_datos(),\

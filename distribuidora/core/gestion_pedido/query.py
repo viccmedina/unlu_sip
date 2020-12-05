@@ -108,3 +108,7 @@ INSERT_NUEVO_COMPROBANTE_PAGO = """ INSERT INTO comprobante_pago (monto,
 
 SELECT_ID_FROM_ESTADO_COMPROBANTE_PAGO = """ SELECT * FROM estado_comprobante_pago
 	WHERE descripcion_corta='{descripcion_corta}' """
+
+SELECT_PEDIDO = """ SELECT * FROM pedido AS p 
+    INNER JOIN pedido_estado AS pe ON pe.pedido_estado_id = p.estado_pedido_id
+    WHERE pedido_id = '{pedido_id}' """
