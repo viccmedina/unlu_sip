@@ -242,7 +242,13 @@ def repetir_pedido():
             form = ModificarDetallePedido()
             detalle = get_detalle_pedido(pedido)
             flash('Pedido creado satisfactoriamente', 'success')
-            return render_template('detalle_pedido.html', detalle=detalle, form=form)
+            return render_template('detalle_pedido.html',\
+                detalle=detalle,\
+                form=form,\
+                datos=current_user.get_mis_datos(),\
+                is_authenticated=current_user.is_authenticated,\
+                rol=current_user.get_role(),\
+                site='Gestión de Pedido')
         else:
             flash('ERROR! Ya existe un pedido en curso', 'error')
             return redirect(url_for('pedido.consultar_pedido'))

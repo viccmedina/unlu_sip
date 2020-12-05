@@ -33,14 +33,23 @@
                   {% endfor %}
                 </tbody>
               </table>
-               <a data-toggle="modal" data-target="#exampleModal" class="btn btn-primary" href="{{ url_for('pedido.repetir_pedido', pedido=detalle[0]['pedido_id']) }}">Repetir Pedido</a>
+               <a id="repetir_pedido" data-toggle="modal" data-target="#linkModal" class="btn btn-primary" href="{{ url_for('pedido.repetir_pedido', pedido=detalle[0]['pedido_id']) }}">Repetir Pedido</a>
             </div>
           </div>
         </div>
 </div>
     
 {% include "modal_form.html" %}
-{% include "js_form_modal.html" %}
+
+<script type="text/javascript">
+
+  document.getElementById('link_confirm').addEventListener('click', repetirPedido);
+  function repetirPedido(){
+    let a = document.getElementById("repetir_pedido");
+    console.log(a.href);
+    window.location.href = a.href;
+  }
+</script>
 
 {% endblock %}
 
