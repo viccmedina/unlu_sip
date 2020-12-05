@@ -36,7 +36,7 @@
                               <div class="card h-100">
                                 <img src="/static/img/pedidos/recipient.svg" class="card-img-top" alt="producto" width="45%" height="100">
                                 <div class="card-body">
-                                  <p>Número de Pedido: {{ pt[0] }}</p>
+                                  <p>Número de Pedido: {{ pt }}</p>
                                   <p> <strong>{{ pt[1] }}</strong></p>
                                   <a class="btn btn-primary btn-sm" role="button" href="{{ url_for('pedido.listar_detalle_pedido_anterior', pedido=pt) }}">Ver Detalle Pedido</a>
                                 </div>

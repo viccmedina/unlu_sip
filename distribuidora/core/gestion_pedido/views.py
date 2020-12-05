@@ -10,10 +10,10 @@ pedido = Blueprint('pedido', __name__, template_folder='templates')
 
 def paginado(page):
     pedidos_todos = db.session.query(Pedido, PedidoEstado).filter(\
-    Pedido.usuario_id==current_user.get_id(), Pedido.estado_pedido_id!=1).paginate(page, 5, False)
-    print('-'*100, flush=True)
-    print(pedidos_todos.items, flush=True)
-    print('-'*100, flush=True)
+        Pedido.usuario_id==current_user.get_id()).\
+        filter(PedidoEstado.descripcion_corta!='PCC').\
+        filter(Pedido.estado_pedido_id == PedidoEstado.pedido_estado_id).\
+        paginate(page, 5, False)
     return pedidos_todos
 
 

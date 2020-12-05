@@ -61,10 +61,7 @@ SELECT_PEDIDOS_ESTADO_PCO = """ SELECT  hep.historial_estado_pedido_id, hep.pedi
 SELECT_PEDIDOS_ESTADO_PCC = """ SELECT hep.pedido_id, pe.descripcion FROM historial_estado_pedido AS hep
     INNER JOIN pedido_estado AS pe ON hep.pedido_estado_id = pe.pedido_estado_id
     INNER JOIN pedido AS p ON p.pedido_id=hep.pedido_id
-    WHERE p.usuario_id='{usuario_id}' AND pe.descripcion_corta='PCC'
-        AND hep.pedido_id IN
-        	(SELECT pedido_id FROM historial_estado_pedido
-        		GROUP BY pedido_id HAVING COUNT(pedido_id) = 1 )"""
+    WHERE p.usuario_id='{usuario_id}' AND p.estado_pedido_id = 1 """
 
 
 INSERT_INTO_DETALLE_PEDIDO = """ INSERT INTO detalle_pedido (pedido_id, producto_envase_id, cantidad)
@@ -86,6 +83,8 @@ UPDATE_PEDIDO_ESTADO = """ UPDATE pedido SET estado_pedido_id='{estado_pedido_id
     WHERE pedido_id='{pedido_id}'"""
 
 DELETE_PEDIDO_BY_CLIENTE = """ DELETE FROM pedido WHERE pedido_id='{pedido_id}' """
+
+DELETE_PEDIDO_FROM_HISTORIAL = """ DELETE FROM historial_estado_pedido WHERE pedido_id='{pedido_id}' """
 
 SELECT_PEDIDO = """ SELECT p.pedido_id, pe.descripcion_corta, pe.descripcion, p.estado_pedido_id
     FROM pedido as p INNER JOIN pedido_estado AS pe ON p.estado_pedido_id=pe.pedido_estado_id

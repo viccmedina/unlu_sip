@@ -81,11 +81,14 @@ def crear_nuevo_pedido(cliente, estado):
 
         result = db.engine.execute(INSERT_NUEVO_PEDIDO.format(\
             usuario_id=cliente, estado_pedido_id=estado))
+        print('RESULTADOD -------- {}'.format(check(result)))
         pedido_id = db.engine.execute(SELECT_ID_ULTIMO_PEDIDO.format(\
             usuario_id=cliente))
         pedido_id = parser_result(pedido_id)
+        print(pedido_id)
         result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
             pedido_estado_id=estado, pedido_id=pedido_id[0]['pedido_id']))
+        print('RESULTADOD -------- {}'.format(check(result)))
         return True
 
 def get_cantidad_estados_pedido(pedido_id):
@@ -266,6 +269,7 @@ def anular_pedido_por_cliente(pedido_id):
     pedido = parser_result(pedido)
     if pedido[0]['descripcion_corta'] == 'PCC':
         delete = db.engine.execute(DELETE_PEDIDO_BY_CLIENTE.format(pedido_id=pedido_id))
+        d = db.engine.execute(DELETE_PEDIDO_FROM_HISTORIAL.format(pedido_id=pedido_id))
         return check(delete)
     else:
         return False

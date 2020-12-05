@@ -22,9 +22,9 @@ class ConsultarMovimientos(FlaskForm):
     format='%Y-%m-%dT%H:%M'
     fecha_desde = DateTimeLocalField('Desde', format=format , validators=[DataRequired()])
     fecha_hasta = DateTimeLocalField('Hasta', format=format)
-    #tp = get_tipos_movimientos()
+    tp = get_tipos_movimientos()
     cliente = StringField('NRO Cliente', validators=[DataRequired()])
-    #tipo_movimiento = SelectField('Tipo Mov', choices=tp)
+    tipo_movimiento = SelectField('Tipo Mov', choices=tp)
     submit = SubmitField('Consultar')
     cancelar = SubmitField('Cancelar')
 
