@@ -97,13 +97,17 @@ def modificar_detalle_producto():
         producto = request.args.get('producto', type=int)
         cantidad = form.cantidad.data
         result = update_detalle_producto(pedido, detalle,\
-            cantidad, usuario=current_user.has_role('Operador'))
+            cantidad, usuario=current_user.get_role())
+        print('%'*100, flush=True)
+        print(result, flush=True)
+        print('%'*100, flush=True)
         if result:
             flash('Actualizado Correctamente !', 'success')
         else:
             flash('Algo Salió mal !', 'error')
     else:
         flash('Algo Salió mal !', 'error')
+        print(form.errors, flush=True)
     detalle = get_detalle_pedido(pedido)
     return render_template('detalle_pedido.html',\
         datos=current_user.get_mis_datos(),\

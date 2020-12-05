@@ -146,7 +146,8 @@ def get_listado_pedidos_pcc(usuario_id):
     return result
 
 def update_detalle_producto(pedido_id, detalle, cantidad, usuario=None):
-    if usuario is None:
+    print(usuario, flush=True)
+    if usuario == 'Cliente':
         print('SOY CLIENTEEEEEEEEE', flush=True)
         if get_cantidad_estados_pedido(pedido_id) < 3 :
             result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
@@ -154,7 +155,7 @@ def update_detalle_producto(pedido_id, detalle, cantidad, usuario=None):
             return check(result)
         else:
             return False
-    elif usuario == True:
+    elif usuario == 'Operador':
         print('SOY OPERADOR, PUEDO MODIFCAR LO QUE SE ME DE LA GANA', flush=True)
         result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
                 detalle_id=detalle, cantidad=cantidad))
@@ -247,9 +248,10 @@ def actualizar_estado_pedido(pedido, estado):
 def eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido_id):
     cantidad = get_cantidad_estados_pedido(pedido_id)
     print('CANTIDAAAAAAAAAAAAAAAAAA {}'.format(cantidad), flush=True)
-    if cantidad < 3 :
+    if cantidad < 4 :
         result = db.engine.execute(DELETE_PRODUCTO_FROM_DETALLE_PEDIDO.format(\
             detalle_id=detalle_id, producto_envase_id=producto_envase_id))
+        print()
         return check(result)
     else:
         return False
