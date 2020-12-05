@@ -1,8 +1,9 @@
 <script type="text/javascript">
 
-  document.getElementById('confirm').addEventListener('click', enviarForm);
-  function enviarForm(event){
+  document.getElementById('link_confirm').addEventListener('click', eliminarItem);
+  function eliminarItem(){
     let a = document.getElementById("l_delete");
-    console.log(a);
+    console.log(a.href);
+    window.location.href = a.href;
   }
 </script>

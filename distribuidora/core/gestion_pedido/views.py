@@ -113,7 +113,7 @@ def modificar_detalle_producto():
         detalle=detalle,\
         form=form)
 
-@pedido.route('/pedido/detalle/eliminar', methods=['GET'])
+@pedido.route('/pedido/detalle/eliminar', methods=['GET', 'POST'])
 @login_required
 def eliminar_producto_detalle():
     form = ModificarDetallePedido()
@@ -121,6 +121,8 @@ def eliminar_producto_detalle():
     producto_envase_id = request.args.get('producto_envase_id', type=int)
     detalle_id = request.args.get('detalle_pedido', type=int)
     result = eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido)
+    print('#'*100, flush=True)
+    print(result, flush=True)
     if result:
         flash('Producto Eliminado Correctamente !', 'success')
     else:

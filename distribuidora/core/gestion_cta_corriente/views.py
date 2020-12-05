@@ -30,28 +30,26 @@ def index():
 @login_required
 def consultar_cta_corriente():
     if current_user.has_role('Operador'):
-    	resultado = None
-    	form = ConsultarMovimientos()
-    	if form.validate_on_submit():
-    		fecha_desde = form.fecha_desde.data
-    		fecha_hasta = form.fecha_hasta.data
-    		if fecha_hasta is None:
-    			fecha_hasta = datetime.datetime.now()
+        resultado = None
+        form = ConsultarMovimientos()
+        if form.validate_on_submit():
+            fecha_desde = form.fecha_desde.data
+            fecha_hasta = form.fecha_hasta.data
+            if fecha_hasta is None:
+                fecha_hasta = datetime.datetime.now()
+            cliente = form.cliente.data
+            print('#'*80, flush=True)
+            nro_cta = get_nro_cuenta_corriente(cliente)
+            nro_cta = nro_cta[0]['cuenta_corriente_id']
+            if nro_cta:
+                resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cta)
+            else:
+                flash("La cuenta ingresada es incorrecta", 'error')
 
-    		cliente = form.cliente.data
-    		print('#'*80, flush=True)
-    		nro_cta = get_nro_cuenta_corriente(cliente)
-    		if nro_cta == -999 :
-    			flash("La cuenta ingresada es incorrecta", 'error')
-    		else:
-    			resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cta)
-    	else:
-    		print(form.errors, flush=True)
-
-    	return render_template('form_consultar_cta_corriente.html', \
-    		datos=current_user.get_mis_datos(),	\
-    		is_authenticated=current_user.is_authenticated, rol=ROL, form=form, \
-    		resultado=resultado, site= TITULO + ' - Consulta')
+        return render_template('form_consultar_cta_corriente.html', \
+            datos=current_user.get_mis_datos(),	\
+            is_authenticated=current_user.is_authenticated, rol=ROL, form=form, \
+            resultado=resultado, site= TITULO + ' - Consulta')
     abort(403)
 
 @cta_corriente.route('/cta_corriente/agregar', methods=['GET', 'POST'])
@@ -67,21 +65,25 @@ def agregar():
             cliente = form.cliente.data
             monto = form.monto.data
             nro_cta = get_nro_cuenta_corriente(cliente)
-            nro_cta = nro_cta[0]['cuenta_corriente_id']
-            usuario_id = current_user.get_id()
-            user = Usuario.query.filter_by(id=usuario_id).first()
-            resultado = new_mov_cta_corriente(nro_cta, tipo_movimiento, user.id, monto)
-            saldo = consulta_saldo(nro_cta)
-            if tipo_movimiento == 'Pago':
-                if actualizar_estado_comprobante_pago(monto, cliente):
-                    flash("Pago agregar correctamente", 'success')
-            else:
-                flash("Algo salió mal, verifique los datos ingresados", 'error')
+            print(nro_cta, flush=True)
+            if len(nro_cta) > 0:
+                nro_cta = nro_cta[0]['cuenta_corriente_id']
+                usuario_id = current_user.get_id()
+                user = Usuario.query.filter_by(id=usuario_id).first()
+                resultado = new_mov_cta_corriente(nro_cta, tipo_movimiento, user.id, monto)
+                saldo = consulta_saldo(nro_cta)
+                if tipo_movimiento == 'Pago':
+                    if actualizar_estado_comprobante_pago(monto, cliente):
+                        flash("Pago agregar correctamente", 'success')
+                else:
+                    flash("Algo salió mal, verifique los datos ingresados", 'error')
 
-            if resultado:
-                flash("La transacción se ha registrado con éxito", 'success')
+                if resultado:
+                    flash("La transacción se ha registrado con éxito", 'success')
+                else:
+                    flash("Algo salió mal, verifique los datos ingresados", 'error')
             else:
-                flash("Algo salió mal, verifique los datos ingresados", 'error')
+                flash("La cuenta ingresada no existe.", 'error')
 
 
         return render_template('form_agregar_movimiento_cta_corriente.html', \
@@ -145,8 +147,11 @@ def importar():
 @cta_corriente.route('/cta_corriente/descargar/consulta')
 @login_required
 def descargar_consulta_cta_corriente():
+    print('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
     if current_user.has_role('Operador'):
-    	resultado = request.args.get('resultado')
-    	html = render_template('tabla_movimientos_cta_corriente.html', resultado=resultado)
-    	return render_pdf(HTML(string=html))
+        resultado = request.args.get('resultado')
+        print(resultado, flush=True)
+        resultado = json.loads(resultado.replace("'", '"'))
+        html = render_template('tabla_movimientos_cta_corriente.html', resultado=resultado)
+        return render_pdf(HTML(string=html))
     abort(403)

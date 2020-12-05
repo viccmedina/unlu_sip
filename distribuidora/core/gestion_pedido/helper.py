@@ -245,7 +245,9 @@ def actualizar_estado_pedido(pedido, estado):
         return check(result)
 
 def eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido_id):
-    if get_cantidad_estados_pedido(pedido_id) < 3 :
+    cantidad = get_cantidad_estados_pedido(pedido_id)
+    print('CANTIDAAAAAAAAAAAAAAAAAA {}'.format(cantidad), flush=True)
+    if cantidad < 3 :
         result = db.engine.execute(DELETE_PRODUCTO_FROM_DETALLE_PEDIDO.format(\
             detalle_id=detalle_id, producto_envase_id=producto_envase_id))
         return check(result)
