@@ -7,3 +7,4 @@ class MessageForm(FlaskForm):
 	message = TextAreaField(validators=[\
 		DataRequired(), Length(min=0, max=140)])
 	submit = SubmitField('Enviar')
+

@@ -25,9 +25,9 @@ class ConsultarMovimientos(FlaskForm):
     format='%Y-%m-%dT%H:%M'
     fecha_desde = DateTimeLocalField('Desde', format=format , validators=[DataRequired()])
     fecha_hasta = DateTimeLocalField('Hasta', format=format)
-    tp = get_tipos_movimientos()
+    #tp = get_tipos_movimientos()
     cliente = StringField('NRO Cliente', validators=[DataRequired(MSG_NRO_CLIENTE_VALIDO)])
-    tipo_movimiento = SelectField('Tipo Mov', choices=tp)
+    tipo_movimiento = SelectField('Tipo Mov', choices=[])
     submit = SubmitField('Consultar')
     cancelar = SubmitField('Cancelar')
 
@@ -47,8 +47,8 @@ class AgregarMovimiento(FlaskForm):
     de la Cta Corriente del usuario.
     """
 
-    tp = get_tipos_movimientos()
-    tipo_movimiento = SelectField(u'Tipo Mov', choices=tp)
+    #tp = get_tipos_movimientos()
+    tipo_movimiento = SelectField(u'Tipo Mov', choices=[])
     cliente = StringField('NRO Cliente', validators=[DataRequired(MSG_NRO_CLIENTE_VALIDO)])
     monto = FloatField('Monto', validators=[DataRequired(MSG_ERR_MONTO_VALIDO),\
         NumberRange(max=3000000, min=1, message=MSG_ERR_MONTO_LEN) ])

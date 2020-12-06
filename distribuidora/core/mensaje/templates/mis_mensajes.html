@@ -1,0 +1,25 @@
+<h2>MIS MENSAJES</h2>
+
+	<h3>ENVIADOS</h3>
+	<ul>
+		{% for e in datos['enviados'] %}
+			<li>{{ e }}</li>
+		{% endfor %}
+	</ul>
+<br>
+	<h3>RECIBIDOS</h3>
+	<ul>
+		{% for r in datos['recibidos'] %}
+			<li>{{ r }}</li>
+		{% endfor %}
+	</ul>
+
+	<h3>CANTIDAD DE MSJ SIN LEER: {{datos['sin_leer']['cantidad']}}</h3>
+	<h2>MENSAJES SIN LEER</h2>
+	<ul>
+		{% for sl in datos['sin_leer']['msjs'] %}
+			<li>{{ sl }}</li>
+			<a id="leer_msj" class="btn btn-primary" href="{{ url_for('mensajes.listar_mensajes', msj_leido=sl) }}">Leer</a>
+		{% endfor %}
+		
+	</ul>
