@@ -4,8 +4,9 @@ from distribuidora.core.gestion_stock.forms import AgregarStock,ConsultarStock, 
 from distribuidora.models.stock import TipoMovimientoStock
 from distribuidora.core.gestion_stock.constants import TITULO, ROL
 from distribuidora.core.gestion_stock.helper import get_id_producto, \
-consulta_sotck, agregar_stock, salida, consultaMovimientosExportar
+	consulta_sotck, agregar_stock, salida, consultaMovimientosExportar
 from distribuidora.models.gestion_usuario import Usuario
+from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora import db
 from flask_weasyprint import HTML, render_pdf, CSS
 import json
@@ -20,7 +21,8 @@ def index():
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated, \
         rol='operador', \
-        site='Gestión de Stock')
+        site='Gestión de Stock',\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
     abort(403)
 
@@ -70,7 +72,8 @@ def consultar_stock():
         rol='operador', \
         products=products, \
         form=form, \
-        site=TITULO)
+        site=TITULO,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
     abort(403)
 
@@ -136,7 +139,9 @@ def agregar():
 		uMedida=id_um, \
 		resultado=resultado, \
 		site=TITULO ,\
-		form=form)
+		form=form,\
+		sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+
 	abort(403)
 
 @stock.route('/stock/exportar', methods=['POST', 'GET'])
@@ -168,7 +173,8 @@ def exportar():
 			resultado=resultado, \
 			form=form, \
 			site=TITULO,\
-			rol='operador')
+			rol='operador',\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 	abort(403)
 
 
@@ -180,7 +186,8 @@ def importar():
 		return render_template('importar_movimientos.html', \
 		datos=current_user.get_mis_datos(), \
 		is_authenticated=current_user.is_authenticated, \
-		rol='operador')
+		rol='operador',\
+		sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 	abort(403)
 
 

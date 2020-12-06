@@ -6,7 +6,7 @@ from distribuidora.core.gestion_pedido.helper import get_cantidad_estados_pedido
     get_ultimo_pedido_id, insert_into_detalle_pedido
 from distribuidora.core.gestion_producto.helper import *
 from distribuidora.models.producto import TipoProducto,Envase
-
+from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase, TipoProducto, \
 UnidadMedida
 from distribuidora.models.precio import Lista_precio_producto
@@ -96,7 +96,8 @@ def consultar_producto():
         is_authenticated=current_user.is_authenticated,\
         rol='operador',\
         products=products,\
-        form=form)
+        form=form,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
 
@@ -123,6 +124,7 @@ def agregar():
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
         rol='operador',\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
         products=products,\
         form=form)
     abort(403)
@@ -133,6 +135,7 @@ def agregar():
 def modificar():
     return render_template('form_modificar_producto.html', \
     datos=current_user.get_mis_datos(), \
+    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
     is_authenticated=current_user.is_authenticated, \
     rol='operador')
 
@@ -143,6 +146,7 @@ def eliminar():
     if current_user.has_role('Operador'):
         return render_template('form_eliminar_producto.html', \
         datos=current_user.get_mis_datos(), \
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
         is_authenticated=current_user.is_authenticated, \
         rol='operador')
     abort(403)
@@ -154,6 +158,7 @@ def exportar():
     if current_user.has_role('Operador'):
     	return render_template('exportar_producto.html', \
         datos=current_user.get_mis_datos(), \
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
         is_authenticated=current_user.is_authenticated, \
         rol='operador')
     abort(403)
@@ -165,6 +170,7 @@ def importar():
         form=ImportarProducto()
         return render_template('importar_producto.html', \
             datos=current_user.get_mis_datos(), \
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
             is_authenticated=current_user.is_authenticated, \
             rol='operador', \
             site='Importar Producto', \
@@ -228,5 +234,6 @@ def detalle_producto():
         productos=productos,\
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated, \
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
         rol=current_user.get_role(), \
         site='Detalle Producto')
