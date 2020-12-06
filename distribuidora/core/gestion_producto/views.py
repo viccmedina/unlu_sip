@@ -36,7 +36,9 @@ def consultar_producto():
         id_um = None
         products = None
         form = ConsultarProducto()
-
+        form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
         if form.validate_on_submit():
             id_producto = form.producto.data
             id_marca = form.marca.data
@@ -96,7 +98,8 @@ def consultar_producto():
         is_authenticated=current_user.is_authenticated,\
         rol='operador',\
         products=products,\
-        form=form)
+        form=form,\
+        site='Consulta de Productos')
     abort(403)
 
 
@@ -104,11 +107,10 @@ def consultar_producto():
 @login_required
 def agregar():
     if current_user.has_role('Operador'):
-        id_producto = None
-        id_marca = None
-        id_um = None
         products = None
         form = AgregarProducto()
+        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
         form.tipo_producto.choices = [(descripcion.descripcion) for descripcion in TipoProducto.query.all()]
         form.envase.choices = [(descripcion.descripcion) for descripcion in Envase.query.all()]
         if form.validate_on_submit():
@@ -137,14 +139,35 @@ def modificar():
     rol='operador')
 
 
-@producto.route('/eliminar', methods=['GET'])
+@producto.route('/eliminar', methods=['POST','GET'])
 @login_required
 def eliminar():
     if current_user.has_role('Operador'):
+        products = None
+            #eliminar_producto(form.producto.data,form.marca.data,form.uMedida.data)
+        form = EliminarProducto()
+        if form.validate_on_submit():
+            id_producto = form.producto.data
+            id_marca = form.marca.data
+            id_um = form.uMedida.data
+            if consultar_id_producto(id_producto) and consultar_id_marca(id_marca) and consultar_id_umedida(id_um):
+                products = consulta_producto_pProductoMarcaUMedida(id_producto,id_marca,id_um)
+            elif not consultar_id_producto(id_producto):
+                flash("El producto ingresado es incorrecto",'warning')
+            elif not consultar_id_marca(id_marca):
+                flash("La marca ingresada es incorrecta",'warning')
+            else:
+                flash("La unidad de medida ingresada es incorrecta",'warning')
+
+
+
         return render_template('form_eliminar_producto.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
-        rol='operador')
+        rol='operador',\
+        form=form,\
+        products=products,\
+        site='Eliminar Producto')
     abort(403)
 
 
@@ -177,6 +200,7 @@ def importar():
 def listar_productos():
     page = request.args.get('page', 1, type=int)
     #productos = lista_de_productos().paginate(page,5,False)
+
     productos = db.session.query(Producto, Marca, TipoProducto,Lista_precio_producto, UnidadMedida, ProductoEnvase).filter(\
         ProductoEnvase.producto_id == Producto.producto_id).filter(\
         Producto.tipo_producto_id == TipoProducto.tipo_producto_id).filter(\
@@ -224,3 +248,18 @@ def detalle_producto():
         flash(form.errors, 'errors')
 
     return render_template('detalle_producto.html', form=form, productos=productos)
+
+
+@producto.route('/producto/eliminado', methods=['GET', 'POST'])
+@login_required
+def eliminar_producto():
+    if current_user.has_role('Operador'):
+
+        return render_template('form_eliminar_producto.html', \
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated, \
+        rol='operador',\
+        form=form,\
+        products=products,\
+        site='Eliminar Producto')
+    abort(403)
