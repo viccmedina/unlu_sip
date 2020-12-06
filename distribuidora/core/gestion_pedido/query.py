@@ -5,6 +5,9 @@ CONSULTA_POR_ESTADO_PEDIDO = """ SELECT * FROM pedido WHERE
 CONSULTA_POR_CLIENTE_PEDIDO = """ SELECT * FROM pedido WHERE
     usuario_id='{usuario_id}' """
 
+# Obtenemos todos los datos del pedido según el id del pedido.
+SELECT_PEDIDO_POR_ID = """ SELECT * FROM pedido WHERE pedido_id='{pedido_id}'"""
+
 # Dado un nro de pedido, recuperamos el detalle del mismo
 LISTAR_DETALLE_PEDIDO = """ SELECT * FROM detalle_pedido WHERE
     pedido_id='{pedido_id}' """
@@ -112,3 +115,4 @@ SELECT_ID_FROM_ESTADO_COMPROBANTE_PAGO = """ SELECT * FROM estado_comprobante_pa
 SELECT_PEDIDO = """ SELECT * FROM pedido AS p 
     INNER JOIN pedido_estado AS pe ON pe.pedido_estado_id = p.estado_pedido_id
     WHERE pedido_id = '{pedido_id}' """
+

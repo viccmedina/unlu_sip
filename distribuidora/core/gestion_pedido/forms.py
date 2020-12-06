@@ -24,8 +24,8 @@ class CancelarPedido(FlaskForm):
     pass
 
 class ActualizarEstadoPedido(FlaskForm):
-    #estados = get_estados_pedidos_para_operador()
-    estado = SelectField(u'Nuevo Estado', choices=[])
+    estados = get_estados_pedidos_para_operador()
+    estado = SelectField(u'Nuevo Estado', choices=estados)
     submit = SubmitField('Actualizar')
 
 

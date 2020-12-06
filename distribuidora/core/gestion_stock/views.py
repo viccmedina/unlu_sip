@@ -2,6 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora.core.gestion_stock.forms import AgregarStock,ConsultarStock, ExportarStock
 from distribuidora.models.stock import TipoMovimientoStock
+from distribuidora.models.producto import Producto,Marca, UnidadMedida
 from distribuidora.core.gestion_stock.constants import TITULO, ROL
 from distribuidora.core.gestion_stock.helper import get_id_producto, \
 	consulta_sotck, agregar_stock, salida, consultaMovimientosExportar

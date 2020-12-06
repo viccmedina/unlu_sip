@@ -23,6 +23,7 @@ def index():
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated,\
         rol='operador',\
+        sin_leer= get_cantidad_msj_sin_leer(current_user.get_id()),\
         site='Gestión de Productos')
     abort(403)
 
@@ -193,12 +194,12 @@ def listar_productos():
 
 
     return render_template('listar_productos.html', \
-    datos=current_user.get_mis_datos(), \
-    is_authenticated=current_user.is_authenticated, \
-    rol=current_user.get_role(), \
-    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
-    site='Listado de Productos', \
-    producto=productos)
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated, \
+        rol=current_user.get_role(), \
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+        site='Listado de Productos', \
+        producto=productos)
 
 @producto.route('/producto/detalle', methods=['GET', 'POST'])
 @login_required

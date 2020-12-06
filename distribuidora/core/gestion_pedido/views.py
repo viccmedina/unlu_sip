@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from distribuidora.models.pedido import PedidoEstado, Pedido, DetallePedido
-from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
+from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer, insert_nuevo_mensaje
 from distribuidora.core.gestion_pedido.helper import *
 from distribuidora.core.gestion_pedido.forms import NuevoPedido, FormAgregarProducto, \
     ModificarDetallePedido, ActualizarEstadoPedido
@@ -189,6 +189,23 @@ def modificar_estado_operador():
 
             if result:
                 flash('Estado de pedido actualizado !', 'success')
+                # Si todo salio bien, debemos informar que hubo 
+                # una actualización en el estado del pedido
+                body = 'El pedido #{} ha cambiado de estado a: - {}'.format(pedido, estado_nuevo)
+                receptor = get_pedido_by_id(pedido)[0]['usuario_id']
+                print('receptor {}'.format(receptor), flush=True)
+                emisor = current_user.get_id()
+                data = {
+                    "emisor": emisor,
+                    "receptor": receptor,
+                    "body": body
+                }
+                resp = insert_nuevo_mensaje(data)
+                if data:
+                    flash('Mensaje enviado', 'success')
+                else:
+                    flash('Algo salió mal, verifique los datos', 'warning')
+
             else:
                 flash('ERROR! El nuevo estado no es posible :(', 'error')
 

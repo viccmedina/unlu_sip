@@ -298,3 +298,7 @@ def get_estado_actual_pedido(pedido_id):
     result = db.engine.execute(SELECT_PEDIDO.format(pedido_id=pedido_id))
     estado_actual = parser_result(result)
     return estado_actual
+
+def get_pedido_by_id(pedido_id):
+    result = db.engine.execute(SELECT_PEDIDO_POR_ID.format(pedido_id=pedido_id))
+    return parser_result(result)
