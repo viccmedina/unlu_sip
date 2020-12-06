@@ -15,13 +15,12 @@ class ConsultarProducto(FlaskForm):
 	cancelar = SubmitField('Cancelar')
 
 class AgregarProducto(FlaskForm):
-	producto = StringField('Ingrese El Nombre Producto')
-	marca = StringField('Ingrese La Marca del Producto')
-	uMedida = StringField('Ingrese La Unidad de Medida')
-	tipo_producto = SelectField(u'Tipo Producto', choices=[])
-	envase = SelectField(u'Envase', choices=[])
-	submit = SubmitField('Consultar')
-	cancelar = SubmitField('Cancelar')
+	producto = StringField('Ingrese El Nombre Producto', validators=[DataRequired()])
+	marca = StringField('Ingrese La Marca del Producto', validators=[DataRequired()])
+	uMedida = StringField('Ingrese La Unidad de Medida', validators=[DataRequired()])
+	tipo_producto = SelectField(u'Tipo Producto', choices=[], validators=[DataRequired()])
+	envase = SelectField(u'Envase', choices=[], validators=[DataRequired()])
+	submit = SubmitField('Agregar')
 
 class ImportarProducto(FlaskForm):
 	file = FileField('Archivo')

@@ -31,5 +31,5 @@ class ActualizarEstadoPedido(FlaskForm):
 
 
 class ModificarDetallePedido(FlaskForm):
-    cantidad = IntegerField('Cantidad:', validators=[DataRequired()])
+    cantidad = IntegerField('Cantidad:', validators=[DataRequired('Debe ingresa la cantidad')])
     submit = SubmitField('Modificar')

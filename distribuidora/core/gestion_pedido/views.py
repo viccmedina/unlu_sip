@@ -8,6 +8,14 @@ from distribuidora.core.gestion_pedido.forms import NuevoPedido, FormAgregarProd
 
 pedido = Blueprint('pedido', __name__, template_folder='templates')
 
+def cargar_errores(errores):
+    """
+    Pasamos el diccionario con todos los errores levantados por Flask
+    """
+    for key, value in errores.items():
+        for v in value:
+            flash(v, 'error')
+
 def paginado(page):
     pedidos_todos = db.session.query(Pedido, PedidoEstado).filter(\
         Pedido.usuario_id==current_user.get_id()).\
@@ -106,8 +114,8 @@ def modificar_detalle_producto():
         else:
             flash('Algo Salió mal !', 'error')
     else:
-        flash('Algo Salió mal !', 'error')
-        print(form.errors, flush=True)
+        cargar_errores(form.errors)
+       
     detalle = get_detalle_pedido(pedido)
     return render_template('detalle_pedido.html',\
         datos=current_user.get_mis_datos(),\
@@ -125,8 +133,7 @@ def eliminar_producto_detalle():
     producto_envase_id = request.args.get('producto_envase_id', type=int)
     detalle_id = request.args.get('detalle_pedido', type=int)
     result = eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido)
-    print('#'*100, flush=True)
-    print(result, flush=True)
+
     if result:
         flash('Producto Eliminado Correctamente !', 'success')
     else:

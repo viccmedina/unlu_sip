@@ -26,7 +26,7 @@ class ConsultarMovimientos(FlaskForm):
     fecha_desde = DateTimeLocalField('Desde', format=format , validators=[DataRequired()])
     fecha_hasta = DateTimeLocalField('Hasta', format=format)
     tp = get_tipos_movimientos()
-    cliente = StringField('NRO Cliente', validators=[DataRequired()])
+    cliente = StringField('NRO Cliente', validators=[DataRequired(MSG_NRO_CLIENTE_VALIDO)])
     tipo_movimiento = SelectField('Tipo Mov', choices=tp)
     submit = SubmitField('Consultar')
     cancelar = SubmitField('Cancelar')
@@ -60,9 +60,8 @@ class ConsultarSaldo(FlaskForm):
     """
 
 
-    cliente = StringField('NRO Cliente', validators=[DataRequired()])
+    cliente = StringField('NRO Cliente', validators=[DataRequired(MSG_NRO_CLIENTE_VALIDO)])
     submit = SubmitField('Consultar')
-    cancelar = SubmitField('Cancelar')
 
 
 class DescargarConsulta(FlaskForm):
