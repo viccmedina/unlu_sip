@@ -625,7 +625,7 @@ if __name__ == '__main__':
 	print('#'*50)
 	insertar_movimiento_stock()
 	print('#'*50)
-	#insertar_triggers()
+	insertar_triggers()
 	#insertar_comprobante_pago()
 	print('#'*50)
 	#insertar_devolucion()

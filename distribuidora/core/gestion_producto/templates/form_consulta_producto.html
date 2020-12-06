@@ -15,25 +15,50 @@
 
 				              <form  method="POST">
 
-								{% include "flash_errors.html" %}
+												{% with messages = get_flashed_messages(with_categories=true) %}
+														{% if messages %}
+																<ul class=flashes>
+																		{% for category, message in messages %}
+																				{% if category == "error" %}
+																						<div class="alert alert-danger alert-dismissible fade show" role="alert">
+																								{{ message }}
+																								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+																										<span aria-hidden="true">&times;</span>
+																								</button>
+																						</div>
+																				{% else %}
+																						<div class="alert alert-warning alert-dismissible fade show" role="alert">
+																										{{ message }}
+																										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+																												<span aria-hidden="true">&times;</span>
+																										</button>
+																						</div>
+																				{% endif%}
+																		{% endfor %}
+																</ul>
+														{% endif %}
+												{% endwith %}
 
 
 
-									{{ form.hidden_tag() }}
-					                <div class="form-group">
-					                 	{{ form.producto.label(class="form-control-label") }}
-					                  	{{ form.producto(class="form-control form-control-md") }}
-										{{ form.marca.label(class="form-control-label") }}
-										{{ form.marca(class="form-control form-control-md") }}
-										{{ form.uMedida.label(class="form-control-label") }}
-										{{ form.uMedida(class="form-control form-control-md") }}
-					                </div>
-									<div class="form-group">
-	            
-										<span style="float:right">
-												{{ form.submit(class="btn btn-success mb-2") }}
-										</span>
-				                	</div>
+
+												{{ form.hidden_tag() }}
+				                <div class="form-group">
+				                  {{ form.producto.label(class="form-control-label") }}
+				                  {{ form.producto(class="form-control form-control-md") }}
+													{{ form.marca.label(class="form-control-label") }}
+													{{ form.marca(class="form-control form-control-md") }}
+													{{ form.uMedida.label(class="form-control-label") }}
+													{{ form.uMedida(class="form-control form-control-md") }}
+				                </div>
+												<div class="form-group">
+				                  <span style="float:left">
+															{{ form.cancelar(class="btn btn-danger mb-2 mb-2") }}
+													</span>
+													<span style="float:right">
+															{{ form.submit(class="btn btn-success mb-2") }}
+													</span>
+				                </div>
 
 
 <br><br><br>

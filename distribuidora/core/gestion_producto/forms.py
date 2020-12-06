@@ -16,11 +16,19 @@ class ConsultarProducto(FlaskForm):
 
 class AgregarProducto(FlaskForm):
 	producto = StringField('Ingrese El Nombre Producto')
-	marca = StringField('Ingrese La Marca del Producto')
-	uMedida = StringField('Ingrese La Unidad de Medida')
+	marca = SelectField(u'Marca', choices=[])
+	uMedida = SelectField(u'Unidad Medida', choices=[])
 	tipo_producto = SelectField(u'Tipo Producto', choices=[])
 	envase = SelectField(u'Envase', choices=[])
-	submit = SubmitField('Consultar')
+	submit = SubmitField('Agregar')
+	submit = SubmitField('Confirmar')
+	cancelar = SubmitField('Cancelar')
+
+class EliminarProducto(FlaskForm):
+	producto = StringField('Ingrese El Nombre Producto')
+	marca = StringField('Ingrese La Marca del Producto')
+	uMedida = StringField('Ingrese La Unidad de Medida')
+	submit = SubmitField('Buscar')
 	cancelar = SubmitField('Cancelar')
 
 class ImportarProducto(FlaskForm):

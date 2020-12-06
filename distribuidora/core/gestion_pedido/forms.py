@@ -24,12 +24,12 @@ class CancelarPedido(FlaskForm):
     pass
 
 class ActualizarEstadoPedido(FlaskForm):
-    #estados = get_estados_pedidos_para_operador()
-    estado = SelectField(u'Nuevo Estado', choices=[])
+    estados = get_estados_pedidos_para_operador()
+    estado = SelectField(u'Nuevo Estado', choices=estados)
     submit = SubmitField('Actualizar')
 
 
 
 class ModificarDetallePedido(FlaskForm):
-    cantidad = IntegerField('Cantidad:', validators=[DataRequired('Debe ingresa la cantidad')])
+    cantidad = IntegerField('Cantidad:', validators=[DataRequired()])
     submit = SubmitField('Modificar')

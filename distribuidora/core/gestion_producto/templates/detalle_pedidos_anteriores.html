@@ -1,0 +1,10 @@
+<h3>DETALLE DEL PEDIDO ANTERIOR</h3>
+{% include "flash_errors.html" %}
+<ul>
+    {% for d in detalle %}
+      <li>{{ d }}</li>
+    {% endfor %}
+    <br>
+    <br>
+    <a href="{{ url_for('pedido.repetir_pedido', pedido=detalle[0]['pedido_id']) }}">Repetir Pedido</a>
+</ul>

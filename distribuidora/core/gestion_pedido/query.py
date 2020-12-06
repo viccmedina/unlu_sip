@@ -10,23 +10,14 @@ LISTAR_DETALLE_PEDIDO = """ SELECT * FROM detalle_pedido WHERE
     pedido_id='{pedido_id}' """
 
 # Vamos a devolver el detalle pero con mas informaciónote
-DETALLE_INFORMACION_FULL = """ SELECT dp.pedido_id, dp.detalle_id, dp.producto_envase_id, 
-    e.descripcion AS desc_envase, dp.pedido_id, pe.stock_real, dp.cantidad, lpp.precio,
-    (lpp.precio * dp.cantidad) AS total, pr.descripcion AS desc_producto, m.descripcion AS desc_marca,
-    um.descripcion AS desc_unidad_medida
-    FROM detalle_pedido AS dp
+DETALLE_INFORMACION_FULL = """ SELECT dp.detalle_id, dp.producto_envase_id,
+    dp.pedido_id, pe.stock_real, dp.cantidad, lpp.precio FROM detalle_pedido AS dp
     INNER JOIN producto_envase AS pe ON dp.producto_envase_id=pe.producto_envase_id
     INNER JOIN lista_precio_producto AS lpp ON dp.producto_envase_id=lpp.producto_envase_id
-    INNER JOIN envase AS e ON dp.producto_envase_id=e.envase_id
-    INNER JOIN pedido AS p ON p.pedido_id=dp.pedido_id
-    INNER JOIN producto AS pr ON pr.producto_id = pe.producto_id
-    INNER JOIN marca AS m ON m.marca_id = pr.marca_id
-    INNER JOIN unidad_medida AS um ON um.unidad_medida_id = pe.unidad_medida_id
     WHERE dp.pedido_id = '{pedido_id}' """
-
 # Actualizamos el estado del pedido
-UPDATE_ESTADO_PEDIDO = """ UPDATE pedido SET estado_pedido_id='{estado_pedido}'
-    WHERE pedido_id='{id_pedido}' """
+UPDATE_ESTADO_PEDIDO = """ UPDATE pedido SET estado_pedido='{estado_pedido}'
+    WHERE id_pedido='{id_pedido}' """
 
 LISTAR_PEDIDO_SEGUN_FECHA = """ SELECT * FROM pedido WHERE ts_created BETWEEN
     '{fecha_desde}' AND '{fecha_hasta}'"""
@@ -61,7 +52,10 @@ SELECT_PEDIDOS_ESTADO_PCO = """ SELECT  hep.historial_estado_pedido_id, hep.pedi
 SELECT_PEDIDOS_ESTADO_PCC = """ SELECT hep.pedido_id, pe.descripcion FROM historial_estado_pedido AS hep
     INNER JOIN pedido_estado AS pe ON hep.pedido_estado_id = pe.pedido_estado_id
     INNER JOIN pedido AS p ON p.pedido_id=hep.pedido_id
-    WHERE p.usuario_id='{usuario_id}' AND p.estado_pedido_id = 1 """
+    WHERE p.usuario_id='{usuario_id}' AND pe.descripcion_corta='PCC'
+        AND hep.pedido_id IN
+        	(SELECT pedido_id FROM historial_estado_pedido
+        		GROUP BY pedido_id HAVING COUNT(pedido_id) = 1 )"""
 
 
 INSERT_INTO_DETALLE_PEDIDO = """ INSERT INTO detalle_pedido (pedido_id, producto_envase_id, cantidad)
@@ -83,8 +77,6 @@ UPDATE_PEDIDO_ESTADO = """ UPDATE pedido SET estado_pedido_id='{estado_pedido_id
     WHERE pedido_id='{pedido_id}'"""
 
 DELETE_PEDIDO_BY_CLIENTE = """ DELETE FROM pedido WHERE pedido_id='{pedido_id}' """
-
-DELETE_PEDIDO_FROM_HISTORIAL = """ DELETE FROM historial_estado_pedido WHERE pedido_id='{pedido_id}' """
 
 SELECT_PEDIDO = """ SELECT p.pedido_id, pe.descripcion_corta, pe.descripcion, p.estado_pedido_id
     FROM pedido as p INNER JOIN pedido_estado AS pe ON p.estado_pedido_id=pe.pedido_estado_id
@@ -108,7 +100,3 @@ INSERT_NUEVO_COMPROBANTE_PAGO = """ INSERT INTO comprobante_pago (monto,
 
 SELECT_ID_FROM_ESTADO_COMPROBANTE_PAGO = """ SELECT * FROM estado_comprobante_pago
 	WHERE descripcion_corta='{descripcion_corta}' """
-
-SELECT_PEDIDO = """ SELECT * FROM pedido AS p 
-    INNER JOIN pedido_estado AS pe ON pe.pedido_estado_id = p.estado_pedido_id
-    WHERE pedido_id = '{pedido_id}' """

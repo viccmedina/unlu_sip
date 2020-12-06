@@ -47,6 +47,9 @@ class DescargarConsulta(FlaskForm):
 
 
 class ExportarStock(FlaskForm):
+	#producto = StringField('Ingrese El Nombre Producto', validators=[DataRequired()])
+	#marca = StringField('Ingrese La Marca del Producto', validators=[DataRequired()])
+	#uMedida = StringField('Ingrese La Unidad de Medida', validators=[DataRequired()])
 	format='%Y-%m-%dT%H:%M'
 	fecha_desde = DateTimeLocalField('Desde', format=format, validators=[DataRequired()])
 	fecha_hasta = DateTimeLocalField('Hasta', format=format)

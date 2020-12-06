@@ -5,9 +5,8 @@ from distribuidora.models.stock import TipoMovimientoStock
 from distribuidora.models.producto import Producto,Marca, UnidadMedida
 from distribuidora.core.gestion_stock.constants import TITULO, ROL
 from distribuidora.core.gestion_stock.helper import get_id_producto, \
-	consulta_sotck, agregar_stock, salida, consultaMovimientosExportar
+consulta_sotck, agregar_stock, salida, consultaMovimientosExportar
 from distribuidora.models.gestion_usuario import Usuario
-from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora import db
 from flask_weasyprint import HTML, render_pdf, CSS
 import json
@@ -22,8 +21,7 @@ def index():
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated, \
         rol='operador', \
-        site='Gestión de Stock',\
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+        site='Gestión de Stock')
 
     abort(403)
 
@@ -75,8 +73,7 @@ def consultar_stock():
         rol='operador', \
         products=products, \
         form=form, \
-        site=TITULO,\
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+        site=TITULO)
 
     abort(403)
 
@@ -135,60 +132,17 @@ def agregar():
             else:
                 print(form.errors, flush=True)
 
-		if form.validate_on_submit():
-			tipo_mov = form.tipo_movimiento.data
-			id_producto = form.producto.data
-			id_marca = form.marca.data
-			id_um = form.uMedida.data
-			cantidad = form.cantidad.data
-			try:
-				cantidad = int(cantidad)
-				if (cantidad >= 0) and (cantidad <= 1000000):
-					product = get_id_producto(id_producto,id_marca,id_um)
-					if product == -777 :
-						flash("el producto ingresado es incorrecto", 'error')
-					else:
-						if product == -888 :
-							flash('La unidad de medida ingresada es incorrecta', 'error')
-						else:
-							if product == -999 :
-								flash("La marca ingresada es incorrecta", 'error')
-							else:
-								usuario_id = current_user.get_id()
-								user = Usuario.query.filter_by(id=usuario_id).first()
-								if user.has_role('Operador'):
-									if tipo_mov == 'entrada':
-										resultado = agregar_stock(user.id,product,cantidad,id_producto)
-										print(resultado, flush=True)
-										print('#'*80, flush=True)
-										flash("El producto se ha cargado correctamente", 'warning')
-									else:
-										resultado = salida(user.id,product,cantidad,id_producto)
-										print(resultado, flush=True)
-										print('#'*80, flush=True)
-										flash("Se ha descontado el stock con exito", 'warning')
-								else:
-									flash("Usuario incorrecto, contacte al administrador", 'error')
-				else:
-					flash("La cantidad ingresada es incorrecta", 'error')
-			except ValueError as e:
-				flash("La cantidad ingresada es incorrecta", 'error')
-		else:
-			print(form.errors, flush=True)
-
-		return render_template('form_agregar_movimiento.html', \
-		datos=current_user.get_mis_datos(), \
-		is_authenticated=current_user.is_authenticated, \
-		rol='operador',\
-		producto=id_producto, \
-		marca=id_marca, \
-		uMedida=id_um, \
-		resultado=resultado, \
-		site=TITULO ,\
-		form=form,\
-		sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
-
-	abort(403)
+        return render_template('form_agregar_movimiento.html', \
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated, \
+        rol='operador',\
+        producto=id_producto, \
+        marca=id_marca, \
+        uMedida=id_um, \
+        resultado=resultado, \
+        site=TITULO ,\
+        form=form)
+    abort(403)
 
 @stock.route('/stock/exportar', methods=['POST', 'GET'])
 @login_required
@@ -219,8 +173,7 @@ def exportar():
 			resultado=resultado, \
 			form=form, \
 			site=TITULO,\
-			rol='operador',\
-			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+			rol='operador')
 	abort(403)
 
 
@@ -232,8 +185,7 @@ def importar():
 		return render_template('importar_movimientos.html', \
 		datos=current_user.get_mis_datos(), \
 		is_authenticated=current_user.is_authenticated, \
-		rol='operador',\
-		sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+		rol='operador')
 	abort(403)
 
 

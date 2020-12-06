@@ -5,7 +5,7 @@
     <div class="row">
       {% include "acordeon_perfil_usuario.html" %}
 
-      <div class="col-sm-5 col-md-9">
+      <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
         <div class="row row-cols-1 row-cols-md-3">
           <div class="col mb-9" >
             <div class="card h-100" style="width: 55rem;">
@@ -17,36 +17,30 @@
                     <p>No tiene pedidos sin confirmar</p>
                   {% else %}
                     <h5>Numero De Pedido:   {{ pedido_pcc[0]['pedido_id'] }} , {{ pedido_pcc[0]['descripcion'] }}</h5>
-                    <br>
-                    <section align= "left">
-                      <a align="left" class="btn btn-primary" href="{{ url_for('pedido.listar_detalle_pedido', pedido=pedido_pcc[0]['pedido_id']) }}" role="button">Ver Detalle Pedido</a>
-                      <a align="center" class="btn btn-success" href="{{ url_for('pedido.confirmar_pedido_cliente', pedido_pcc=pedido_pcc[0]['pedido_id']) }}" role="button">Confirmar Pedido</a>
-                      <a id="anular_pedido" align="right" class="btn btn-danger "href="{{ url_for('pedido.anular_pedido', pedido_id=pedido_pcc[0]['pedido_id']) }}" data-toggle="modal" data-target="#linkModal" role="button">Anular Pedido</a>
+                    <section align= "center">
+                      <a align="left" class="btn btn-primary " href="{{ url_for('pedido.listar_detalle_pedido', pedido=pedido_pcc[0]['pedido_id']) }}" role="button">Ver Detalle Pedido</a>
+                      <a align="center" class="btn btn-success " href="{{ url_for('pedido.confirmar_pedido_cliente', pedido_pcc=pedido_pcc[0]['pedido_id']) }}" role="button">Confirmar Pedido</a>
+                      <a align="right" class="btn btn-danger "href="{{ url_for('pedido.anular_pedido', pedido_id=pedido_pcc[0]['pedido_id']) }}" role="button">Anular Pedido</a>
                     </section>
 
                   {% endif %}
-<br><br><br>
-                  <h4>Pedidos Anteriores</h4>
-                  <div class="container-fluid">
+<br>
+                    <h4>Pedidos Anteriores</h4>
                     <div class="row">
-                      <div class="col-sm-5 col-md-9">
-                        <div class="row row-cols-9 row-cols-md-1">
-                          {% for pt in pedidos_todos.items %}
-                            <div class="col mb-9" style="padding:5px">
-                              <div class="card h-100">
-                                <img src="/static/img/pedidos/recipient.svg" class="card-img-top" alt="producto" width="45%" height="100">
-                                <div class="card-body">
-                                  <p>Número de Pedido: {{ pt }}</p>
-                                  <p> <strong>{{ pt[1] }}</strong></p>
-                                  <a class="btn btn-primary btn-sm" role="button" href="{{ url_for('pedido.listar_detalle_pedido_anterior', pedido=pt) }}">Ver Detalle Pedido</a>
-                                </div>
+                        {% for pt in pedidos_todos.items %}
+                        <p>{{pt}}</p>
+                          <div class="col-sm-3">
+                            <div class="card" style="width: 18rem; padding: 0px 5px; margin: 10px 5px;">
+                              <img src="..." class="card-img-top" alt="...">
+                              <div class="card-body">
+                                <h5 class="card-title">{{ pt }}</h5>
+                                <a href="{{ url_for('pedido.listar_detalle_pedido_anterior', pedido=pt) }}">Ver Detalle Pedido</a>
                               </div>
                             </div>
-                          {% endfor %}
-                        </div>
+                          </div>
+                        {% endfor %}
                       </div>
-                    </div>
-                  </div>
+
 
 
                 <!-- Pagination Links-->
@@ -93,15 +87,4 @@
 
   </div>
 </div>
-
-{% include "modal_form.html" %}
-<script type="text/javascript">
-
-  document.getElementById('link_confirm').addEventListener('click', anularPedido);
-  function anularPedido(){
-    let a = document.getElementById("anular_pedido");
-    console.log(a.href);
-    window.location.href = a.href;
-  }
-</script>
 {% endblock %}

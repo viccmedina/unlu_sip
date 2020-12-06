@@ -42,7 +42,7 @@
 		{% if resultado is not none %}
 			<div class="form-group">
 				{% include "tabla_movimientos_cta_corriente.html" %}
-					<a align="left" class="btn btn-success" href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
+				<a align="right" class="btn btn-success mb-2 offset-md-10" href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" target="_blank" role="button">Descargar</a>
 			</div>
 		{% else %}
 			<h3 align="center">RESULTADO</h3>

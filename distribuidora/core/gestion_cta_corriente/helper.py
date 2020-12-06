@@ -1,18 +1,11 @@
 from distribuidora import db
 from distribuidora.core.gestion_cta_corriente.query import *
-
 def parser_result(result):
     resp = []
     for row in result:
         resp.append(dict(row))
     return resp
 
-
-def check(result):
-    if result.rowcount == 1 :
-        return True
-    else:
-        return False
 
 def get_tipos_movimientos():
     """
@@ -38,9 +31,14 @@ def get_nro_cuenta_corriente(nro_cliente):
     """
     nro_cta = None
     result = db.engine.execute(CONSULTAR_NRO_CUENTA_CORRIENTE.format(nro_cliente=nro_cliente))
-    result = parser_result(result)
-    print(result, flush=True)
-    return result
+    resp = []
+    for row in result:
+        nro_cta = row['cuenta_corriente_id']
+
+    if nro_cta is None:
+        nro_cta = -999
+
+    return nro_cta
 
 def get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cliente):
     """
@@ -69,14 +67,12 @@ def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
     print(" t mov : {}".format(t_movimiento))
     if t_movimiento == 2 :
         saldo = float(monto * (-1))
-        query = db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(n_cta=nro_cta, t_mov=t_movimiento, \
-            user=user,descripcion=desc,monto=saldo))
+        db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(n_cta=nro_cta, t_mov=t_movimiento, \
+        user=user,descripcion=desc,monto=saldo))
     else:
         print("agregamos movimientos")
-        query = db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(n_cta=nro_cta, t_mov=t_movimiento, \
-            user=user,descripcion=desc,monto=monto))
-
-    return check(query)
+        db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(n_cta=nro_cta, t_mov=t_movimiento, \
+        user=user,descripcion=desc,monto=monto))
 
 
 def consulta_saldo(nro_cta):
@@ -93,9 +89,7 @@ def actualizar_estado_comprobante_pago(monto, cliente):
     comprobantes = parser_result(comprobantes)
     print(type(comprobantes), flush=True)
     print(comprobantes, flush=True)
-    query = False
     if len(comprobantes) > 0:
         update_comprobante = db.engine.execute(UPDATE_ESTADO_COMPROBANTE.format(\
             estado=2,comprobante_id=comprobantes[0]['comprobante_id']))
-        query = check(update_comprobante)
-    return query
+    return True

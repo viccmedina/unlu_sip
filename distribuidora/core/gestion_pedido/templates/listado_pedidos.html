@@ -10,7 +10,7 @@
           {% if pedidos is none%}
             <p>NO HAY PEDIDOS</p>
           {% else %}
-            {% include "flash_errors.html" %}
+            
             <h3>Pedidos a Confirmar</h2>
             {% for p in pedidos %}
               <div class="card">
@@ -20,7 +20,7 @@
                   <a href="{{ url_for('pedido.listar_detalle_pedido', pedido=p.pedido_id) }}" class="btn btn-primary">Ver Detalle</a>
                 </div>
             
-                
+                {% include "flash_errors.html" %}
                 <form  action="{{ url_for('pedido.modificar_estado_operador', estado_anterior=p.descripcion, pedido=p.pedido_id) }}" method="POST">
                   {{ form.hidden_tag() }}
 
