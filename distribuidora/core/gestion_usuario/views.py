@@ -4,6 +4,7 @@ from distribuidora import db
 from werkzeug.security import generate_password_hash,check_password_hash
 from distribuidora.models.gestion_usuario import Usuario
 from distribuidora.core.gestion_usuario.forms import LoginForm
+from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 
 gestion_usuario = Blueprint('gestion_usuario', __name__, template_folder='templates')
 
@@ -66,8 +67,9 @@ def home_operador():
     return render_template('home_operador.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
-        rol='operador',
-        site=site)
+        rol='operador',\
+        site=site,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
 
 @login_required
@@ -80,5 +82,6 @@ def home_cliente():
     return render_template('home_cliente.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
-        rol='cliente',
-        site=site)
+        rol='cliente',\
+        site=site,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))

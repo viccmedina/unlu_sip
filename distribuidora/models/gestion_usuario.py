@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from distribuidora.models.persona import Persona
 from distribuidora.models.stock import Movimiento_Stock
-
+from distribuidora.models.mensaje import Message
 # Establecemos las tablas pivot.
 
 # Relacionamos un usuario con uno o mas roles.
@@ -127,6 +127,7 @@ class Usuario(db.Model, UserMixin):
 	movimiento_stock_id = db.relationship('Movimiento_Stock', uselist=False, backref='detalles_stocks_usuarios', lazy=True)
 	ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
+	last_message_read_time = db.Column(db.DateTime)
 
 	def __init__(self, username, password, persona_id):
 		"""
@@ -188,6 +189,14 @@ class Usuario(db.Model, UserMixin):
 			return True
 		else:
 			return False
+			
+	def new_messages(self):
+		"""
+		Devuelve los últimos mensajes
+		"""
+		last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+		return Message.query.filter_by(recipient=self).filter(\
+		    Message.timestamp > last_read_time).count()
 
 
 

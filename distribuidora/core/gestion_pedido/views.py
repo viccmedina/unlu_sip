@@ -2,11 +2,29 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from distribuidora.models.pedido import PedidoEstado, Pedido, DetallePedido
+from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora.core.gestion_pedido.helper import *
 from distribuidora.core.gestion_pedido.forms import NuevoPedido, FormAgregarProducto, \
     ModificarDetallePedido, ActualizarEstadoPedido
 
 pedido = Blueprint('pedido', __name__, template_folder='templates')
+
+def cargar_errores(errores):
+    """
+    Pasamos el diccionario con todos los errores levantados por Flask
+    """
+    for key, value in errores.items():
+        for v in value:
+            flash(v, 'error')
+
+def paginado(page):
+    pedidos_todos = db.session.query(Pedido, PedidoEstado).filter(\
+        Pedido.usuario_id==current_user.get_id()).\
+        filter(PedidoEstado.descripcion_corta!='PCC').\
+        filter(Pedido.estado_pedido_id == PedidoEstado.pedido_estado_id).\
+        paginate(page, 5, False)
+    return pedidos_todos
+
 
 @pedido.route('/pedido', methods=['GET'])
 @login_required
@@ -15,7 +33,8 @@ def index():
 			datos=current_user.get_mis_datos(),\
 			is_authenticated=current_user.is_authenticated, \
 			rol=current_user.get_role(), \
-            site='Gestión de Pedido')
+            site='Gestión de Pedido',\
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
 @pedido.route('/pedido/nuevo', methods=['GET', 'POST'])
 @login_required
@@ -35,7 +54,8 @@ def nuevo_pedido():
          datos=current_user.get_mis_datos(),\
          is_authenticated=current_user.is_authenticated,\
          rol=current_user.get_role(),\
-         form=form, site='Gestión de Pedido')
+         form=form, site='Gestión de Pedido', \
+         sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
 @pedido.route('/pedido/consultar', methods=['GET'])
 @login_required
@@ -45,15 +65,16 @@ def consultar_pedido():
         if not pedido_pcc:
             pedido_pcc = None
         page = request.args.get('page', 1, type=int)
-        pedidos_todos = db.session.query(Pedido).filter(\
-            Pedido.usuario_id==current_user.get_id(), Pedido.estado_pedido_id!=1).paginate( page, 5, False)
+        
+
         return render_template('form_consultar_pedido.html',\
             datos=current_user.get_mis_datos(),\
             is_authenticated=current_user.is_authenticated,\
             rol=current_user.get_role(),\
             site='Gestión de Pedido',\
             pedido_pcc=pedido_pcc,
-            pedidos_todos=pedidos_todos)
+            pedidos_todos=paginado(page),\
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
 @pedido.route('/pedido/anular', methods=['GET', 'POST'])
@@ -69,12 +90,15 @@ def anular_pedido():
     pedido_pcc = get_listado_pedidos_pcc(usuario_id=current_user.get_id())
     if not pedido_pcc:
         pedido_pcc = None
+    page = request.args.get('page', 1, type=int)
     return render_template('form_consultar_pedido.html',\
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated,\
         rol=current_user.get_role(),\
         site='Gestión de Pedido',\
-        pedido_pcc=pedido_pcc)
+        pedido_pcc=pedido_pcc,\
+        pedidos_todos=paginado(page),\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
 @pedido.route('/pedido/detalle/modificar', methods=['GET', 'POST'])
 @login_required
@@ -85,24 +109,29 @@ def modificar_detalle_producto():
         detalle = request.args.get('detalle_pedido', type=int)
         producto = request.args.get('producto', type=int)
         cantidad = form.cantidad.data
-        result = update_detalle_producto(pedido, detalle, cantidad)
+        result = update_detalle_producto(pedido, detalle,\
+            cantidad, usuario=current_user.get_role())
+        print('%'*100, flush=True)
+        print(result, flush=True)
+        print('%'*100, flush=True)
         if result:
             flash('Actualizado Correctamente !', 'success')
         else:
             flash('Algo Salió mal !', 'error')
     else:
-        flash('Algo Salió mal !', 'error')
+        cargar_errores(form.errors)
+       
     detalle = get_detalle_pedido(pedido)
-    print('detalle_pedido ---> {}'.format(detalle), flush=True)
     return render_template('detalle_pedido.html',\
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated,\
         rol=current_user.get_role(),\
         site='Gestión de Pedido', \
         detalle=detalle,\
-        form=form)
+        form=form,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
-@pedido.route('/pedido/detalle/eliminar', methods=['GET'])
+@pedido.route('/pedido/detalle/eliminar', methods=['GET', 'POST'])
 @login_required
 def eliminar_producto_detalle():
     form = ModificarDetallePedido()
@@ -110,6 +139,7 @@ def eliminar_producto_detalle():
     producto_envase_id = request.args.get('producto_envase_id', type=int)
     detalle_id = request.args.get('detalle_pedido', type=int)
     result = eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido)
+
     if result:
         flash('Producto Eliminado Correctamente !', 'success')
     else:
@@ -121,13 +151,15 @@ def eliminar_producto_detalle():
         rol=current_user.get_role(),\
         site='Gestión de Pedido', \
         detalle=detalle,\
-        form=form)
+        form=form,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
 @pedido.route('/pedido/confirmar/cliente', methods=['GET', 'POST'])
 @login_required
 def confirmar_pedido_cliente():
     if current_user.has_role('Cliente'):
         pedido_pcc = request.args.get('pedido_pcc', type=int)
+        detalle = get_detalle_pedido(pedido)
         if pedido_pcc is not None:
             if actualizar_estado_pedido(pedido_pcc, 'PCO'):
                 flash('Pedido confirmado correctamente', 'success')
@@ -166,6 +198,7 @@ def modificar_estado_operador():
             is_authenticated=current_user.is_authenticated,\
             rol=current_user.get_role(),\
             site='Gestión de Pedido',\
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
             pedidos=pedidos, form=form)
     abort(403)
 
@@ -182,7 +215,8 @@ def listar_pedido_operador():
             is_authenticated=current_user.is_authenticated,\
             rol=current_user.get_role(),\
             site='Gestión de Pedido', \
-            pedidos=pedidos, form=form)
+            pedidos=pedidos, form=form,
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
 
@@ -198,15 +232,26 @@ def listar_detalle_pedido():
         rol=current_user.get_role(),\
         site='Gestión de Pedido', \
         detalle=detalle, \
-        form=form)
+        form=form,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
 
 @pedido.route('/pedido/listar/detalle/anterior', methods=['GET'])
 @login_required
 def listar_detalle_pedido_anterior():
     pedido = request.args.get('pedido', type=int)
+    estado_pedido = get_estado_actual_pedido(pedido)
+    if estado_pedido[0]['descripcion_corta'] in ['PCO']:
+        return redirect(url_for('pedido.listar_detalle_pedido', pedido=pedido))
+    
     detalle = get_detalle_pedido(pedido)
-    return render_template('detalle_pedidos_anteriores.html', detalle=detalle)
+    return render_template('detalle_pedidos_anteriores.html',\
+        detalle=detalle,\
+        datos=current_user.get_mis_datos(),\
+        is_authenticated=current_user.is_authenticated,\
+        rol=current_user.get_role(),\
+        site='Gestión de Pedido',\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
 @pedido.route('/pedido/repetir', methods=['GET', 'POST'])
 @login_required
@@ -219,7 +264,14 @@ def repetir_pedido():
             form = ModificarDetallePedido()
             detalle = get_detalle_pedido(pedido)
             flash('Pedido creado satisfactoriamente', 'success')
-            return render_template('detalle_pedido.html', detalle=detalle, form=form)
+            return render_template('detalle_pedido.html',\
+                detalle=detalle,\
+                form=form,\
+                datos=current_user.get_mis_datos(),\
+                is_authenticated=current_user.is_authenticated,\
+                rol=current_user.get_role(),\
+                site='Gestión de Pedido',\
+                sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
         else:
             flash('ERROR! Ya existe un pedido en curso', 'error')
             return redirect(url_for('pedido.consultar_pedido'))

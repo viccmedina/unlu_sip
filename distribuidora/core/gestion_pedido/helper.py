@@ -81,11 +81,14 @@ def crear_nuevo_pedido(cliente, estado):
 
         result = db.engine.execute(INSERT_NUEVO_PEDIDO.format(\
             usuario_id=cliente, estado_pedido_id=estado))
+        print('RESULTADOD -------- {}'.format(check(result)))
         pedido_id = db.engine.execute(SELECT_ID_ULTIMO_PEDIDO.format(\
             usuario_id=cliente))
         pedido_id = parser_result(pedido_id)
+        print(pedido_id)
         result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
             pedido_estado_id=estado, pedido_id=pedido_id[0]['pedido_id']))
+        print('RESULTADOD -------- {}'.format(check(result)))
         return True
 
 def get_cantidad_estados_pedido(pedido_id):
@@ -104,7 +107,7 @@ def get_ultimo_pedido_id(usuario_id):
     return result[0]['pedido_id']
 
 def get_detalle_pedido(pedido_id):
-    result = db.engine.execute(LISTAR_DETALLE_PEDIDO.format(\
+    result = db.engine.execute(DETALLE_INFORMACION_FULL.format(\
         pedido_id=pedido_id))
     result = parser_result(result)
     return result
@@ -145,13 +148,22 @@ def get_listado_pedidos_pcc(usuario_id):
     result = parser_result(result)
     return result
 
-def update_detalle_producto(pedido_id, detalle, cantidad):
-    if get_cantidad_estados_pedido(pedido_id) < 3 :
+def update_detalle_producto(pedido_id, detalle, cantidad, usuario=None):
+    print(usuario, flush=True)
+    if usuario == 'Cliente':
+        print('SOY CLIENTEEEEEEEEE', flush=True)
+        if get_cantidad_estados_pedido(pedido_id) < 3 :
+            result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
+                detalle_id=detalle, cantidad=cantidad))
+            return check(result)
+        else:
+            return False
+    elif usuario == 'Operador':
+        print('SOY OPERADOR, PUEDO MODIFCAR LO QUE SE ME DE LA GANA', flush=True)
         result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
-            detalle_id=detalle, cantidad=cantidad))
+                detalle_id=detalle, cantidad=cantidad))
         return check(result)
-    else:
-        return False
+
 
 
 def get_id_estado_comprobante_pago(descripcion_corta):
@@ -222,16 +234,27 @@ def actualizar_estado_pedido(pedido, estado):
     Dado un nro de pedido y un estado, actualizamos
     el estado de dicho pedido.
     """
-    estado_id = db.engine.execute(CONSULTA_POR_ESTADO_PEDIDO_SEGUN_ID.format(descripcion_corta=estado))
-    estado_id = parser_result(estado_id)
-    result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
-        pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
-    return check(result)
+    cantidad_productos = get_detalle_pedido(pedido)
+    print('*'*100, flush=True)
+    print(cantidad_productos, flush=True)
+    print('*'*100, flush=True)
+    if not cantidad_productos:
+        return False
+    else:
+        estado_id = db.engine.execute(CONSULTA_POR_ESTADO_PEDIDO_SEGUN_ID.format(descripcion_corta=estado))
+        estado_id = parser_result(estado_id)
+        db.engine.execute(UPDATE_ESTADO_PEDIDO.format(estado_pedido=estado_id[0]['pedido_estado_id'], id_pedido=pedido))
+        result = db.engine.execute(INSERT_NUEVO_HISTORIAL_PEDIDO_ESTADO.format(\
+            pedido_id=pedido, pedido_estado_id=estado_id[0]['pedido_estado_id']))
+        return check(result)
 
 def eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido_id):
-    if get_cantidad_estados_pedido(pedido_id) < 3 :
+    cantidad = get_cantidad_estados_pedido(pedido_id)
+    print('CANTIDAAAAAAAAAAAAAAAAAA {}'.format(cantidad), flush=True)
+    if cantidad < 4 :
         result = db.engine.execute(DELETE_PRODUCTO_FROM_DETALLE_PEDIDO.format(\
             detalle_id=detalle_id, producto_envase_id=producto_envase_id))
+        print()
         return check(result)
     else:
         return False
@@ -246,6 +269,7 @@ def anular_pedido_por_cliente(pedido_id):
     pedido = parser_result(pedido)
     if pedido[0]['descripcion_corta'] == 'PCC':
         delete = db.engine.execute(DELETE_PEDIDO_BY_CLIENTE.format(pedido_id=pedido_id))
+        d = db.engine.execute(DELETE_PEDIDO_FROM_HISTORIAL.format(pedido_id=pedido_id))
         return check(delete)
     else:
         return False
@@ -269,3 +293,8 @@ def nuevo_pedido_desde_pedido_anterior(usuario, pedido):
         for r in result:
             insert_into_detalle_pedido(pedido, r['producto_envase_id'], r['cantidad'])
     return execute
+
+def get_estado_actual_pedido(pedido_id):
+    result = db.engine.execute(SELECT_PEDIDO.format(pedido_id=pedido_id))
+    estado_actual = parser_result(result)
+    return estado_actual

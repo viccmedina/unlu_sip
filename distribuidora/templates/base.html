@@ -22,6 +22,8 @@
     <a class="p-2 text-dark" href="{{ url_for('core_blueprint.contacto') }}">Contactos</a>
   </nav>
   {% if is_authenticated %}
+
+  	<a href="{{ url_for('mensajes.listar_mensajes') }}" class="btn btn-primary" style="margin-right: 1em;">Mensajes <span class="badge badge-light">{{ sin_leer[0]['sin_leer'] }}</span></a>
   	<div class="dropdown">
   		<button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     		Mi Perfil

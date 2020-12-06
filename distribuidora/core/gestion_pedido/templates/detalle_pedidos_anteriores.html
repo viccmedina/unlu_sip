@@ -29,30 +29,28 @@
                     <td>{{ d.cantidad }}</td>
                     <td>$ {{ d.precio }}</td>
                     <td>$ {{ d.total }}</td>
-                    <td>
-                      <a id="l_delete" data-toggle="modal" data-target="#linkModal" href="{{ url_for('pedido.eliminar_producto_detalle', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                    </td>
-                    <td>
-                      <form id="myForm" class="form-inline" action="{{ url_for('pedido.modificar_detalle_producto', pedido=d.pedido_id, producto_envase_id=d.producto_envase_id, detalle_pedido=d.detalle_id) }}" method="POST">
-
-                        {{ form.hidden_tag() }}
-                        <div class="form-group mb-2">
-                          {{ form.cantidad(class="form-control w-25") }}
-                          <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="margin-left: 5%;"> Modificar </button>
-                        </div>
-                      </form>
-                    </td>
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
+               <a id="repetir_pedido" data-toggle="modal" data-target="#linkModal" class="btn btn-primary" href="{{ url_for('pedido.repetir_pedido', pedido=detalle[0]['pedido_id']) }}">Repetir Pedido</a>
             </div>
           </div>
         </div>
 </div>
     
 {% include "modal_form.html" %}
-{% include "js_form_modal.html" %}
-{% include "js_link_modal.html" %}
+
+<script type="text/javascript">
+
+  document.getElementById('link_confirm').addEventListener('click', repetirPedido);
+  function repetirPedido(){
+    let a = document.getElementById("repetir_pedido");
+    console.log(a.href);
+    window.location.href = a.href;
+  }
+</script>
 
 {% endblock %}
+
+
