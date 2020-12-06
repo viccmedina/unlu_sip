@@ -88,9 +88,6 @@ def consulta_sotck(pro,mar,umed):
     result = None
     r = []
     resultado = None
-    print("Producto-Marca-UnidadMedida {}".format(pro))
-    print("Producto-Marca-UnidadMedida {}".format(mar))
-    print("Producto-Marca-UnidadMedida {}".format(umed))
     #buscar por producto solo
     if mar == '' and umed == '' :
         result = db.engine.execute(CONSULTAR_ID_PRODUCTO.format(producto=pro))
@@ -218,14 +215,8 @@ def consulta_sotck(pro,mar,umed):
 
                                     if valor is None:
                                         return -777
-                                    else:
-                                        resultado = db.engine.execute(CONSULTA_STOCK1.format(\
-                                        producto_id=valor))
-                                        for rows in resultado:
-                                            print("rows tiene {}".format(rows['descripcion_p']))
-                                            r.append(dict(rows))
-    if valor is None or valor == -999 or valor == -888 or valor == -777 or valor == -666 or valor == -555:
-        print("valor es {}".format(valor) )
+    if valor is not None or valor == -999 or valor == -888 or valor == -777 or valor == -666 or valor == -555:
+        print("valor es sssss{}".format(valor) )
         return valor
     else:
         return r

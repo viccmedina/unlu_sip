@@ -14,13 +14,9 @@ class ConsultarStock(FlaskForm):
 	 nombreProducto -> Es Obligatorio.
 	 marcaProducto  -> Es Obligatorio.
 	"""
-
-	producto = SelectField(u'Producto', choices=[])
-	marca = SelectField(u'Marca', choices=[])
-	uMedida = SelectField(u'Unidad Medida', choices=[])
-	#producto = StringField('Ingrese El Nombre Producto')
-	#marca = StringField('Ingrese La Marca del Producto')
-	#uMedida = StringField('Ingrese La Unidad de Medida')
+	producto = StringField('Ingrese El Nombre Producto')
+	marca = StringField('Ingrese La Marca del Producto')
+	uMedida = StringField('Ingrese La Unidad de Medida')
 	submit = SubmitField('Consultar')
 	cancelar = SubmitField('Cancelar')
 
@@ -34,9 +30,9 @@ class AgregarStock(FlaskForm):
 
 	tipo_movimiento = SelectField(u'Tipo Movimiento', choices=[('entrada', 'entrada'), ('salida', 'salida')])
 	#tipo_movimiento = SelectField('Tipo Movimiento',[validators.Required()],choices=[])
-	producto = SelectField(u'Producto', choices=[])
-	marca = SelectField(u'Marca', choices=[])
-	uMedida = SelectField(u'Unidad Medida', choices=[])
+	producto = StringField('Ingrese El Nombre Producto', validators=[DataRequired()])
+	marca = StringField('Ingrese La Marca del Producto', validators=[DataRequired()])
+	uMedida = StringField('Ingrese La Unidad de Medida', validators=[DataRequired()])
 	cantidad = StringField('Cantidad',validators=[DataRequired()])
 	submit = SubmitField('Actuliazar')
 	cancelar = SubmitField('Cancelar')

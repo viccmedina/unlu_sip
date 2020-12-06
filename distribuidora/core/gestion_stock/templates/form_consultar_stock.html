@@ -27,16 +27,16 @@
                                         {{ form.uMedida(class="form-control form-control-md") }}
                                     </div>
                                     <div class="form-group">
-
+                                   
                                         <span style="float:right">
                                             {{ form.submit(class="btn btn-success mb-2") }}
                                         </span>
                                     </div>
 
 
-                                    {% if products is not none %}
+                                    {% if resultado is not none %}
 
-                                        {% if products %}
+                                        {% if resultado %}
                                             <div class="form-group">
                                                 {% include "tabla_consulta_stock.html"%}
                                             </div>
