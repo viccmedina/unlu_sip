@@ -37,7 +37,9 @@ def consultar_producto():
         id_um = None
         products = None
         form = ConsultarProducto()
-
+        form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
         if form.validate_on_submit():
             id_producto = form.producto.data
             id_marca = form.marca.data
@@ -111,6 +113,8 @@ def agregar():
         id_um = None
         products = None
         form = AgregarProducto()
+        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
         form.tipo_producto.choices = [(descripcion.descripcion) for descripcion in TipoProducto.query.all()]
         form.envase.choices = [(descripcion.descripcion) for descripcion in Envase.query.all()]
         if form.validate_on_submit():

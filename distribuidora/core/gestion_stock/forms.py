@@ -29,9 +29,12 @@ class AgregarStock(FlaskForm):
 	"""
 
 	tipo_movimiento = SelectField(u'Tipo Movimiento', choices=[('entrada', 'entrada'), ('salida', 'salida')])
-	producto = StringField('Ingrese El Nombre Producto', validators=[DataRequired()], render_kw={"placeholder": "Levadura"})
-	marca = StringField('Ingrese La Marca del Producto', validators=[DataRequired()], render_kw={"placeholder": "Ejemplo"})
-	uMedida = StringField('Ingrese La Unidad de Medida', validators=[DataRequired()], render_kw={"placeholder": "25gr"})
+	producto = SelectField(u'Producto', choices=[])
+	marca = SelectField(u'Marca', choices=[])
+	uMedida = SelectField(u'Unidad de Medida', choices=[])
+	#producto = StringField('Ingrese El Nombre Producto', validators=[DataRequired()], render_kw={"placeholder": "Levadura"})
+	#marca = StringField('Ingrese La Marca del Producto', validators=[DataRequired()], render_kw={"placeholder": "Ejemplo"})
+	#uMedida = StringField('Ingrese La Unidad de Medida', validators=[DataRequired()], render_kw={"placeholder": "25gr"})
 	cantidad = StringField('Cantidad',validators=[DataRequired()], render_kw={"placeholder": "10"})
 	submit = SubmitField('Actuliazar')
 	cancelar = SubmitField('Cancelar')
