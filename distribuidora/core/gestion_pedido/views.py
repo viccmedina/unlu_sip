@@ -116,6 +116,23 @@ def modificar_detalle_producto():
         print('%'*100, flush=True)
         if result:
             flash('Actualizado Correctamente !', 'success')
+            if current_user.has_role('Operador'):
+                body = 'Modificacion del pedido #{} : - {}'.format(pedido, estado_nuevo)
+                receptor = get_pedido_by_id(pedido)[0]['usuario_id']
+                print('receptor {}'.format(receptor), flush=True)
+                emisor = current_user.get_id()
+                data = {
+                    "emisor": emisor,
+                    "receptor": receptor,
+                    "body": body
+                }
+                resp = insert_nuevo_mensaje(data)
+                if resp:
+                    flash('Mensaje enviado', 'success')
+                else:
+                    flash('Algo salió mal, verifique los datos', 'warning')
+
+
         else:
             flash('Algo Salió mal !', 'error')
     else:
@@ -141,7 +158,24 @@ def eliminar_producto_detalle():
     result = eliminar_producto_detalle_pedido(producto_envase_id, detalle_id, pedido)
 
     if result:
+
         flash('Producto Eliminado Correctamente !', 'success')
+        if current_user.has_role('Operador'):
+            # Si el que modifica el pedido es el operador, mando un msj
+            body = 'Eliminacion del producto #{producto} del pedido #{pedido}'.format(\
+                producto=producto_envase_id, pedido=pedido)
+            emisor = current_user.get_id()
+            receptor = get_pedido_by_id(pedido)[0]['usuario_id']
+            data = {
+                "emisor": emisor,
+                "receptor": receptor,
+                "body": body
+                }
+            resp = insert_nuevo_mensaje(data)
+            if resp:
+                flash('Mensaje enviado', 'success')
+            else:
+                flash('Algo salió mal, verifique los datos', 'warning')
     else:
         flash('Algo Salió mal :( !', 'error')
     detalle = get_detalle_pedido(pedido)
@@ -191,7 +225,7 @@ def modificar_estado_operador():
                 flash('Estado de pedido actualizado !', 'success')
                 # Si todo salio bien, debemos informar que hubo 
                 # una actualización en el estado del pedido
-                body = 'El pedido #{} ha cambiado de estado a: - {}'.format(pedido, estado_nuevo)
+                body = 'Cambio de estado del pedido #{} : - {}'.format(pedido, estado_nuevo)
                 receptor = get_pedido_by_id(pedido)[0]['usuario_id']
                 print('receptor {}'.format(receptor), flush=True)
                 emisor = current_user.get_id()
@@ -201,7 +235,7 @@ def modificar_estado_operador():
                     "body": body
                 }
                 resp = insert_nuevo_mensaje(data)
-                if data:
+                if resp:
                     flash('Mensaje enviado', 'success')
                 else:
                     flash('Algo salió mal, verifique los datos', 'warning')
