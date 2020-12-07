@@ -35,7 +35,6 @@ MarkupSafe==1.1.1
 passlib==1.7.4
 path-and-address==2.0.1
 Pillow==8.0.1
-pkg-resources==0.0.0
 pycparser==2.20
 Pygments==2.7.1
 Pyphen==0.10.0
