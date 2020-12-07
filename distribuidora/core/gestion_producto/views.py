@@ -10,6 +10,7 @@ from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase, TipoProducto, \
 UnidadMedida
 from distribuidora.models.precio import Lista_precio_producto
+from tkinter import messagebox
 
 from distribuidora import db
 
@@ -145,15 +146,34 @@ def modificar():
     rol='operador')
 
 
-@producto.route('/eliminar', methods=['GET'])
+@producto.route('/eliminar', methods=['POST','GET'])
 @login_required
 def eliminar():
     if current_user.has_role('Operador'):
+        id_producto = None
+        id_marca = None
+        id_um = None
+        products = None
+        form = ConsultarProducto()
+        form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
+        if form.validate_on_submit():
+            id_producto = form.producto.data
+            id_marca = form.marca.data
+            id_um = form.uMedida.data
+            products = delete_producto(form.producto.data,form.marca.data,form.uMedida.data)
+                #flash("Se ha Eliminado el producto", 'warning')
+
+                #flash("No se ha podido borrar el producto, ha surgido un error",'error')
+
         return render_template('form_eliminar_producto.html', \
         datos=current_user.get_mis_datos(), \
         sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
         is_authenticated=current_user.is_authenticated, \
-        rol='operador')
+        rol='operador',\
+        products=products,\
+        form=form)
     abort(403)
 
 
@@ -161,7 +181,25 @@ def eliminar():
 @login_required
 def exportar():
     if current_user.has_role('Operador'):
-    	return render_template('exportar_producto.html', \
+        id_producto = None
+        id_marca = None
+        id_um = None
+        products = None
+        form = ConsultarProducto()
+        form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
+        if form.validate_on_submit():
+            id_producto = form.producto.data
+            id_marca = form.marca.data
+            id_um = form.uMedida.data
+            if form.validate_on_submit():
+                if delete_producto(form.producto.data,form.marca.data,form.uMedida.data):
+                    flash("Se ha Eliminado el producto", 'warning')
+                else:
+                    flash("No se ha podido borrar el producto, ha surgido un error",'error')
+
+        return render_template('exportar_producto.html', \
         datos=current_user.get_mis_datos(), \
         sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
         is_authenticated=current_user.is_authenticated, \
@@ -243,3 +281,13 @@ def detalle_producto():
         sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
         rol=current_user.get_role(), \
         site='Detalle Producto')
+
+@producto.route('/eliminar/producto', methods=['POST','GET'])
+def eliminar_producto():
+    #eliminar_producto(products)
+    print("eliminado")
+    return render_template('form_eliminar_producto.html', \
+    datos=current_user.get_mis_datos(), \
+    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+    is_authenticated=current_user.is_authenticated, \
+    rol='operador')

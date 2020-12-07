@@ -1,5 +1,6 @@
 from distribuidora import db
 from distribuidora.core.gestion_producto.query import *
+#from distribuidora.core.gestion_stock.query import CONSULTA_STOCK1
 
 def parser_result(result):
     resp = []
@@ -119,6 +120,45 @@ def consulta_producto_pProductoMarca(producto,marca):
     marca=marca))
     return parser_result(resultado)
 
+
+def delete_producto(producto,marca,uMedida):
+    result = None
+    resultado = None
+    r = []
+    valor = None
+    umed = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=uMedida))
+    for row in umed:
+        um = row.unidad_medida_id
+
+    mar = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=marca))
+    for row in mar:
+        m = row.marca_id
+
+    result = db.engine.execute(CONSULTA_ID_PRODUCTO_MARCA_UMEDIDA.format(producto=producto,marca=m,uMedida=um))
+    for row in result:
+        valor = row.producto_envase_id
+
+    resultado = db.engine.execute(CONSULTA_STOCK1.format(producto_envase_id=valor))
+
+    return resultado
+
+def eliminar_producto(produto,marca,uMedida):
+    umed = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=uMedida))
+    for row in umed:
+        um = row.unidad_medida_id
+    mar = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=marca))
+    for row in mar:
+        m = row.marca_id
+    result = db.engine.execute(CONSULTA_ID_PRODUCTO_MARCA_UMEDIDA.format(producto=producto,marca=m,uMedida=um))
+    for row in result:
+        valor = row.producto_envase_id
+    db.engine.execute(ELIMINAR_PRODUCTO_ENVASE.format(producto=valor))
+
+    result = db.engine.execute(CONSULTAR_ID_PRODUCTO.format(producto=producto,marca=m,uMedida=um))
+    for row in result:
+        valor = row.producto_id
+    db.engine.execute(ELIMINAR_PRODUCTO.format(producto=valor))
+
 def consulta_producto_pProductoUMedida(producto,uMedida):
     resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO_UMEDIDA.format(producto=producto,\
     uMedida=uMedida))
@@ -133,6 +173,7 @@ def consulta_producto_pProductoMarcaUMedida(producto,marca,uMedida):
     resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO_MARCA_UMEDIDA.format(producto=producto,\
     marca=marca,uMedida=uMedida))
     return parser_result(resultado)
+
 
 def insert_new_producto(producto,marca,uMedida,tProd,envase):
     db.engine.execute(INSERT_T_PRODUCTO.format(producto=producto,marca=Id_marca(marca),tProd=Id_tipo_producto(tProd)))

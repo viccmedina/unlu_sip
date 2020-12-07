@@ -133,3 +133,39 @@ VALUES ('{producto}',{marca},{tProd}); """
 
 INSERT_T_PRODUCTO_ENVASE = """ INSERT INTO producto_envase (producto_id,envase_id,unidad_medida_id,stock_real)
 VALUES ({producto},{envase},{uMedida},0); """
+
+CONSULTAR_ID_UMEDIDA = """
+SELECT um.unidad_medida_id FROM unidad_medida um WHERE um.descripcion = '{uMedida}'
+"""
+
+CONSULTAR_ID_MARCA = """
+SELECT m.marca_id FROM marca m WHERE m.descripcion = '{marca}'
+"""
+
+CONSULTA_ID_PRODUCTO_MARCA_UMEDIDA =  """ SELECT (pe.producto_envase_id) FROM producto p INNER JOIN
+producto_envase pe on p.producto_id=pe.producto_id
+WHERE p.marca_id = {marca} AND pe.unidad_medida_id = {uMedida} and p.descripcion = '{producto}'"""
+
+CONSULTA_STOCK1 = """
+SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
+tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
+p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
+pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+WHERE pe.producto_envase_id = {producto_envase_id}
+"""
+
+
+ELIMINAR_PRODUCTO_ENVASE = """
+DELETE FROM producto_envase WHERE producto_envase_id = {produto}
+"""
+
+CONSULTAR_ID_PRODUCTO = """
+SELECT p.producto_id FROM producto p INNER JOIN marca m on m.marca_id = p.marca_id
+INNER JOIN unidad_medida um ON um.unidad_medida_id = pe.unidad_medida_id
+WHERE m.descripcion = '{marca}' AND um.descripcion = '{uMedida}' AND p.descripcion = '{produto}'
+"""
+
+ELIMINAR_PRODUCTO = """
+DELETE FROM producto WHERE producto_id = {produto}
+"""
