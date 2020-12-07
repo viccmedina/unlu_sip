@@ -30,53 +30,55 @@ def index():
 @stock.route('/stock/consultar', methods=['POST', 'GET'])
 @login_required
 def consultar_stock():
-    if current_user.has_role('Operador'):
-        id_producto = None
-        id_marca = None
-        id_um = None
-        products = None
-        form = ConsultarStock()
+	if current_user.has_role('Operador'):
+		id_producto = None
+		id_marca = None
+		id_um = None
+		products = None
+		form = ConsultarStock()
+		form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+		form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+		form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
+		if form.validate_on_submit():
+			id_producto = form.producto.data
+			id_marca = form.marca.data
+			id_um = form.uMedida.data
 
-        if form.validate_on_submit():
-            id_producto = form.producto.data
-            id_marca = form.marca.data
-            id_um = form.uMedida.data
+			products = consulta_sotck(id_producto,id_marca,id_um)
+			# hacer algo con los error de devolucine de id
+			print("Productooo: {} ".format(products))
+			if products == -777 :
+				flash("el producto ingresado es incorrecto", 'error')
+				products = None
+			else:
+				if products == -888 :
+					flash('La unidad de medida ingresada es incorrecta', 'error')
+					products = None
+				else:
+					if products == -999 :
+						flash("La marca ingresada es incorrecta", 'error')
+						products = None
+					else:
+						if products == -666:
+							flash("El nombre de producto ingresado es incorrecto", 'error')
+							products = None
+						else:
+							if products == -555:
+								flash("No se han encontrados registros para los valores ingresados", 'warning')
+								products = None
 
-            products = consulta_sotck(id_producto,id_marca,id_um)
-            # hacer algo con los error de devolucine de id
-            print("Productooo: {} ".format(products))
-            if products == -777 :
-                flash("el producto ingresado es incorrecto", 'error')
-                products = None
-            else:
-                if products == -888 :
-                    flash('La unidad de medida ingresada es incorrecta', 'error')
-                    products = None
-                else:
-                    if products == -999 :
-                        flash("La marca ingresada es incorrecta", 'error')
-                        products = None
-                    else:
-                        if products == -666:
-                            flash("El nombre de producto ingresado es incorrecto", 'error')
-                            products = None
-                        else:
-                            if products == -555:
-                                flash("No se han encontrados registros para los valores ingresados", 'warning')
-                                products = None
+								print(form.errors, flush=True)
 
-            print(form.errors, flush=True)
+		return render_template('form_consultar_stock.html', \
+		datos=current_user.get_mis_datos(),\
+		is_authenticated=current_user.is_authenticated, \
+		rol='operador', \
+		products=products, \
+		form=form, \
+		site=TITULO,\
+		sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
-        return render_template('form_consultar_stock.html', \
-        datos=current_user.get_mis_datos(),\
-        is_authenticated=current_user.is_authenticated, \
-        rol='operador', \
-        products=products, \
-        form=form, \
-        site=TITULO,\
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
-
-    abort(403)
+	abort(403)
 
 
 @stock.route('/stock/agregar', methods=['POST', 'GET'])

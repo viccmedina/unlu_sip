@@ -215,7 +215,12 @@ def consulta_sotck(pro,mar,umed):
 
                                     if valor is None:
                                         return -777
-    if valor is not None or valor == -999 or valor == -888 or valor == -777 or valor == -666 or valor == -555:
+                                    else:
+                                        resultado = db.engine.execute(CONSULTA_STOCK1.format(\
+                                        producto_envase_id=row['producto_envase_id']))
+                                        for rows in resultado:
+                                            r.append(dict(rows))
+    if valor is None or valor == -999 or valor == -888 or valor == -777 or valor == -666 or valor == -555:
         print("valor es sssss{}".format(valor) )
         return valor
     else:

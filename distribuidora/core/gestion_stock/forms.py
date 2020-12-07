@@ -14,9 +14,9 @@ class ConsultarStock(FlaskForm):
 	 nombreProducto -> Es Obligatorio.
 	 marcaProducto  -> Es Obligatorio.
 	"""
-	producto = StringField('Ingrese El Nombre Producto')
-	marca = StringField('Ingrese La Marca del Producto')
-	uMedida = StringField('Ingrese La Unidad de Medida')
+	producto = SelectField(u'Producto', choices=[])
+	marca = SelectField(u'Marca', choices=[])
+	uMedida = SelectField(u'Unidad de Medida', choices=[])
 	submit = SubmitField('Consultar')
 	cancelar = SubmitField('Cancelar')
 
