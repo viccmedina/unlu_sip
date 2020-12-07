@@ -10,7 +10,6 @@ from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase, TipoProducto, \
 UnidadMedida
 from distribuidora.models.precio import Lista_precio_producto
-from tkinter import messagebox
 
 from distribuidora import db
 

@@ -19,6 +19,16 @@ def cargar_errores(errores):
             flash(v, 'error')
 
 
+@msg.route('/mensaje/index', methods=['GET'])
+@login_required
+def index():
+	return render_template('mensajeria.html', \
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated, \
+        rol='ROL', \
+        site='Mensajería', \
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+
 @msg.route('/mensaje/listar', methods=['GET'])
 @login_required
 def listar_mensajes():
