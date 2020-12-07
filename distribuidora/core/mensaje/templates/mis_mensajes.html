@@ -1,25 +1,57 @@
-<h2>MIS MENSAJES</h2>
+{% extends "base.html" %}
 
-	<h3>ENVIADOS</h3>
-	<ul>
-		{% for e in datos['enviados'] %}
-			<li>{{ e }}</li>
-		{% endfor %}
-	</ul>
-<br>
-	<h3>RECIBIDOS</h3>
-	<ul>
-		{% for r in datos['recibidos'] %}
-			<li>{{ r }}</li>
-		{% endfor %}
-	</ul>
+  {% block content %}
+    <div class="container-fluid">
+      <div class="row">
 
-	<h3>CANTIDAD DE MSJ SIN LEER: {{datos['sin_leer']['cantidad']}}</h3>
-	<h2>MENSAJES SIN LEER</h2>
-	<ul>
-		{% for sl in datos['sin_leer']['msjs'] %}
-			<li>{{ sl }}</li>
-			<a id="leer_msj" class="btn btn-primary" href="{{ url_for('mensajes.listar_mensajes', msj_leido=sl) }}">Leer</a>
-		{% endfor %}
+        {% include "acordeon_perfil_usuario.html" %}
+        <div class="col-sm-5 col-md-6">
+          <div class="row row-cols-1 row-cols-md-9">
+		<div class="col mb-9">
+			<h5>Mensajes sin Leer </h5>
+			<p>Total: {{datos['sin_leer']['cantidad']}}</p>
+			{% for sl in datos['sin_leer']['msjs'] %}
+				<div class="card" style="margin-bottom: 10px;">
+				  <div class="card-body">
+				    <h5 class="card-title">Mensaje Nuevo</h5>
+				    <p><b>De: </b> {{sl['sender_id']}}</p>
+				    <p>{{ sl['body'] }}</p>
+				    <a id="leer_msj" class="btn btn-primary" href="{{ url_for('mensajes.listar_mensajes', msj_leido=sl) }}">Leer</a>
+
+				  </div>
+				</div>
+			{% endfor %}
+		</div>
 		
-	</ul>
+		<div class="col mb-9" style="padding-top: 20px; padding-bottom: 20px;">
+			<h5>Mensajes Recibidos </h5>
+			{% for r in datos['recibidos'] %}
+				<div class="card" style="margin-bottom: 10px;">
+				  <div class="card-body">
+				    <h5 class="card-title">Mensaje Nuevo</h5>
+				    <p><b>De: </b> {{r['sender_id']}}</p>
+				    <p>{{ r['body'] }}</p>
+				  </div>
+				</div>
+			{% endfor %}
+		</div>
+		
+		<div class="col mb-9">
+			<h5>Mensajes Enviados </h5>
+			{% for e in datos['enviados'] %}
+				<div class="card" style="margin-bottom: 10px;">
+				  <div class="card-body">
+				    <h5 class="card-title">Mensaje Nuevo</h5>
+				    <p><b>De: </b> {{e['sender_id']}}</p>
+				    <p>{{ e['body'] }}</p>
+				  </div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}
