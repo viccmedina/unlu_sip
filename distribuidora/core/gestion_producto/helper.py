@@ -121,7 +121,9 @@ def consulta_producto_pProductoMarca(producto,marca):
     return parser_result(resultado)
 
 
-def delete_producto(producto,marca,uMedida):
+
+
+def consult_producto(producto,marca,uMedida):
     result = None
     resultado = None
     r = []
@@ -138,26 +140,42 @@ def delete_producto(producto,marca,uMedida):
     for row in result:
         valor = row.producto_envase_id
 
+    if valor == None:
+        print("acaaaaaaaa")
+        return -777
+
     resultado = db.engine.execute(CONSULTA_STOCK1.format(producto_envase_id=valor))
+    resultado = parser_result(resultado)
 
     return resultado
 
-def eliminar_producto(produto,marca,uMedida):
+
+
+
+
+def eli_producto(producto,marca,uMedida):
+    val = None
     umed = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=uMedida))
     for row in umed:
         um = row.unidad_medida_id
     mar = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=marca))
     for row in mar:
         m = row.marca_id
-    result = db.engine.execute(CONSULTA_ID_PRODUCTO_MARCA_UMEDIDA.format(producto=producto,marca=m,uMedida=um))
+    result = db.engine.execute(CONSULTAR_ID_PRODUCTO_MARCA_UMEDIDA.format(producto=producto,marca=m,uMedida=um))
     for row in result:
-        valor = row.producto_envase_id
-    db.engine.execute(ELIMINAR_PRODUCTO_ENVASE.format(producto=valor))
+        val = row['producto_envase_id']
+        print("valor {}".format(val))
+        pro = row.producto_id
+        print("pro {}".format(pro))
+    #Borramos en la tabla producto_envase el producto
+    db.engine.execute(ELIMINAR_PRODUCTO_ENVASE.format(producto=val))
 
-    result = db.engine.execute(CONSULTAR_ID_PRODUCTO.format(producto=producto,marca=m,uMedida=um))
-    for row in result:
-        valor = row.producto_id
-    db.engine.execute(ELIMINAR_PRODUCTO.format(producto=valor))
+    #Borramos en la tabla producto el producto
+    db.engine.execute(ELIMINAR_PRODUCTO.format(producto=pro))
+
+
+
+
 
 def consulta_producto_pProductoUMedida(producto,uMedida):
     resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO_UMEDIDA.format(producto=producto,\
@@ -182,3 +200,37 @@ def insert_new_producto(producto,marca,uMedida,tProd,envase):
     envase=envase_ide(envase),uMedida=unidad_medida_ide(uMedida)))
 
     return True
+
+
+def modific_producto(pro,mar,um,env,tProd,pro1,mar1,um1):
+    marca = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=mar1))
+    umedida_id = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=um1))
+    for row in marca:
+        print("marca {}".format(row.marca_id))
+        m1 = row.marca_id
+    for row in umedida_id:
+        print("um1 {}".format(row.unidad_medida_id))
+        um1 = row.unidad_medida_id
+
+    marca_id = db.engine.execute(CONSULTAR_ID_MARCA.format(marca=mar))
+    um_id = db.engine.execute(CONSULTAR_ID_UMEDIDA.format(uMedida=um))
+    envase_id = db.engine.execute(ENVASE_IDE.format(envase=env))
+    tp_id = db.engine.execute(TIPOPRODUCTOID.format(tp=tProd))
+    for row in marca_id:
+        m = row.marca_id
+    for row in um_id:
+        um = row.unidad_medida_id
+    for row in envase_id:
+        e = row.envase_id
+    for row in tp_id:
+        tp=row.tipo_producto_id
+
+    result = db.engine.execute(CONSULTAR_ID_PRODUCTO_MARCA_UMEDIDA.format(producto=pro1,marca=m1,uMedida=um1))
+    for row in result:
+        pe_id = row['producto_envase_id']
+        print("valor {}".format(pe_id))
+        p = row.producto_id
+        print("pro {}".format(p))
+
+    db.engine.execute(UPDATEPRODUCTOENVASE.format(e=e,um=um,pe_id=pe_id))
+    db.engine.execute(UPDATEPRODUCTO.format(pro=pro,m=m,tp=tp,p=p))

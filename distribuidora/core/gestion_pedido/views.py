@@ -65,7 +65,7 @@ def consultar_pedido():
         if not pedido_pcc:
             pedido_pcc = None
         page = request.args.get('page', 1, type=int)
-        
+
 
         return render_template('form_consultar_pedido.html',\
             datos=current_user.get_mis_datos(),\
@@ -137,7 +137,7 @@ def modificar_detalle_producto():
             flash('Algo Salió mal !', 'error')
     else:
         cargar_errores(form.errors)
-       
+
     detalle = get_detalle_pedido(pedido)
     return render_template('detalle_pedido.html',\
         datos=current_user.get_mis_datos(),\
@@ -217,13 +217,13 @@ def modificar_estado_operador():
             costo = None
             if estado_nuevo == 'EN PREPARACION':
                 costo = actualizar_stock_real(pedido)
-            
+
             result = actualizar_pedido_estado_por_operador(current_user.get_id(),\
                 pedido, estado_nuevo, estado_actual, costo)
 
             if result:
                 flash('Estado de pedido actualizado !', 'success')
-                # Si todo salio bien, debemos informar que hubo 
+                # Si todo salio bien, debemos informar que hubo
                 # una actualización en el estado del pedido
                 body = 'Cambio de estado del pedido #{} : - {}'.format(pedido, estado_nuevo)
                 receptor = get_pedido_by_id(pedido)[0]['usuario_id']
@@ -294,7 +294,7 @@ def listar_detalle_pedido_anterior():
     estado_pedido = get_estado_actual_pedido(pedido)
     if estado_pedido[0]['descripcion_corta'] in ['PCO']:
         return redirect(url_for('pedido.listar_detalle_pedido', pedido=pedido))
-    
+
     detalle = get_detalle_pedido(pedido)
     return render_template('detalle_pedidos_anteriores.html',\
         detalle=detalle,\

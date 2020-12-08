@@ -38,10 +38,8 @@
 
 									{% if products %}
 										<div class="form-group">
-											{% include "tabla_consulta_producto.html"%}
-                      <span style="float:right">
-                      	<a align="right" class="btn btn-success " href="{{ url_for('producto.eliminar_producto', form=form,products=products, current_user=current_user) }}" target="_blank" role="button">Eliminar Producto</a>
-                      </span>
+											{% include "tabla_eliminar_producto.html"%}
+
 										</div>
 										{% else %}
 											<h3 align="center">RESULTADO</h3>

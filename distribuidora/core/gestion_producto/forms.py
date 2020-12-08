@@ -22,6 +22,30 @@ class AgregarProducto(FlaskForm):
 	envase = SelectField(u'Envase', choices=[], validators=[DataRequired()])
 	submit = SubmitField('Agregar')
 
+class EliminarProducto(FlaskForm):
+	producto = SelectField(u'Producto', choices=[])
+	marca = SelectField(u'Marca', choices=[])
+	uMedida = SelectField(u'Unidad de Medida', choices=[])
+	submit = SubmitField('Eliminar')
+	cancelar = SubmitField('Cancelar')
+
+
+class ModificarProducto(FlaskForm):
+	producto = SelectField(u'Producto', choices=[])
+	marca = SelectField(u'Marca', choices=[])
+	uMedida = SelectField(u'Unidad de Medida', choices=[])
+	submit = SubmitField('Modificar')
+	cancelar = SubmitField('Cancelar')
+
+class ModifProducto(FlaskForm):
+	product = SelectField(u'Producto', choices=[])
+	marc = SelectField(u'Marca', choices=[])
+	uMedid = SelectField(u'Unidad de Medida', choices=[])
+	tipo_product = SelectField(u'Tipo Producto', choices=[])
+	envas = SelectField(u'Envase', choices=[])
+	submit = SubmitField('Modificar')
+	cancelar = SubmitField('Cancelar')
+
 class ImportarProducto(FlaskForm):
 	file = FileField('Archivo')
 	submit = SubmitField('Importar')

@@ -5,10 +5,9 @@ from distribuidora.core.gestion_pedido.forms import FormAgregarProducto
 from distribuidora.core.gestion_pedido.helper import get_cantidad_estados_pedido, \
     get_ultimo_pedido_id, insert_into_detalle_pedido
 from distribuidora.core.gestion_producto.helper import *
-from distribuidora.models.producto import TipoProducto,Envase
 from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase, TipoProducto, \
-UnidadMedida
+UnidadMedida, TipoProducto
 from distribuidora.models.precio import Lista_precio_producto
 
 from distribuidora import db
@@ -135,14 +134,55 @@ def agregar():
     abort(403)
 
 
-@producto.route('/modificar', methods=['GET'])
+@producto.route('/modificar', methods=['POST','GET'])
 @login_required
 def modificar():
+    if current_user.has_role('Operador'):
+        id_producto = None
+        id_marca = None
+        id_um = None
+        products = None
+        form = ModificarProducto()
+        form1 = ModifProducto()
+        form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
+        if form.validate_on_submit():
+            id_producto = form.producto.data
+            id_marca = form.marca.data
+            id_um = form.uMedida.data
+            products = consult_producto(form.producto.data,form.marca.data,form.uMedida.data)
+
+            if products == -777:
+                #flash("Se ha Eliminado el producto", 'warning')
+                products = None
+                flash("No se ha podido localizar el producto, producto invalido",'error')
+            else:
+                form1.product.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+                form1.marc.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+                form1.uMedid.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
+                form1.envas.choices = [(descripcion.descripcion) for descripcion in Envase.query.all()]
+                form1.tipo_product.choices = [(descripcion.descripcion) for descripcion in TipoProducto.query.all()]
+                if form1.validate_on_submit():
+                    print("algo")
+
+                    return render_template('form_modificar_product.html', \
+                    datos=current_user.get_mis_datos(), \
+                    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+                    is_authenticated=current_user.is_authenticated, \
+                    rol='operador',\
+                    form=form,\
+                    form1=form1,\
+                    products=products)
+
     return render_template('form_modificar_producto.html', \
     datos=current_user.get_mis_datos(), \
     sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
     is_authenticated=current_user.is_authenticated, \
-    rol='operador')
+    rol='operador',\
+    form=form,\
+    form1=form1,\
+    products=products)
 
 
 @producto.route('/eliminar', methods=['POST','GET'])
@@ -153,7 +193,7 @@ def eliminar():
         id_marca = None
         id_um = None
         products = None
-        form = ConsultarProducto()
+        form = EliminarProducto()
         form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
         form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
         form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
@@ -162,9 +202,10 @@ def eliminar():
             id_marca = form.marca.data
             id_um = form.uMedida.data
             products = delete_producto(form.producto.data,form.marca.data,form.uMedida.data)
+            if products == -777:
                 #flash("Se ha Eliminado el producto", 'warning')
-
-                #flash("No se ha podido borrar el producto, ha surgido un error",'error')
+                products = None
+                flash("No se ha podido borrar el producto, producto invalido",'error')
 
         return render_template('form_eliminar_producto.html', \
         datos=current_user.get_mis_datos(), \
@@ -282,11 +323,35 @@ def detalle_producto():
         site='Detalle Producto')
 
 @producto.route('/eliminar/producto', methods=['POST','GET'])
+@login_required
 def eliminar_producto():
-    #eliminar_producto(products)
-    print("eliminado")
-    return render_template('form_eliminar_producto.html', \
-    datos=current_user.get_mis_datos(), \
-    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
-    is_authenticated=current_user.is_authenticated, \
-    rol='operador')
+
+    pro = request.args.get('producto')
+    mar = request.args.get('marca')
+    um = request.args.get('umed')
+
+    print("producto {}".format(pro))
+    print("marca {}".format(mar))
+    print("umed {}".format(um))
+
+    eli_producto(pro,mar,um)
+
+    flash("Producto Eliminado",'warning')
+    return redirect(url_for('producto.eliminar'))
+
+@producto.route('/modificar/producto', methods=['POST','GET'])
+@login_required
+def modificar_producto():
+    pro = request.args.get('pro')
+    mar = request.args.get('mar')
+    umed = request.args.get('um')
+    env = request.args.get('env')
+    tp = request.args.get('tp')
+    pro1 = request.args.get('pro1')
+    mar1 = request.args.get('mar1')
+    umed1 = request.args.get('um1')
+    print("prod 1 {}".format(pro1))
+    modific_producto(pro,mar,umed,env,tp,pro1,mar1,umed1)
+    flash("Producto Modificado",'warning')
+
+    return redirect(url_for('producto.modificar'))

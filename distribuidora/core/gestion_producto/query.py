@@ -119,6 +119,10 @@ UNIDADMEDIDA_IDE = """
 SELECT um.unidad_medida_id FROM unidad_medida um WHERE um.descripcion = '{uMedida}'
 """
 
+TIPOPRODUCTOID =  """
+SELECT tp.tipo_producto_id FROM tipo_producto tp WHERE tp.descripcion = '{tp}'
+"""
+
 ENVASE_IDE = """
 SELECT e.envase_id FROM envase e WHERE e.descripcion = '{envase}'
 """
@@ -143,29 +147,42 @@ SELECT m.marca_id FROM marca m WHERE m.descripcion = '{marca}'
 """
 
 CONSULTA_ID_PRODUCTO_MARCA_UMEDIDA =  """ SELECT (pe.producto_envase_id) FROM producto p INNER JOIN
-producto_envase pe on p.producto_id=pe.producto_id
-WHERE p.marca_id = {marca} AND pe.unidad_medida_id = {uMedida} and p.descripcion = '{producto}'"""
+producto_envase pe on p.producto_id = pe.producto_id
+WHERE p.marca_id = {marca} AND pe.unidad_medida_id = {uMedida} AND p.descripcion = '{producto}' """
 
 CONSULTA_STOCK1 = """
 SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
-tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
+tp.descripcion as tipoProd,pe.stock_real as stock, e.descripcion as envase FROM producto p INNER JOIN producto_envase pe ON
 p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
 pe.unidad_medida_id = um.unidad_medida_id INNER JOIN tipo_producto tp ON p.tipo_producto_id = tp.tipo_producto_id
-INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id INNER JOIN envase e ON e.envase_id = pe.envase_id
 WHERE pe.producto_envase_id = {producto_envase_id}
 """
 
 
 ELIMINAR_PRODUCTO_ENVASE = """
-DELETE FROM producto_envase WHERE producto_envase_id = {produto}
+DELETE FROM producto_envase WHERE producto_envase_id = {producto}
 """
 
 CONSULTAR_ID_PRODUCTO = """
 SELECT p.producto_id FROM producto p INNER JOIN marca m on m.marca_id = p.marca_id
 INNER JOIN unidad_medida um ON um.unidad_medida_id = pe.unidad_medida_id
-WHERE m.descripcion = '{marca}' AND um.descripcion = '{uMedida}' AND p.descripcion = '{produto}'
+WHERE m.descripcion = '{marca}' AND um.descripcion = '{uMedida}' AND p.descripcion = '{producto}'
 """
 
 ELIMINAR_PRODUCTO = """
-DELETE FROM producto WHERE producto_id = {produto}
+DELETE FROM producto WHERE producto_id = {producto}
+"""
+CONSULTAR_ID_PRODUCTO_MARCA_UMEDIDA =  """ SELECT pe.producto_envase_id, p.producto_id FROM producto p INNER JOIN
+producto_envase pe on p.producto_id=pe.producto_id
+WHERE p.marca_id = {marca} AND pe.unidad_medida_id = {uMedida} and p.descripcion = '{producto}'"""
+
+
+
+UPDATEPRODUCTOENVASE = """
+UPDATE producto_envase SET envase_id = {e} , unidad_medida_id = {um} WHERE producto_envase_id = {pe_id}
+"""
+
+UPDATEPRODUCTO = """
+UPDATE producto SET descripcion= '{pro}', marca_id = {m} , tipo_producto_id = {tp} WHERE producto_id = {p}
 """
