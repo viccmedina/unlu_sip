@@ -32,7 +32,6 @@ def index():
 @msg.route('/mensaje/listar', methods=['GET'])
 @login_required
 def listar_mensajes():
-	
 	#print(msjs, flush=True)
 	msj_sin_leer = request.args.get('msj_leido', None)
 
@@ -48,7 +47,13 @@ def listar_mensajes():
 	usuarios_id = current_user.get_id()
 	msjs = get_mensajes(usuarios_id)
 	
-	return render_template('mis_mensajes.html', datos=msjs)
+	return render_template('mis_mensajes.html', \
+		datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated, \
+        rol='ROL', \
+        site='Mensajería', \
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()), \
+		msjs=msjs)
 
 
 @msg.route('/mensaje/nuevo', methods=['GET', 'POST'])
@@ -61,14 +66,19 @@ def enviar_mensaje():
 			'receptor': form.recipient.data,
 			'body': form.message.data
 		}
-		
-		print('data: {}'.format(data), flush=True)
-		result = insert_nuevo_mensaje(data)
-		#result = True
-		if result:
-			flash('El mensaje ha sido enviado correctamente', 'success')
+		if data['emisor'] != current_user.get_id():
+			if current_user.has_role('Cliente') and data['receptor'] == '2':
+				print('data: {}'.format(data), flush=True)
+				result = insert_nuevo_mensaje(data)
+				#result = True
+				if result:
+					flash('El mensaje ha sido enviado correctamente', 'success')
+				else:
+					flash('Verifique la información ingresada', 'error')
+			else:
+				flash('No es posible enviarle a este destinatario', 'error')
 		else:
-			flash('Verifique la información ingresada', 'error')
+			flash('No es posible enviarle a este destinatario', 'error')
 	else:
 		cargar_errores(form.errors)
 
