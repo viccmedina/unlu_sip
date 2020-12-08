@@ -1,0 +1,59 @@
+{% block tabla_movimientos %}
+<div class="container">
+  <h2 align="center" >Resultado de la consulta</h2>
+  <p>Productos </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Marca</th>
+        <th>Unidad Medida</th>
+        <th>Tipo Producto</th>
+        <th>Envase</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% include "flash_errors.html" %}
+        {{ form.hidden_tag() }}
+        {% for r in products %}
+          <tr>
+            <td>{{r['producto']}}</td>
+            <td>{{r['marca']}}</td>
+            <td>{{r['umedida']}}</td>
+            <td>{{r['tipoProd']}}</td>
+            <td>{{r['envase']}}</td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Marca</th>
+        <th>Unidad Medida</th>
+        <th>Tipo Producto</th>
+        <th>Envase</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for r in products %}
+      <tr>
+        <div class="form-group">
+          <h5>Campos a modificar: </h5>
+          <td> {{ form1.product(class="form-control form-control-md") }} </td>
+          <td> {{ form1.marc(class="form-control form-control-md") }}</td>
+          <td> {{ form1.uMedid(class="form-control form-control-md") }}</td>
+          <td> {{ form1.tipo_product(class="form-control form-control-md")}} </td>
+          <td> {{ form1.envas(class="form-control form-control-md") }}</td>
+        </div>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <span style="float:right">
+      {{ form.submit(class="btn btn-success mb-2") }}
+
+</div>
+{% endblock %}

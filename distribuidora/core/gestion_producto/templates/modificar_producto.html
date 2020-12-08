@@ -1,0 +1,72 @@
+{% block tabla_movimientos %}
+<div class="container">
+  <h2 align="center" >Resultado de la consulta</h2>
+  <p>Productos </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Marca</th>
+        <th>Unidad Medida</th>
+        <th>Tipo Producto</th>
+        <th>Envase</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% include "flash_errors.html" %}
+        {{ form.hidden_tag() }}
+        {% for r in products %}
+          <tr>
+            <td>{{r['producto']}}</td>
+            <td>{{r['marca']}}</td>
+            <td>{{r['umedida']}}</td>
+            <td>{{r['tipoProd']}}</td>
+            <td>{{r['envase']}}</td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Marca</th>
+        <th>Unidad Medida</th>
+        <th>Tipo Producto</th>
+        <th>Envase</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for r in products %}
+      <tr>
+        <div class="form-group">
+          <h5>Campos a modificar: </h5>
+          <td> {{ form1.product.data }} </td>
+          <td> {{ form1.marc.data }}</td>
+          <td> {{ form1.uMedid.data }}</td>
+          <td> {{ form1.tipo_product.data}} </td>
+          <td> {{ form1.envas.data }}</td>
+        </div>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <span style="float:right">
+    <a id="confirmar" data-toggle="modal" data-target="#linkModal" class="btn btn-primary" href="{{ url_for('producto.modificar_producto',pro=[form1.product.data],pro1=[form.producto.data],mar=[form1.marc.data],mar1=[form.marca.data],um=[form1.uMedid.data],um1=[form.uMedida.data],env=[form1.envas.data],tp=[form1.tipo_product.data]) }}">Modificar</a>
+  </span>
+</div>
+
+{% include "modal_form.html" %}
+<script type="text/javascript">
+
+  document.getElementById('link_confirm').addEventListener('click', modificarProd);
+  function modificarProd(){
+    let a = document.getElementById("confirmar");
+    console.log(a.href);
+    window.location.href = a.href;
+  }
+</script>
+
+
+{% endblock %}
