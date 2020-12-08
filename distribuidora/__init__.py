@@ -28,8 +28,10 @@ from distribuidora.core.gestion_pedido.views import pedido
 from distribuidora.core.gestion_devoluciones.views import devolucion
 from distribuidora.core.mensaje.views import msg
 from distribuidora.core.error_handler.handler import error_pages
+from distribuidora.core.gestion_devolucion.views import devolucion
 
 app.register_blueprint(msg)
+app.register_blueprint(devolucion)
 app.register_blueprint(error_pages)
 app.register_blueprint(stock)
 app.register_blueprint(core_blueprint, url_prefix='/')
