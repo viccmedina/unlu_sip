@@ -49,7 +49,7 @@ def ver_detalle():
 		form = NuevaDevolucion()
 		form.motivo.choices = [(descripcion.descripcion) for descripcion in EstadoDevolucion.query.all()]
 
-		return render_template('detalle_pedido.html',form=form,\
+		return render_template('detalle_pedido_devolucion.html',form=form,\
 		datos=current_user.get_mis_datos(),\
 		site='Gestion Devoluciones',\
 		rol=current_user.get_role(),\

@@ -37,7 +37,7 @@
               </table>
             </div>
             <div align="right" >
-              <a id="devolver" data-toggle="modal" data-target="#linkModal" class="btn btn-primary" href="{{ url_for('devoluciones.index', arr=arr)}}">Generar Devolucion</a>
+              <a id="devolver" class="btn btn-primary" href="{{ url_for('devoluciones.index')}}">Generar Devolución</a>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@
 
 <script type="text/javascript">
 
-  document.getElementById('link_confirm').addEventListener('click', devolverProducto);
+  //document.getElementById('link_confirm').addEventListener('click', devolverProducto);
   function devolverProducto(){
      var checked = document.getElementById('checkbox').checked
      console.log(checked);
