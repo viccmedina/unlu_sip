@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 
-{% block content %}      
+{% block content %}
 <div class="container-fluid">
   <div class="row">
     {% include "acordeon_perfil_usuario.html" %}
@@ -19,8 +19,8 @@
                   <p class="card-text">Estado actual: {{ p.descripcion }}</p>
                   <a href="{{ url_for('pedido.listar_detalle_pedido', pedido=p.pedido_id) }}" class="btn btn-primary">Ver Detalle</a>
                 </div>
-            
-                
+
+
                 <form  action="{{ url_for('pedido.modificar_estado_operador', estado_anterior=p.descripcion, pedido=p.pedido_id) }}" method="POST">
                   {{ form.hidden_tag() }}
 
@@ -35,7 +35,7 @@
               </div>
               <br>
             {% endfor %}
- 
+
           {% endif %}
         </div>
       </div>

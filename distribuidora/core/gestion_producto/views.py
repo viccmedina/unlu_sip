@@ -158,7 +158,7 @@ def modificar():
                 products = None
                 flash("No se ha podido localizar el producto, producto invalido",'error')
             else:
-                form1.product.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+                #form1.product.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
                 form1.marc.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
                 form1.uMedid.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
                 form1.envas.choices = [(descripcion.descripcion) for descripcion in Envase.query.all()]

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+      <div class="row">
+        {% include "acordeon_perfil_usuario.html" %}
+        <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+          {% include "flash_errors.html" %}
+          <div>
+              <h3>Detalle del Pedido</h3>
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Envase</th>
+                    <th scope="col">Devolver</th>
+                    <th scope="col">Motivo</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for d in det_pedido %}
+                  <tr>
+                    <td>{{ d.desc_producto }}</td>
+                    <td>{{ d.desc_marca }}</td>
+                    <td>{{ d.desc_envase }} {{ d.desc_unidad_medida}}</td>
+                    <td >
+                        {{ form.checkbox(class="form-control w-25",id="checkbox" )}}
+                    </td>
+                    <td  >
+                        {{ form.motivo(class="form-control w-55")}}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div align="right" >
+              <a id="devolver" data-toggle="modal" data-target="#linkModal" class="btn btn-primary" href="{{ url_for('devoluciones.index', arr=arr)}}">Generar Devolucion</a>
+            </div>
+          </div>
+        </div>
+</div>
+{% include "modal_form.html" %}
+
+
+<script type="text/javascript">
+
+  document.getElementById('link_confirm').addEventListener('click', devolverProducto);
+  function devolverProducto(){
+     var checked = document.getElementById('checkbox').checked
+     console.log(checked);
+     var arr =[];
+     if (checked){
+       arr.push(d);
+     }
+    let a = document.getElementById("devolver");
+    console.log(a.href);
+    console.log(arr);
+    window.location.href = a.href;
+  }
+</script>
+
+{% endblock %}

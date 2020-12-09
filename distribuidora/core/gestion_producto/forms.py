@@ -38,7 +38,7 @@ class ModificarProducto(FlaskForm):
 	cancelar = SubmitField('Cancelar')
 
 class ModifProducto(FlaskForm):
-	product = SelectField(u'Producto', choices=[])
+	product = StringField(u'Producto')
 	marc = SelectField(u'Marca', choices=[])
 	uMedid = SelectField(u'Unidad de Medida', choices=[])
 	tipo_product = SelectField(u'Tipo Producto', choices=[])
