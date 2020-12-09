@@ -25,7 +25,7 @@ from distribuidora.core.gestion_cta_corriente.views import cta_corriente
 from distribuidora.core.gestion_producto.views import producto
 from distribuidora.core.gestion_lista_precio.views import lista_precio
 from distribuidora.core.gestion_pedido.views import pedido
-from distribuidora.core.gestion_devoluciones.views import devolucion
+from distribuidora.core.gestion_devolucion.views import devolucion
 from distribuidora.core.mensaje.views import msg
 from distribuidora.core.error_handler.handler import error_pages
 from distribuidora.core.gestion_devolucion.views import devolucion

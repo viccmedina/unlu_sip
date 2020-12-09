@@ -294,6 +294,7 @@ def detalle_producto():
         producto_envase_id = request.args.get('producto', type=int)
         producto_id = get_producto_id_from_producto_envase(producto_envase_id)
     productos = get_producto_envase_by_producto_id(producto_id[0]['producto_id'])
+    print(productos, flush=True)
 
     form = FormAgregarProducto()
     if form.validate_on_submit():

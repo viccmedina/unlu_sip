@@ -74,8 +74,6 @@ def insertar_provincias():
 		for row in csv_reader:
 			# Dado que row es un diccionario, podemos acceder a sus campos
 			# como cualquier diccionario en Python
-			print('Provincia: {}'.format(row['descripcion']))
-			print('-'*50)
 			# Creamos el objeto Provincia y lo guardamos
 			new_provincia = Provincia(descripcion=row['descripcion'])
 	lista_prov.append(new_provincia)
@@ -90,8 +88,6 @@ def insertar_localidades():
 	with open(DATOS_PATH + 'localidad.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Localidad: {}'.format(row['descripcion']))
-			print('-'*50)
 			new_localidad = Localidad(descripcion=row['descripcion'], provincia_id=row['provincia_id'])
 			lista_loc.append(new_localidad)
 	db.session.add_all(lista_loc)
@@ -104,8 +100,6 @@ def insertar_roles():
 	with open(DATOS_PATH + 'rol.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Rol: {}'.format(row['nombre']))
-			print('-'*50)
 			new_rol = Rol(nombre=row['nombre'], descripcion=row['descripcion'])
 			lista_rol.append(new_rol)
 	db.session.add_all(lista_rol)
@@ -118,10 +112,7 @@ def insertar_permisos():
 	with open(DATOS_PATH + 'permiso_rol.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Permiso: {}'.format(row['nombre']))
-			print('-'*50)
 			rol = Rol.query.filter_by(nombre=row['rol']).first()
-			print(rol)
 			new_permiso = Permiso(nombre=row['nombre'], descripcion=row['descripcion'])
 			new_permiso.rol_permiso.append(rol)
 			lista_permiso.append(new_permiso)
@@ -135,9 +126,6 @@ def insertar_personas():
 	with open(DATOS_PATH + 'persona.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Persona: {}'.format(row['nombre']))
-			print('-'*50)
-
 			new_persona = Persona(nombre=row['nombre'], apellido=row['apellido'], \
 			email=row['email'], telefono_ppal=row['telefono_principal'])
 
@@ -153,12 +141,8 @@ def insertar_usuarios():
 	with open(DATOS_PATH + 'usuario.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Usuario: {}'.format(row['username']))
-			print('-'*50)
 			rol = Rol.query.filter_by(nombre=row['rol']).first()
 			persona = Persona.query.filter_by(email=row['persona']).first()
-			print(rol)
-			print(persona.persona_id)
 			new_usuario = Usuario(username=row['username'], password=row['password'], \
 			persona_id=persona.persona_id)
 			new_usuario.usuario_rol.append(rol)
@@ -178,8 +162,6 @@ def insertar_tipo_movimiento_cta_corriente():
 	with open(DATOS_PATH + 'tipo_movimiento_cta_corriente.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Tipo Movimiento: {}'.format(row['descripcion']))
-			print('-'*50)
 			tm = TipoMovimientoCtaCorriente(descripcion=row['descripcion'], \
 			descripcion_corta=row['descripcion_corta'])
 			tipos_movimientos.append(tm)
@@ -215,14 +197,9 @@ def insertar_movimientos_cta_corriente():
 	with open(DATOS_PATH + 'movimiento_cta_corriente.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Movimiento: {}'.format(row['tipo_movimiento_cta_corriente']))
-			print('-'*50)
 			usuario = Usuario.query.get(row['usuario_registrador'])
-			print('USUARIO: {}'.format(usuario))
 			tm = TipoMovimientoCtaCorriente.query.filter_by(descripcion=row['tipo_movimiento_cta_corriente']).first()
-			print('TIPO MOVIMIENTO {}'.format(tm.id))
 			cta_corriente = CuentaCorriente.query.get(row['cta_corriente'])
-			print('CTA CORRIENTE {}'.format(cta_corriente))
 			if row['tipo_movimiento_cta_corriente'] == 'Deuda':
 				saldo = float(row['saldo']) * (-1)
 			else:
@@ -240,8 +217,6 @@ def insertar_estado_pedido():
 	with open(DATOS_PATH + 'tipo_estado_pedido.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Estado Pedido: {}'.format(row['descripcion']))
-			print('-'*50)
 			tipos_estado_pedido = PedidoEstado(descripcion=row['descripcion'], descripcion_corta=row['descripcion_corta'], orden=row['orden'])
 
 			estados.append(tipos_estado_pedido)
@@ -249,147 +224,65 @@ def insertar_estado_pedido():
 	db.session.commit()
 
 
-def insertar_marca():
-	"""
-	Cargamos las marcas con las cuales trabaja la distribuidora.
-	"""
-	print('Importando Modelo de Marcas')
-	marcas = []
-	with open(DATOS_PATH + 'marca.csv') as csv_file:
+def parser_result(result):
+    resp = []
+    for row in result:
+        resp.append(dict(row))
+    return resp[0]
+
+
+def insertar_datos_demo_producto():
+	print('INSERTANDO PRODUCTO')
+	QUERY_PRODUCTO = """ INSERT INTO producto (descripcion, tipo_producto_id, marca_id) VALUES """
+	SELECT_MARCA = """ SELECT * FROM marca WHERE descripcion='{}'"""
+	SELECT_TIPO_PRODUCTO = """ SELECT * FROM tipo_producto WHERE descripcion='{}'"""
+	producto = list()
+	with open(DATOS_PATH + 'datos_demo.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Marca: {}'.format(row['descripcion']))
-			print('-'*50)
-			m = Marca(descripcion=row['descripcion'])
+			if row['PRODUCTO'] not in producto:
+				producto.append(row['PRODUCTO'])
+				marca = db.engine.execute(SELECT_MARCA.format(row['MARCA']))
+				marca = parser_result(marca)
+				tipo_producto = db.engine.execute(SELECT_TIPO_PRODUCTO.format(row['TIPO_PRODUCTO']))
+				tipo_producto=parser_result(tipo_producto)
+				QUERY_PRODUCTO += "('{}', '{}', '{}'),".format(row['PRODUCTO'],\
+					tipo_producto['tipo_producto_id'], marca['marca_id'])
+	db.engine.execute(QUERY_PRODUCTO[:-1] + ';')
 
-			marcas.append(m)
-	db.session.add_all(marcas)
-	db.session.commit()
 
-
-#Cargamos la db con tipo de producto
-def insertar_tipo_producto():
-	print('Importando Modelo tipoProducto')
-	tipoProd = []
-	with open(DATOS_PATH + 'tipo_producto.csv') as csv_file:
+def insertar_datos_demo_producto_envase():
+	#producto_id, envase_id, unidad_medida_id,stock_real
+	print('INSERTANDO PRODUCTO ENVASE')
+	QUERY_PRODUCTO_ENVASE = """ INSERT INTO producto_envase (producto_id, envase_id,unidad_medida_id, stock_real) VALUES """
+	f_desde = datetime.strptime('15/06/2020', "%d/%m/%Y")
+	f_hasta = datetime.strptime('15/06/2021', "%d/%m/%Y")
+	QUERY_LISTA_PRECIO = """INSERT INTO lista_precio (fecha_desde, fecha_hasta) VALUES ('{}', '{}');""".\
+		format(f_desde, f_hasta)
+	db.engine.execute(QUERY_LISTA_PRECIO)
+	lista_precio = '1'
+	id_producto_envase = 1
+	QUERY_PRECIO = """ INSERT INTO lista_precio_producto (producto_envase_id, precio_id, precio, fecha_inicio, fecha_fin) VALUES """
+	SELECT_ENVASE = """ SELECT * FROM envase WHERE descripcion='{}'"""
+	SELECT_PRODUCTO = """ SELECT * FROM producto WHERE descripcion='{}'"""
+	SELECT_TIPO_UNIDAD_MEDIDA = """ SELECT * FROM unidad_medida WHERE descripcion='{}'"""
+	with open(DATOS_PATH + 'datos_demo.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Tipo Producto: {}'.format(row['descripcion']))
-			print('-'*50)
-			new_tipo_producto = TipoProducto(descripcion=row['descripcion'])
-			tipoProd.append(new_tipo_producto)
-	db.session.add_all(tipoProd)
-	db.session.commit()
-
-
-def insertar_unidad_medida():
-	print('Importando Modelo Unidad de medida')
-	unidad_medida = []
-	with open(DATOS_PATH + 'unidad_medida.csv') as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		for row in csv_reader:
-			print('Unidad de medida: {}'.format(row['descripcion']))
-			print('-'*50)
-			new_unidad_medida = UnidadMedida(descripcion=row['descripcion'])
-			unidad_medida.append(new_unidad_medida)
-	db.session.add_all(unidad_medida)
-	db.session.commit()
-
-
-def insertar_lista_precio():
-	print('Importando Modelo Lista de precios')
-	lista_precio = []
-	with open(DATOS_PATH + 'lista_precio.csv') as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		for row in csv_reader:
-			print('Fecha_desde : {}'.format(row['fecha_desde']))
-			print('Fecha_hasta: {}'.format(row['fecha_hasta']))
-			print('-'*50)
-			f_desde = datetime.strptime(row['fecha_desde'], "%d/%m/%Y")
-			f_hasta = datetime.strptime(row['fecha_hasta'], "%d/%m/%Y")
-			new_lista_precio = Lista_precio(f_desde,f_hasta)
-			lista_precio.append(new_lista_precio)
-	db.session.add_all(lista_precio)
-	db.session.commit()
-
-
-def insertar_envase():
-	print('Importando Modelo Envase')
-	envase = []
-	with open(DATOS_PATH + 'envase.csv') as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		for row in csv_reader:
-			print('Envase: {}'.format(row['descripcion']))
-			print('-'*50)
-			new_envase = Envase(descripcion=row['descripcion'])
-			envase.append(new_envase)
-	db.session.add_all(envase)
-	db.session.commit()
-
-
-def insertar_producto():
-	print('Importando Modelo de Producto')
-	producto = []
-	with open(DATOS_PATH + 'producto.csv') as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		for row in csv_reader:
-			print('Producto: {}'.format(row['descripcion']))
-			print('Tipo de producto: {}'.format(row['tipo_producto_id']))
-			print('Marca del producto: {}'.format(row['marca_id']))
-			print('-'*50)
-			tp = TipoProducto.query.filter_by(descripcion=row['tipo_producto_id']).first()
-			m = Marca.query.filter_by(descripcion=row['marca_id']).first()
-			new_producto = Producto(descripcion=row['descripcion'],
-			tipo_producto_id=tp.tipo_producto_id,marca_id=m.marca_id)
-			producto.append(new_producto)
-	db.session.add_all(producto)
-	db.session.commit()
-
-
-def insertar_producto_envase():
-	print('Importando Modelo de Producto_Envase')
-	producto_envase = []
-	with open(DATOS_PATH + 'producto_envase.csv') as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		for row in csv_reader:
-			print('Producto: {}'.format(row['producto']))
-			print('Envase : {}'.format(row['envase']))
-			print('Unidad de medida: {}'.format(row['unidad_medida']))
-			print('Stock Real: {}'.format(row['stock_real']))
-			print('-'*50)
-			#p = Producto.query.filter_by(descripcion=row['producto']).first()
-			#e = Envase.query.filter_by(descripcion=row['envase']).first()
-			new_producto_envase = ProductoEnvase(producto_id=row['producto'],
-			envase_id=row['envase'],unidad_medida_id=row['unidad_medida'],stock_real=row['stock_real'])
-			producto_envase.append(new_producto_envase)
-	db.session.add_all(producto_envase)
-	db.session.commit()
-
-
-
-def insertar_lista_precio_producto():
-	print('Importando Modelo de Producto_Envase')
-	lista_precio_producto = []
-	with open(DATOS_PATH + 'lista_precio_producto.csv') as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		for row in csv_reader:
-			print('producto_envase_id: {}'.format(row['producto_envase_id']))
-			print('Lista_precio : {}'.format(row['lista_id']))
-			print('Precio: {}'.format(row['precio']))
-			print('Fecha_inicio: {}'.format(row['fecha_inicio']))
-			print('fecha_Fin: {}'.format(row['fecha_fin']))
-			print('-'*50)
-			f_inicio = datetime.strptime(row['fecha_inicio'], "%d/%m/%Y")
-			f_fin = datetime.strptime(row['fecha_fin'], "%d/%m/%Y")
-			new_lista_precio_producto = Lista_precio_producto(producto_envase_id=row['producto_envase_id'],
-			precio_id=row['lista_id'],precio=row['precio'],fecha_inicio=f_inicio,
-			fecha_fin=f_fin)
-			lista_precio_producto.append(new_lista_precio_producto)
-	db.session.add_all(lista_precio_producto)
-	db.session.commit()
-
-
-
+			envase = db.engine.execute(SELECT_ENVASE.format(row['ENVASE']))
+			envase = parser_result(envase)
+			producto = db.engine.execute(SELECT_PRODUCTO.format(row['PRODUCTO']))
+			producto = parser_result(producto)
+			unidad_medida = db.engine.execute(SELECT_TIPO_UNIDAD_MEDIDA.format(row['UNIDAD']))
+			unidad_medida = parser_result(unidad_medida)
+			QUERY_PRODUCTO_ENVASE += "('{}', '{}', '{}', '{}'),".format(producto['producto_id'],\
+				envase['envase_id'], unidad_medida['unidad_medida_id'], row['CANTIDAD'])
+			# producto_envase_id, precio_id, precio, fecha_inicio, fecha_fin
+			QUERY_PRECIO += "('{}', '{}', '{}', '{}', '{}'),".format(id_producto_envase, lista_precio,\
+				row['PRECIO'], f_desde, f_hasta)
+			id_producto_envase += 1
+	db.engine.execute(QUERY_PRODUCTO_ENVASE[:-1] + ';')
+	db.engine.execute(QUERY_PRECIO[:-1] + ';')
 
 
 def insertar_estado_devolucion():
@@ -398,10 +291,7 @@ def insertar_estado_devolucion():
 	with open(DATOS_PATH + 'estado_devolucion.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Estado Devolucion: {}'.format(row['descripcion']))
-			print('-'*50)
 			new_estado_devolucion = EstadoDevolucion(descripcion=row['descripcion'])
-
 			estado_devolucion.append(new_estado_devolucion)
 	db.session.add_all(estado_devolucion)
 	db.session.commit()
@@ -413,8 +303,6 @@ def insertar_estado_cta_corriente():
 	with open(DATOS_PATH + 'estado_cta_corriente.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Estado Cuenta Corriente: {}'.format(row['descripcion']))
-			print('-'*50)
 			new_estado_cta_corriente = EstadoCtaCorriente(descripcion=row['descripcion'],
 			descripcion_corta=row['descripcion_corta'])
 			estado_cta_corriente.append(new_estado_cta_corriente)
@@ -428,8 +316,6 @@ def insertar_tipo_movimiento_stock():
 	with open(DATOS_PATH + 'tipo_movimiento_stock.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('Tipo Movimiento Stock: {}'.format(row['descripcion']))
-			print('-'*50)
 			new_tipo_movimiento_stock = TipoMovimientoStock(descripcion=row['descripcion'],
 			descripcion_corta=row['descripcion_corta'])
 			tipo_movimiento_stock.append(new_tipo_movimiento_stock)
@@ -457,9 +343,6 @@ def insertar_historial_estado_pedido():
 	with open(DATOS_PATH + 'estado_Pedido_PEDIDO.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('-'*50)
-			print(row['estado_pedido_id'])
-			print(row['pedido_id'])
 			new_estadoP_pedido = HistorialPedidoEstado(pedido_estado_id=row['estado_pedido_id'],\
 			pedido_id=row['pedido_id'])
 	estadoP_pedido.append(new_estadoP_pedido)
@@ -473,7 +356,6 @@ def insertar_detalle_pedido():
 	with open(DATOS_PATH + 'detalle_pedido.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('-'*50)
 			new_detalle_pedido = DetallePedido(pedido_id=row['pedido_id'],\
 			producto_envase_id = row['producto_envase_id'],cantidad = row['cantidad'])
 			detalle_pedido.append(new_detalle_pedido)
@@ -488,13 +370,6 @@ def insertar_movimiento_stock():
 	with open(DATOS_PATH + 'movimiento_stock.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			print('detalle: {}'.format(row['detalle_pedido_id']))
-			print('tipo_mov: {}'.format(row['tipo_movimiento_stock_id']))
-			print('user: {}'.format(row['usuario_id']))
-			print('desc: {}'.format(row['descripcion']))
-			print('prod: {}'.format(row['producto_envase_id']))
-			print('cantidad: {}'.format(row['cantidad']))
-			print('-'*50)
 			new_movimiento_stock = Movimiento_Stock(detalle_pedido_id=row['detalle_pedido_id'],
 			detalle_devolucion_id=row['detalle_devolucion_id'],
 			tipo_movimiento_stock_id=row['tipo_movimiento_stock_id'],usuario_id=row['usuario_id'],
@@ -570,8 +445,45 @@ def insertar_estado_comprobante_pago():
 
 
 
+def insertar_datos_demo():
+	print('Insertando datos demo')
+
+	QUERY_MARCA = """ INSERT INTO marca (descripcion) VALUES """
+	QUERY_UNIDAD_MEDIDA = """ INSERT INTO unidad_medida (descripcion) VALUES """
+	QUERY_ENVASE= """ INSERT INTO envase (descripcion) VALUES """
+	QUERY_TIPO_PRODUCTO= """ INSERT INTO tipo_producto (descripcion) VALUES """
+	envases = list()
+	marcas = list()
+	tipo_producto = list()
+	unidad_medida = list()
+	with open(DATOS_PATH + 'datos_demo.csv') as csv_file:
+			csv_reader = csv.DictReader(csv_file)
+			for row in csv_reader:
+				if row['MARCA'] not in marcas:
+					marcas.append(row['MARCA'])
+					QUERY_MARCA += "('{}'),".format(row['MARCA'])
+				if row['UNIDAD'] not in unidad_medida:
+					unidad_medida.append(row['UNIDAD'])
+					QUERY_UNIDAD_MEDIDA += "('{}'),".format(row['UNIDAD'])
+				if row['ENVASE'] not in envases:
+					envases.append(row['ENVASE'])
+					QUERY_ENVASE += "('{}'),".format(row['ENVASE'])
+				if row['TIPO_PRODUCTO'] not in tipo_producto:
+					tipo_producto.append(row['TIPO_PRODUCTO'])
+					QUERY_TIPO_PRODUCTO += "('{}'),".format(row['TIPO_PRODUCTO'])
+
+			print(QUERY_MARCA[:-1] + ';')
+	db.engine.execute(QUERY_MARCA[:-1] + ';')
+	db.engine.execute(QUERY_UNIDAD_MEDIDA[:-1] + ';')
+	db.engine.execute(QUERY_ENVASE[:-1] + ';')
+	db.engine.execute(QUERY_TIPO_PRODUCTO[:-1] + ';')
+
 
 if __name__ == '__main__':
+	
+	insertar_datos_demo()
+	insertar_datos_demo_producto()
+	insertar_datos_demo_producto_envase()
 
 	insertar_provincias()
 	print('#'*50)
@@ -594,23 +506,6 @@ if __name__ == '__main__':
 	insertar_cuenta_corriente()
 	print('#'*50)
 	#insertar_movimientos_cta_corriente()
-	print('#'*50)
-	insertar_marca()
-	print('#'*50)
-	insertar_tipo_producto()
-	print('#'*50)
-	insertar_envase()
-	print('#'*50)
-	insertar_unidad_medida()
-	print('#'*50)
-	insertar_lista_precio()
-	print('#'*50)
-	insertar_producto()
-	print('#'*50)
-	insertar_producto_envase()
-	print('#'*50)
-	insertar_lista_precio_producto()
-	print('#'*50)
 	insertar_estado_devolucion()
 	print('#'*50)
 	insertar_estado_cta_corriente()
@@ -633,3 +528,4 @@ if __name__ == '__main__':
 	#insertar_detalle_devolucion()
 	#print('#'*50)
 	insertar_estado_comprobante_pago()
+	

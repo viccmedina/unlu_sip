@@ -14,9 +14,9 @@
 	                  			<div class="card-body">
 
 				  					<img src="/static/img/productos/default.svg" class="card-img-top" alt="producto" width="45%" height="100">
-				  					<p><small>Producto:</small> </p>
-				  					<p><small>Envase {{p.descripcion}}</small></p>
-				  					<p><small>Descripción:</small></p>
+				  					<p><small>Producto: {{ p.producto_descripcion }}</small> </p>
+				  					<p><small>Envase {{p.envase}} {{ p.unidad_descripcion }}</small></p>
+				  					<p><small>Tipo de Producto {{ p.tp_descripcion }} </small></p>
 				  					<p><small>Precio $ {{p.precio}}</small></p>
 				  					
 				  					<form  action="{{ url_for('producto.detalle_producto', producto=p.producto_envase_id) }}" method="POST">
