@@ -3,8 +3,10 @@ from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from werkzeug.security import generate_password_hash,check_password_hash
 from distribuidora.models.gestion_usuario import Usuario
-from distribuidora.core.gestion_usuario.forms import LoginForm
+from distribuidora.core.gestion_usuario.forms import LoginForm,CambiarContraseña
 from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
+from distribuidora.core.gestion_usuario.query import *
+from distribuidora.core.gestion_usuario.helper import updateContraseña
 
 gestion_usuario = Blueprint('gestion_usuario', __name__, template_folder='templates')
 
@@ -32,7 +34,7 @@ def login():
                         next = url_for('admin.index')
                 elif user.has_role('Operador'):
                     next = url_for('gestion_usuario.home_operador')
-                    
+
                 elif user.has_role('Cliente'):
                     next = url_for('gestion_usuario.home_cliente')
 
@@ -52,7 +54,7 @@ def logout():
     """
     Para cerrar sesión.
     """
-    logout_user()    
+    logout_user()
     flash("Usted ha cerrado sesión", 'warning')
     return redirect(url_for('gestion_usuario.login'))
 
@@ -85,3 +87,37 @@ def home_cliente():
         rol='cliente',\
         site=site,\
         sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+
+
+@login_required
+@gestion_usuario.route('/cambiar_contraseña', methods=['POST', 'GET'])
+def cambiar_contraseña():
+    """
+    Vista home del usuario de tipo Cliente
+    """
+    form = CambiarContraseña()
+    site = 'Home {}'.format(current_user.get_username())
+    if form.validate_on_submit():
+        passOld = form.passwordAnt.data
+        passNew = form.passwordNew.data
+        passConfNew = form.passwordConfNew.data
+        if passNew != passConfNew:
+            flash("ERROR, Las contraseñas ingresadas no coinciden",'error')
+        else:
+            user = Usuario.query.filter_by(username=current_user.get_username()).first()
+            if user.check_password(passOld):
+                password_hash = generate_password_hash(passConfNew)
+                #updateContraseña(password_hash,current_user.get_username())
+                db.engine.execute(UPDATE_USER.format(passw=password_hash,user=current_user.get_username()))
+                flash("Se ha cambiado la contraseña correctamente",'warning')
+            else:
+                flash("La clave ingresada es incorrecta",'error')
+
+
+    return render_template('cambiar_contraseña.html', \
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated, \
+        rol='cliente',\
+        site=site,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+        form=form)
