@@ -31,6 +31,22 @@
 									</span>
 				                </div>
 				            </form>
+
+										<br><br><br>
+										{% if resultado is not none %}
+											<div class="form-group">
+												{% include "tabla_movimientos_cta_corriente.html" %}
+												<div align="right">
+													<a align="left" class="btn btn-success" href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
+												</div>
+											</div>
+										{% else %}
+											<h3 align="center">RESULTADO</h3>
+
+													<h5 a>No se han encontrado movimientos para este cliente</h5>
+
+
+										{% endif %}
 				          </div>
 				     	</div>
 			     	</div>
@@ -38,14 +54,5 @@
 			 </div>
 			</div>
  		</div>
-		<br><br><br>
-		{% if resultado is not none %}
-			<div class="form-group">
-				{% include "tabla_movimientos_cta_corriente.html" %}
-					<a align="left" class="btn btn-success" href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
-			</div>
-		{% else %}
-			<h3 align="center">RESULTADO</h3>
-			<h5 align="center">No se han encontrado movimientos para este cliente</h5>
-		{% endif %}
+
 {% endblock %}

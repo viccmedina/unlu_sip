@@ -9,6 +9,7 @@ from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos,
 from distribuidora.models.cuenta_corriente import MovimientoCtaCorriente, TipoMovimientoCtaCorriente
 from distribuidora.models.gestion_usuario import Usuario
 from flask_weasyprint import HTML, render_pdf
+from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 import datetime
 import json
 
@@ -30,7 +31,8 @@ def index():
             datos=current_user.get_mis_datos(),\
             is_authenticated=current_user.is_authenticated,\
             rol='operador',\
-            site=TITULO)
+            site=TITULO,\
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
 @cta_corriente.route('/cta_corriente/consultar', methods=['POST', 'GET'])
@@ -44,19 +46,23 @@ def consultar_cta_corriente():
             fecha_hasta = form.fecha_hasta.data
             if fecha_hasta is None:
                 fecha_hasta = datetime.datetime.now()
-            cliente = form.cliente.data
-            
-            nro_cta = get_nro_cuenta_corriente(cliente)
-            nro_cta = nro_cta[0]['cuenta_corriente_id']
-            if nro_cta:
-                resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cta)
+            if fecha_hasta < fecha_desde :
+                flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
             else:
-                flash("La cuenta ingresada es incorrecta", 'error')
+                cliente = form.cliente.data
+
+                nro_cta = get_nro_cuenta_corriente(cliente)
+                nro_cta = nro_cta[0]['cuenta_corriente_id']
+                if nro_cta:
+                    resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cta)
+                else:
+                    flash("La cuenta ingresada es incorrecta", 'error')
 
         return render_template('form_consultar_cta_corriente.html', \
             datos=current_user.get_mis_datos(),	\
             is_authenticated=current_user.is_authenticated, rol=ROL, form=form, \
-            resultado=resultado, site= TITULO + ' - Consulta')
+            resultado=resultado, site= TITULO + ' - Consulta',\
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
 @cta_corriente.route('/cta_corriente/agregar', methods=['GET', 'POST'])
@@ -99,7 +105,8 @@ def agregar():
         is_authenticated=current_user.is_authenticated, \
         rol=ROL, \
         site=TITULO + ' - Nuevo Movimiento', \
-        form=form)
+        form=form,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
 @cta_corriente.route('/cta_corriente/consultarSaldo', methods=['GET', 'POST'])
@@ -112,7 +119,7 @@ def consultar_saldo():
         if form.validate_on_submit():
             cliente = form.cliente.data
             nro_cta = get_nro_cuenta_corriente(cliente)
-              
+
             if not nro_cta:
                 flash("El cliente no posee una Cta Corriente", 'error')
             else:
@@ -128,7 +135,8 @@ def consultar_saldo():
             resultado=resultado,\
             form=form,\
             rol=ROL, \
-            site= TITULO + ' - Consultar Saldo')
+            site= TITULO + ' - Consultar Saldo',\
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
 @cta_corriente.route('/cta_corriente/exportar', methods=['GET'])
@@ -139,7 +147,8 @@ def exportar():
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
         rol=ROL, \
-    	site= TITULO + ' - Exportar')
+    	site= TITULO + ' - Exportar',\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
     abort(403)
 
@@ -151,7 +160,8 @@ def importar():
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
         rol=ROL, \
-    	site= TITULO + ' - Importar')
+    	site= TITULO + ' - Importar',\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
 
