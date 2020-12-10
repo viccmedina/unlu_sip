@@ -26,6 +26,7 @@ from distribuidora.core.gestion_producto.views import producto
 from distribuidora.core.gestion_lista_precio.views import lista_precio
 from distribuidora.core.gestion_pedido.views import pedido
 from distribuidora.core.gestion_devolucion.views import devolucion
+from distribuidora.core.gestion_informes.views import informe
 from distribuidora.core.mensaje.views import msg
 from distribuidora.core.error_handler.handler import error_pages
 from distribuidora.core.gestion_devolucion.views import devolucion
@@ -41,3 +42,4 @@ app.register_blueprint(producto)
 app.register_blueprint(devolucion)
 app.register_blueprint(lista_precio)
 app.register_blueprint(pedido)
+app.register_blueprint(informe)
