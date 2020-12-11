@@ -89,9 +89,7 @@ def consultar_stock():
             if fecha_hasta < fecha_desde :
                 flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
             else:
-                print("Acaaaa")
                 resultado = get_consulta_stock(fecha_desde,fecha_hasta)
-                print("pasoo")
 
         return render_template('gestionar_informe_stock.html', \
         datos=current_user.get_mis_datos(),	\
