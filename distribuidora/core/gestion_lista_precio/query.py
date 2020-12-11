@@ -24,3 +24,14 @@ INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_env
 INNER JOIN envase e ON e.envase_id = pe.envase_id
 WHERE pe.producto_envase_id = {producto}
 """
+AGREGAR_PRECIO = """
+INSERT INTO lista_precio (fecha_desde,fecha_hasta) VALUES (CURRENT_TIMESTAMP,'{fecha}')
+"""
+
+CONSULTAR_ID_PRECIO = """
+SELECT lp.precio_id FROM lista_precio lp WHERE lp.fecha_hasta = '{fecha}'
+"""
+AGREGAR_PRECIO_PRODUCTO = """
+INSERT INTO lista_precio_producto (producto_envase_id,precio_id,precio,fecha_inicio,fecha_fin)
+VALUES ({producto},{id},'{precio}',CURRENT_TIMESTAMP,'{fecha}')
+"""
