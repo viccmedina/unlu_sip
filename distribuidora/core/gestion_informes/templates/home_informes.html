@@ -12,8 +12,8 @@
 				    <div class="card h-100" style="height: 18rem;">
 				      <img src="static/img/gestion_ctas_corrientes.svg" class="card-img-top" alt="Gestión de Pedidos" width="100%" height="100">
 				      <div class="card-body">
-				        <h5 class="card-title">Generar Informe Ctas Corriente</h5>
-				        <p class="card-text">Podrás realizar el informe de cuentas corrientes.</p>
+				        <h5 align="center"class="card-title">Generar Informe Ctas Corriente</h5>
+				        <p align="center" class="card-text">Podrás realizar el informe de cuentas corrientes.</p>
 				      </div>
 				      <div class="card-footer">
 							<center>
@@ -26,8 +26,8 @@
 				    <div class="card h-100">
 				      <img src="static/img/reemplazar.svg" class="card-img-top" alt="Realizar Devolución" width="100%" height="100">
 				      <div class="card-body">
-				        <h5 class="card-title">Generar Informe Devoluciones</h5>
-				        <p class="card-text">Podrás realizar un informe con las las mayores cantidad de devoluciones .</p>
+				        <h5 align="center" class="card-title">Generar Informe Devoluciones</h5>
+				        <p align="center" class="card-text">Podrás realizar un informe con las las mayores cantidad de devoluciones .</p>
 				      </div>
 				      <div class="card-footer">
 							<center>
@@ -40,12 +40,12 @@
 				    <div class="card h-100">
 				      <img src="static/img/gestion_stock.svg" class="card-img-top" alt="Ver Pedidos" width="100%" height="100">
 				      <div class="card-body">
-				        <h5 class="card-title">Generar Informes de Movimientos Stock</h5>
-				        <p class="card-text">Podrás importar de forma masiva movimientos anteriores por medio de un archivo csv/xlsx.</p>
+				        <h5 align="center" class="card-title">Generar Informes de Movimientos Stock</h5>
+				        <p align="center" class="card-text">Podrás igenerar un informe con el stock actual.</p>
 				      </div>
 				      <div class="card-footer">
 							<center>
-								<a class="btn btn-primary btn-sm"  href="{{ url_for('pedido.consultar_pedido') }}" role="button">Ver Mas</a>
+								<a class="btn btn-primary btn-sm"  href="{{ url_for('informe.consultar_stock') }}" role="button">Ver Mas</a>
 							</center>
     				</div>
 				    </div>
@@ -54,26 +54,26 @@
 				    <div class="card h-100">
 				      <img src="static/img/gestion_lista_precio.svg" class="card-img-top" alt="Editar Perfil" width="100%" height="100">
 				      <div class="card-body">
-				        <h5 class="card-title">Generar Informe Listado Precios</h5>
-				        <p class="card-text">Podras generar un informe con la lista de preciosa actual.</p>
+				        <h5 align="center" class="card-title">Generar Informe Listado Precios</h5>
+				        <p align="center" class="card-text">Podras generar un informe con la lista de preciosa actual.</p>
 				      </div>
 				      <div class="card-footer">
 							<center>
-								<a class="btn btn-primary btn-sm" href="#" role="button">Ver Mas</a>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('informe.consultar_listado_precios') }}" role="button">Ver Mas</a>
 							</center>
     				</div>
 				    </div>
 				  </div>
 				  	<div class="col mb-4">
 				    <div class="card h-100">
-				      <img src="static/img/mensaje.svg" class="card-img-top" alt="Mensajería" width="100%" height="100">
+				      <img src="static/img/gestion_producto.svg" class="card-img-top" alt="Mensajería" width="100%" height="100">
 				      <div class="card-body">
-				        <h5 class="card-title">Mensajería</h5>
-				        <p class="card-text">Chequea nuestras notificaciones</p>
+				        <h5 align="center" class="card-title">Generar Informe Productos</h5>
+				        <p align="center" class="card-text">Podras generar un informe con los productos mas vendidos</p>
 				      </div>
 				      <div class="card-footer">
 							<center>
-								<a class="btn btn-primary btn-sm" href="{{ url_for('mensajes.index') }}" role="button">Ver Mas</a>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('informe.consultar_productos') }}" role="button">Ver Mas</a>
 							</center>
     				</div>
 				    </div>

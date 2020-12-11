@@ -74,6 +74,82 @@ def consultar_devoluciones():
     abort(403)
 
 
+
+@informe.route('/informe/stock', methods=['POST', 'GET'])
+@login_required
+def consultar_stock():
+    if current_user.has_role('Operador'):
+        resultado = None
+        form = ConsultarMovimientos()
+        if form.validate_on_submit():
+            fecha_desde = form.fecha_desde.data
+            fecha_hasta = form.fecha_hasta.data
+            if fecha_hasta is None:
+                fecha_hasta = datetime.datetime.now()
+                if fecha_hasta < fecha_desde :
+                    flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
+                else:
+                    resultado = get_consulta_stock(fecha_desde,fecha_hasta)
+
+        return render_template('gestionar_informe_stock.html', \
+        datos=current_user.get_mis_datos(),	\
+        is_authenticated=current_user.is_authenticated, rol='Operador', form=form, \
+        resultado=resultado, site= 'Gestión de Informes - Consulta',\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+    abort(403)
+
+
+@informe.route('/informe/lista_precios', methods=['POST', 'GET'])
+@login_required
+def consultar_listado_precios():
+    if current_user.has_role('Operador'):
+        resultado = None
+        form = ConsultarMovimientos()
+        if form.validate_on_submit():
+            fecha_desde = form.fecha_desde.data
+            fecha_hasta = form.fecha_hasta.data
+            if fecha_hasta is None:
+                fecha_hasta = datetime.datetime.now()
+                if fecha_hasta < fecha_desde :
+                    flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
+                else:
+                    resultado = get_consulta_lista_precios(fecha_desde,fecha_hasta)
+
+        return render_template('gestionar_informe_lista_precios.html', \
+        datos=current_user.get_mis_datos(),	\
+        is_authenticated=current_user.is_authenticated, rol='Operador', form=form, \
+        resultado=resultado, site= 'Gestión de Informes - Consulta',\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+    abort(403)
+
+
+
+
+@informe.route('/informe/productos', methods=['POST', 'GET'])
+@login_required
+def consultar_productos():
+    if current_user.has_role('Operador'):
+        resultado = None
+        form = ConsultarMovimientos()
+        if form.validate_on_submit():
+            fecha_desde = form.fecha_desde.data
+            fecha_hasta = form.fecha_hasta.data
+            if fecha_hasta is None:
+                fecha_hasta = datetime.datetime.now()
+                if fecha_hasta < fecha_desde :
+                    flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
+                else:
+                    resultado = get_consulta_lista_precios(fecha_desde,fecha_hasta)
+
+        return render_template('gestionar_informe_productos.html', \
+        datos=current_user.get_mis_datos(),	\
+        is_authenticated=current_user.is_authenticated, rol='Operador', form=form, \
+        resultado=resultado, site= 'Gestión de Informes - Consulta',\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+    abort(403)
+
+
+
 @informe.route('/informe/descargar/consulta')
 @login_required
 def descargar_consulta():
