@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="container-fluid">
+		<div class="row">
+		    {% include "acordeon_perfil_usuario.html" %}
+				<div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+					<div class="row row-cols-9 row-cols-md-3">
+					  <div class="col mb-9" >
+					    <div class="card h-100" style="width: 50rem;">
+
+					      <div class="card-body">
+					        <h3 class="card-title">Informe de Cuentas Corrientes</h3>
+							{% include "flash_errors.html" %}
+				            <form  method="POST">
+				                {{ form.hidden_tag() }}
+				                <div class="form-group">
+				                  {{ form.fecha_desde.label(class="form-control-label") }}
+				                  {{ form.fecha_desde(class="form-control form-control-md") }}
+				                </div>
+				                <div class="form-group">
+				                  {{ form.fecha_hasta.label(class="form-control-label") }}
+				                  {{ form.fecha_hasta(class="form-control form-control-md") }}
+				                </div>
+				                <div class="form-group">
+									<span style="float:right">
+										{{ form.submit(class="btn btn-success mb-2") }}
+									</span>
+				                </div>
+				            </form>
+
+										<br><br><br>
+										{% if resultado is not none %}
+											<div class="form-group">
+												{% include "tabla_cuentas_corriente.html" %}
+												<div align="right">
+													<a align="left" class="btn btn-success" href="{{ url_for('informe.descargar_consulta', resultado=resultado) }}" role="button">Descargar</a>
+												</div>
+											</div>
+										{% else %}
+											<h3 align="center">RESULTADO</h3>
+
+													<h5 a>No se han encontrado movimientos para este cliente</h5>
+
+
+										{% endif %}
+				          </div>
+				     	</div>
+			     	</div>
+		     	</div>
+			 </div>
+			</div>
+ 		</div>
+
+{% endblock %}

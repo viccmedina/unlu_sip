@@ -1,0 +1,27 @@
+{% block tabla_movimientos %}
+<div class="container">
+  <h2 align="center" >Resultado de la consulta</h2>
+  <p>Devulociones </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Motivo</th>
+        <th>Cantidad</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in resultado %}
+      <tr>
+        <td>{{r['producto']}}</td>
+        <td>{{r['motivo']}}</td>
+        <td>{{r['cantidad']}}</td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
