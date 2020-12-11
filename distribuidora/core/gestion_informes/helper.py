@@ -16,8 +16,8 @@ def get_consulta_movimientos(fecha_desde, fecha_hasta):
         datos = db.engine.execute(CONSULTA_MOVIMIENTOS_CTA_CORRIENTE.format(fecha_desde=fecha_desde, fecha_hasta=fecha_hasta,user=row.id))
         for row in datos:
             list.append(row)
-
     return list
+
 
 def get_consulta_devoluciones(fecha_desde, fecha_hasta):
     list = []
@@ -26,7 +26,12 @@ def get_consulta_devoluciones(fecha_desde, fecha_hasta):
 
 def get_consulta_stock(fecha_desde, fecha_hasta):
     list = []
-    pass
+    all_productos = db.engine.execute(CONSULTAR_PRODUCTOS)
+    for row in all_productos:
+        datos = db.engine.execute(CONSULTA_MOVIMIENTOS_STOCK.format(fecha_desde=fecha_desde, fecha_hasta=fecha_hasta,productoEnvase=row.producto_envase_id))
+        for row in datos:
+            list.append(row)
+    return list
 
 
 def get_consulta_lista_precios(fecha_desde, fecha_hasta):
