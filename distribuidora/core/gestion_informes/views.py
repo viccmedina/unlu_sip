@@ -110,10 +110,10 @@ def consultar_listado_precios():
             fecha_hasta = form.fecha_hasta.data
             if fecha_hasta is None:
                 fecha_hasta = datetime.datetime.now()
-                if fecha_hasta < fecha_desde :
-                    flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
-                else:
-                    resultado = get_consulta_lista_precios(fecha_desde,fecha_hasta)
+            if fecha_hasta < fecha_desde :
+                flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
+            else:
+                resultado = get_consulta_lista_precios(fecha_desde,fecha_hasta)
 
         return render_template('gestionar_informe_lista_precios.html', \
         datos=current_user.get_mis_datos(),	\
@@ -136,10 +136,10 @@ def consultar_productos():
             fecha_hasta = form.fecha_hasta.data
             if fecha_hasta is None:
                 fecha_hasta = datetime.datetime.now()
-                if fecha_hasta < fecha_desde :
-                    flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
-                else:
-                    resultado = get_consulta_productos(fecha_desde,fecha_hasta)
+            if fecha_hasta < fecha_desde :
+                flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
+            else:
+                resultado = get_consulta_productos(fecha_desde,fecha_hasta)
 
         return render_template('gestionar_informe_productos.html', \
         datos=current_user.get_mis_datos(),	\

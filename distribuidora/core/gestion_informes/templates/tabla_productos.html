@@ -1,15 +1,15 @@
 {% block tabla_movimientos %}
 <div class="container">
   <h2 align="center" >Resultado de la consulta</h2>
-  <p>Lista Precios </p>
+  <p>Productos </p>
   <table class="table table-striped">
     <thead>
       <tr>
         <th>Producto</th>
         <th>Marca</th>
         <th>Unidad Medida</th>
-        <th>Cantidad</th>ver si recaudacion vale la pena
-
+        <th>Cantidad</th>
+        <th>Total Vendido en $</th>
       </tr>
     </thead>
     <tbody>
@@ -18,7 +18,8 @@
         <td>{{r['producto']}}</td>
         <td>{{r['marca']}}</td>
         <td>{{r['umedida']}}</td>
-          <td>{{r['cantidad']}}</td>
+        <td>{{r['cant']}}</td>
+        <td>{{r['precio']}}</td>
       </tr>
       {% endfor %}
 

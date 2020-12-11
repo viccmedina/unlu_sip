@@ -48,7 +48,7 @@ def get_consulta_productos(fecha_desde, fecha_hasta):
     list = []
     all_productos = db.engine.execute(CONSULTAR_PRODUCTOS)
     for row in all_productos:
-        datos = db.engine.execute(CONSULTA_MOVIMIENTOS_STOCK.format(fecha_desde=fecha_desde, fecha_hasta=fecha_hasta,productoEnvase=row.producto_envase_id))
+        datos = db.engine.execute(CONSULTA_STOCK_REAL.format(fecha_desde=fecha_desde, fecha_hasta=fecha_hasta,productoEnvase=row.producto_envase_id))
         for row in datos:
             list.append(row)
     return list

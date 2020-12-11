@@ -30,11 +30,13 @@ WHERE pe.producto_envase_id = {productoEnvase} AND pe.ts_created>= ('{fecha_desd
 
 
 CONSULTA_STOCK_REAL = """
-SELECT p.descripcion AS producto , m.descripcion AS marca,
-um.descripcion AS umedida, pe.stock_real AS stock, lpp.precio AS precio FROM producto_envase pe INNER JOIN producto p
-ON p.producto_id=pe.producto_id
-INNER JOIN marca m ON p.marca_id=m.marca_id
-INNER JOIN unidad_medida um ON um.unidad_medida_id=pe.unidad_medida_id
-INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id=pe.producto_envase_id
+SELECT p.descripcion AS producto, m.descripcion AS marca, um.descripcion AS umedida,sum(dp.cantidad) AS cant,
+(lpp.precio * (SELECT sum(dpp.cantidad) FROM detalle_pedido dpp WHERE dpp.producto_envase_id = {productoEnvase})) AS precio
+FROM detalle_pedido dp INNER JOIN producto_envase pe ON pe.producto_envase_id = dp.producto_envase_id
+INNER JOIN producto p ON p.producto_id = pe.producto_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+INNER JOIN marca m ON m.marca_id = p.marca_id
+INNER JOIN unidad_medida um ON um.unidad_medida_id = pe.unidad_medida_id
 WHERE pe.producto_envase_id = {productoEnvase} AND pe.ts_created>= ('{fecha_desde}') AND pe.ts_created <= ('{fecha_hasta}')
+GROUP BY pe.producto_envase_id ORDER BY dp.cantidad DESC;
 """
