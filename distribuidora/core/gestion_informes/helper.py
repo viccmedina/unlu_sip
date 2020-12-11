@@ -30,7 +30,12 @@ def get_consulta_stock(fecha_desde, fecha_hasta):
     for row in all_productos:
         datos = db.engine.execute(CONSULTA_MOVIMIENTOS_STOCK.format(fecha_desde=fecha_desde, fecha_hasta=fecha_hasta,productoEnvase=row.producto_envase_id))
         for row in datos:
-            list.append(row)
+            if row.stock == None:
+                datos = db.engine.execute(CONSULTA_STOCK_REAL.format(fecha_desde=fecha_desde, fecha_hasta=fecha_hasta,productoEnvase=row.pei))
+                for r in datos:
+                    list.append(r)
+            else:
+                list.append(row)
     return list
 
 
@@ -41,4 +46,9 @@ def get_consulta_lista_precios(fecha_desde, fecha_hasta):
 
 def get_consulta_productos(fecha_desde, fecha_hasta):
     list = []
-    pass
+    all_productos = db.engine.execute(CONSULTAR_PRODUCTOS)
+    for row in all_productos:
+        datos = db.engine.execute(CONSULTA_MOVIMIENTOS_STOCK.format(fecha_desde=fecha_desde, fecha_hasta=fecha_hasta,productoEnvase=row.producto_envase_id))
+        for row in datos:
+            list.append(row)
+    return list
