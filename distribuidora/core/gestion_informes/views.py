@@ -139,7 +139,7 @@ def consultar_productos():
                 if fecha_hasta < fecha_desde :
                     flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
                 else:
-                    resultado = get_consulta_lista_precios(fecha_desde,fecha_hasta)
+                    resultado = get_consulta_productos(fecha_desde,fecha_hasta)
 
         return render_template('gestionar_informe_productos.html', \
         datos=current_user.get_mis_datos(),	\

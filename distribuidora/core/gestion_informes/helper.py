@@ -32,3 +32,8 @@ def get_consulta_stock(fecha_desde, fecha_hasta):
 def get_consulta_lista_precios(fecha_desde, fecha_hasta):
     list = []
     pass
+
+
+def get_consulta_productos(fecha_desde, fecha_hasta):
+    list = []
+    pass
