@@ -9,9 +9,9 @@ WHERE p.usuario_id = {user} AND p.estado_pedido_id   = {ep}
 """
 
 LIST_PEDIDO_DETALLE = """
-SELECT dp.producto_envase_id FROM detalle_pedido dp INNER JOIN pedido p ON p.pedido_id = dp.pedido_id
+SELECT * FROM detalle_pedido dp INNER JOIN pedido p ON p.pedido_id = dp.pedido_id
 INNER JOIN producto_envase pe ON pe.producto_envase_id = dp.producto_envase_id
-WHERE dp.pedido_id = {p_id}
+WHERE dp.pedido_id = '{p_id}'
 """
 
 LIST_PRODUCTO_DETALLE = """
@@ -21,3 +21,12 @@ INNER JOIN producto_envase pe ON p.producto_id = pe.producto_envase_id
 INNER JOIN unidad_medida um ON um.unidad_medida_id = pe.unidad_medida_id
 WHERE pe.producto_envase_id = {producto}
 """
+
+SELECT_ESTADO_DEVOLUCION_BY_DESCRIPCION = """ SELECT * FROM estado_devolucion WHERE descripcion_corta='{descripcion_corta}'"""
+
+
+INSERT_INTO_DEVOLUCION = """ INSERT INTO devolucion (pedido_id, estado_devolucion_id, descripcion) VALUES 
+	('{pedido_id}', '{estado_devolucion_id}', 'esto es una descripcion') """
+
+SELECT_ALL_DEVOLUCIONES = """ SELECT * FROM devolucion AS d INNER JOIN pedido AS p ON 
+	d.pedido_id=p.pedido_id WHERE p.usuario_id = '{usuario_id}'"""

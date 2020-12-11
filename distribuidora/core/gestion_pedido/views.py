@@ -207,7 +207,12 @@ def confirmar_pedido_cliente():
 @login_required
 def modificar_estado_operador():
     if current_user.has_role('Operador'):
+        estados = get_estados_pedidos_para_operador()
+
         form = ActualizarEstadoPedido()
+        print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP')
+        print(estados)
+        form.estado.choices = estados
         pedido = request.args.get('pedido', type=int)
         if form.validate_on_submit():
             #nuevo estado, el que queremos insertar
@@ -258,7 +263,11 @@ def modificar_estado_operador():
 def listar_pedido_operador():
     if current_user.has_role('Operador'):
         pedidos = None
+        estados = get_estados_pedidos_para_operador()
         form = ActualizarEstadoPedido()
+        print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP')
+        print(estados)
+        form.estado.choices = estados
         if current_user.has_role('Operador'):
             pedidos = get_listado_pedidos_pco()
         return render_template('listado_pedidos.html',\

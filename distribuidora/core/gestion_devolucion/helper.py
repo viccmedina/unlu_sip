@@ -16,6 +16,12 @@ def parser_resultINT(result):
     return resp
 
 
+def check(result):
+    if result.rowcount == 1 :
+        return True
+    else:
+        return False
+
 def buscar_pedido_id(user):
     print("usuario es {}".format(user))
     resp = []
@@ -43,3 +49,16 @@ def detalle_pedidos(pedidos_id):
             resp.append(row)
 
     return resp
+
+def generar_nueva_devolucion(pedido_id):
+    estado_devolucion = db.engine.execute(SELECT_ESTADO_DEVOLUCION_BY_DESCRIPCION.format(descripcion_corta='EC'))
+    
+    estado_devolucion = parser_result(estado_devolucion)
+    print('ESTADO DEVOLUCION ---- {}'.format(estado_devolucion))
+    result = db.engine.execute(INSERT_INTO_DEVOLUCION.format(pedido_id=pedido_id,\
+        estado_devolucion_id=estado_devolucion[0]['estado_devolucion_id']))
+    return check(result)
+
+def get_all_devoluciones(usuario_id):
+    devoluciones = db.engine.execute(SELECT_ALL_DEVOLUCIONES.format(usuario_id=usuario_id))
+    return parser_result(devoluciones)

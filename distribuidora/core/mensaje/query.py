@@ -1,5 +1,5 @@
 INSERTAR_NUEVO_MENSAJE = """ INSERT INTO mensaje (sender_id, recipient_id, body, read)
-    VALUES ('{sender_id}', '{recipient_id}', '{body}', false)
+    VALUES ('{sender_id}', '{recipient_id}', '{body}', 0)
 """
 
 SELECT_TODOS_MIS_MENSAJES_ENVIADOS = """ SELECT * FROM mensaje 

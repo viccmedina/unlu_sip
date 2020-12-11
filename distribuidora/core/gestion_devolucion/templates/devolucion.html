@@ -4,27 +4,40 @@
 {% include "flash_errors.html" %}
 	<div class="container-fluid">
     	<div class="row">
-				{% include "acordeon_perfil_usuario.html" %}
+			{% include "acordeon_perfil_usuario.html" %}
     		<div class="col-sm-5 offset-sm-7 col-md-6 offset-md-0">
         		<div class="row row-cols-9 row-cols-md-3">
-							{% for p in pedidos_id %}
-	            <div class="col mb-9" >
-	               <div class="card h-100" >
-	                  <img src="..." class="card-img-top" alt="...">
-	                  <div class="card-body">
-											<h5 class="card-title">Realizar Devolución para</h5>
-	                    <h5 class="card-title">Nº Pedido : {{ p }}</h5>
-											<span style="float:center">
-												<a href="{{ url_for('devoluciones.ver_detalle', p=p) }}" class="btn btn-primary">Ver Detalle</a>
+					{% for p in pedidos_id %}
+		            	<div class="col mb-9" >
+		               		<div class="card h-100" >
+		                 		<img src="..." class="card-img-top" alt="...">
+		                  		<div class="card-body">
+									<h5 class="card-title">Realizar Devolución para Nº Pedido : {{ p }} </h5>
+									<span style="float:center">
+										<a href="{{ url_for('devoluciones.nueva_devolucion', pedido=p) }}" class="btn btn-primary">Generar</a>
+		 							</span>
+		                  		</div>
+		              		</div>
+		            	</div>
+		          	{% endfor %}
 
- 	 								  	</span>
-	                  </div>
-	              </div>
-	            </div>
-	          {% endfor %}
+
+
+		          	{% for d in devoluciones %}
+		            	<div class="col mb-9" >
+		               		<div class="card h-100" >
+		                 		<img src="..." class="card-img-top" alt="...">
+		                  		<div class="card-body">
+									<h5 class="card-title"> {{ d }} </h5>
+									<span style="float:center">
+										<a href="{{ url_for('devoluciones.ver_detalle', pedido=d.pedido_id) }}" class="btn btn-primary">Ver Detalle</a>
+		 							</span>
+		                  		</div>
+		              		</div>
+		            	</div>
+		          	{% endfor %}
 				</div>
 			</div>
+		</div>
 	</div>
-
-
 {% endblock %}

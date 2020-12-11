@@ -10,24 +10,17 @@ from distribuidora.core.gestion_pedido.helper import get_estados_pedidos_para_op
 
 class NuevoPedido(FlaskForm):
 	submit = SubmitField('Nuevo Pedido')
-
+    
 
 class FormAgregarProducto(FlaskForm):
     producto_id = IntegerField('Producto:')
     cantidad = IntegerField('Cantidad:', validators=[DataRequired()])
     submit = SubmitField('Agregar')
 
-class EliminarProducto(FlaskForm):
-    pass
-
-class CancelarPedido(FlaskForm):
-    pass
 
 class ActualizarEstadoPedido(FlaskForm):
-    #estados = get_estados_pedidos_para_operador()
     estado = SelectField(u'Nuevo Estado', choices=[])
     submit = SubmitField('Actualizar')
-
 
 
 class ModificarDetallePedido(FlaskForm):

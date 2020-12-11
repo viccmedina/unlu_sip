@@ -279,7 +279,7 @@ def actualizar_stock_real(pedido_id):
         stock_descontar = int(dp['stock_real'])- int(dp['cantidad'])
         print('stock a descontar ---> {}'.format(stock_descontar), flush=True)
         if stock_descontar >= 0:
-            costo += int(dp['cantidad']) * int(dp['precio'])
+            costo += float(dp['cantidad'].replace(',','.')) * float(dp['precio'].replace(',','.'))
             #detalle_pedido = db.engine.execute(UPDATE_NUEVO_PEDIDO_STOCK_REAL.format(producto_envase_id=dp['producto_envase_id'], stock_real=stock_descontar))
             pe = ProductoEnvase.query.get(dp['producto_envase_id'])
             print(pe, flush=True)

@@ -25,19 +25,18 @@
                     <td>{{ d.desc_producto }}</td>
                     <td>{{ d.desc_marca }}</td>
                     <td>{{ d.desc_envase }} {{ d.desc_unidad_medida}}</td>
-                    <td >
-                        {{ form.checkbox(class="form-control w-25",id="checkbox" )}}
-                    </td>
-                    <td  >
-                        {{ form.motivo(class="form-control w-55")}}
-                    </td>
+                    <td colspan="" rowspan="" headers="">  
+                      <div class="form-group form-check">
+                          <input type="checkbox" class="form-check-input">
+                          <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                      </div></td>
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
             </div>
             <div align="right" >
-              <a id="devolver" class="btn btn-primary" href="{{ url_for('devoluciones.index')}}">Generar Devolución</a>
+              <a id="devolver" class="btn btn-primary" href="{{ url_for('devoluciones.index')}}">Confirmar Devolución</a>
             </div>
           </div>
         </div>

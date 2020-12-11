@@ -285,17 +285,25 @@ def insertar_datos_demo_producto_envase():
 	db.engine.execute(QUERY_PRECIO[:-1] + ';')
 
 
-def insertar_estado_devolucion():
-	print('Importando Modelo Estados de la devolucion')
-	estado_devolucion = []
-	with open(DATOS_PATH + 'estado_devolucion.csv') as csv_file:
+def insertar_estado_motivo():
+	print('Importando Modelo Motivo de la devolucion')
+	motivo = []
+	with open(DATOS_PATH + 'motivo_devolucion.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			new_estado_devolucion = EstadoDevolucion(descripcion=row['descripcion'])
-			estado_devolucion.append(new_estado_devolucion)
-	db.session.add_all(estado_devolucion)
+			new_motivo = MOtivoDevolucion(descripcion=row['descripcion'])
+			motivo.append(new_motivo)
+	db.session.add_all(motivo)
 	db.session.commit()
 
+def insertar_estado_devolucion():
+	estados = list()
+	descripcion = [('ESPERA CONFIRMACION', 'EC'), ('RECHAZADA', 'R'), ('ACEPTADA', 'A')]
+	for d in descripcion:
+		estado_devolucion =  EstadoDevolucion(descripcion=d[0], descripcion_corta=d[1])
+		estados.append(estado_devolucion)
+		db.session.add_all(estados)
+	db.session.commit()
 
 def insertar_estado_cta_corriente():
 	print('Importando Modelo de Estados de las cuentas corrientes')
