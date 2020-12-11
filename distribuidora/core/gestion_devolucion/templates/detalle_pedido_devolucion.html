@@ -14,7 +14,6 @@
                     <th scope="col">Producto</th>
                     <th scope="col">Marca</th>
                     <th scope="col">Envase</th>
-                    <th scope="col">Devolver</th>
                     <th scope="col">Motivo</th>
                   </tr>
                 </thead>
@@ -22,14 +21,22 @@
 
                   {% for d in det_pedido %}
                   <tr>
+                    <p>{{d}}</p>
+
                     <td>{{ d.desc_producto }}</td>
                     <td>{{ d.desc_marca }}</td>
                     <td>{{ d.desc_envase }} {{ d.desc_unidad_medida}}</td>
-                    <td colspan="" rowspan="" headers="">  
-                      <div class="form-group form-check">
-                          <input type="checkbox" class="form-check-input">
-                          <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                      </div></td>
+                    <td>
+                      <form id="myForm" class="form-inline" action="{{ url_for('devoluciones.ver_detalle', detalle=d.producto_envase_id, cantidad=d.cantidad, pedido=d.pedido_id, detalle_pedido=d.detalle_id) }}" method="POST">
+
+                        {{ form.hidden_tag() }}
+                        <div class="form-group mb-2">
+                          {{ form.motivo(class="form-control w-50") }}
+                          <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="margin-left: 5%;"> Agregar </button>
+                        </div>
+                      </form>
+                    </td>
+
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -42,23 +49,6 @@
         </div>
 </div>
 {% include "modal_form.html" %}
-
-
-<script type="text/javascript">
-
-  //document.getElementById('link_confirm').addEventListener('click', devolverProducto);
-  function devolverProducto(){
-     var checked = document.getElementById('checkbox').checked
-     console.log(checked);
-     var arr =[];
-     if (checked){
-       arr.push(d);
-     }
-    let a = document.getElementById("devolver");
-    console.log(a.href);
-    console.log(arr);
-    window.location.href = a.href;
-  }
-</script>
+{% include "js_form_modal.html" %}
 
 {% endblock %}

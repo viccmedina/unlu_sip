@@ -10,11 +10,6 @@ from distribuidora.core.gestion_pedido.helper import get_estados_pedidos_para_op
 
 
 class NuevaDevolucion(FlaskForm):
-    nPedido = StringField(u'Nº Pedido' )
-    producto = StringField(u'Producto')
-    marca = StringField(u'Marca')
-    uMedida = StringField(u'Unidad de Medida')
-    checkbox = BooleanField('Oprima el check si lo devuelve')
     motivo = SelectField(u'Motivo', choices=[])
     submit = SubmitField('Realizar Devolucion')
-    cancelar = SubmitField('Cancelar')
+

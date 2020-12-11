@@ -62,3 +62,12 @@ def generar_nueva_devolucion(pedido_id):
 def get_all_devoluciones(usuario_id):
     devoluciones = db.engine.execute(SELECT_ALL_DEVOLUCIONES.format(usuario_id=usuario_id))
     return parser_result(devoluciones)
+
+def get_devolucion_by_pedido(pedido_id):
+    devolucion = db.engine.execute(SELECT_DEVOLUCION_BY_PEDIDO.format(pedido_id=pedido_id))
+    return parser_result(devolucion)
+
+def check_producto_devolucion(detalle_pedido):
+    existe = db.engine.execute(SELECT_DEVOLUCION_BY_DETALLE_PEDIDO.format(detalle_pedido=detalle_pedido))
+    print(parser_result(existe))
+    return True

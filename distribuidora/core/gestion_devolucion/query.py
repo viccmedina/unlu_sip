@@ -30,3 +30,7 @@ INSERT_INTO_DEVOLUCION = """ INSERT INTO devolucion (pedido_id, estado_devolucio
 
 SELECT_ALL_DEVOLUCIONES = """ SELECT * FROM devolucion AS d INNER JOIN pedido AS p ON 
 	d.pedido_id=p.pedido_id WHERE p.usuario_id = '{usuario_id}'"""
+
+SELECT_DEVOLUCION_BY_PEDIDO = """ SELECT * FROM detalle_devolucion AS d INNER JOIN detalle_pedido AS dp ON dp.detalle_id = d.detalle_pedido_id WHERE dp.pedido_id='{pedido_id}' """
+
+SELECT_DEVOLUCION_BY_DETALLE_PEDIDO = """ SELECT * FROM devolucion WHERE detalle_pedido='{detalle_pedido}' """

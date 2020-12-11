@@ -5,7 +5,7 @@ from distribuidora import db
 from distribuidora.core.gestion_devolucion.forms import *
 from distribuidora.core.gestion_devolucion.helper import *
 from distribuidora.models.producto import *
-from distribuidora.models.devolucion import EstadoDevolucion
+from distribuidora.models.devolucion import EstadoDevolucion, MotivoDevolucion
 from distribuidora.core.gestion_devolucion.helper import *
 from distribuidora.core.gestion_pedido.helper import get_detalle_pedido
 
@@ -37,15 +37,45 @@ def index():
 @login_required
 def ver_detalle():
 	if current_user.has_role('Cliente'):
-		pedidos_id = request.args.get('pedido')
-		print(pedidos_id)
+		pedido_id = request.args.get('pedido')
+		print(pedido_id)
 		#det_pedido = detalle_pedidos(pedidos_id)
-		det_pedido = get_detalle_pedido(pedidos_id)
+		
+		form = NuevaDevolucion()
+		form.motivo.choices = [(descripcion.descripcion) for descripcion in MotivoDevolucion.query.all()]
+		print('WWWWWWWWWWWWWWWWWWWWWWWWWWWW')
+		producto_envase = request.args.get('producto_envase', None)
+		print(producto_envase)
+		cantidad = request.args.get('cantidad', None)
+		print(cantidad)
+		detalle_pedido = request.args.get('detalle_pedido', None)
+		print(detalle_pedido)
+		print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
+		print(form.motivo.data)
+		motivo = form.motivo.data
+		devolucion_id = get_devolucion_by_pedido(pedido_id)
+		print('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
+		print(devolucion_id)
+		if form.validate_on_submit():
+			print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
+			print(form.motivo.data)
+			motivo = form.motivo.data
+			devolucion_id = get_devolucion_by_pedido(pedido_id)
+			print('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
+			print(devolucion_id)
+			devolucion_id = devolucion_id[0]['devolucion_id']
+			# aca tenemos que validar que el producto que haya ingresado no exista en la devolucion
+			if check_producto_devolucion(detalle_pedido):
+				flash('Este reclamo ya se encuentra en el sistema', 'errors')
+			else:
+				if agregar_producto_a_devolucion(producto_envase, motivo, cantidad, devolucion_id, detalle_pedido):
+					flash('Producto agregado al reclamo', 'success')
+		else:
+			print(form.errors)
+
+		det_pedido = get_detalle_pedido(pedido_id)
 		print('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')
 		print(det_pedido)
-		form = NuevaDevolucion()
-		form.motivo.choices = [(descripcion.descripcion) for descripcion in EstadoDevolucion.query.all()]
-
 		return render_template('detalle_pedido_devolucion.html',form=form,\
 		datos=current_user.get_mis_datos(),\
 		site='Gestion Devoluciones',\
