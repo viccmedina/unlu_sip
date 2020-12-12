@@ -21,6 +21,7 @@
 
                   {% for d in det_pedido %}
                   <tr>
+                    
                     <td>{{ d.desc_producto }}</td>
                     <td>{{ d.desc_marca }}</td>
                     <td>{{ d.desc_envase }} {{ d.desc_unidad_medida}}</td>
@@ -30,7 +31,8 @@
                         {{ form.hidden_tag() }}
                         <div class="form-group mb-2">
                           {{ form.motivo(class="form-control w-50") }}
-                          <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="margin-left: 5%;"> Agregar </button>
+                          {{ form.submit(class="btn btn-danger mb-2", style="margin-left: 5%;") }}
+                         <!-- <button type="button" class="btn btn-danger" style="margin-left: 5%;"> Agregar </button> -->
                         </div>
                       </form>
                     </td>
@@ -41,12 +43,13 @@
               </table>
             </div>
             <div align="right" >
-              <a id="devolver" class="btn btn-primary" href="{{ url_for('devoluciones.index')}}">Confirmar Devolución</a>
+              <a id="devolver" class="btn btn-primary" href="{{ url_for('devoluciones.confirmar_devolucion_cliente', detalle=det_pedido[0]['detalle_id'])}}">Confirmar Devolución</a>
             </div>
           </div>
         </div>
 </div>
-{% include "modal_form.html" %}
-{% include "js_form_modal.html" %}
+
+<!--{% include "modal_form.html" %}
+{% include "js_form_modal.html" %} -->
 
 {% endblock %}

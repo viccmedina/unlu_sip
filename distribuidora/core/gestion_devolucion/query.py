@@ -38,3 +38,11 @@ SELECT_DEVOLUCION_BY_DETALLE_PEDIDO = """ SELECT * FROM detalle_devolucion WHERE
 INSERT_INTO_DETALLE_DEVOLUCION = """ INSERT INTO detalle_devolucion (devolucion_id, motivo_id, detalle_pedido_id, cantidad) VALUES('{devolucion_id}', '{motivo_id}', '{detalle_pedido_id}', '{cantidad}')"""
 
 SELECT_ALL_MOTIVOS_BY_DESCRIPCION = """ SELECT * FROM motivo_devolucion WHERE descripcion = '{descripcion}' """
+
+SELECT_ALL_ESTADO_DEVOLUCION_BY_DESCRIPCION_CORTA = """ SELECT * FROM estado_devolucion WHERE descripcion_corta = '{descripcion_corta}' """
+
+SELECT_DEVOLUCION_CON_ESTADO = """ SELECT * FROM devolucion AS d INNER JOIN estado_devolucion AS ed ON d.estado_devolucion_id=ed.estado_devolucion_id WHERE d.devolucion_id='{devolucion_id}'"""
+
+UPDATE_ESTADO_DEVOLUCION = """ UPDATE devolucion SET estado_devolucion_id='{estado}' WHERE devolucion_id = '{devolucion_id}' """
+
+INSERT_INTO_HISTORIAL_DEVOLUCION = """ INSERT INTO historial_devolucion_estado (devolucion_id, estado_devolucion_id) VALUES('{devolucion_id}', '{estado_id}') """

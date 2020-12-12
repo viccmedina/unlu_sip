@@ -39,8 +39,7 @@ def ver_detalle():
 	if current_user.has_role('Cliente'):
 		pedido_id = request.args.get('pedido')
 		print(pedido_id)
-		#det_pedido = detalle_pedidos(pedidos_id)
-		
+				
 		form = NuevaDevolucion()
 		form.motivo.choices = [(descripcion.descripcion) for descripcion in MotivoDevolucion.query.all()]
 		print('MOTIVOSSSSSSS {}'.format(form.motivo.choices))
@@ -92,12 +91,51 @@ def nueva_devolucion():
 		
 		pedido_id = request.args.get('pedido')
 		print("pedido ----- : {}".format(pedido_id))
-		# Necesito generar una nueva devolucion
-		result = generar_nueva_devolucion(pedido_id)
-		if result:
-			flash('La solicitud de una devolución ha sido generada, por favor agregue los productos asociados', 'success')
+		# Necesito verificar que el pedido no tenga una devolucion ya solicitada
+		if get_devolucion_by_pedido(pedido_id):
+			flash('Ya se generó una Devolución para este Pedido', 'warning')
 		else:
-			flash('Algo salió mal', 'error')
+			# Necesito generar una nueva devolucion
+			result = generar_nueva_devolucion(pedido_id)
+			if result:
+				# mandar a guardar esto en el historial de devolucion
+				devolucion_id = get_devolucion_by_pedido(pedido_id)
+				devolucion_id = devolucion_id[0]['devolucion_id']
+				insert_into_historial_devolucion(devolucion_id, 'ECC')
+				flash('La solicitud de una devolución ha sido generada, por favor agregue los productos asociados', 'success')
+			else:
+				flash('Algo salió mal', 'error')
 
 		return redirect(url_for('devoluciones.index'))
 	abort(403)
+
+@devolucion.route('/devolucion/cliente/confirmacion', methods=['POST','GET'])
+@login_required
+def confirmar_devolucion_cliente():
+	print('confirmacion de devolucion por parte del cliente')
+	devolucion_id = request.args.get('detalle')
+	result = check_producto_devolucion(devolucion_id)
+	print("devolucion_id ----- : {}".format(devolucion_id))
+	print("devolucion_id ----- : {}".format(result))
+	devolucion_id = result[0]['devolucion_id']
+	update = update_estado_devolucion(devolucion_id, 'CPC')
+	if update:
+		# mandar a guardar esto en el historial de devolucion
+		insert_into_historial_devolucion(devolucion_id, 'CPC')
+		flash('Devolución enviada para ser procesada', 'success')
+	else:
+		flash('Algo salió mal, comuniquese con el operador', 'error')
+
+	return redirect(url_for('devoluciones.index'))
+
+@devolucion.route('/devolucion/operador/listar', methods=['POST','GET'])
+@login_required
+def listar_devoluicones_operador():
+	pass
+
+
+@devolucion.route('/devolucion/operador/confirmacion', methods=['POST','GET'])
+@login_required
+def actualizar_estado_devolcion_operador():
+	pass
+

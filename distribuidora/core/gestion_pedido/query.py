@@ -58,8 +58,9 @@ SELECT_ID_ULTIMO_PEDIDO = """ SELECT pedido_id FROM pedido WHERE usuario_id='{us
 SELECT_PEDIDOS_ESTADO_PCO = """ SELECT  hep.historial_estado_pedido_id, hep.pedido_id, pe.descripcion, pe.orden FROM historial_estado_pedido AS hep
     INNER JOIN pedido_estado AS pe ON hep.pedido_estado_id = pe.pedido_estado_id
     WHERE pe.orden>1
-    GROUP by hep.pedido_id
-    HAVING MAX(hep.ts_created)"""
+    GROUP by hep.pedido_id 
+    HAVING MAX(hep.ts_created)
+    ORDER BY hep.pedido_id  DESC"""
 
 SELECT_PEDIDOS_ESTADO_PCC = """ SELECT hep.pedido_id, pe.descripcion FROM historial_estado_pedido AS hep
     INNER JOIN pedido_estado AS pe ON hep.pedido_estado_id = pe.pedido_estado_id
