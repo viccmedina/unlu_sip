@@ -66,11 +66,13 @@ def enviar_mensaje():
 			'receptor': form.recipient.data,
 			'body': form.message.data
 		}
-		if data['emisor'] != current_user.get_id():
+		if data['receptor'] != current_user.get_id():
+			print('es distinto')
 			if current_user.has_role('Cliente') and data['receptor'] == '2':
 				print('data: {}'.format(data), flush=True)
 				result = insert_nuevo_mensaje(data)
 				#result = True
+				print(result)
 				if result:
 					flash('El mensaje ha sido enviado correctamente', 'success')
 				else:
