@@ -119,8 +119,6 @@ def confirmar_devolucion_cliente():
 	result = check_producto_devolucion(devolucion_id)
 	print("devolucion_id ----- : {}".format(devolucion_id))
 	print("devolucion_id ----- : {}".format(result))
-
-	
 	if len(result) > 0:
 		print(result)
 		devolucion_id = result[0]['devolucion_id']
@@ -138,10 +136,40 @@ def confirmar_devolucion_cliente():
 
 @devolucion.route('/devolucion/operador/listar', methods=['POST','GET'])
 @login_required
-def listar_devoluicones_operador():
-	pass
+def listar_devoluciones_operador():
+	if current_user.has_role('Operador'):
+		form = ActualizarEstadoDevolucion()
+		estados = get_all_estado_devolucion()
+		form.estado.choices = estados
+		devoluciones = get_all_devoluciones_operador()
+		return render_template('devoluciones_vista_operador.html',\
+			devoluciones=devoluciones,\
+			form=form,\
+			datos=current_user.get_mis_datos(),\
+			is_authenticated=current_user.is_authenticated,\
+			site='Gestion Devoluciones',\
+			rol=current_user.get_role(),\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+	abort(403)
 
-
+@devolucion.route('/devolucion/operador/listar/detalle', methods=['POST','GET'])
+@login_required
+def listar_detalle_devoluciones_operador():
+	if current_user.has_role('Operador'):
+		devolucion_id = request.args.get('devolucion')
+		print('DEVOLUCION ID: ---- {}'.format(devolucion_id))
+		detalle_devolucion = get_detalle_devolucion(devolucion_id)
+		print('DETALLE DEVOLUCION')
+		print(detalle_devolucion)
+		return render_template('devoluciones_vista_operador_detalle.html',\
+			datos=current_user.get_mis_datos(),\
+			is_authenticated=current_user.is_authenticated,\
+			site='Gestion Devoluciones',\
+			rol=current_user.get_role(),\
+			devolucion=detalle_devolucion,\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+	abort(403)
+	
 @devolucion.route('/devolucion/operador/confirmacion', methods=['POST','GET'])
 @login_required
 def actualizar_estado_devolcion_operador():

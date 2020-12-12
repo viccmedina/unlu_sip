@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+      <div class="row">
+        {% include "acordeon_perfil_usuario.html" %}
+        <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+          
+
+          {% if devoluciones is none%}
+            <p>NO HAY DEVOLUCIONES PARA PROCESAR</p>
+          {% else %}
+            {% include "flash_errors.html" %}
+            <h3>Devoluciones a Confirmar</h2>
+            {% for d in devoluciones %}
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Devolución Nro: # {{ d.devolucion_id}}</h5>
+                  <p class="card-text">Estado actual: {{d.descripcion}} ({{d.descripcion_corta}})</p>
+                  <a href="{{ url_for('devoluciones.listar_detalle_devoluciones_operador', devolucion=d.devolucion_id) }}" class="btn btn-primary">Ver Detalle</a>
+                </div>
+
+
+                <form  action="{{ url_for('devoluciones.actualizar_estado_devolcion_operador', estado_anterior=d.estado_devolucion_id, devolucion=d.devolucion_id) }}" method="POST">
+                  {{ form.hidden_tag() }}
+
+                    <div class="form-group mx-sm-3 mb-2">
+                      {{ form.estado.label(class="form-control-label") }}
+                      {{ form.estado(class="form-control form-control") }}
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      {{ form.submit(class="btn btn-success") }}
+                    </div>
+                </form>
+              </div>
+              <br>
+            {% endfor %}
+
+          {% endif %}
+
+          <ul>
+          	{% for d in devoluciones %}
+          	<li><p>{{ d }}</p></li>
+          </ul>
+          {% endfor %}
+      </div>
+  </div>
+</div>
+{% endblock %}

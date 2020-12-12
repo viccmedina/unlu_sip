@@ -24,7 +24,6 @@ WHERE pe.producto_envase_id = {producto}
 
 SELECT_ESTADO_DEVOLUCION_BY_DESCRIPCION = """ SELECT * FROM estado_devolucion WHERE descripcion_corta='{descripcion_corta}'"""
 
-
 INSERT_INTO_DEVOLUCION = """ INSERT INTO devolucion (pedido_id, estado_devolucion_id, descripcion) VALUES 
 	('{pedido_id}', '{estado_devolucion_id}', 'esto es una descripcion') """
 
@@ -46,3 +45,20 @@ SELECT_DEVOLUCION_CON_ESTADO = """ SELECT * FROM devolucion AS d INNER JOIN esta
 UPDATE_ESTADO_DEVOLUCION = """ UPDATE devolucion SET estado_devolucion_id='{estado}' WHERE devolucion_id = '{devolucion_id}' """
 
 INSERT_INTO_HISTORIAL_DEVOLUCION = """ INSERT INTO historial_devolucion_estado (devolucion_id, estado_devolucion_id) VALUES('{devolucion_id}', '{estado_id}') """
+
+SELECT_DETALLE_DEVOLUCION = """ SELECT * FROM detalle_devolucion WHERE devolucion_id='{devolucion_id}' """
+
+SELECT_DEVOLUCION_VISTA_OPERADOR = """ SELECT * FROM devolucion AS d INNER JOIN estado_devolucion AS ed ON ed.estado_devolucion_id=d.estado_devolucion_id WHERE ed.descripcion_corta = 'CPC'"""
+
+SELECT_ALL_ESTADO_DEVOLUCION = """ SELECT * FROM estado_devolucion """
+
+DETALLE_DEVOLUCION_FULL = """  SELECT e.descripcion AS d_envase, m.descripcion AS d_marca, um.descripcion as d_unidad_medida, md.descripcion as d_motivo, p.descripcion AS d_producto 
+FROM devolucion AS d INNER JOIN detalle_devolucion AS dd ON dd.devolucion_id=d.devolucion_id
+INNER JOIN motivo_devolucion AS md ON dd.motivo_id = md.motivo_devolucion_id
+INNER JOIN detalle_pedido AS dp ON dp.detalle_id = dd.detalle_pedido_id
+INNER JOIN producto_envase AS pe ON pe.producto_envase_id=dp.producto_envase_id
+INNER JOIN producto AS p ON p.producto_id=pe.producto_id
+INNER JOIN marca AS m ON m.marca_id=p.marca_id
+INNER JOIN unidad_medida AS um ON um.unidad_medida_id=pe.unidad_medida_id
+INNER JOIN envase AS e ON e.envase_id=pe.envase_id
+WHERE d.devolucion_id = 1"""

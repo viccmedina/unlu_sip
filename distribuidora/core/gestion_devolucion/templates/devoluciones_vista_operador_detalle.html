@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+      <div class="row">
+        {% include "acordeon_perfil_usuario.html" %}
+        <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
+          {% include "flash_errors.html" %}
+          <div>
+              <h3>Detalle de la Devolución</h3>
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Envase</th>
+                    <th scope="col">Motivo</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for d in devolucion %}
+                  <tr>
+                    
+                    <td>{{d.d_producto}}</td>
+                    <td>{{d.d_marca}}</td>
+                    <td>{{d.d_envase}} {{d.d_unidad_medida}}</td>
+                    <td>{{d.d_motivo}}</td>
+
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div align="right" >
+              <a id="devolver" class="btn btn-success" href="">Aceptar</a>
+              <a id="devolver" class="btn btn-danger" href="">Rechazar</a>
+            </div>
+          </div>
+        </div>
+</div>
+{% endblock %}

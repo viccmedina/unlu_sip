@@ -15,6 +15,11 @@ def parser_resultINT(result):
         resp.append(int(row['pedido']))
     return resp
 
+def parser_result_select_field(result):
+    salida = list()
+    for r in result:
+        salida.append(r['descripcion'])
+    return salida
 
 def check(result):
     if result.rowcount == 1 :
@@ -73,16 +78,14 @@ def get_devolucion_by_pedido(pedido_id):
     return parser_result(devolucion)
 
 def check_producto_devolucion(detalle_pedido):
+    print('CHECK PRODUCTO DEVOLUCION')
     existe = db.engine.execute(SELECT_DEVOLUCION_BY_DETALLE_PEDIDO.format(detalle_pedido=detalle_pedido))
-    print('oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo')
     result = parser_result(existe)
     print(result)
-    print('oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo')
     return result
 
 def agregar_producto_a_devolucion(motivo, cantidad, devolucion_id, detalle_pedido):
-    print('producto agregado!')
-    print('mmmmmmmmmmmmmmmmmmmmm')
+    print('AGREGAR PRODUCTO A LA DEVOLUCION')
     print(motivo)
     motivo = get_all_motivo_by_descripcion(motivo)
     print(motivo)
@@ -130,8 +133,32 @@ def update_estado_devolucion(devolucion_id, descripcion_estado_devolucion):
 def insert_into_historial_devolucion(devolucion_id, estado):
     print('AGREGAMOS EN EL HISTORIA DE DEVOLUCION')
     estado_id = get_all_estado_devolucion_by_descripcion_corta(estado)
-    print('ESTADOSSSSSSSSSS')
+    print('ESTADOS')
     print(estado_id)
     estado_id = estado_id[0]['estado_devolucion_id']
     result = db.engine.execute(INSERT_INTO_HISTORIAL_DEVOLUCION.format(devolucion_id=devolucion_id, estado_id=estado_id))
     print(check(result))
+
+def get_all_devoluciones_operador():
+    print('TODAS LAS DEVOLCIONES PARA VISTA OPERADOR')
+    devoluciones = db.engine.execute(SELECT_DEVOLUCION_VISTA_OPERADOR.format(estado='ECC'))
+    devoluciones = parser_result(devoluciones)
+    print('-------------------------------------------------------------------------------')
+    print(devoluciones)
+    return devoluciones
+
+def get_detalle_devolucion(devolucion_id):
+    print('GET DETALLE DEVOLUCION FULL')
+    print('devolucion_id: {} ----'.format(devolucion_id))
+    result = db.engine.execute(DETALLE_DEVOLUCION_FULL.format(devolucion_id=devolucion_id))
+    detalle = parser_result(result)
+    print('detalle: --------------------------- {}'.format(detalle))
+    return detalle
+
+def get_all_estado_devolucion():
+    print('GET ALL ESTADO DEVOLUCION')
+    result = db.engine.execute(SELECT_ALL_ESTADO_DEVOLUCION)
+    estados = parser_result_select_field(result)
+    print('estados: --------------------------- {}'.format(estados))
+    return estados
+    

@@ -13,3 +13,6 @@ class NuevaDevolucion(FlaskForm):
     motivo = SelectField(u'Motivo', choices=[])
     submit = SubmitField(u'Agregar')
 
+class ActualizarEstadoDevolucion(FlaskForm):
+    estado = SelectField(u'Nuevo Estado', choices=[])
+    submit = SubmitField('Actualizar')
