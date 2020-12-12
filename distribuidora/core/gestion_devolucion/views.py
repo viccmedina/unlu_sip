@@ -23,12 +23,13 @@ def index():
 
 
 		return render_template('devolucion.html',\
-		datos=current_user.get_mis_datos(),\
-		site='Gestión Devoluciones',\
-		rol=current_user.get_role(),\
-		sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
-		pedidos_id=pedidos_id, \
-		devoluciones=devoluciones)
+			is_authenticated=current_user.is_authenticated,\
+			datos=current_user.get_mis_datos(),\
+			site='Gestión Devoluciones',\
+			rol=current_user.get_role(),\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+			pedidos_id=pedidos_id, \
+			devoluciones=devoluciones)
 	abort(403)
 
 
@@ -75,6 +76,7 @@ def ver_detalle():
 		print(det_pedido)
 		return render_template('detalle_pedido_devolucion.html',form=form,\
 		datos=current_user.get_mis_datos(),\
+		is_authenticated=current_user.is_authenticated,\
 		site='Gestion Devoluciones',\
 		rol=current_user.get_role(),\
 		sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
@@ -117,14 +119,20 @@ def confirmar_devolucion_cliente():
 	result = check_producto_devolucion(devolucion_id)
 	print("devolucion_id ----- : {}".format(devolucion_id))
 	print("devolucion_id ----- : {}".format(result))
-	devolucion_id = result[0]['devolucion_id']
-	update = update_estado_devolucion(devolucion_id, 'CPC')
-	if update:
-		# mandar a guardar esto en el historial de devolucion
-		insert_into_historial_devolucion(devolucion_id, 'CPC')
-		flash('Devolución enviada para ser procesada', 'success')
+
+	
+	if len(result) > 0:
+		print(result)
+		devolucion_id = result[0]['devolucion_id']
+		update = update_estado_devolucion(devolucion_id, 'CPC')
+		if update:
+			# mandar a guardar esto en el historial de devolucion
+			insert_into_historial_devolucion(devolucion_id, 'CPC')
+			flash('Devolución enviada para ser procesada', 'success')
+		else:
+			flash('Algo salió mal, comuniquese con el operador', 'error')
 	else:
-		flash('Algo salió mal, comuniquese con el operador', 'error')
+		flash('Para confirmar la devolución tiene que tener al menos un producto', 'error')
 
 	return redirect(url_for('devoluciones.index'))
 
