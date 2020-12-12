@@ -18,7 +18,7 @@
       <tr>
         <td>{{r['producto']}}</td>
         <td>{{r['marca']}}</td>
-        <td>{{r['umedida']}}</td>
+        <td>{{r['umedida']}} {{r['envase']}}</td>
         <td>${{r['precio']}}</td>
         <td>{{r['tipoProd']}}</td>
         <td>{{r['stock']}}</td>
@@ -27,7 +27,7 @@
     </tbody>
   </table>
   <span style="float:right">
-    <a id="confirmar" data-toggle="modal" data-target="#linkModal" class="btn btn-primary" href="{{ url_for('producto.eliminar_producto', producto=products[0]['producto'],marca=products[0]['marca'],umed=products[0]['umedida']) }}">Modificar</a>
+    <a id="confirmar" data-toggle="modal" data-target="#linkModal" class="btn btn-primary" href="{{ url_for('producto.eliminar_producto', producto=products[0]['producto'],marca=products[0]['marca'],umed=products[0]['umedida']) }}">Eliminar</a>
   </span>
 </div>
 

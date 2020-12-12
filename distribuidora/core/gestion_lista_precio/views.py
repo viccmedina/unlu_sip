@@ -189,9 +189,9 @@ def modificar_precios():
     product = consulta_precio_pProductoMarcaUMedida(pro,mar,um)
     for row in products:
         fecha = row['vigencia']
-    form1.cantidad.data = 0
+        form1.cantidad.data = row.precio
     #f = int(datetime.date(fecha))
-    #form1.fecha_vigencia.data = format(fecha)
+        form1.fecha_vigencia.data = row.vigencia
     if form1.validate_on_submit():
 
         flash("Producto Modificado",'warning')
