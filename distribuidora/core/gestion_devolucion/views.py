@@ -23,12 +23,13 @@ def index():
 
 
 		return render_template('devolucion.html',\
-		datos=current_user.get_mis_datos(),\
-		site='Gestión Devoluciones',\
-		rol=current_user.get_role(),\
-		sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
-		pedidos_id=pedidos_id, \
-		devoluciones=devoluciones)
+			is_authenticated=current_user.is_authenticated,\
+			datos=current_user.get_mis_datos(),\
+			site='Gestión Devoluciones',\
+			rol=current_user.get_role(),\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+			pedidos_id=pedidos_id, \
+			devoluciones=devoluciones)
 	abort(403)
 
 
@@ -75,6 +76,7 @@ def ver_detalle():
 		print(det_pedido)
 		return render_template('detalle_pedido_devolucion.html',form=form,\
 		datos=current_user.get_mis_datos(),\
+		is_authenticated=current_user.is_authenticated,\
 		site='Gestion Devoluciones',\
 		rol=current_user.get_role(),\
 		sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
