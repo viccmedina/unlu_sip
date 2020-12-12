@@ -97,7 +97,9 @@ def cambiar_contraseña():
     """
 
     b = request.args.get('b')
-    if not b:
+    print("Entro aca {}".format(type(b)))
+    if b == 'f':
+        print("Entro aca ")
         form = CambiarContraseña()
         site = 'Home {}'.format(current_user.get_username())
         if form.validate_on_submit():

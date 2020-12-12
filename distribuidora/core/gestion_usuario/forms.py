@@ -20,7 +20,7 @@ class CambiarContraseña(FlaskForm):
     passwordNew = PasswordField('Contraseña Nueva', validators=[DataRequired()])
     passwordConfNew = PasswordField('Confirmar Contraseña Nueva', validators=[DataRequired()])
     submit = SubmitField('Cambiar Contraseña')
-    
+
 
 class CambiarContraseñaLogin(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
