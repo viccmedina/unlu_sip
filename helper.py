@@ -16,7 +16,8 @@ from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMed
 from distribuidora.models.precio import Lista_precio, Lista_precio_producto
 from distribuidora.models.pedido import PedidoEstado, DetallePedido, Pedido, \
 	HistorialPedidoEstado
-from distribuidora.models.devolucion import EstadoDevolucion, Devolucion, DetalleDevolucion
+from distribuidora.models.devolucion import EstadoDevolucion, Devolucion, DetalleDevolucion,\
+	MotivoDevolucion
 from distribuidora.models.stock import TipoMovimientoStock, Movimiento_Stock
 from distribuidora.query import CREATE_TRIGGER_BUmov_stock, CREATE_TRIGGER_BIPedido, \
 CREATE_TRIGGER_BU_Pedido, CREATE_TRIGGER_BU_Pedido2
@@ -291,7 +292,7 @@ def insertar_estado_motivo():
 	with open(DATOS_PATH + 'motivo_devolucion.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
-			new_motivo = MOtivoDevolucion(descripcion=row['descripcion'])
+			new_motivo = MotivoDevolucion(descripcion=row['descripcion'])
 			motivo.append(new_motivo)
 	db.session.add_all(motivo)
 	db.session.commit()
@@ -536,4 +537,6 @@ if __name__ == '__main__':
 	#insertar_detalle_devolucion()
 	#print('#'*50)
 	insertar_estado_comprobante_pago()
+	insertar_estado_motivo()
+
 	
