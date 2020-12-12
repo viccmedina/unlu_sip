@@ -119,14 +119,20 @@ def confirmar_devolucion_cliente():
 	result = check_producto_devolucion(devolucion_id)
 	print("devolucion_id ----- : {}".format(devolucion_id))
 	print("devolucion_id ----- : {}".format(result))
-	devolucion_id = result[0]['devolucion_id']
-	update = update_estado_devolucion(devolucion_id, 'CPC')
-	if update:
-		# mandar a guardar esto en el historial de devolucion
-		insert_into_historial_devolucion(devolucion_id, 'CPC')
-		flash('Devolución enviada para ser procesada', 'success')
+
+	
+	if len(result) > 0:
+		print(result)
+		devolucion_id = result[0]['devolucion_id']
+		update = update_estado_devolucion(devolucion_id, 'CPC')
+		if update:
+			# mandar a guardar esto en el historial de devolucion
+			insert_into_historial_devolucion(devolucion_id, 'CPC')
+			flash('Devolución enviada para ser procesada', 'success')
+		else:
+			flash('Algo salió mal, comuniquese con el operador', 'error')
 	else:
-		flash('Algo salió mal, comuniquese con el operador', 'error')
+		flash('Para confirmar la devolución tiene que tener al menos un producto', 'error')
 
 	return redirect(url_for('devoluciones.index'))
 
