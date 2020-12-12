@@ -21,9 +21,27 @@
                     {% endfor %}
                 </div>
                 <div class="form-group">
-                    {{ form.password.label(class="form-control-label") }} {{ form.password(class="form-control form-control-md") }}
+                    {{ form.passwordAnt.label(class="form-control-label") }} {{ form.passwordAnt(class="form-control form-control-md") }}
                     <ul>
-                        {% for error in form.password.errors %}
+                        {% for error in form.passwordAnt.errors %}
+                            <li style="color: red;">{{ error }}</li>
+                    </ul>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.passwordNew.label(class="form-control-label") }} {{ form.passwordNew(class="form-control form-control-md") }}
+                    <ul>
+                        {% for error in form.passwordNew.errors %}
+                            <li style="color: red;">{{ error }}</li>
+                    </ul>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.passwordConfNew.label(class="form-control-label") }} {{ form.passwordConfNew(class="form-control form-control-md") }}
+                    <ul>
+                        {% for error in form.passwordConfNew.errors %}
                             <li style="color: red;">{{ error }}</li>
                     </ul>
                     {% endfor %}
@@ -32,9 +50,7 @@
                 <small id="emailHelp" class="form-text text-muted">Para registrarse como cliente, haga click <a href="#">AQUÍ</a></small>
                 {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
                 <p class="copyright">&copy; SIP Grupo 1.</p>
-                <center>
-                  <a href="{{ url_for('gestion_usuario.cambiar_contraseña', b=True) }}" tupe="submit" role="button">Cambiar contraseña</a>
-                <center>
+                
             </form>
         </div>
     </div>

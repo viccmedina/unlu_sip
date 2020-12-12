@@ -14,7 +14,16 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Iniciar Sesión')
 
 
+
 class CambiarContraseña(FlaskForm):
+    passwordAnt = PasswordField('Contraseña Anterior', validators=[DataRequired()])
+    passwordNew = PasswordField('Contraseña Nueva', validators=[DataRequired()])
+    passwordConfNew = PasswordField('Confirmar Contraseña Nueva', validators=[DataRequired()])
+    submit = SubmitField('Cambiar Contraseña')
+    
+
+class CambiarContraseñaLogin(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
     passwordAnt = PasswordField('Contraseña Anterior', validators=[DataRequired()])
     passwordNew = PasswordField('Contraseña Nueva', validators=[DataRequired()])
     passwordConfNew = PasswordField('Confirmar Contraseña Nueva', validators=[DataRequired()])

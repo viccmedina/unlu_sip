@@ -1,0 +1,62 @@
+{% block tabla_movimientos %}
+<div class="container">
+  <h2 align="center" >Resultado de la consulta</h2>
+  <p>Precios Productos </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Marca</th>
+        <th>Unidad Medida</th>
+        <th>Precio</th>
+        <th>Fecha Vigencia</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% include "flash_errors.html" %}
+        {{ form1.hidden_tag() }}
+        {% for r in products %}
+          <tr>
+            <td>{{r['producto']}}</td>
+            <td>{{r['marca']}}</td>
+            <td>{{r['envase'] }} {{r['umedida'] }} </td>
+            <td>${{r['precio']}}</td>
+            <td>{{r['vigencia']}}</td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Precio</th>
+        <th>Fecha Vigencia</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for r in products %}
+      <tr>
+        <div class="form-group">
+          <h5>Campos a modificar: </h5>
+          <td> {{ form1.cantidad(class="form-control form-control-md")}} </td>
+          <td> {{ form1.fecha_vigencia(class="form-control form-control-md", value="{{fecha}}") }}</td>
+        </div>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="form-group">
+
+
+    <span style="float:right">
+        {{ form1.submitt(class="btn btn-success mb-2") }}
+    </span>
+  </div>
+
+</div>
+
+
+
+
+{% endblock %}

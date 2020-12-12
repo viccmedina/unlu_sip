@@ -8,7 +8,7 @@ from wtforms.fields.html5 import DateTimeLocalField
 from flask_login import current_user
 
 
-class ConsultarProducto(FlaskForm):
+class ConsultarPrecio(FlaskForm):
 	producto = SelectField(u'Producto', choices=[])
 	marca = SelectField(u'Marca', choices=[])
 	uMedida = SelectField(u'Unidad de Medida', choices=[])
@@ -16,7 +16,7 @@ class ConsultarProducto(FlaskForm):
 	cancelar = SubmitField('Cancelar')
 
 
-class AgregarProducto(FlaskForm):
+class AgregarPrecios(FlaskForm):
 	producto = SelectField(u'Producto', choices=[])
 	marca = SelectField(u'Marca', choices=[])
 	uMedida = SelectField(u'Unidad de Medida', choices=[])
@@ -24,6 +24,22 @@ class AgregarProducto(FlaskForm):
 	format='%Y-%m-%dT%H:%M'
 	fecha_vigencia = DateTimeLocalField('Vigencia Hasta', format=format, validators=[DataRequired()])
 	submit = SubmitField('Consultar')
+	cancelar = SubmitField('Cancelar')
+
+
+
+class ModificarPrecios(FlaskForm):
+	producto = SelectField(u'Producto', choices=[])
+	marca = SelectField(u'Marca', choices=[])
+	uMedida = SelectField(u'Unidad de Medida', choices=[])
+	submit = SubmitField('Consultar')
+	cancelar = SubmitField('Cancelar')
+
+class ModifiPrecios(FlaskForm):
+	cantidad = StringField('Precio', render_kw={"placeholder": "0"})
+	format='%Y-%m-%dT%H:%M'
+	fecha_vigencia = DateTimeLocalField('Vigencia Hasta', format=format)
+	submitt = SubmitField('Modificar')
 	cancelar = SubmitField('Cancelar')
 
 class ImportarListaPrecio(FlaskForm):

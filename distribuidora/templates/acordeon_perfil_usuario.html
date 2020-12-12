@@ -9,14 +9,20 @@
           {% endif %}
           {% if datos.username == 'cliente' %}
             <a align="right" href="{{ url_for('gestion_usuario.home_cliente') }}" role="button">Home</a>
-            <div class="">
-              <a align="right" href="{{ url_for('gestion_usuario.cambiar_contraseña') }}" role="button">Cambiar contraseña</a>
-            </div>
 
-          {% endif %}
         </h6>
       </div>
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h6 align = "center">
+          <a align="right" href="{{ url_for('gestion_usuario.cambiar_contraseña', b = False) }}" role="button">Cambiar contraseña</a>
+          </h6>
+        </div>
+      </div>
+
+    {% endif %}
     </div>
+
 
     <div class="card">
       <div class="card-header" id="headingOne">

@@ -26,7 +26,7 @@ def index():
         site='Gestión de Productos')
     abort(403)
 
-@producto.route('/consultar', methods=['POST', 'GET'])
+@producto.route('/consultar/producto', methods=['POST', 'GET'])
 @login_required
 
 def consultar_producto():
@@ -103,7 +103,7 @@ def consultar_producto():
     abort(403)
 
 
-@producto.route('/agregar', methods=['POST', 'GET'])
+@producto.route('/agregar/producto', methods=['POST', 'GET'])
 @login_required
 def agregar():
     if current_user.has_role('Operador'):
@@ -134,7 +134,7 @@ def agregar():
     abort(403)
 
 
-@producto.route('/modificar', methods=['POST','GET'])
+@producto.route('/modificar/producto', methods=['POST','GET'])
 @login_required
 def modificar():
     if current_user.has_role('Operador'):
@@ -163,8 +163,8 @@ def modificar():
                 form1.uMedid.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
                 form1.envas.choices = [(descripcion.descripcion) for descripcion in Envase.query.all()]
                 form1.tipo_product.choices = [(descripcion.descripcion) for descripcion in TipoProducto.query.all()]
+                
                 if form1.validate_on_submit():
-                    print("algo")
 
                     return render_template('form_modificar_product.html', \
                     datos=current_user.get_mis_datos(), \
@@ -185,7 +185,7 @@ def modificar():
     products=products)
 
 
-@producto.route('/eliminar', methods=['POST','GET'])
+@producto.route('/eliminar/producto', methods=['POST','GET'])
 @login_required
 def eliminar():
     if current_user.has_role('Operador'):
@@ -217,7 +217,7 @@ def eliminar():
     abort(403)
 
 
-@producto.route('/exportar', methods=['GET'])
+@producto.route('/exportar/producto', methods=['GET'])
 @login_required
 def exportar():
     if current_user.has_role('Operador'):
@@ -246,7 +246,7 @@ def exportar():
         rol='operador')
     abort(403)
 
-@producto.route('/producto/importar', methods=['GET'])
+@producto.route('/importar/producto', methods=['GET'])
 @login_required
 def importar():
     if current_user.has_role('Operador'):
@@ -261,7 +261,7 @@ def importar():
     abort(403)
 
 
-@producto.route('/producto/listar', methods=['GET', 'POST'])
+@producto.route('/listar/producto', methods=['GET', 'POST'])
 @login_required
 def listar_productos():
     page = request.args.get('page', 1, type=int)
@@ -283,7 +283,7 @@ def listar_productos():
         site='Listado de Productos', \
         producto=productos)
 
-@producto.route('/producto/detalle', methods=['GET', 'POST'])
+@producto.route('/detalle/producto', methods=['GET', 'POST'])
 @login_required
 def detalle_producto():
     producto = request.args.get('producto', type=str)
@@ -323,7 +323,7 @@ def detalle_producto():
         rol=current_user.get_role(), \
         site='Detalle Producto')
 
-@producto.route('/eliminar/producto', methods=['POST','GET'])
+@producto.route('/eliminar/productos', methods=['POST','GET'])
 @login_required
 def eliminar_producto():
 
@@ -340,7 +340,7 @@ def eliminar_producto():
     flash("Producto Eliminado",'warning')
     return redirect(url_for('producto.eliminar'))
 
-@producto.route('/modificar/producto', methods=['POST','GET'])
+@producto.route('/modificar/productos', methods=['POST','GET'])
 @login_required
 def modificar_producto():
     pro = request.args.get('pro')

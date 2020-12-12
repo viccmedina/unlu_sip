@@ -3,9 +3,10 @@ from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora.core.gestion_lista_precio.forms import *
 from distribuidora.core.gestion_lista_precio.helper import *
 from distribuidora.models.producto import *
-
 from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora import db
+from distribuidora.models.producto import Producto
+from datetime import datetime
 
 lista_precio = Blueprint('lista_precio', __name__, template_folder='templates')
 
@@ -29,7 +30,7 @@ def index():
 def consultar_lista_precio():
     if current_user.has_role('Operador'):
         products = None
-        form = ConsultarProducto()
+        form = ConsultarPrecio()
         form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
         form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
         form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
@@ -38,7 +39,8 @@ def consultar_lista_precio():
             id_marca = form.marca.data
             id_um = form.uMedida.data
             products = consulta_precio_pProductoMarcaUMedida(id_producto,id_marca,id_um)
-
+            if products == None:
+                flash("Producto invalido", 'error')
 
         return render_template('form_consultar_lista_precios.html',\
         datos=current_user.get_mis_datos(),\
@@ -55,7 +57,7 @@ def consultar_lista_precio():
 def agregar():
     if current_user.has_role('Operador'):
         products = None
-        form = AgregarProducto()
+        form = AgregarPrecios()
         form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
         form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
         form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
@@ -78,23 +80,54 @@ def agregar():
     abort(403)
 
 
-@lista_precio.route('/modificar', methods=['GET','POST'])
+@lista_precio.route('/modificar/precios', methods=['GET','POST'])
 @login_required
 def modificar():
     if current_user.has_role('Operador'):
-        return render_template('form_modificar_lista_precio.html', \
-        datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated, \
-        sin_leer= get_cantidad_msj_sin_leer(current_user.get_id()),\
-        rol='operador')
-    abort(403)
+        id_producto = None
+        id_marca = None
+        id_um = None
+        b = None
+        products = None
+        form = ModificarPrecios()
+
+        form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
+        if form.validate_on_submit():
+            id_producto = form.producto.data
+            id_marca = form.marca.data
+            id_um = form.uMedida.data
+            products = consulta_precio_pProductoMarcaUMedida(id_producto,id_marca,id_um)
 
 
-@lista_precio.route('/eliminar', methods=['GET','POST'])
+            if products == None:
+                #flash("Se ha Eliminado el producto", 'warning')
+                flash("No se ha podido localizar el producto, producto invalido",'error')
+            else:
+                return redirect(url_for('lista_precio.modificar_precios',producto=form.producto.data,marca=form.marca.data,umed=form.uMedida.data))
+
+
+
+
+
+
+    return render_template('form_modificar_lista_precios.html', \
+    datos=current_user.get_mis_datos(), \
+    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+    is_authenticated=current_user.is_authenticated, \
+    rol='operador'  ,\
+    form=form,\
+    products=products)
+
+
+
+
+@lista_precio.route('/eliminar/precios', methods=['GET','POST'])
 @login_required
 def eliminar():
     if current_user.has_role('Operador'):
-        return render_template('form_eliminar_lista_precio.html', \
+        return render_template('form_eliminar_lista_precios.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
         rol='operador')
@@ -124,3 +157,54 @@ def importar():
         site='Importar Lista de Precios',\
         form=form)
     abort(403)
+
+
+@lista_precio.route('/lista_precio/eliminar', methods=['POST','GET'])
+@login_required
+def eliminar_precios():
+
+    pro = request.args.get('producto')
+    mar = request.args.get('marca')
+    um = request.args.get('umed')
+
+    print("producto {}".format(pro))
+    print("marca {}".format(mar))
+    print("umed {}".format(um))
+
+    eli_producto(pro,mar,um)
+
+    flash("Producto Eliminado",'warning')
+    return redirect(url_for('producto.eliminar'))
+
+
+
+@lista_precio.route('/lista_precio/modificar', methods=['POST','GET'])
+@login_required
+def modificar_precios():
+    pro = request.args.get('producto')
+    mar = request.args.get('marca')
+    um = request.args.get('umed')
+    form1 = ModifiPrecios()
+    products = consultar_precio_pProductoMarcaUMedida(pro,mar,um)
+    product = consulta_precio_pProductoMarcaUMedida(pro,mar,um)
+    for row in products:
+        fecha = row['vigencia']
+    form1.cantidad.data = 0
+    #f = int(datetime.date(fecha))
+    #form1.fecha_vigencia.data = format(fecha)
+    if form1.validate_on_submit():
+
+        flash("Producto Modificado",'warning')
+
+
+    #modific_producto(pro,mar,umed,env,tp,pro1,mar1,umed1)
+    #flash("Producto Modificado",'warning')
+
+    return render_template('form_modificar_lista_precio.html', \
+    datos=current_user.get_mis_datos(), \
+    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+    is_authenticated=current_user.is_authenticated, \
+    rol='operador'  ,\
+    form1=form1,\
+    products=product,\
+    fecha=fecha)
