@@ -1,17 +1,31 @@
 {% block acordeon %}
 <div class="col-sm-5 col-md-3">
   <div class="accordion" id="accordionExample">
+
+    {% if datos.username == 'operador' %}
     <div class="card">
       <div class="card-header" id="headingOne">
         <h6 align = "center">
-          {% if datos.username == 'operador' %}
             <a align="right" href="{{ url_for('gestion_usuario.home_operador') }}" role="button">Home</a>
-          {% endif %}
-          {% if datos.username == 'cliente' %}
-            <a align="right" href="{{ url_for('gestion_usuario.home_cliente') }}" role="button">Home</a>
-
         </h6>
       </div>
+    </div>
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h6 align = "center">
+          <a align="right" href="{{ url_for('gestion_usuario.cambiar_contraseña', b='f') }}" role="button">Cambiar contraseña</a>
+          </h6>
+        </div>
+      </div>
+    {% endif %}
+    {% if datos.username == 'cliente' %}
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h6 align = "center">
+            <a align="right" href="{{ url_for('gestion_usuario.home_cliente') }}" role="button">Home</a>
+        </h6>
+      </div>
+    </div>
       <div class="card">
         <div class="card-header" id="headingOne">
           <h6 align = "center">
@@ -20,8 +34,8 @@
         </div>
       </div>
 
+
     {% endif %}
-    </div>
 
 
     <div class="card">
@@ -30,7 +44,7 @@
           <a align="right" href="#" role="button">Mis Datos</a>
 
         </h6>
-      </div>
+    </div>
 
       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
         <div class="card-body">
@@ -42,6 +56,7 @@
           {% endif %}
         </div>
       </div>
+
     </div>
   </div>
 </div>
