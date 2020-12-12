@@ -5,88 +5,114 @@
 	<div class="row">
 		{% include "acordeon_perfil_usuario.html" %}
 		<div class="col-sm-5 offset-sm-2 col-md-9 offset-md-0">
-			<div class="card-deck">
+			<div class="row row-cols-1 row-cols-md-3">
 
-				<div class="card" style="height: 20rem;">
-					<img src="static/img/gestion_pedido.svg" class="card-img-top" alt="gestión de pedidos" width="100%" height="100">
-					<div class="card-body">
-						<h5 class="card-title">Gestión de Pedidos</h5>
-						<p class="card-text">Aquí podrás confirmar pedidos o devoluciones, consultar los pedidos actuales y demás.</p>
+				<div class="col mb-4">
+				    <div class="card h-100">
+						<img src="static/img/gestion_pedido.svg" class="card-img-top" alt="gestión de pedidos" width="100%" height="100">
+						<div class="card-body">
+							<h5 class="card-title">Gestión de Pedidos</h5>
+							<p class="card-text">Aquí podrás confirmar pedidos o devoluciones, consultar los pedidos actuales y demás.</p>
+						</div>
+						<div class="card-footer">
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('pedido.index') }}" role="button">Ver Más</a>
+							</center>
+    					</div>
 					</div>
-					<div class="card-footer">
-					<center>
-						<a class="btn btn-primary btn-sm" href="{{ url_for('pedido.index') }}" role="button">Ver Más</a>
-					</center>
-    			</div>
 				</div>
 
-				<div class="card" style="height: 20rem;">
-					<img src="static/img/gestion_stock.svg" class="card-img-top" alt="gestión de stock" width="100%" height="100">
-					<div class="card-body">
-						<h5 class="card-title">Gestión de Stock</h5>
-						<p class="card-text">Aquí podrás consultar disponibilidad de productos, registrar el ingreso o descontar stock. </p>
-					</div>
-					<div class="card-footer">
-					<center>
-						<a class="btn btn-primary btn-sm" href="{{ url_for('stock.index') }}" role="button">Ver Más</a>
-					</center>
-    			</div>
+				<div class="col mb-4">
+				    <div class="card h-100">
+						<img src="static/img/gestion_stock.svg" class="card-img-top" alt="gestión de stock" width="100%" height="100">
+						<div class="card-body">
+							<h5 class="card-title">Gestión de Stock</h5>
+							<p class="card-text">Aquí podrás consultar disponibilidad de productos, registrar el ingreso o descontar stock. </p>
+						</div>
+						<div class="card-footer">
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('stock.index') }}" role="button">Ver Más</a>
+							</center>
+    					</div>
+    				</div>
 				</div>
 
-				<div class="card" style="height: 20rem;">
-					<img src="static/img/gestion_ctas_corrientes.svg" class="card-img-top" alt="gestión de ctas corrientes" width="100%" height="100">
-					<div class="card-body">
-						<h5 class="card-title">Gestión de Ctas Corrientes</h5>
-						<p class="card-text">Podrás agregar los movimientos asociados a las Cuentas Corrientes de los Clientes.</p>
+				<div class="col mb-4">
+				    <div class="card h-100">
+						<img src="static/img/gestion_ctas_corrientes.svg" class="card-img-top" alt="gestión de ctas corrientes" width="100%" height="100">
+						<div class="card-body">
+							<h5 class="card-title">Gestión de Ctas Corrientes</h5>
+							<p class="card-text">Podrás agregar los movimientos asociados a las Cuentas Corrientes de los Clientes.</p>
+						</div>
+						<div class="card-footer">
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.index') }}" role="button">Ver Más</a>
+							</center>
+	    				</div>
 					</div>
-					<div class="card-footer">
-					<center>
-						<a class="btn btn-primary btn-sm" href="{{ url_for('cta_corriente.index') }}" role="button">Ver Más</a>
-					</center>
-    			</div>
 				</div>
-			</div>
-
 
 		<br>
-			<div class="card-deck">
-				<div class="card" style="height: 20rem;">
-					<img src="static/img/gestion_producto.svg" class="card-img-top" alt="gestión de productos" width="100%" height="100">
-					<div class="card-body">
-						<h5 class="card-title">Gestión de Productos</h5>
-						<p class="card-text">Aquí encontrarás lo necesario para confirmar pedidos, consultarlos, y demás.</p>
+				<div class="col mb-4">
+				    <div class="card h-100">
+						<img src="static/img/gestion_producto.svg" class="card-img-top" alt="gestión de productos" width="100%" height="100">
+						<div class="card-body">
+							<h5 class="card-title">Gestión de Productos</h5>
+							<p class="card-text">Aquí encontrarás lo necesario para confirmar pedidos, consultarlos, y demás.</p>
+						</div>
+						<div class="card-footer">
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('producto.index') }}" role="button">Ver Más</a>
+							</center>
+    					</div>
 					</div>
-					<div class="card-footer">
-					<center>
-						<a class="btn btn-primary btn-sm" href="{{ url_for('producto.index') }}" role="button">Ver Más</a>
-					</center>
-    				</div>
 				</div>
-				<div class="card" style="height: 20rem;">
-					<img src="static/img/gestion_lista_precio.svg" class="card-img-top" alt="gestión de lista de precios" width="100%" height="100">
-					<div class="card-body">
-						<h5 class="card-title">Gestión de Lista de Precios</h5>
-						<p class="card-text">Aquí encontraras todo lo necesario para gestionar las listas de precios.</p>
+
+				<div class="col mb-4">
+				    <div class="card h-100">
+						<img src="static/img/gestion_lista_precio.svg" class="card-img-top" alt="gestión de lista de precios" width="100%" height="100">
+						<div class="card-body">
+							<h5 class="card-title">Gestión de Lista de Precios</h5>
+							<p class="card-text">Aquí encontraras todo lo necesario para gestionar las listas de precios.</p>
+						</div>
+						<div class="card-footer">
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('lista_precio.index') }}" role="button">Ver Más</a>
+							</center>
+	    				</div>
 					</div>
-					<div class="card-footer">
-					<center>
-						<a class="btn btn-primary btn-sm" href="{{ url_for('lista_precio.index') }}" role="button">Ver Más</a>
-					</center>
-    				</div>
 				</div>
-				<div class="card" style="height: 20rem;">
-					<img src="static/img/gestion_informes.svg" class="card-img-top" alt="gestión de informes" width="100%" height="100">
-					<div class="card-body">
-						<h5 class="card-title">Gestión de Informes</h5>
-						<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. </p>
+				<div class="col mb-4">
+				    <div class="card h-100">
+						<img src="static/img/gestion_informes.svg" class="card-img-top" alt="gestión de informes" width="100%" height="100">
+						<div class="card-body">
+							<h5 class="card-title">Gestión de Informes</h5>
+							<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. </p>
+						</div>
+						<div class="card-footer">
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('informe.index') }}" role="button">Ver Más</a>
+							</center>
+    					</div>
 					</div>
-					<div class="card-footer">
-					<center>
-						<a class="btn btn-primary btn-sm" href="{{ url_for('informe.index') }}" role="button">Ver Más</a>
-					</center>
-    				</div>
+				</div>
+
+		   		<div class="col mb-4">
+				    <div class="card h-100">
+					    <img src="static/img/reemplazar.svg" class="card-img-top" alt="Gestión de Devolución" width="100%" height="100">
+				    	<div class="card-body">
+				        	<h5 class="card-title">Gestión de Devolución</h5>
+				        	<p class="card-text">Podrás realizar ver las solicitudes de devoluciones y tomar un accionar sobre ellas.</p>
+				      	</div>
+				      <div class="card-footer">
+							<center>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('devoluciones.listar_devoluciones_operador') }}" role="button">Ver Más</a>
+							</center>
+				 		</div>
+					</div>
 				</div>
 			</div>
+			<br>
 		</div>
 	</div>
 </div>
