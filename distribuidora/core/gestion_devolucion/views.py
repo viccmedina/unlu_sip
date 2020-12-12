@@ -43,19 +43,12 @@ def ver_detalle():
 		
 		form = NuevaDevolucion()
 		form.motivo.choices = [(descripcion.descripcion) for descripcion in MotivoDevolucion.query.all()]
+		print('MOTIVOSSSSSSS {}'.format(form.motivo.choices))
 		print('WWWWWWWWWWWWWWWWWWWWWWWWWWWW')
-		producto_envase = request.args.get('producto_envase', None)
-		print(producto_envase)
 		cantidad = request.args.get('cantidad', None)
-		print(cantidad)
+		print('Cantidad --- {}'.format(cantidad))
 		detalle_pedido = request.args.get('detalle_pedido', None)
-		print(detalle_pedido)
-		print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
-		print(form.motivo.data)
-		motivo = form.motivo.data
-		devolucion_id = get_devolucion_by_pedido(pedido_id)
-		print('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
-		print(devolucion_id)
+		print('detalle pedido ------ {}'.format(detalle_pedido))
 		if form.validate_on_submit():
 			print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
 			print(form.motivo.data)
@@ -65,11 +58,16 @@ def ver_detalle():
 			print(devolucion_id)
 			devolucion_id = devolucion_id[0]['devolucion_id']
 			# aca tenemos que validar que el producto que haya ingresado no exista en la devolucion
-			if check_producto_devolucion(detalle_pedido):
-				flash('Este reclamo ya se encuentra en el sistema', 'errors')
-			else:
-				if agregar_producto_a_devolucion(producto_envase, motivo, cantidad, devolucion_id, detalle_pedido):
+			result = check_producto_devolucion(detalle_pedido)
+			print('lllllllllllllllllllllllllllllll')
+			print(result)
+			if not result:
+				if agregar_producto_a_devolucion(motivo, cantidad, devolucion_id, detalle_pedido):
 					flash('Producto agregado al reclamo', 'success')
+				
+			else:
+				flash('Este reclamo ya se encuentra en el sistema', 'error')
+				
 		else:
 			print(form.errors)
 
