@@ -303,6 +303,8 @@ def detalle_producto():
 
         #recupero el pedido en estado pcc
         pedido_id = get_ultimo_pedido_id(usuario_id)
+        print('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ')
+        print(pedido_id)
         #recupero la cantidad de estados de ese pedido
         cantidad_estados = get_cantidad_estados_pedido(pedido_id)
         if cantidad_estados == 1:

@@ -299,7 +299,7 @@ def insertar_estado_motivo():
 
 def insertar_estado_devolucion():
 	estados = list()
-	descripcion = [('ESPERA CONFIRMACION', 'EC'), ('RECHAZADA', 'R'), ('ACEPTADA', 'A')]
+	descripcion = [('ESPERA CONFIRMACION CLIENTE', 'ECC'), ('CONFIRMADA POR CLIENTE', 'CPC'), ('RECHAZADA', 'R'), ('ACEPTADA', 'A')]
 	for d in descripcion:
 		estado_devolucion =  EstadoDevolucion(descripcion=d[0], descripcion_corta=d[1])
 		estados.append(estado_devolucion)

@@ -11,5 +11,5 @@ from distribuidora.core.gestion_pedido.helper import get_estados_pedidos_para_op
 
 class NuevaDevolucion(FlaskForm):
     motivo = SelectField(u'Motivo', choices=[])
-    submit = SubmitField('Realizar Devolucion')
+    submit = SubmitField(u'Agregar')
 
