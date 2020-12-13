@@ -120,17 +120,17 @@ def modificar():
 
 
 
-@lista_precio.route('/eliminar/precios', methods=['GET','POST'])
-@login_required
-def eliminar():
-
-
-    if current_user.has_role('Operador'):
-        return render_template('form_eliminar_lista_precios.html', \
-        datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated, \
-        rol='operador')
-    abort(403)
+# @lista_precio.route('/eliminar/precios', methods=['GET','POST'])
+# @login_required
+# def eliminar():
+#
+#
+#     if current_user.has_role('Operador'):
+#         return render_template('form_eliminar_lista_precios.html', \
+#         datos=current_user.get_mis_datos(), \
+#         is_authenticated=current_user.is_authenticated, \
+#         rol='operador')
+#     abort(403)
 
 
 @lista_precio.route('/exportar', methods=['GET','POST'])
