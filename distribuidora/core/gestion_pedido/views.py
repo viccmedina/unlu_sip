@@ -3,6 +3,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from distribuidora.models.pedido import PedidoEstado, Pedido, DetallePedido
 from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer, insert_nuevo_mensaje
+from distribuidora.core.gestion_stock.helper import agregar_historial_movimientos_stock
 from distribuidora.core.gestion_pedido.helper import *
 from distribuidora.core.gestion_pedido.forms import NuevoPedido, FormAgregarProducto, \
     ModificarDetallePedido, ActualizarEstadoPedido
@@ -222,6 +223,8 @@ def modificar_estado_operador():
             costo = None
             if estado_nuevo == 'EN PREPARACION':
                 costo = actualizar_stock_real(pedido)
+                operador = current_user.get_id()
+                agregar_historial_movimientos_stock(pedido, operador, 'SALIDA')
 
             result = actualizar_pedido_estado_por_operador(current_user.get_id(),\
                 pedido, estado_nuevo, estado_actual, costo)

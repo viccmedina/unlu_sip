@@ -167,3 +167,6 @@ CONSULTAR_MOVIMIENTOS = """
 
 UPDATE_NUEVO_PEDIDO_STOCK_REAL = """ UPDATE producto_envase SET stock_real='{stock_real}'
     WHERE producto_envase_id='{producto_envase_id}'"""
+
+
+SELECT_TIPO_MOVIMIENTO_STOCK = """ SELECT * FROM tipo_movimiento_stock WHERE descripcion='{descripcion}' """

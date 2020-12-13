@@ -62,8 +62,8 @@ class Movimiento_Stock(db.Model):
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
-    def __init__(self, detalle_pedido_id, detalle_devolucion_id, tipo_movimiento_stock_id, \
-    usuario_id, producto_envase_id, descripcion, cantidad ):
+    def __init__(self, detalle_pedido_id, tipo_movimiento_stock_id, \
+        usuario_id, producto_envase_id, descripcion, cantidad, detalle_devolucion_id=None):
         """
         Constructor de la clase stock
         """

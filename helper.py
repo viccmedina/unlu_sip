@@ -255,7 +255,7 @@ def insertar_datos_demo_producto():
 def insertar_datos_demo_producto_envase():
 	#producto_id, envase_id, unidad_medida_id,stock_real
 	print('INSERTANDO PRODUCTO ENVASE')
-	QUERY_PRODUCTO_ENVASE = """ INSERT INTO producto_envase (producto_id, envase_id,unidad_medida_id, stock_real) VALUES """
+	QUERY_PRODUCTO_ENVASE = """ INSERT INTO producto_envase (producto_id, envase_id, unidad_medida_id, stock_real) VALUES """
 	f_desde = datetime.strptime('15/06/2020', "%d/%m/%Y")
 	f_hasta = datetime.strptime('15/06/2021', "%d/%m/%Y")
 	QUERY_LISTA_PRECIO = """INSERT INTO lista_precio (fecha_desde, fecha_hasta) VALUES ('{}', '{}');""".\

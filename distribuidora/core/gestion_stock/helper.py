@@ -3,6 +3,7 @@ from flask import flash
 from distribuidora.core.gestion_stock.query import *
 from distribuidora.core.gestion_pedido.query import LISTAR_DETALLE_PEDIDO, DETALLE_INFORMACION_FULL
 from distribuidora.models.producto import ProductoEnvase
+from distribuidora.models.stock import Movimiento_Stock
 #from distribuidora.core.gestion_pedido.helper import parser_result
 
 def parser_result(result):
@@ -288,3 +289,27 @@ def actualizar_stock_real(pedido_id):
     db.session.add_all(save)
     db.session.commit()
     return costo
+
+def agregar_historial_movimientos_stock(pedido_id, operador_id, tipo_movimiento, tipo='PEDIDO'):
+    print('AGREGAMOS STOCK AL HISTORIAL DE MOVIMIENTOS')
+    add_historial = list()
+    detalle_pedido = db.engine.execute(DETALLE_INFORMACION_FULL.format(\
+        pedido_id=pedido_id))
+    detalle_pedido = parser_result(detalle_pedido)
+    movimiento = db.engine.execute(SELECT_TIPO_MOVIMIENTO_STOCK.format(descripcion=tipo_movimiento))
+    movimiento = parser_result(movimiento)
+    movimiento_id = movimiento[0]['tipo_movimiento_stock_id']
+    for d in detalle_pedido:
+        if tipo == 'PEDIDO':
+            nuevo_movimiento_stock = Movimiento_Stock(detalle_pedido_id=d['detalle_id'],\
+                tipo_movimiento_stock_id=movimiento_id,\
+                usuario_id=operador_id,\
+                producto_envase_id=d['producto_envase_id'],\
+                descripcion='MOVIMIENTO POR PEDIDO',\
+                cantidad=d['cantidad'])
+            add_historial.append(nuevo_movimiento_stock)
+    db.session.add_all(add_historial)
+    db.session.commit()
+    print('>'*100)
+
+   
