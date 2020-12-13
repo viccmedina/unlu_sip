@@ -109,9 +109,6 @@ def modificar():
 
 
 
-
-
-
     return render_template('form_modificar_lista_precios.html', \
     datos=current_user.get_mis_datos(), \
     sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
@@ -174,28 +171,60 @@ def eliminar_precios():
     eli_producto(pro,mar,um)
 
     flash("Producto Eliminado",'warning')
-    return redirect(url_for('producto.eliminar'))
+    return redirect(url_for('lista_precio.eliminar'))
 
 
 
 @lista_precio.route('/lista_precio/modificar', methods=['POST','GET'])
 @login_required
 def modificar_precios():
+    vigencia = "2020-01-01 00:00:00"
     pro = request.args.get('producto')
     mar = request.args.get('marca')
     um = request.args.get('umed')
     form1 = ModifiPrecios()
-    products = consultar_precio_pProductoMarcaUMedida(pro,mar,um)
+
     product = consulta_precio_pProductoMarcaUMedida(pro,mar,um)
+
+    products = consultar_precio_pProductoMarcaUMedida(pro,mar,um)
     for row in products:
-        fecha = row['vigencia']
-        form1.cantidad.data = row.precio
-    #f = int(datetime.date(fecha))
-        form1.fecha_vigencia.data = row.vigencia
+        print("Precio {}".format(row.precio))
+        p = str(row.precio)
+        f = row.vigencia
+        producto = row.id
+        hoy = str(row.hoy)
+    print("Hoy {}".format(hoy))
     if form1.validate_on_submit():
 
-        flash("Producto Modificado",'warning')
+        precio = str(form1.cantidad.data)
+        print("precio1 {}".format(precio))
+        print("precio2 {}".format(p))
+        fech = str(form1.fecha_vigencia.data)
+        print("fechaaaaaa {}".format(p))
+        if str(precio) == str(p):
+            print("Las fech son distintas")
 
+        if str(precio) == str(p) and (fech == vigencia):
+            flash("No has realizado ningun cambio",'warning')
+            return redirect(url_for('lista_precio.modificar'))
+        else:
+            if str(precio) == str(p) and (fech != vigencia):
+                if fech < hoy:
+                    flash("Error, la fecha ingresada no puede ser menor a 'HOY'",'error')
+                    return redirect(url_for('lista_precio.modificar'))
+                else:
+                    modificarFecha(fech,producto,f)
+                    flash("La fecha se ha cambiado con exito",'warning')
+                    return redirect(url_for('lista_precio.modificar'))
+            else:
+                if str(precio) != str(p) and (fech == vigencia):
+                    modificarPrecio(precio,producto)
+                    flash("El precio se ha modificado con exito",'warning')
+                    return redirect(url_for('lista_precio.modificar'))
+                else:
+                    modificarPrecioFecha(fech,precio,producto,f)
+                    flash("El precio y la fecha se han modificado con exito",'warning')
+                    return redirect(url_for('lista_precio.modificar'))
 
     #modific_producto(pro,mar,umed,env,tp,pro1,mar1,umed1)
     #flash("Producto Modificado",'warning')
@@ -207,4 +236,5 @@ def modificar_precios():
     rol='operador'  ,\
     form1=form1,\
     products=product,\
-    fecha=fecha)
+    precio=p,\
+    fecha=f)

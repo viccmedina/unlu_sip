@@ -42,6 +42,7 @@ def consultar_precio_pProductoMarcaUMedida(producto,marca,umedida):
     else:
         precio = db.engine.execute(CONSULTAR_PRECIO.format(producto=p))
 
+
     return precio
 
 
@@ -63,13 +64,25 @@ def agregar_precio_pProductoMarcaUMedida(producto,marca,umedida,precio,fecha):
         print("precio id es {}".format(row.precio_id))
         db.engine.execute(AGREGAR_PRECIO_PRODUCTO.format(producto=p,precio=precio,fecha=fecha,id=row.precio_id))
 
-def modificarPrecio(precio):
-    print("precio {}".format(prec))
-    pass
+def modificarPrecio(precio,producto):
+    print("precio {}".format(precio))
+    db.engine.execute(ACTUALIZAR_PRECIO.format(producto=producto,precio=precio))
 
-def modificarFecha(fecha):
-    print("precio {}".format(fecha))
-    pass
+
+def modificarFecha(fecha,producto,olddate):
+    id_precio = db.engine.execute(CONSULTAR_ID_PRECIO.format(fecha=olddate))
+    for row in id_precio:
+        print("precio {}".format(row.precio_id))
+        print("producto {}".format(producto))
+        db.engine.execute(ACTUALIZAR_FECHA.format(fecha=fecha,id=row.precio_id))
+        db.engine.execute(ACTUALIZAR_FECHA_PP.format(producto=producto,fecha=fecha,id=row.precio_id))
+
 
 def consultarFechaData():
     fecha = db.engine.execute(AGREGAR_PRECIO_PRODUCTO.format(producto=p,precio=precio,fecha=fecha,id=row.precio_id))
+
+def modificarPrecioFecha(fecha,precio,producto,olddate):
+    id_precio = db.engine.execute(CONSULTAR_ID_PRECIO.format(fecha=olddate))
+    for row in id_precio:
+        db.engine.execute(ACTUALIZAR_FECHA_PRECIO.format(fecha=fecha,id=row.precio_id))
+        db.engine.execute(ACTUALIZAR_FECHA_PRECIO_LISTA.format(producto=producto,fecha=fecha,id=row.precio_id,precio=precio))

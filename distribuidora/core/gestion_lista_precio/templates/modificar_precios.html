@@ -39,8 +39,8 @@
       <tr>
         <div class="form-group">
           <h5>Campos a modificar: </h5>
-          <td> {{ form1.cantidad(class="form-control form-control-md")}} </td>
-          <td> {{ form1.fecha_vigencia(class="form-control form-control-md", value="{{fecha}}") }}</td>
+          <td> {{ form1.cantidad(class="form-control form-control-md", value=precio )}} </td>
+          <td> {{ form1.fecha_vigencia(class="form-control form-control-md", value="2020-01-01T00:00") }}</td>
         </div>
       </tr>
       {% endfor %}
