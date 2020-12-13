@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from distribuidora.settings import DB_PATH, DB_SECRET_KEY
+from distribuidora.settings import DB_PATH, DB_SECRET_KEY, FILE_PATH
 
 
 
