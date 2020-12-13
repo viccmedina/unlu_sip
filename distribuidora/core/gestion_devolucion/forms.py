@@ -14,5 +14,5 @@ class NuevaDevolucion(FlaskForm):
     submit = SubmitField(u'Agregar')
 
 class ActualizarEstadoDevolucion(FlaskForm):
-    estado = SelectField(u'Nuevo Estado', choices=[])
+    estado = SelectField(u'Nuevo Estado', choices=['ACEPTADA', 'RECHAZADA','CONCRETADA'])
     submit = SubmitField('Actualizar')

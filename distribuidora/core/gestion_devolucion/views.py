@@ -21,7 +21,6 @@ def index():
 		print('PEDIDOS ----- {}'.format(pedidos_id))
 		print('DEVOLUCIONES ------ {}'.format(devoluciones))
 
-
 		return render_template('devolucion.html',\
 			is_authenticated=current_user.is_authenticated,\
 			datos=current_user.get_mis_datos(),\
@@ -32,19 +31,14 @@ def index():
 			devoluciones=devoluciones)
 	abort(403)
 
-
-
 @devolucion.route('/devolucion/detallePedido', methods=['POST','GET'])
 @login_required
 def ver_detalle():
 	if current_user.has_role('Cliente'):
 		pedido_id = request.args.get('pedido')
-		print(pedido_id)
-				
 		form = NuevaDevolucion()
 		form.motivo.choices = [(descripcion.descripcion) for descripcion in MotivoDevolucion.query.all()]
 		print('MOTIVOSSSSSSS {}'.format(form.motivo.choices))
-		print('WWWWWWWWWWWWWWWWWWWWWWWWWWWW')
 		cantidad = request.args.get('cantidad', None)
 		print('Cantidad --- {}'.format(cantidad))
 		detalle_pedido = request.args.get('detalle_pedido', None)
@@ -72,8 +66,6 @@ def ver_detalle():
 			print(form.errors)
 
 		det_pedido = get_detalle_pedido(pedido_id)
-		print('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')
-		print(det_pedido)
 		return render_template('detalle_pedido_devolucion.html',form=form,\
 		datos=current_user.get_mis_datos(),\
 		is_authenticated=current_user.is_authenticated,\
@@ -89,10 +81,7 @@ def ver_detalle():
 @login_required
 def nueva_devolucion():
 	if current_user.has_role('Cliente'):
-		print("Volviooo aca")
-		
 		pedido_id = request.args.get('pedido')
-		print("pedido ----- : {}".format(pedido_id))
 		# Necesito verificar que el pedido no tenga una devolucion ya solicitada
 		if get_devolucion_by_pedido(pedido_id):
 			flash('Ya se generó una Devolución para este Pedido', 'warning')
@@ -114,34 +103,37 @@ def nueva_devolucion():
 @devolucion.route('/devolucion/cliente/confirmacion', methods=['POST','GET'])
 @login_required
 def confirmar_devolucion_cliente():
-	print('confirmacion de devolucion por parte del cliente')
-	devolucion_id = request.args.get('detalle')
-	result = check_producto_devolucion(devolucion_id)
-	print("devolucion_id ----- : {}".format(devolucion_id))
-	print("devolucion_id ----- : {}".format(result))
-	if len(result) > 0:
-		print(result)
-		devolucion_id = result[0]['devolucion_id']
-		update = update_estado_devolucion(devolucion_id, 'CPC')
-		if update:
-			# mandar a guardar esto en el historial de devolucion
-			insert_into_historial_devolucion(devolucion_id, 'CPC')
-			flash('Devolución enviada para ser procesada', 'success')
+	if current_user.has_role('Cliente'):
+		print('confirmacion de devolucion por parte del cliente')
+		devolucion_id = request.args.get('detalle')
+		result = check_producto_devolucion(devolucion_id)
+		print("devolucion_id ----- : {}".format(devolucion_id))
+		print("devolucion_id ----- : {}".format(result))
+		if len(result) > 0:
+			print(result)
+			devolucion_id = result[0]['devolucion_id']
+			update = update_estado_devolucion(devolucion_id, 'CPC')
+			if update:
+				# mandar a guardar esto en el historial de devolucion
+				insert_into_historial_devolucion(devolucion_id, 'CPC')
+				flash('Devolución enviada para ser procesada', 'success')
+			else:
+				flash('Algo salió mal, comuniquese con el operador', 'error')
 		else:
-			flash('Algo salió mal, comuniquese con el operador', 'error')
-	else:
-		flash('Para confirmar la devolución tiene que tener al menos un producto', 'error')
+			flash('Para confirmar la devolución tiene que tener al menos un producto', 'error')
 
-	return redirect(url_for('devoluciones.index'))
+		return redirect(url_for('devoluciones.index'))
+	abort(403)
 
 @devolucion.route('/devolucion/operador/listar', methods=['POST','GET'])
 @login_required
 def listar_devoluciones_operador():
 	if current_user.has_role('Operador'):
 		form = ActualizarEstadoDevolucion()
-		estados = get_all_estado_devolucion()
-		form.estado.choices = estados
+		form.estado.choices = ['RECHAZADA', 'ACEPTADA', 'CONCRETADA']
 		devoluciones = get_all_devoluciones_operador()
+		if not devoluciones:
+			devoluciones = None
 		return render_template('devoluciones_vista_operador.html',\
 			devoluciones=devoluciones,\
 			form=form,\
@@ -173,5 +165,41 @@ def listar_detalle_devoluciones_operador():
 @devolucion.route('/devolucion/operador/confirmacion', methods=['POST','GET'])
 @login_required
 def actualizar_estado_devolcion_operador():
-	pass
+	if current_user.has_role('Operador'):
+		form = ActualizarEstadoDevolucion()
+		estado = form.estado.data
+		print('ESTADO!!!')
+		print(estado)
+		if form.validate_on_submit():
+			estado_nuevo = form.estado.data
+			estado_anterior = request.args.get('estado_anterior')
+			devolucion = request.args.get('devolucion')
+			estado = get_devolucion_estado_by_descripcion(estado_nuevo)
+			# necesito pasar el id de la devolución + descripcion corta del nuevo estado
+			update = update_estado_devolucion(devolucion, estado[0]['descripcion_corta'])
+			print('UPDATE!!!!!: {}'.format(update))
+			# si pudo actualizar en tbl devolucion, agregamos al historial
+			if update:
+				insert_into_historial_devolucion(devolucion, estado[0]['descripcion_corta'])
+				flash('Estado actualizado', 'success')
+				body = 'La devolución #{} : fue - {}'.format(devolucion, estado_nuevo)
+				receptor = get_devolucion_pedido(devolucion)
+				print('RECEPTOR --- {}'.format(receptor))
+				data = {
+					"body": body,
+					"emisor": current_user.get_id(),
+					"receptor": receptor[0]['usuario_id']
+				}
+				resp = insert_nuevo_mensaje(data)
 
+				if resp:
+					flash('Mensaje enviado', 'success')
+				else:
+					flash('Algo salió mal, verifique los datos', 'warning')
+			else:
+				flash('No es posible actualizar el estado', 'error')
+		else:
+			flash('Ocurrió un erro en la carga de datos.', 'error')
+	
+		return redirect(url_for('devoluciones.listar_devoluciones_operador'))
+	abort(403)

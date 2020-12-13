@@ -14,7 +14,6 @@ def check(result):
     else:
         return False
 
-
 def insert_nuevo_mensaje(data):
 	result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(\
         recipient_id=data['receptor'], \

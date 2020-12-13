@@ -22,7 +22,9 @@ INNER JOIN unidad_medida um ON um.unidad_medida_id = pe.unidad_medida_id
 WHERE pe.producto_envase_id = {producto}
 """
 
-SELECT_ESTADO_DEVOLUCION_BY_DESCRIPCION = """ SELECT * FROM estado_devolucion WHERE descripcion_corta='{descripcion_corta}'"""
+SELECT_ESTADO_DEVOLUCION_BY_DESCRIPCION_CORTA = """ SELECT * FROM estado_devolucion WHERE descripcion_corta='{descripcion_corta}'"""
+
+SELECT_ESTADO_DEVOLUCION_BY_DESCRIPCION = """ SELECT * FROM estado_devolucion WHERE descripcion='{descripcion}'"""
 
 INSERT_INTO_DEVOLUCION = """ INSERT INTO devolucion (pedido_id, estado_devolucion_id, descripcion) VALUES 
 	('{pedido_id}', '{estado_devolucion_id}', 'esto es una descripcion') """
@@ -34,6 +36,8 @@ SELECT_DEVOLUCION_BY_PEDIDO = """ SELECT * FROM devolucion WHERE pedido_id='{ped
 
 SELECT_DEVOLUCION_BY_DETALLE_PEDIDO = """ SELECT * FROM detalle_devolucion WHERE detalle_pedido_id='{detalle_pedido}' """
 
+SELECT_DEVOLUCION = """ SELECT * FROM devolucion AS d INNER JOIN pedido AS p ON p.pedido_id = d.pedido_id WHERE devolucion_id = '{devolucion_id}' """
+
 INSERT_INTO_DETALLE_DEVOLUCION = """ INSERT INTO detalle_devolucion (devolucion_id, motivo_id, detalle_pedido_id, cantidad) VALUES('{devolucion_id}', '{motivo_id}', '{detalle_pedido_id}', '{cantidad}')"""
 
 SELECT_ALL_MOTIVOS_BY_DESCRIPCION = """ SELECT * FROM motivo_devolucion WHERE descripcion = '{descripcion}' """
@@ -42,13 +46,15 @@ SELECT_ALL_ESTADO_DEVOLUCION_BY_DESCRIPCION_CORTA = """ SELECT * FROM estado_dev
 
 SELECT_DEVOLUCION_CON_ESTADO = """ SELECT * FROM devolucion AS d INNER JOIN estado_devolucion AS ed ON d.estado_devolucion_id=ed.estado_devolucion_id WHERE d.devolucion_id='{devolucion_id}'"""
 
+SELECT_ESTADO_DEVOLUCION_BY_ID = """ SELECT * FROM estado_devolucion WHERE estado_devolucion_id = '{estado_id}' """
+
 UPDATE_ESTADO_DEVOLUCION = """ UPDATE devolucion SET estado_devolucion_id='{estado}' WHERE devolucion_id = '{devolucion_id}' """
 
 INSERT_INTO_HISTORIAL_DEVOLUCION = """ INSERT INTO historial_devolucion_estado (devolucion_id, estado_devolucion_id) VALUES('{devolucion_id}', '{estado_id}') """
 
 SELECT_DETALLE_DEVOLUCION = """ SELECT * FROM detalle_devolucion WHERE devolucion_id='{devolucion_id}' """
 
-SELECT_DEVOLUCION_VISTA_OPERADOR = """ SELECT * FROM devolucion AS d INNER JOIN estado_devolucion AS ed ON ed.estado_devolucion_id=d.estado_devolucion_id WHERE ed.descripcion_corta = 'CPC'"""
+SELECT_DEVOLUCION_VISTA_OPERADOR = """ SELECT * FROM devolucion AS d INNER JOIN estado_devolucion AS ed ON ed.estado_devolucion_id=d.estado_devolucion_id WHERE ed.descripcion_corta <> 'ECC'"""
 
 SELECT_ALL_ESTADO_DEVOLUCION = """ SELECT * FROM estado_devolucion """
 

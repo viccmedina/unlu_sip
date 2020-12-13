@@ -56,7 +56,7 @@ def detalle_pedidos(pedidos_id):
     return resp
 
 def generar_nueva_devolucion(pedido_id):
-    estado_devolucion = db.engine.execute(SELECT_ESTADO_DEVOLUCION_BY_DESCRIPCION.format(descripcion_corta='ECC'))
+    estado_devolucion = db.engine.execute(SELECT_ESTADO_DEVOLUCION_BY_DESCRIPCION_CORTA.format(descripcion_corta='ECC'))
     
     estado_devolucion = parser_result(estado_devolucion)
     print('ESTADO DEVOLUCION ---- {}'.format(estado_devolucion))
@@ -72,6 +72,11 @@ def get_all_motivo_by_descripcion(motivo):
     motivos = db.engine.execute(SELECT_ALL_MOTIVOS_BY_DESCRIPCION.format(descripcion=motivo))
     return parser_result(motivos)
 
+def get_devolucion_pedido(devolucion_id):
+    print('DEVOLUCION POR PEDIDO PARA OPTENER USUARIO_ID')
+    devolucion = db.engine.execute(SELECT_DEVOLUCION.format(devolucion_id=devolucion_id))
+    datos = parser_result(devolucion)
+    return datos
 
 def get_devolucion_by_pedido(pedido_id):
     devolucion = db.engine.execute(SELECT_DEVOLUCION_BY_PEDIDO.format(pedido_id=pedido_id))
@@ -97,25 +102,32 @@ def agregar_producto_a_devolucion(motivo, cantidad, devolucion_id, detalle_pedid
 def get_all_estado_devolucion_by_descripcion_corta(descripcion_estado_devolucion):
     result = db.engine.execute(SELECT_ALL_ESTADO_DEVOLUCION_BY_DESCRIPCION_CORTA.format(\
         descripcion_corta=descripcion_estado_devolucion))
+
     result = parser_result(result)
     return result
 
+
 def update_estado_devolucion(devolucion_id, descripcion_estado_devolucion):
     print('update estado descripcion')
-    estado_devolucion = db.engine.execute(SELECT_DEVOLUCION_CON_ESTADO.format(devolucion_id=devolucion_id))
+    estado_devolucion = db.engine.execute(SELECT_DEVOLUCION_CON_ESTADO.format(\
+        devolucion_id=devolucion_id))
     estado_devolucion = parser_result(estado_devolucion)
     print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
     print('devolucion_id : {}'.format(devolucion_id))
     print(estado_devolucion)
     print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
     update = False
-    if estado_devolucion[0]['descripcion_corta'] == 'ECC' and descripcion_estado_devolucion == 'CPC':
+    actual = estado_devolucion[0]['descripcion_corta']
+    if  actual == 'ECC' and descripcion_estado_devolucion == 'CPC':
         #actualizamos
         update = True
-    elif estado_devolucion[0]['descripcion_corta'] == 'CPC' and descripcion_estado_devolucion == 'R':
+    elif actual == 'CPC' and descripcion_estado_devolucion == 'R':
         #actualizamos
         update = True
-    elif estado_devolucion[0]['descripcion_corta'] == 'CPC' and descripcion_estado_devolucion == 'A':
+    elif actual == 'CPC' and descripcion_estado_devolucion == 'A':
+        #actualizamos
+        update = True
+    elif actual == 'A' and descripcion_estado_devolucion == 'C':
         #actualizamos
         update = True
 
@@ -127,11 +139,13 @@ def update_estado_devolucion(devolucion_id, descripcion_estado_devolucion):
         print(estado)
         result = db.engine.execute(UPDATE_ESTADO_DEVOLUCION.format(devolucion_id=devolucion_id,\
             estado=estado[0]['estado_devolucion_id']))
+        print('resultado del update: {}'.format(check(result)))
 
     return update
 
 def insert_into_historial_devolucion(devolucion_id, estado):
     print('AGREGAMOS EN EL HISTORIA DE DEVOLUCION')
+    print('ESTADOOOO {}'.format(estado))
     estado_id = get_all_estado_devolucion_by_descripcion_corta(estado)
     print('ESTADOS')
     print(estado_id)
@@ -161,4 +175,10 @@ def get_all_estado_devolucion():
     estados = parser_result_select_field(result)
     print('estados: --------------------------- {}'.format(estados))
     return estados
-    
+
+
+def get_devolucion_estado_by_descripcion(descripcion):
+    result = db.engine.execute(SELECT_ESTADO_DEVOLUCION_BY_DESCRIPCION.format(descripcion=descripcion))
+    estados = parser_result(result)
+    print('estados: |||||||||||||||||||| {}'.format(estados))
+    return estados

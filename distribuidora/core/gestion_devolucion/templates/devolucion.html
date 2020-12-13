@@ -27,20 +27,23 @@
 
         			<div>
 	        			<h2>Devoluciones Activas</h2>
-
-			          	{% for d in devoluciones %}
-			            	<div class="col mb-9" >
-			               		<div class="card h-100" >
-			                 		<img src="static/img/pickup.svg" class="card-img-top" alt="Devolución">
-			                  		<div class="card-body">
-										<h5 class="card-title"> {{ d }} </h5>
-										<span style="float:center">
-											<a href="{{ url_for('devoluciones.ver_detalle', pedido=d.pedido_id) }}" class="btn btn-primary">Ver Detalle</a>
-			 							</span>
-			                  		</div>
-			              		</div>
-			            	</div>
-			          	{% endfor %}
+	        			{% if devoluciones is not none%}
+				          	{% for d in devoluciones %}
+				            	<div class="col mb-9" >
+				               		<div class="card h-100" >
+				                 		<img src="static/img/pickup.svg" class="card-img-top" alt="Devolución">
+				                  		<div class="card-body">
+											<h5 class="card-title"> {{ d }} </h5>
+											<span style="float:center">
+												<a href="{{ url_for('devoluciones.ver_detalle', pedido=d.pedido_id) }}" class="btn btn-primary">Ver Detalle</a>
+				 							</span>
+				                  		</div>
+				              		</div>
+				            	</div>
+				          	{% endfor %}
+			          	{% else %}
+			          		<h2>No hay devoluciones para procesar</h2>
+			          	{% endif %}
         			</div>
 
 				</div>
