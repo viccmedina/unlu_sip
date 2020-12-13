@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = DB_SECRET_KEY
 app.config['UPLOAD_EXTENSIONS'] = ['csv']
-app.config['UPLOAD_FOLDER'] = '/opt/unlu_sip/files/'
+app.config['UPLOAD_FOLDER'] = FILE_PATH
 
 db = SQLAlchemy(app)
 
