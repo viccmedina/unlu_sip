@@ -39,11 +39,15 @@ def get_consulta_stock():
     return list
 
 
-def get_consulta_lista_precios(fecha_desde, fecha_hasta):
+def get_consulta_lista_precios(id=id):
+    list = []
     all_productos = db.engine.execute(CONSULTAR_PRODUCTOS)
     for row in all_productos:
-        datos = db.engine.execute(CONSULTA_LISTA_PRECIOS.format(fecha_desde=fecha_desde,\
-        fecha_hasta=fecha_hasta,productoEnvase=row.producto_envase_id))
+        precios = db.engine.execute(CONSULTA_LISTA_PRECIOS.format(id=id,productoEnvase=row.producto_envase_id))
+        for row in precios:
+            list.append(row)
+
+    return list
 
 
 def get_consulta_productos(fecha_desde, fecha_hasta):
@@ -54,3 +58,7 @@ def get_consulta_productos(fecha_desde, fecha_hasta):
         for row in datos:
             list.append(row)
     return list
+
+def constultar_id_precio(id):
+    fechas = db.engine.execute(CONSULTA_FECHAS_PRECIOS_FOR_PRECIOS.format(id=id))
+    return fechas

@@ -51,7 +51,14 @@ WHERE pe.producto_envase_id = {productoEnvase}
 
 
 CONSULTA_LISTA_PRECIOS = """
-
+SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida,
+e.descripcion as envase,lpp.fecha_fin as fin,lpp.precio as precio
+FROM producto p INNER JOIN producto_envase pe on p.producto_id = pe.producto_envase_id
+INNER JOIN marca m ON m.marca_id = p.marca_id
+INNER JOIN unidad_medida um ON um.unidad_medida_id = pe.unidad_medida_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+INNER JOIN envase e ON e.envase_id = pe.envase_id
+WHERE lpp.producto_envase_id = {productoEnvase} and lpp.precio_id = {id}
 """
 
 
@@ -74,3 +81,8 @@ CONSULTAR_PRODUCTOS_ALL = """
  INNER JOIN detalle_pedido dped
  WHERE pe.producto_envase_id = {productoEnvase} AND dped.ts_created >= '{desde}' AND dped.ts_created <= '{hasta}'
  """
+
+
+CONSULTA_FECHAS_PRECIOS_FOR_PRECIOS = """
+	SELECT lpp.fecha_inicio as ini, lpp.fecha_fin as fin FROM lista_precio_producto lpp WHERE lpp.precio_id = {id}
+"""

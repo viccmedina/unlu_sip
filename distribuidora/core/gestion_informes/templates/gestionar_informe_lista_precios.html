@@ -10,16 +10,12 @@
 
 					      <div class="card-body">
 					        <h3 class="card-title">Informe de Lista de Precios</h3>
-							{% include "flash_errors.html" %}
+									{% include "flash_errors.html" %}
 				            <form  method="POST">
 				                {{ form.hidden_tag() }}
 				                <div class="form-group">
-				                  {{ form.fecha_desde.label(class="form-control-label") }}
-				                  {{ form.fecha_desde(class="form-control form-control-md") }}
-				                </div>
-				                <div class="form-group">
-				                  {{ form.fecha_hasta.label(class="form-control-label") }}
-				                  {{ form.fecha_hasta(class="form-control form-control-md") }}
+				                  {{ form.id_precio.label(class="form-control-label") }}
+				                  {{ form.id_precio(class="form-control form-control-md") }}
 				                </div>
 				                <div class="form-group">
 									<span style="float:right">

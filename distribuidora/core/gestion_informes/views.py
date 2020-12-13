@@ -5,6 +5,7 @@ from distribuidora.core.gestion_informes.helper import *
 from distribuidora.models.gestion_usuario import Usuario
 from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora import db
+from distribuidora.models.precio import Lista_precio
 from flask_weasyprint import HTML, render_pdf, CSS
 import json
 
@@ -97,17 +98,14 @@ def consultar_stock():
 def consultar_listado_precios():
     if current_user.has_role('Operador'):
         resultado = None
-        form = ConsultarMovimientos()
+        form = ConsultarPrecios()
+        form.id_precio.choices = [(precio_id.precio_id) for precio_id in Lista_precio.query.all()]
         if form.validate_on_submit():
-            fecha_desde = form.fecha_desde.data
-            fecha_hasta = form.fecha_hasta.data
-            if fecha_hasta is None:
-                fecha_hasta = datetime.datetime.now()
-            if fecha_hasta < fecha_desde :
-                flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
-            else:
-                resultado = get_consulta_lista_precios(fecha_desde,fecha_hasta)
-
+            #resultado = get_consulta_lista_precios(fecha_desde,fecha_hasta)
+            id = form.id_precio.data
+            fechas = constultar_id_precio(id)
+            for row in fechas:
+                return redirect(url_for('informe.consultar_listado_precio',ini=row.ini,fin=row.fin,id=id))
         return render_template('gestionar_informe_lista_precios.html', \
         datos=current_user.get_mis_datos(),	\
         is_authenticated=current_user.is_authenticated, rol='Operador', form=form, \
@@ -155,4 +153,34 @@ def descargar_consulta():
         resultado = json.loads(resultado.replace("'", '"'))
         html = render_template('tabla_cuentas_corriente.html', resultado=resultado)
         return render_pdf(HTML(string=html))
+    abort(403)
+
+
+@informe.route('/informe/lista_precio', methods=['POST', 'GET'])
+@login_required
+def consultar_listado_precio():
+    if current_user.has_role('Operador'):
+        resultado = None
+        ini = request.args.get('ini')
+        fin = request.args.get('fin')
+        id = request.args.get('id')
+        form1 = ConsultarPrecios2()
+        form1.id_precio.choices = [(precio_id.precio_id) for precio_id in Lista_precio.query.all()]
+        form1.fecha_desde.data= ini
+        form1.fecha_hasta.data = fin
+        if form1.validate_on_submit():
+            resultado = get_consulta_lista_precios(id=id)
+            print("resutado {}".format(resultado))
+
+            return render_template('gestionar_informe_lista_precio.html', \
+            datos=current_user.get_mis_datos(),	\
+            is_authenticated=current_user.is_authenticated, rol='Operador', form1=form1, \
+            resultado=resultado, site= 'Gestión de Informes - Consulta',\
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),ini=ini,fin=fin)
+
+        return render_template('gestionar_informe_lista_precio.html', \
+        datos=current_user.get_mis_datos(),	\
+        is_authenticated=current_user.is_authenticated, rol='Operador', form1=form1, \
+        resultado=resultado, site= 'Gestión de Informes - Consulta',\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),ini=ini,fin=fin)
     abort(403)
