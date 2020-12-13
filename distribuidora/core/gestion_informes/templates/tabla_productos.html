@@ -17,9 +17,19 @@
       <tr>
         <td>{{r['producto']}}</td>
         <td>{{r['marca']}}</td>
-        <td>{{r['umedida']}}</td>
-        <td>{{r['cant']}}</td>
-        <td>{{r['precio']}}</td>
+        <td>{{r['umedida']}} {{r['envase']}}</td>
+          {% if r['cantidad'] == None %}
+            <td>{{0}}</td>
+          {% else  %}
+            <td>{{     r['cantidad']}}</td>
+          {% endif  %}
+
+          {% if r['precio'] == None %}
+            <td>{{0}}</td>
+          {% else  %}
+            <td>$ {{r['precio']}}</td>
+          {% endif  %}
+
       </tr>
       {% endfor %}
 

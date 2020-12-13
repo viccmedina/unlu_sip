@@ -16,5 +16,10 @@ class ConsultarMovimientos(FlaskForm):
     format='%Y-%m-%dT%H:%M'
     fecha_desde = DateTimeLocalField('Desde', format=format , validators=[DataRequired()])
     fecha_hasta = DateTimeLocalField('Hasta', format=format)
-    submit = SubmitField('Consultar')
+    submit = SubmitField('Emitir Informe')
+    cancelar = SubmitField('Cancelar')
+
+class FormStock(FlaskForm):
+
+    submit = SubmitField('Emitir Informe')
     cancelar = SubmitField('Cancelar')

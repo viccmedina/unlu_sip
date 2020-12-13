@@ -80,16 +80,9 @@ def consultar_devoluciones():
 def consultar_stock():
     if current_user.has_role('Operador'):
         resultado = None
-        form = ConsultarMovimientos()
+        form = FormStock()
         if form.validate_on_submit():
-            fecha_desde = form.fecha_desde.data
-            fecha_hasta = form.fecha_hasta.data
-            if fecha_hasta is None:
-                fecha_hasta = datetime.datetime.now()
-            if fecha_hasta < fecha_desde :
-                flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
-            else:
-                resultado = get_consulta_stock(fecha_desde,fecha_hasta)
+            resultado = get_consulta_stock()
 
         return render_template('gestionar_informe_stock.html', \
         datos=current_user.get_mis_datos(),	\
@@ -140,7 +133,10 @@ def consultar_productos():
                 flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
             else:
                 resultado = get_consulta_productos(fecha_desde,fecha_hasta)
-
+                if resultado == []:
+                    print("REsultado none")
+                    resultado = None
+                    flash("No se han encontrado datos para la fecha ingresada",'warning')
         return render_template('gestionar_informe_productos.html', \
         datos=current_user.get_mis_datos(),	\
         is_authenticated=current_user.is_authenticated, rol='Operador', form=form, \

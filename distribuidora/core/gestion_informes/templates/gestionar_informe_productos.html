@@ -10,7 +10,7 @@
 
 					      <div class="card-body">
 					        <h3 class="card-title">Informe de Productos</h3>
-							{% include "flash_errors.html" %}
+										{% include "flash_errors.html" %}
 				            <form  method="POST">
 				                {{ form.hidden_tag() }}
 				                <div class="form-group">
@@ -30,6 +30,7 @@
 
 										<br><br><br>
 										{% if resultado is not none %}
+
 											{% if resultado is not none %}
 												<div class="form-group">
 													{% include "tabla_productos.html" %}
@@ -41,7 +42,8 @@
 												<h3 align="center">RESULTADO</h3>
 														<h5 a>No se han encontrado movimientos para este cliente</h5>
 											{% endif %}
-										{% endif %}	
+
+										{% endif %}
 				          </div>
 				     	</div>
 			     	</div>

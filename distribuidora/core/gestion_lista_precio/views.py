@@ -123,6 +123,8 @@ def modificar():
 @lista_precio.route('/eliminar/precios', methods=['GET','POST'])
 @login_required
 def eliminar():
+
+
     if current_user.has_role('Operador'):
         return render_template('form_eliminar_lista_precios.html', \
         datos=current_user.get_mis_datos(), \
@@ -226,8 +228,7 @@ def modificar_precios():
                     flash("El precio y la fecha se han modificado con exito",'warning')
                     return redirect(url_for('lista_precio.modificar'))
 
-    #modific_producto(pro,mar,umed,env,tp,pro1,mar1,umed1)
-    #flash("Producto Modificado",'warning')
+
 
     return render_template('form_modificar_lista_precio.html', \
     datos=current_user.get_mis_datos(), \
