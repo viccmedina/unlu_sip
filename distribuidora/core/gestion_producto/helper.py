@@ -1,5 +1,11 @@
 from distribuidora import db
 from distribuidora.core.gestion_producto.query import *
+from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
+    Producto, ProductoEnvase
+from distribuidora.models.precio import Lista_precio_producto
+import csv
+from datetime import datetime
+
 #from distribuidora.core.gestion_stock.query import CONSULTA_STOCK1
 
 def parser_result(result):
@@ -238,3 +244,73 @@ def modific_producto(pro,mar,um,env,tProd,pro1,mar1,um1):
 
     db.engine.execute(UPDATEPRODUCTOENVASE.format(e=e,um=um,pe_id=pe_id))
     db.engine.execute(UPDATEPRODUCTO.format(pro=pro,m=m,tp=tp,p=p))
+
+
+
+def importar_productos_from_file(path):
+    print('IMPORTACION DE PRODUCTOS DESDE ARCHIVO POR PARTE DEL USUARIO OPERADOR')
+    print(path)
+    # hardcodeamos unas cuantas cosas
+    productos_a_guardar = list()
+    lista_precio = '1'
+    f_desde = datetime.strptime('15/06/2020', "%d/%m/%Y")
+    f_hasta = datetime.strptime('15/06/2021', "%d/%m/%Y")
+
+    # recorremos el archivo ingresado
+    with open(path) as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            # recupero los datos
+            marca = Marca.query.filter_by(descripcion=row['MARCA']).first()
+            unidad_medida = UnidadMedida.query.filter_by(descripcion=row['UNIDAD']).first()
+            envase = Envase.query.filter_by(descripcion=row['ENVASE']).first()
+            tipo_producto = TipoProducto.query.filter_by(descripcion=row['TIPO_PRODUCTO']).first()
+            producto = Producto.query.filter_by(descripcion=row['PRODUCTO']).first()
+
+            # si NO ingresan algun dato, corto el flujo y salgo
+            if marca is None or unidad_medida is None or envase is None or tipo_producto is None or producto is None:
+                return 'Hay datos que no existen en el Sistema.'
+            precio = row['PRECIO'].replace(',', '.')
+            precio = float(precio)
+
+            # si el precio no es valido, corto el flujo y salgo
+            if precio <= 0:
+                return 'El valor del precio es incorrecto'
+            
+            # primero verifico si existe el producto
+            pe = ProductoEnvase.query.filter_by(producto_id=producto.get_id(),\
+                envase_id=envase.get_id(),\
+                unidad_medida_id=unidad_medida.get_id()).first()
+
+            # si no existe, lo creo
+            if pe is None:
+                pe = ProductoEnvase(producto_id=producto.get_id(),\
+                    envase_id=envase.get_id(),\
+                    unidad_medida_id=unidad_medida.get_id(),\
+                    stock_real=row['CANTIDAD'])
+                db.session.add(pe)
+                db.session.commit()
+            else:
+                # si existe, actualizo su cantidad
+                pe.stock_real = row['CANTIDAD']
+                db.session.commit()
+
+            pe = ProductoEnvase.query.filter_by(envase_id=envase.get_id(),\
+                unidad_medida_id=unidad_medida.get_id(),\
+                producto_id=producto.get_id()).first()
+            
+            # lo mismo para el precio, si no existe lo creo, caso contrario actualizo
+            lista = Lista_precio_producto.query.filter_by(producto_envase_id=pe.get_id()).first()
+            if lista is None:
+                lista = Lista_precio_producto(producto_envase_id=pe.get_id(),\
+                    precio_id=lista_precio,\
+                    precio=row['PRECIO'],\
+                    fecha_inicio=f_desde,\
+                    fecha_fin=f_hasta)
+                db.session.add(lista)
+                db.session.commit()
+            else:
+                lista.precio =row['PRECIO']
+                db.session.commit()
+
+    return "Carga Exitosa"

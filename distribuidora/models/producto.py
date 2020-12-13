@@ -19,6 +19,9 @@ class UnidadMedida(db.Model):
     def __repr__(self):
         return self.descripcion
 
+    def get_id(self):
+        return self.unidad_medida_id
+
 
 class Envase(db.Model):
     """
@@ -41,6 +44,9 @@ class Envase(db.Model):
     def __repr__(self):
         return '{descripcion}'.format(descripcion=self.descripcion)
 
+    def get_id(self):
+        return self.envase_id
+
 
 
 class ProductoEnvase(db.Model):
@@ -57,7 +63,7 @@ class ProductoEnvase(db.Model):
     stock_real = db.Column(db.Integer, nullable=False)
     ts_created = db.Column(db.DateTime, server_default=db.func.now())
 
-    def __init__(self, producto_id, envase_id, unidad_medida_id,stock_real):
+    def __init__(self, producto_id, envase_id, unidad_medida_id, stock_real):
         self.producto_id = producto_id
         self.stock_real = stock_real
         self.envase_id = envase_id
@@ -65,6 +71,9 @@ class ProductoEnvase(db.Model):
 
     def __repr__(self):
         return str(self.producto_envase_id)
+
+    def get_id(self):
+        return self.producto_envase_id
 
 
 class Marca(db.Model):
@@ -95,6 +104,8 @@ class Marca(db.Model):
         """
         return self.descripcion
 
+    def get_id(self):
+        return self.marca_id
 
 class TipoProducto(db.Model):
     """
@@ -125,6 +136,9 @@ class TipoProducto(db.Model):
         Nos devolverá una representación del Modelo
         """
         return self.descripcion
+
+    def get_id(self):
+        return self.tipo_producto_id
 
 
 class Producto(db.Model):
@@ -168,6 +182,8 @@ class Producto(db.Model):
         """
         return self.descripcion
 
+    def get_id(self):
+        return self.producto_id
 
     def getProducto(self):
         return self.descripcion

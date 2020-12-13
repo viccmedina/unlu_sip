@@ -7,10 +7,12 @@ from distribuidora.core.gestion_pedido.helper import get_cantidad_estados_pedido
 from distribuidora.core.gestion_producto.helper import *
 from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envase, TipoProducto, \
-UnidadMedida, TipoProducto
+    UnidadMedida, TipoProducto
 from distribuidora.models.precio import Lista_precio_producto
+from werkzeug.utils import secure_filename
+from distribuidora import db, app
+import os
 
-from distribuidora import db
 
 producto = Blueprint('producto', __name__, template_folder='templates')
 
@@ -220,18 +222,37 @@ def exportar():
         rol='operador')
     abort(403)
 
-@producto.route('/importar/producto', methods=['GET'])
+@producto.route('/producto/importar', methods=['POST', 'GET'])
 @login_required
-def importar():
+def importar_productos():
     if current_user.has_role('Operador'):
-        form=ImportarProducto()
+        print('DIRECTORIO ---- {}'.format(app.config['UPLOAD_FOLDER']))
+        print('EXTENSIONES PERMITIDAS ---- {}'.format(app.config['UPLOAD_EXTENSIONS']))
+        if 'file' not in request.files:
+            pass
+        else:
+            file = request.files['file']
+            filename = secure_filename(file.filename)
+            print(filename)
+            extension = filename.split('.')
+            print('EXTENSION!!')
+            print(extension[1])
+            if extension[1] not in app.config['UPLOAD_EXTENSIONS']:
+                flash('La extensión del archivo no es la correcta. Se aceptan: {}'.format(app.config['UPLOAD_EXTENSIONS']), 'error')
+            else:
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                path = app.config['UPLOAD_FOLDER'] + filename
+                print('PATH: {}'.format(path))
+                result = importar_productos_from_file(path)
+                flash(result, 'warning')
+
+
         return render_template('importar_producto.html', \
             datos=current_user.get_mis_datos(), \
             sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
             is_authenticated=current_user.is_authenticated, \
             rol='operador', \
-            site='Importar Producto', \
-            form=form)
+            site='Importar Producto')
     abort(403)
 
 

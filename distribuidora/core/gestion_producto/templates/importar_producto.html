@@ -1,22 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% include "acordeon_perfil_usuario.html" %}
+    <p>Para cargar de forma masiva los productos es necesario un archivo con extensión CSV con los siguientes datos:</p>
+    {% include "flash_errors.html" %}
+    <table>
+      <caption>Estructura del archivo a modo de ejemplo</caption>
+      <thead>
+        <tr>
+          <th>PRODUCTO</th>
+          <th>UNIDAD</th>
+          <th>ENVASE</th>
+          <th>PRECIO</th>
+          <th>MARCA</th>
+          <th>TIPO_PRODUCTO</th>
+          <th>CANTIDAD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DETERGENTE</td>
+          <td>1L</td>
+          <td>BOTELLA</td>
+          <td>130,28</td>
+          <td>ALA</td>
+          <td>LIMPIEZA</td>
+          <td>12</td>
+        </tr>
+      </tbody>
+    </table>
+    <form method="post" action="{{ url_for('producto.importar_productos') }}" enctype="multipart/form-data">
+      <dl>
+        <p>
+          <input type="file" name="file" autocomplete="off" required>
+        </p>
+      </dl>
+      <p><input type="submit" value="Submit"></p>
+</form>
 
-          <ul>
-            {% for error in form.file.errors %}
-              <li style="color: red;">{{ error }}</li>
-            {% endfor %}
-          </ul>
-          <form>
-            <div class="form-row">
-              {{ form.hidden_tag() }}
-              <div class="col-9">
-                {{ form.file(class="form-control form-control-md") }}
-              </div>
-              <div class="col">
-                {{ form.submit(class="btn btn-primary mb-2") }}
-              </div>
-            </div>
-          </form>
 
 {% endblock%}
