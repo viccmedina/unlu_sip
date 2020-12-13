@@ -115,6 +115,7 @@ def consulta_producto_pUMedida(uMedida):
     resultado = db.engine.execute(PRODUCTOS_P_UMEDIDA.format(uMedida=uMedida))
     return parser_result(resultado)
 
+
 def consulta_producto_pProductoMarca(producto,marca):
     resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO_MARCA.format(producto=producto,\
     marca=marca))
@@ -122,6 +123,11 @@ def consulta_producto_pProductoMarca(producto,marca):
 
 
 
+def consulta_producto_pProductoMarcaUMedida(producto,marca,uMedida):
+
+    resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO_MARCA_UMEDIDA.format(producto=producto,\
+    marca=marca,uMedida=uMedida))
+    return parser_result(resultado)
 
 def consult_producto(producto,marca,uMedida):
     result = None
@@ -187,10 +193,8 @@ def consulta_producto_pMarcaUMedida(marca,uMedida):
     uMedida=uMedida))
     return parser_result(resultado)
 
-def consulta_producto_pProductoMarcaUMedida(producto,marca,uMedida):
-    resultado = db.engine.execute(PRODUCTOS_P_PRODUCTO_MARCA_UMEDIDA.format(producto=producto,\
-    marca=marca,uMedida=uMedida))
-    return parser_result(resultado)
+
+
 
 
 def insert_new_producto(producto,marca,uMedida,tProd,envase):
