@@ -259,6 +259,12 @@ def importar_productos_from_file(path):
     # recorremos el archivo ingresado
     with open(path) as csv_file:
         csv_reader = csv.DictReader(csv_file)
+        #headers = csv.reader(csv_file)
+        #headers = next(headers)
+        print('HEADERS_ {}'.format(csv_reader.fieldnames))
+        if csv_reader.fieldnames != ['PRODUCTO', 'UNIDAD', 'ENVASE', 'PRECIO', 'MARCA', 'TIPO_PRODUCTO', 'CANTIDAD']:
+            return 'El archivo no tiene los campos necesarios'
+            
         for row in csv_reader:
             # recupero los datos
             marca = Marca.query.filter_by(descripcion=row['MARCA']).first()
