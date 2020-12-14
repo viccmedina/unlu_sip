@@ -11,6 +11,9 @@ from distribuidora.models.producto import Producto, Marca, ProductoEnvase, Envas
 from distribuidora.models.precio import Lista_precio_producto
 from werkzeug.utils import secure_filename
 from distribuidora import db, app
+from flask_weasyprint import HTML, render_pdf, CSS
+import json
+
 import os
 
 
@@ -193,34 +196,34 @@ def eliminar():
     abort(403)
 
 
-@producto.route('/exportar/producto', methods=['GET'])
+
+
+
+@producto.route('/producto/exportar', methods=['POST', 'GET'])
 @login_required
 def exportar():
-    if current_user.has_role('Operador'):
-        id_producto = None
-        id_marca = None
-        id_um = None
-        products = None
-        form = ConsultarProducto()
-        form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
-        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
-        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
-        if form.validate_on_submit():
-            id_producto = form.producto.data
-            id_marca = form.marca.data
-            id_um = form.uMedida.data
-            if form.validate_on_submit():
-                if delete_producto(form.producto.data,form.marca.data,form.uMedida.data):
-                    flash("Se ha Eliminado el producto", 'warning')
-                else:
-                    flash("No se ha podido borrar el producto, ha surgido un error",'error')
+	if current_user.has_role('Operador'):
+		resultado = None
+		fecha_hasta = None
+		fecha_desde = None
+		form = ExportarProducto()
 
-        return render_template('exportar_producto.html', \
-        datos=current_user.get_mis_datos(), \
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
-        is_authenticated=current_user.is_authenticated, \
-        rol='operador')
-    abort(403)
+		if form.validate_on_submit():
+			resultado = consultaMovimientosExportar()
+			print('#'*80, flush=True)
+		else:
+			print(form.errors, flush=True)
+
+		return render_template('exportar_producto.html', \
+			datos=current_user.get_mis_datos(), \
+			is_authenticated=current_user.is_authenticated, \
+			resultado=resultado, \
+			form=form, \
+			site='Gestión de Productos',\
+			rol='operador',\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+	abort(403)
+
 
 
 @producto.route('/producto/importar', methods=['POST', 'GET'])
@@ -356,3 +359,23 @@ def modificar_producto():
     flash("Producto Modificado",'warning')
 
     return redirect(url_for('producto.modificar'))
+
+
+@producto.route('/producto/descargar/consulta')
+@login_required
+def descargar_consulta_producto():
+	if current_user.has_role('Operador'):
+		resultado = request.args.get("resultado", None)
+		print('RESULTADOO!')
+		print(resultado)
+		result = consultaMovimientosExportar()
+
+		html = render_template('tabla_consulta_producto_css.html',\
+			resultado=result)
+		"""
+		stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
+		return render_pdf(HTML(string=html), stylesheets=stylesheets)
+		"""
+
+		return render_pdf(HTML(string=html))
+	abort(403)

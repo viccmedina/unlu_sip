@@ -46,6 +46,11 @@ class ModifProducto(FlaskForm):
 	submit = SubmitField('Modificar')
 	cancelar = SubmitField('Cancelar')
 
+
+class ExportarProducto(FlaskForm):
+	submit = SubmitField('Exportar')
+	cancelar = SubmitField('Cancelar')
+
 class ImportarProducto(FlaskForm):
 	file = FileField('Archivo')
 	submit = SubmitField('Importar')

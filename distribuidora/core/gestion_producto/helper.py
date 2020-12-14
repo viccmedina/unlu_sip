@@ -246,6 +246,13 @@ def modific_producto(pro,mar,um,env,tProd,pro1,mar1,um1):
     db.engine.execute(UPDATEPRODUCTO.format(pro=pro,m=m,tp=tp,p=p))
 
 
+def consultaMovimientosExportar():
+    list = []
+    resultado = db.engine.execute(PRODUCTOS_TO_EXPORT)
+    return parser_result(resultado)
+
+
+
 
 def importar_productos_from_file(path):
     print('IMPORTACION DE PRODUCTOS DESDE ARCHIVO POR PARTE DEL USUARIO OPERADOR')

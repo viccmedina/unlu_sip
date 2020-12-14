@@ -5,7 +5,7 @@ LISTAR_PRODUCTOS = """ SELECT p.descripcion as descripcion ,
 	LEFT JOIN marca AS m ON m.marca_id=p.marca_id"""
 
 PRODUCTO_ENVASE_BY_PRODUCTO_ID = """ SELECT pe.producto_envase_id, p.descripcion AS producto_descripcion,
-    m.descripcion AS marca_descripcion, lpp.precio, e.descripcion AS envase_descripcion, 
+    m.descripcion AS marca_descripcion, lpp.precio, e.descripcion AS envase_descripcion,
     u.descripcion AS unidad_descripcion, pe.ts_created, tp.descripcion AS tp_descripcion
     FROM producto_envase AS pe
     INNER JOIN producto AS p ON p.producto_id = pe.producto_id
@@ -30,7 +30,18 @@ select pe.producto_envase_id as peid, p.descripcion as desc, m.descripcion as de
 lpp.precio as precio from producto_envase pe inner join producto p on p.producto_id= pe.producto_id
 inner join marca m on m.marca_id = p.marca_id inner join unidad_medida um on
 pe.unidad_medida_id = um.unidad_medida_id inner join lista_precio_producto lpp on
-pe.producto_envase_id = lpp.producto_envase_id ;
+pe.producto_envase_id = lpp.producto_envase_id
+"""
+
+
+PRODUCTOS_TO_EXPORT = """
+select p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida,
+lpp.precio as precio, e.descripcion as envase
+from producto_envase pe inner join producto p on p.producto_id= pe.producto_id
+inner join marca m on m.marca_id = p.marca_id
+inner join unidad_medida um on pe.unidad_medida_id = um.unidad_medida_id
+inner join lista_precio_producto lpp on pe.producto_envase_id = lpp.producto_envase_id
+inner join envase e on e.envase_id = pe.envase_id
 """
 
 CONSULTAR_ID_PRODUCTO = """
