@@ -3,12 +3,26 @@ CONSULTAR_USUARIO = """
 SELECT u.id FROM usuario u;
 """
 
+CONSULTAR_MONTO_CC ="""
+SELECT sum(saldo) as saldoCC FROM movimiento_cta_corriente mccc WHERE mccc.usuario = {user}
+"""
+
+CONSULTAR_MONTO_CP = """
+SELECT sum(monto) as saldoCP FROM comprobante_pago cpp INNER JOIN pedido ped on cpp.pedido = ped.pedido_id
+inner join usuario u on ped.usuario_id = u.id WHERE u.id = {user}
+"""
+
 CONSULTA_MOVIMIENTOS_CTA_CORRIENTE = """
-	SELECT cc.cuenta_corriente_id AS cta_corriente,p.nombre AS nombre,p.email AS email,((SELECT sum(saldo) FROM movimiento_cta_corriente mccc WHERE
-    mccc.usuario = {user}) - (SELECT sum(monto) FROM comprobante_pago cpp INNER JOIN pedido ped WHERE ped.usuario_id = {user})) AS saldo FROM
-    movimiento_cta_corriente mcc INNER JOIN cuenta_corriente cc ON mcc.cta_corriente = cc.cuenta_corriente_id INNER JOIN persona p
-    ON cc.persona_id = p.persona_id INNER JOIN pedido pe ON pe.usuario_id = mcc.usuario
-	WHERE mcc.usuario = {user}
+	SELECT cc.cuenta_corriente_id AS cliente,p.nombre AS nombre,p.email AS email, p.telefono_ppal AS telefono,cp.monto as monto ,mcc.saldo as saldo
+	FROM movimiento_cta_corriente mcc
+	INNER JOIN cuenta_corriente cc ON mcc.cta_corriente = cc.cuenta_corriente_id
+	INNER JOIN persona p ON cc.persona_id = p.persona_id
+	INNER JOIN pedido pe ON pe.usuario_id = mcc.usuario
+	INNER JOIN usuario u ON u.id = mcc.usuario
+	INNER JOIN usuario_rol ur ON ur.id = u.id
+	INNER JOIN rol r ON r.rol_id = ur.rol_id
+	INNER JOIN comprobante_pago cp ON cp.pedido = pe.pedido_id
+	WHERE mcc.usuario = {user} AND r.nombre != 'Gerencia' AND r.nombre != 'Operador'
 
 	"""
 
@@ -31,21 +45,23 @@ CONSULTA_MOVIMIENTOS_STOCK = """ SELECT pe.producto_envase_id AS peid ,p.descrip
 um.descripcion AS umedida, pe.stock_real - (select sum(dp.cantidad) from producto_envase pee
 INNER JOIN detalle_pedido dp ON pee.producto_envase_id=dp.producto_envase_id
 INNER JOIN pedido p ON p.pedido_id= dp.pedido_id WHERE pee.producto_envase_id = {productoEnvase}
-AND p.estado_pedido_id = 1) AS stock, lpp.precio AS precio FROM producto_envase pe INNER JOIN producto p
-ON p.producto_id=pe.producto_id
+AND p.estado_pedido_id = 1) AS stock, lpp.precio AS precio ,e.descripcion AS envase
+FROM producto_envase pe INNER JOIN producto p ON p.producto_id=pe.producto_id
 INNER JOIN marca m ON p.marca_id=m.marca_id
 INNER JOIN unidad_medida um ON um.unidad_medida_id=pe.unidad_medida_id
 INNER JOIN lista_precio_producto lpp ON pe.producto_envase_id = lpp.producto_envase_id
+INNER JOIN envase e ON e.envase_id = pe.envase_id
 WHERE pe.producto_envase_id = {productoEnvase}
  """
 
 CONSULTA_STOCK_REAL = """
  SELECT pe.producto_envase_id AS peid ,p.descripcion AS producto , m.descripcion as marca,
-um.descripcion AS umedida, pe.stock_real AS stock, lpp.precio AS precio FROM producto_envase pe INNER JOIN producto p
-ON p.producto_id=pe.producto_id
+um.descripcion AS umedida, pe.stock_real AS stock, lpp.precio AS precio ,e.descripcion as envase
+FROM producto_envase pe INNER JOIN producto p ON p.producto_id=pe.producto_id
 INNER JOIN marca m ON p.marca_id=m.marca_id
 INNER JOIN unidad_medida um ON um.unidad_medida_id=pe.unidad_medida_id
 INNER JOIN lista_precio_producto lpp ON pe.producto_envase_id = lpp.producto_envase_id
+INNER JOIN envase e ON e.envase_id = pe.envase_id
 WHERE pe.producto_envase_id = {productoEnvase}
 """
 

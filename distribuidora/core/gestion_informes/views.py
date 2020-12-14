@@ -41,7 +41,7 @@ def consultar_cta_corriente():
             if fecha_hasta < fecha_desde :
                 flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
             else:
-                resultado = get_consulta_movimientos(fecha_desde,fecha_hasta)
+                resultado = get_consulta_movimientos()
 
         return render_template('gestionar_informe_cta_corriente.html', \
             datos=current_user.get_mis_datos(),	\
@@ -144,16 +144,6 @@ def consultar_productos():
 
 
 
-@informe.route('/informe/descargar/consulta')
-@login_required
-def descargar_consulta():
-    if current_user.has_role('Operador'):
-        resultado = request.args.get('resultado')
-        print(resultado, flush=True)
-        resultado = json.loads(resultado.replace("'", '"'))
-        html = render_template('tabla_cuentas_corriente.html', resultado=resultado)
-        return render_pdf(HTML(string=html))
-    abort(403)
 
 
 @informe.route('/informe/lista_precio', methods=['POST', 'GET'])
@@ -183,4 +173,38 @@ def consultar_listado_precio():
         is_authenticated=current_user.is_authenticated, rol='Operador', form1=form1, \
         resultado=resultado, site= 'Gestión de Informes - Consulta',\
         sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),ini=ini,fin=fin)
+    abort(403)
+
+
+@informe.route('/informe/cta_corriente/descargar/consulta')
+@login_required
+def descargar_consulta_cta_corriente():
+    if current_user.has_role('Operador'):
+        movimientos = get_consulta_movimientos()
+        html = render_template('tabla_consulta_cta_corriente_css.html',resultado=movimientos)
+        """
+        stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
+        return render_pdf(HTML(string=html), stylesheets=stylesheets)
+        """
+
+        return render_pdf(HTML(string=html))
+    abort(403)
+
+
+
+@informe.route('/informe/stock/descargar/consulta')
+@login_required
+def descargar_consulta_stock():
+    if current_user.has_role('Operador'):
+        movimientos = get_consulta_stock()
+        for row in movimientos:
+            print("movimientos {}".format(row))
+
+        html = render_template('tabla_consultar_stock_css.html',resultado=movimientos)
+        """
+        stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
+        return render_pdf(HTML(string=html), stylesheets=stylesheets)
+        """
+
+        return render_pdf(HTML(string=html))
     abort(403)

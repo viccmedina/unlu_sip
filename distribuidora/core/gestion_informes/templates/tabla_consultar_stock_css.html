@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="{{url_for('static', filename='invoice.css')}}" media="print" rel="stylesheet">
+    <title>Consulta de Movimientos de Stock</title>
+    <meta name="description" content="Invoice demo sample">
+    <meta name="author" content="Kozea">
+  </head>
+
+  <body>
+    {% include "informacion_distribuidora.html"%}
+    <h2 align="center">Resultado de la Consulta</h2>
+    <p class="lead">Stock de los productos hasta "hoy": </p>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Producto</th>
+          <th scope="col">Marca</th>
+          <th scope="col">Unidad Medida</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in resultado %}
+        <tr>
+          <td>{{r['producto']}}</td>
+          <td>{{r['marca']}}</td>
+          <td>{{r['umedida']}}</td>
+          <td>{{r['precio']}}</td>
+          <td>{{r['stock']}}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </body>
+</html>

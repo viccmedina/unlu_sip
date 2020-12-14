@@ -9,14 +9,39 @@ def parser_result(result):
     return resp
 
 
-def get_consulta_movimientos(fecha_desde, fecha_hasta):
+def get_consulta_movimientos():
     list = []
-    all_usuarios = db.engine.execute(CONSULTAR_USUARIO)
-    for row in all_usuarios:
-        datos = db.engine.execute(CONSULTA_MOVIMIENTOS_CTA_CORRIENTE.format(fecha_desde=fecha_desde, fecha_hasta=fecha_hasta,user=row.id))
+    id = None
+    usuarios =  db.engine.execute(CONSULTAR_USUARIO)
+    for row in usuarios:
+        id = row.id
+        saldoCC = db.engine.execute(CONSULTAR_MONTO_CC.format(user=row.id))#lo que debe
+        saldoCP = db.engine.execute(CONSULTAR_MONTO_CP.format(user=row.id))# lo oque pago
+        print("usuario {}".format(row.id))
+        for row in saldoCC:
+            if(row.saldoCC != None):
+                scc= float(row.saldoCC)
+                print("scc {}".format(scc))
+            else:
+                scc = 0
+        for row in saldoCP:
+            if(row.saldoCP != None):
+                scp= float(row.saldoCP)
+                print("scc {}".format(scp))
+            else:
+                scp = 0
+
+        resta =   scc -   scp # resto deuda - pagos
+        print("resta {}".format(resta))
+        datos = db.engine.execute(CONSULTA_MOVIMIENTOS_CTA_CORRIENTE.format(user=id))# constultos el resto de los valores
         for row in datos:
-            list.append(row)
+            item = dict(row)
+            item['saldo'] =float(resta)# seteo valor de la resta al saldo
+            print("resta en dict {}".format(item['saldo']))
+            list.append(item)
+
     return list
+
 
 
 def get_consulta_devoluciones(fecha_desde, fecha_hasta):
@@ -36,7 +61,8 @@ def get_consulta_stock():
                     list.append(r)
             else:
                 list.append(row)
-    return list
+    
+    return parser_result(list)
 
 
 def get_consulta_lista_precios(id=id):

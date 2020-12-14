@@ -215,7 +215,7 @@ def descargar_consulta_stock():
 		print('hasta: {}'.format(hasta))
 		movimientos = get_movimientos_by_fechas(desde, hasta)
 		print('MOVIMIENTOS -------- {}'.format(movimientos))
-		
+
 		html = render_template('tabla_consulta_stock_css.html',\
 			desde=desde,\
 			hasta=hasta,\
@@ -224,6 +224,6 @@ def descargar_consulta_stock():
 		stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
 		return render_pdf(HTML(string=html), stylesheets=stylesheets)
 		"""
-		
+
 		return render_pdf(HTML(string=html))
 	abort(403)

@@ -1,3 +1,5 @@
+
+
 {% extends "base.html" %}
 {% block content %}
 	<div class="container-fluid">
@@ -21,19 +23,22 @@
 					            </form>
 
 										<br><br><br>
+
 										{% if resultado is not none %}
 
-											{% if resultado is not none %}
+											{% if resultado %}
 												<div class="form-group">
 													{% include "tabla_stock.html" %}
 													<div align="right">
-														<a align="left" class="btn btn-success" href="{{ url_for('informe.descargar_consulta', resultado=resultado) }}" role="button">Descargar</a>
+														<a align="right" class="btn btn-success " href="{{ url_for('informe.descargar_consulta_stock') }}" target="_blank" role="button">Descargar</a>
 													</div>
+													
 												</div>
 											{% else %}
 												<h3 align="center">RESULTADO</h3>
 												<h5 a>No se han encontrado movimientos para este cliente</h5>
 											{% endif %}
+
 									{% endif %}
 				          </div>
 				     	</div>
