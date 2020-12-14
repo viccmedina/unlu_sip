@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link href="{{url_for('static', filename='invoice.css')}}" media="print" rel="stylesheet">
-    <title>Informe de Movimientos de Stock</title>
+    <title>Informe de Lista de Precios</title>
     <meta name="description" content="Invoice demo sample">
     <meta name="author" content="Kozea">
   </head>
@@ -26,7 +26,7 @@
         <tr>
           <td>{{r['producto']}}</td>
           <td>{{r['marca']}}</td>
-          <td>{{r['umedida']}} {{r['envase']}}</td>
+          <td>{{r['envase']}} {{r['umedida']}} </td>
           <td>$ {{r['precio']}}</td>
         </tr>
         {% endfor %}

@@ -61,7 +61,7 @@ def get_consulta_stock():
                     list.append(r)
             else:
                 list.append(row)
-    
+
     return parser_result(list)
 
 

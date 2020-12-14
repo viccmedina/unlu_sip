@@ -24,6 +24,7 @@ CONSULTA_MOVIMIENTOS_CTA_CORRIENTE = """
 	INNER JOIN comprobante_pago cp ON cp.pedido = pe.pedido_id
 	WHERE mcc.usuario = {user} AND r.nombre != 'Gerencia' AND r.nombre != 'Operador'
 
+
 	"""
 
 
@@ -75,6 +76,8 @@ INNER JOIN unidad_medida um ON um.unidad_medida_id = pe.unidad_medida_id
 INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
 INNER JOIN envase e ON e.envase_id = pe.envase_id
 WHERE lpp.producto_envase_id = {productoEnvase} and lpp.precio_id = {id}
+GROUP BY pe.producto_envase_id
+ORDER BY (precio) DESC
 """
 
 

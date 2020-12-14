@@ -25,7 +25,7 @@ class ConsultarPrecios(FlaskForm):
     cancelar = SubmitField('Cancelar')
 
 class ConsultarPrecios2(FlaskForm):
-    id_precio =  SelectField(u'Precio ID', choices=[])
+    id_precio =  StringField(u'Precio ID')
     fecha_desde = StringField('Desde')
     fecha_hasta = StringField('Hasta')
     submit = SubmitField('Emitir Informe')

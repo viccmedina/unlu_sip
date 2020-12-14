@@ -26,6 +26,7 @@
 
 										<br><br><br>
 										{% if resultado is not none %}
+										{% if resultado  %}
 											<div class="form-group">
 												{% include "tabla_lista_precios.html" %}
 												<div align="right">
@@ -34,11 +35,9 @@
 											</div>
 										{% else %}
 											<h3 align="center">RESULTADO</h3>
-
 													<h5 a>No se han encontrado movimientos para este cliente</h5>
-
-
 										{% endif %}
+									{% endif %}
 				          </div>
 				     	</div>
 			     	</div>
