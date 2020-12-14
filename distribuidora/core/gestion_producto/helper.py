@@ -264,7 +264,7 @@ def importar_productos_from_file(path):
         print('HEADERS_ {}'.format(csv_reader.fieldnames))
         if csv_reader.fieldnames != ['PRODUCTO', 'UNIDAD', 'ENVASE', 'PRECIO', 'MARCA', 'TIPO_PRODUCTO', 'CANTIDAD']:
             return 'El archivo no tiene los campos necesarios'
-            
+
         for row in csv_reader:
             # recupero los datos
             marca = Marca.query.filter_by(descripcion=row['MARCA']).first()
@@ -282,7 +282,7 @@ def importar_productos_from_file(path):
             # si el precio no es valido, corto el flujo y salgo
             if precio <= 0:
                 return 'El valor del precio es incorrecto'
-            
+
             # primero verifico si existe el producto
             pe = ProductoEnvase.query.filter_by(producto_id=producto.get_id(),\
                 envase_id=envase.get_id(),\
@@ -304,7 +304,7 @@ def importar_productos_from_file(path):
             pe = ProductoEnvase.query.filter_by(envase_id=envase.get_id(),\
                 unidad_medida_id=unidad_medida.get_id(),\
                 producto_id=producto.get_id()).first()
-            
+
             # lo mismo para el precio, si no existe lo creo, caso contrario actualizo
             lista = Lista_precio_producto.query.filter_by(producto_envase_id=pe.get_id()).first()
             if lista is None:

@@ -55,7 +55,7 @@ def consultar_producto():
                 products = None
                 flash("No se ha podido localizar el producto, producto invalido",'error')
             else:
-                
+
                 return render_template('form_consulta_producto.html', \
                 datos=current_user.get_mis_datos(), \
                 is_authenticated=current_user.is_authenticated,\
@@ -221,6 +221,7 @@ def exportar():
         is_authenticated=current_user.is_authenticated, \
         rol='operador')
     abort(403)
+
 
 @producto.route('/producto/importar', methods=['POST', 'GET'])
 @login_required
