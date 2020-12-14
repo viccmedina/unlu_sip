@@ -34,7 +34,7 @@
 											<div class="form-group">
 												{% include "tabla_movimientos_stock.html" %}
 												<div align="right">
-													<a align="right" class="btn btn-success " href="{{ url_for('stock.descargar_consulta_stock', resultado=resultado) }}" target="_blank" role="button">Descargar</a>
+													<a align="right" class="btn btn-success " href="{{ url_for('stock.descargar_consulta_stock', fecha_desde=fecha_desde, fecha_hasta=fecha_hasta) }}" target="_blank" role="button">Descargar</a>
 												</div>
 											</div>
 										{% else %}

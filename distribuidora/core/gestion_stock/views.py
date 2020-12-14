@@ -4,8 +4,7 @@ from distribuidora.core.gestion_stock.forms import AgregarStock,ConsultarStock, 
 from distribuidora.models.stock import TipoMovimientoStock
 from distribuidora.models.producto import Producto,Marca, UnidadMedida
 from distribuidora.core.gestion_stock.constants import TITULO, ROL
-from distribuidora.core.gestion_stock.helper import get_id_producto, \
-	consulta_sotck, agregar_stock, salida, consultaMovimientosExportar
+from distribuidora.core.gestion_stock.helper import *
 from distribuidora.models.gestion_usuario import Usuario
 from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
 from distribuidora import db
@@ -154,6 +153,8 @@ def agregar():
 def exportar():
 	if current_user.has_role('Operador'):
 		resultado = None
+		fecha_hasta = None
+		fecha_desde = None
 		form = ExportarStock()
 
 		if form.validate_on_submit():
@@ -179,6 +180,8 @@ def exportar():
 			datos=current_user.get_mis_datos(), \
 			is_authenticated=current_user.is_authenticated, \
 			resultado=resultado, \
+			fecha_desde=fecha_desde,\
+			fecha_hasta=fecha_hasta,\
 			form=form, \
 			site=TITULO,\
 			rol='operador',\
@@ -199,12 +202,28 @@ def importar():
 	abort(403)
 
 
-@stock.route('/stock/descargar/consulta/<string:resultado>.pdf')
+@stock.route('/stock/descargar/consulta')
 @login_required
-def descargar_consulta_stock(resultado):
+def descargar_consulta_stock():
 	if current_user.has_role('Operador'):
-		resultado = json.loads(resultado.replace("'", '"'))
-		html = render_template('tabla_consulta_stock.html', resultado=resultado)
+		resultado = request.args.get("resultado", None)
+		desde = request.args.get('fecha_desde')
+		hasta = request.args.get('fecha_hasta')
+		print('RESULTADOO!')
+		print(resultado)
+		print('desde: {}'.format(desde))
+		print('hasta: {}'.format(hasta))
+		movimientos = get_movimientos_by_fechas(desde, hasta)
+		print('MOVIMIENTOS -------- {}'.format(movimientos))
+		
+		html = render_template('tabla_consulta_stock_css.html',\
+			desde=desde,\
+			hasta=hasta,\
+			resultado=movimientos)
+		"""
 		stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
 		return render_pdf(HTML(string=html), stylesheets=stylesheets)
+		"""
+		
+		return render_pdf(HTML(string=html))
 	abort(403)

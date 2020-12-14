@@ -312,4 +312,8 @@ def agregar_historial_movimientos_stock(pedido_id, operador_id, tipo_movimiento,
     db.session.commit()
     print('>'*100)
 
-   
+def get_movimientos_by_fechas(desde, hasta):
+    result = db.engine.execute(SELECT_MOVIMIENTOS_BY_FECHA.format(\
+        fecha_desde=desde, fecha_hasta=hasta))
+    result = parser_result(result)
+    return result
