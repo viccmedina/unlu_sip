@@ -57,11 +57,13 @@ class ConsultarSaldo(FlaskForm):
     """
         Este Formulario permitira consultar el saldo de una cta determinada
     """
-
-
     cliente = StringField('NRO Cliente', validators=[DataRequired(MSG_NRO_CLIENTE_VALIDO)])
     submit = SubmitField('Consultar')
 
+
+class ExportarCtaCorriente(FlaskForm):
+	submit = SubmitField('Exportar')
+	cancelar = SubmitField('Cancelar')
 
 class DescargarConsulta(FlaskForm):
     submit = SubmitField('Descargar')

@@ -120,19 +120,6 @@ def modificar():
 
 
 
-# @lista_precio.route('/eliminar/precios', methods=['GET','POST'])
-# @login_required
-# def eliminar():
-#
-#
-#     if current_user.has_role('Operador'):
-#         return render_template('form_eliminar_lista_precios.html', \
-#         datos=current_user.get_mis_datos(), \
-#         is_authenticated=current_user.is_authenticated, \
-#         rol='operador')
-#     abort(403)
-
-
 @lista_precio.route('/exportar', methods=['GET','POST'])
 @login_required
 def exportar():
@@ -158,22 +145,7 @@ def importar():
     abort(403)
 
 
-@lista_precio.route('/lista_precio/eliminar', methods=['POST','GET'])
-@login_required
-def eliminar_precios():
 
-    pro = request.args.get('producto')
-    mar = request.args.get('marca')
-    um = request.args.get('umed')
-
-    print("producto {}".format(pro))
-    print("marca {}".format(mar))
-    print("umed {}".format(um))
-
-    eli_producto(pro,mar,um)
-
-    flash("Producto Eliminado",'warning')
-    return redirect(url_for('lista_precio.eliminar'))
 
 
 

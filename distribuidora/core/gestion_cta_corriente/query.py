@@ -9,6 +9,37 @@ CONSULTA_MOVIMIENTOS_CTA_CORRIENTE = """
 		ts_created<=('{fecha_hasta}') and cta_corriente=('{nro_cliente}')
 	"""
 
+CONSULT_ALL_USERS= """
+SELECT u.id FROM usuario u inner join usuario_rol ur on ur.id = u.id inner join rol r on r.rol_id = ur.rol_id
+WHERE r.nombre != 'Gerencia' AND r.nombre != 'Operador'
+"""
+
+CONSULTAR_MONTO_CC ="""
+SELECT sum(saldo) as saldoCC FROM movimiento_cta_corriente mccc WHERE mccc.usuario = {user}
+"""
+
+CONSULTAR_MONTO_CP = """
+SELECT sum(monto) as saldoCP FROM comprobante_pago cpp INNER JOIN pedido ped on cpp.pedido = ped.pedido_id
+inner join usuario u on ped.usuario_id = u.id WHERE u.id = {user}
+"""
+
+CONSULTA_MOVIMIENTOS_CTA_CORRIENTE = """
+	SELECT cc.cuenta_corriente_id AS cliente,p.nombre AS nombre,p.email AS email, p.telefono_ppal AS telefono,cp.monto as monto ,mcc.saldo as saldo
+	FROM movimiento_cta_corriente mcc
+	INNER JOIN cuenta_corriente cc ON mcc.cta_corriente = cc.cuenta_corriente_id
+	INNER JOIN persona p ON cc.persona_id = p.persona_id
+	INNER JOIN pedido pe ON pe.usuario_id = mcc.usuario
+	INNER JOIN usuario u ON u.id = mcc.usuario
+	INNER JOIN usuario_rol ur ON ur.id = u.id
+	INNER JOIN rol r ON r.rol_id = ur.rol_id
+	INNER JOIN comprobante_pago cp ON cp.pedido = pe.pedido_id
+	WHERE mcc.usuario = {user} AND r.nombre != 'Gerencia' AND r.nombre != 'Operador'
+
+	"""
+
+#(SELECT sum(saldo) FROM movimiento_cta_corriente mccc WHERE mccc.usuario = 4) - (SELECT sum(monto) FROM comprobante_pago cpp INNER JOIN pedido ped on cpp.pedido = ped.pedido_id inner join usuario u on ped.usuario_id = u.id WHERE u.id = 4;
+
+
 SELECT_TIPO_MOVIMIENTOS = """
 	SELECT descripcion FROM tipo_movimiento_cta_corriente
 	"""

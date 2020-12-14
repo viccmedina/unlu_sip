@@ -1,0 +1,31 @@
+{% block tabla_movimientos %}
+
+<div class="container">
+  <h2 align="center">Resultado de la consulta</h2>
+  <p>Movimientos del stock </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Cliente Nº</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Saldo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in resultado %}
+      <tr>
+        <td>{{r['cliente']}}</td>
+        <td>{{r['nombre']}}</td>
+        <td>{{r['email']}}</td>
+        <td>{{r['telefono']}}</td>
+        <td>{{r['saldo']}}</td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

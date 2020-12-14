@@ -4,8 +4,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from distribuidora.core.gestion_cta_corriente.constants import TITULO, ROL
 from distribuidora.core.gestion_cta_corriente.helper import *
-from distribuidora.core.gestion_cta_corriente.forms import ConsultarMovimientos, \
-	AgregarMovimiento, ConsultarSaldo
+from distribuidora.core.gestion_cta_corriente.forms import *
 from distribuidora.models.cuenta_corriente import MovimientoCtaCorriente, TipoMovimientoCtaCorriente
 from distribuidora.models.gestion_usuario import Usuario
 from flask_weasyprint import HTML, render_pdf
@@ -139,18 +138,43 @@ def consultar_saldo():
             sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
-@cta_corriente.route('/cta_corriente/exportar', methods=['GET'])
+
+
+
+
+@cta_corriente.route('/cta_corriente/exportar', methods=['POST', 'GET'])
 @login_required
 def exportar():
-    if current_user.has_role('Operador'):
-    	return render_template('exportar_movimientos_cta_corriente.html', \
-        datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated, \
-        rol=ROL, \
-    	site= TITULO + ' - Exportar',\
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+	if current_user.has_role('Operador'):
+		resultado = None
+		fecha_hasta = None
+		fecha_desde = None
+		form = ExportarCtaCorriente()
 
-    abort(403)
+		if form.validate_on_submit():
+			resultado = consultaCtaCorrienteExportar()
+			#print("lengt {}".format(resultado.length))
+			print('#'*80, flush=True)
+			#nro_cta = get_nro_cuenta_corriente(cliente)
+			#resultado = get_consulta_movimientos(fecha_desde, fecha_hasta,nro_cta[0]['cuenta_corriente_id'])
+			#print(resultado, flush=True)
+			print('#'*80, flush=True)
+		else:
+			print(form.errors, flush=True)
+
+		return render_template('exportar_movimientos_cta_corriente.html', \
+			datos=current_user.get_mis_datos(), \
+			is_authenticated=current_user.is_authenticated, \
+			resultado=resultado, \
+			form=form, \
+			site=TITULO,\
+			rol='operador',\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+	abort(403)
+
+
+
+
 
 @cta_corriente.route('/cta_corriente/importar', methods=['GET'])
 @login_required
@@ -169,9 +193,17 @@ def importar():
 @login_required
 def descargar_consulta_cta_corriente():
     if current_user.has_role('Operador'):
-        resultado = request.args.get('resultado')
-        print(resultado, flush=True)
-        resultado = json.loads(resultado.replace("'", '"'))
-        html = render_template('tabla_movimientos_cta_corriente.html', resultado=resultado)
+        resultado = request.args.get("resultado", None)
+        print('RESULTADOO!')
+        print(resultado)
+        result = consultaCtaCorrienteExportar()
+
+        html = render_template('tabla_consulta_cta_corriente_css.html',\
+        	resultado=result)
+        """
+        stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
+        return render_pdf(HTML(string=html), stylesheets=stylesheets)
+        """
+
         return render_pdf(HTML(string=html))
     abort(403)

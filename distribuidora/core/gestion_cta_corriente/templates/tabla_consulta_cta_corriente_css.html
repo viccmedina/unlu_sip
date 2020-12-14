@@ -1,0 +1,40 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="{{url_for('static', filename='invoice.css')}}" media="print" rel="stylesheet">
+    <title>Consulta de Movimientos de Cuenta Corriente</title>
+    <meta name="description" content="Invoice demo sample">
+    <meta name="author" content="Kozea">
+  </head>
+
+  <body>
+    {% include "informacion_distribuidora.html"%}
+    <h2 align="center">Resultado de la Consulta</h2>
+    <p class="lead">Movimientos cuenta corriente en el periodo hasta hoy:</p>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Cliente Nº</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Saldo</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in resultado %}
+        <tr>
+          <td>{{r['cliente']}}</td>
+          <td>{{r['nombre']}}</td>
+          <td>{{r['email']}}</td>
+          <td>{{r['telefono']}}</td>
+          <td>{{r['saldo']}}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </body>
+</html>

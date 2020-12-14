@@ -79,6 +79,44 @@ def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
     return check(query)
 
 
+
+
+def consultaCtaCorrienteExportar():
+
+    list = []
+    id = None
+    usuarios =  db.engine.execute(CONSULT_ALL_USERS)
+    for row in usuarios:
+        id = row.id
+        saldoCC = db.engine.execute(CONSULTAR_MONTO_CC.format(user=row.id))#lo que debe
+        saldoCP = db.engine.execute(CONSULTAR_MONTO_CP.format(user=row.id))# lo oque pago
+        print("usuario {}".format(row.id))
+        for row in saldoCC:
+            if(row.saldoCC != None):
+                scc= float(row.saldoCC)
+                print("scc {}".format(scc))
+            else:
+                scc = 0
+        for row in saldoCP:
+            if(row.saldoCP != None):
+                scp= float(row.saldoCP)
+                print("scc {}".format(scp))
+            else:
+                scp = 0
+
+        resta =   scc -   scp # resto deuda - pagos
+        print("resta {}".format(resta))
+        datos = db.engine.execute(CONSULTA_MOVIMIENTOS_CTA_CORRIENTE.format(user=id))# constultos el resto de los valores
+        for row in datos:
+            item = dict(row)
+            item['saldo'] =float(resta)# seteo valor de la resta al saldo
+            print("resta en dict {}".format(item['saldo']))
+            list.append(item)
+
+    return list
+
+
+
 def consulta_saldo(nro_cta):
     saldo = db.engine.execute(CONSULTAR_SALDO.format(nro_cta=nro_cta))
     return parser_result(saldo)
