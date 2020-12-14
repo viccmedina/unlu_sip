@@ -42,6 +42,10 @@ class ModifiPrecios(FlaskForm):
 	submitt = SubmitField('Modificar')
 	cancelar = SubmitField('Cancelar')
 
+class ExportarListaPrecio(FlaskForm):
+	submit = SubmitField('Exportar')
+	cancelar = SubmitField('Cancelar')
+
 class ImportarListaPrecio(FlaskForm):
 	file = FileField('Archivo')
 	submit = SubmitField('Importar')

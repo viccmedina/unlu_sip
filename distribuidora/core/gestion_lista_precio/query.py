@@ -15,6 +15,17 @@ WHERE p.descripcion = '{producto}' AND m.marca_id = {marca} AND um.unidad_medida
 """
 
 
+PRODUCTOS_TO_EXPORT = """
+select p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida,
+lpp.precio as precio, e.descripcion as envase
+from producto_envase pe inner join producto p on p.producto_id= pe.producto_id
+inner join marca m on m.marca_id = p.marca_id
+inner join unidad_medida um on pe.unidad_medida_id = um.unidad_medida_id
+inner join lista_precio_producto lpp on pe.producto_envase_id = lpp.producto_envase_id
+inner join envase e on e.envase_id = pe.envase_id
+"""
+
+
 CONSULTAR_PRECIO ="""
 SELECT p.descripcion AS producto, m.descripcion AS marca, um.descripcion AS umedida, e.descripcion AS envase, lpp.precio AS precio,
 lpp.fecha_fin AS vigencia, pe.producto_envase_id AS id, CURRENT_TIMESTAMP AS hoy

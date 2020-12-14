@@ -119,16 +119,32 @@ def modificar():
 
 
 
-
-@lista_precio.route('/exportar', methods=['GET','POST'])
+@lista_precio.route('/lista_precio/exportar', methods=['POST', 'GET'])
 @login_required
 def exportar():
-    if current_user.has_role('Operador'):
-    	return render_template('exportar_lista_precio.html', \
-        datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated, \
-        rol='operador')
-    abort(403)
+	if current_user.has_role('Operador'):
+		resultado = None
+		fecha_hasta = None
+		fecha_desde = None
+		form = ExportarListaPrecio()
+
+		if form.validate_on_submit():
+			resultado = consultaListaPreciosExportar()
+			print('#'*80, flush=True)
+		else:
+			print(form.errors, flush=True)
+
+		return render_template('exportar_lista_precio.html', \
+			datos=current_user.get_mis_datos(), \
+			is_authenticated=current_user.is_authenticated, \
+			resultado=resultado, \
+			form=form, \
+			site='Gestión de Lista Precios',\
+			rol='operador',\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+	abort(403)
+
+
 
 
 @lista_precio.route('/lista_precio/importar', methods=['GET','POST'])
@@ -211,3 +227,23 @@ def modificar_precios():
     products=product,\
     precio=p,\
     fecha=f)
+
+
+@lista_precio.route('/lista_precio/descargar/consulta')
+@login_required
+def descargar_consulta_lista_precio():
+	if current_user.has_role('Operador'):
+		resultado = request.args.get("resultado", None)
+		print('RESULTADOO!')
+		print(resultado)
+		result = consultaListaPreciosExportar()
+
+		html = render_template('tabla_consulta_lista_precio_css.html',\
+			resultado=result)
+		"""
+		stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
+		return render_pdf(HTML(string=html), stylesheets=stylesheets)
+		"""
+
+		return render_pdf(HTML(string=html))
+	abort(403)

@@ -77,6 +77,12 @@ def modificarFecha(fecha,producto,olddate):
         db.engine.execute(ACTUALIZAR_FECHA.format(fecha=fecha,id=row.precio_id))
         db.engine.execute(ACTUALIZAR_FECHA_PP.format(producto=producto,fecha=fecha,id=row.precio_id))
 
+def consultaListaPreciosExportar():
+    list = []
+    resultado = db.engine.execute(PRODUCTOS_TO_EXPORT)
+    return parser_result(resultado)
+
+
 
 def consultarFechaData():
     fecha = db.engine.execute(AGREGAR_PRECIO_PRODUCTO.format(producto=p,precio=precio,fecha=fecha,id=row.precio_id))
