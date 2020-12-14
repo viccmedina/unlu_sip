@@ -9,7 +9,7 @@
         		<div class="row row-cols-9 row-cols-md-3">
         			<div>
 	        			<h2>Pedidos</h2>
-						{% for p in pedidos_id %}
+								{% for p in pedidos_id %}
 			            	<div class="col mb-9" >
 			               		<div class="card h-100" >
 			                 		<img src="static/img/pickup.svg" class="card-img-top" alt="Pedido">
@@ -21,9 +21,9 @@
 			                  		</div>
 			              		</div>
 			            	</div>
-			          	{% endfor %}	
+			          	{% endfor %}
         			</div>
-        			
+
 
         			<div>
 	        			<h2>Devoluciones Activas</h2>
@@ -42,7 +42,14 @@
 				            	</div>
 				          	{% endfor %}
 			          	{% else %}
-			          		<h2>No hay devoluciones para procesar</h2>
+									<div class="col mb-9" >
+				              <div class="card h-100" >
+				                <img src="/static/img/ok.svg" width="70" height="70" class="card-img-top" alt="Pedido">
+				                  <div class="card-body">
+				                  <p align="center" >NO HAY DEVOLUCIONES PARA PROCESAR</p>
+				                  </div>
+				              </div>
+				          </div>
 			          	{% endif %}
         			</div>
 

@@ -6,10 +6,18 @@
         {% include "acordeon_perfil_usuario.html" %}
         <div class="col-sm-5 offset-sm-7 col-md-9 offset-md-0">
           {% if devoluciones is none%}
-            <p>NO HAY DEVOLUCIONES PARA PROCESAR</p>
+          <div class="col mb-9" >
+              <div class="card h-100" >
+                <img src="/static/img/ok.svg" width="70" height="70" class="card-img-top" alt="Pedido">
+                  <div class="card-body">
+                  <p align="center" >NO HAY DEVOLUCIONES PARA PROCESAR</p>
+                  </div>
+              </div>
+          </div>
+
           {% else %}
             {% include "flash_errors.html" %}
-            <h3>Devoluciones a Confirmar</h2>
+            <h3>Devoluciones a Confirmar</h3>
               {% if devoluciones is not none%}
                 {% for d in devoluciones %}
                   <div class="card">
@@ -35,7 +43,7 @@
                   <br>
                 {% endfor %}
             {% else %}
-              <h2>No hay devoluciones disponibles</h2>
+              <h2>No hay devoluciones disponiblses</h2>
             {% endif %}
           {% endif %}
       </div>
