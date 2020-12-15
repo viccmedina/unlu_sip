@@ -123,7 +123,7 @@ def consultar_listado_precios():
 def consultar_productos():
     if current_user.has_role('Operador'):
         resultado = None
-        form = ConsultarMovimientos()
+        form = FormProducto()
         if form.validate_on_submit():
             fecha_desde = form.fecha_desde.data
             fecha_hasta = form.fecha_hasta.data
@@ -133,10 +133,8 @@ def consultar_productos():
                 flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
             else:
                 resultado = get_consulta_productos(fecha_desde,fecha_hasta)
-                if resultado == []:
-                    print("REsultado none")
-                    resultado = None
-                    flash("No se han encontrado datos para la fecha ingresada",'warning')
+
+
         return render_template('gestionar_informe_productos.html', \
         datos=current_user.get_mis_datos(),	\
         is_authenticated=current_user.is_authenticated, rol='Operador', form=form, \
@@ -224,6 +222,28 @@ def descargar_consulta_lista_precios():
             print("resultado {}".format(row))
 
         html = render_template('tabla_consultar_lista_precios_css.html',resultado=resultado)
+        """
+        stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
+        return render_pdf(HTML(string=html), stylesheets=stylesheets)
+        """
+
+        return render_pdf(HTML(string=html))
+    abort(403)
+
+
+@informe.route('/informe/productos/descargar/consulta')
+@login_required
+def descargar_consulta_producto():
+    if current_user.has_role('Operador'):
+        desde = request.args.get('desde')
+        hasta = request.args.get('hasta')
+        print("hasta {}".format(hasta))
+        print("desde {}".format(desde))
+        resultado = get_consulta_productos(desde,hasta)
+        for row in resultado:
+            print("resultado {}".format(row))
+
+        html = render_template('tabla_consultar_productos_css.html',resultado=resultado,desde=desde,hasta=hasta)
         """
         stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
         return render_pdf(HTML(string=html), stylesheets=stylesheets)

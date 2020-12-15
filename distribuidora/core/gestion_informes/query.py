@@ -88,17 +88,16 @@ ORDER BY (precio) DESC
 
 CONSULTAR_PRODUCTOS_ALL = """
 
- SELECT distinct p.descripcion as producto,m.descripcion as marca,um.descripcion as umedida, e.descripcion as envase ,
- (SELECT sum(dp.cantidad) FROM detalle_pedido dp WHERE dp.producto_envase_id = {productoEnvase}) as cantidad ,
- ((SELECT lip.precio FROM lista_precio_producto lip WHERE {productoEnvase} = lip.producto_envase_id) *
- (SELECT sum(ddpp.cantidad) FROM detalle_pedido ddpp WHERE ddpp.producto_envase_id = {productoEnvase})) as precio
- FROM producto p INNER JOIN producto_envase pe on p.producto_id = pe.producto_id
- INNER JOIN marca m on m.marca_id = p.marca_id
- INNER JOIN unidad_medida um on um.unidad_medida_id = pe.unidad_medida_id
- INNER JOIN envase e on e.envase_id = pe.envase_id
- INNER JOIN lista_precio_producto lpp on lpp.producto_envase_id = pe.producto_envase_id
- INNER JOIN detalle_pedido dped
- WHERE pe.producto_envase_id = {productoEnvase} AND dped.ts_created >= '{desde}' AND dped.ts_created <= '{hasta}'
+SELECT p.descripcion AS producto, m.descripcion AS marca, um.descripcion AS umedida, e.descripcion AS envase,lpp.fecha_fin AS fin,
+lpp.precio AS precio, sum(dp.cantidad) AS cantidad, lpp.precio * sum(dp.cantidad) AS recaudacion
+FROM producto p INNER JOIN producto_envase pe on p.producto_id = pe.producto_envase_id
+INNER JOIN marca m ON m.marca_id = p.marca_id
+INNER JOIN unidad_medida um ON um.unidad_medida_id = pe.unidad_medida_id
+INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_envase_id
+INNER JOIN envase e ON e.envase_id = pe.envase_id
+INNER JOIN detalle_pedido dp ON dp.producto_envase_id = pe.producto_envase_id
+WHERE lpp.producto_envase_id = {productoEnvase} AND dp.ts_created >= '{desde}' AND dp.ts_created <= '{hasta}'
+GROUP BY pe.producto_envase_id ORDER BY (recaudacion) DESC
  """
 
 

@@ -32,6 +32,12 @@ class ConsultarPrecios2(FlaskForm):
     cancelar = SubmitField('Cancelar')
 
 class FormStock(FlaskForm):
+    submit = SubmitField('Emitir Informe')
+    cancelar = SubmitField('Cancelar')
 
+class FormProducto(FlaskForm):
+    format='%Y-%m-%dT%H:%M'
+    fecha_desde = DateTimeLocalField('Desde', format=format , validators=[DataRequired()])
+    fecha_hasta = DateTimeLocalField('Hasta', format=format)
     submit = SubmitField('Emitir Informe')
     cancelar = SubmitField('Cancelar')

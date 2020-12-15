@@ -8,8 +8,9 @@
         <th>Producto</th>
         <th>Marca</th>
         <th>Unidad Medida</th>
+        <th>Precio</th>
         <th>Cantidad</th>
-        <th>Total Vendido en $</th>
+        <th>Recaudacion</th>
       </tr>
     </thead>
     <tbody>
@@ -18,16 +19,17 @@
         <td>{{r['producto']}}</td>
         <td>{{r['marca']}}</td>
         <td>{{r['umedida']}} {{r['envase']}}</td>
+          <td>{{r['precio']}} </td>
           {% if r['cantidad'] == None %}
             <td>{{0}}</td>
           {% else  %}
             <td>{{     r['cantidad']}}</td>
           {% endif  %}
 
-          {% if r['precio'] == None %}
+          {% if r['recaudacion'] == None %}
             <td>{{0}}</td>
           {% else  %}
-            <td>$ {{r['precio']}}</td>
+            <td>$ {{r['recaudacion']}}</td>
           {% endif  %}
 
       </tr>

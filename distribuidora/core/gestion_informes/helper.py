@@ -80,8 +80,10 @@ def get_consulta_productos(fecha_desde, fecha_hasta):
     list = []
     all_productos = db.engine.execute(CONSULTAR_PRODUCTOS)
     for row in all_productos:
+
         datos = db.engine.execute(CONSULTAR_PRODUCTOS_ALL.format(desde=fecha_desde, hasta=fecha_hasta,productoEnvase=row.producto_envase_id))
         for row in datos:
+            print("rows {}".format(row.cantidad))
             list.append(row)
     return list
 
