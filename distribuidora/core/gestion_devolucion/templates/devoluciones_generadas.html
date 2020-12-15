@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container-fluid">
+	{% include "flash_errors.html" %}
+	<div class="row">
+		{% include "acordeon_perfil_usuario.html" %}
+		<div class="col-sm-5 offset-sm-2 col-md-9 offset-md-0">
+			<h2>Devoluciones Activas</h2>
+			<div class="row row-cols-1 row-cols-md-3">
+				{% if devoluciones is not none%}
+		          	{% for d in devoluciones %}
+		            	<div class="col mb-6" >
+		               		<div class="card h-100" >
+		                 		<img src="{{ url_for('static', filename='courier.svg') }}" class="card-img-top" alt="Devolución" width="50%" height="100">
+		                  		<div class="card-body">
+									<h5 class="card-title">Nro de Devolución #{{ d.devolucion_id }} </h5>
+									<p><i>Fecha: {{d.ts_created}}</i></p>
+									<span style="float:center">
+										<a href="{{ url_for('devoluciones.ver_detalle', pedido=d.pedido_id) }}" class="btn btn-primary">Ver Detalle</a>
+		 							</span>
+		                  		</div>
+		              		</div>
+		            	</div>
+		          	{% endfor %}
+	          	{% else %}
+	          		<h2>No hay devoluciones para procesar</h2>
+	          	{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

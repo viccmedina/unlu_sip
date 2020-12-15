@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+
+{% block content %}
+	<div class="container-fluid">
+		{% include "flash_errors.html" %}
+    	<div class="row">
+			{% include "acordeon_perfil_usuario.html" %}
+    		<div class="col-sm-5 offset-sm-2 col-md-9 offset-md-0">
+        		<h3>Pedidos con posibilidad de generar devolución</h3>
+        		<div class="row row-cols-1 row-cols-md-3">
+					{% for p in pedidos_id %}
+			           	<div class="col mb-6" >
+			           		<div class="card h-100" >
+			               		<img src="{{ url_for('static', filename='pickup.svg') }}" class="card-img-top" alt="Devolción" width="50%" height="100">
+			               		<div class="card-body">
+									<h5 class="card-title">Realizar Devolución para Nº Pedido : {{ p }} </h5>
+									<span style="float:center">
+										<a href="{{ url_for('devoluciones.nueva_devolucion', pedido=p) }}" class="btn btn-primary">Generar</a>
+			 						</span>
+			               		</div>
+			           		</div>
+			           	</div>
+			       	{% endfor %}	
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

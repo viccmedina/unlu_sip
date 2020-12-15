@@ -15,13 +15,41 @@ devolucion = Blueprint('devoluciones', __name__, template_folder='templates')
 @login_required
 def index():
 	if current_user.has_role('Cliente') or current_user.has_role('Operador') :
+
+		return render_template('devolucion.html',\
+			is_authenticated=current_user.is_authenticated,\
+			datos=current_user.get_mis_datos(),\
+			site='Gestión Devoluciones',\
+			rol=current_user.get_role(),\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+	abort(403)
+
+@devolucion.route('/devolucion/pedidos/listar', methods=['POST','GET'])
+@login_required
+def listar_pedidos_para_devolucion():
+	if current_user.has_role('Cliente') or current_user.has_role('Operador') :
+		usuario_id = current_user.get_id()
+		pedidos_id = buscar_pedido_id(usuario_id)
+		return render_template('pedidos_para_devolucion.html',\
+			is_authenticated=current_user.is_authenticated,\
+			datos=current_user.get_mis_datos(),\
+			site='Gestión Devoluciones',\
+			rol=current_user.get_role(),\
+			sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+			pedidos_id=pedidos_id)
+	abort(403)
+
+@devolucion.route('/devolucion/listar', methods=['POST','GET'])
+@login_required
+def listar_devoluciones():
+	if current_user.has_role('Cliente') or current_user.has_role('Operador') :
 		usuario_id = current_user.get_id()
 		pedidos_id = buscar_pedido_id(usuario_id)
 		devoluciones = get_all_devoluciones(usuario_id)
 		print('PEDIDOS ----- {}'.format(pedidos_id))
 		print('DEVOLUCIONES ------ {}'.format(devoluciones))
 
-		return render_template('devolucion.html',\
+		return render_template('devoluciones_generadas.html',\
 			is_authenticated=current_user.is_authenticated,\
 			datos=current_user.get_mis_datos(),\
 			site='Gestión Devoluciones',\
@@ -30,6 +58,7 @@ def index():
 			pedidos_id=pedidos_id, \
 			devoluciones=devoluciones)
 	abort(403)
+
 
 @devolucion.route('/devolucion/detallePedido', methods=['POST','GET'])
 @login_required
@@ -97,7 +126,7 @@ def nueva_devolucion():
 			else:
 				flash('Algo salió mal', 'error')
 
-		return redirect(url_for('devoluciones.index'))
+		return redirect(url_for('devoluciones.listar_pedidos_para_devolucion'))
 	abort(403)
 
 @devolucion.route('/devolucion/cliente/confirmacion', methods=['POST','GET'])
