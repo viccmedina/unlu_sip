@@ -102,6 +102,7 @@ def agregar():
 			try:
 				cantidad = int(cantidad)
 				if (cantidad >= 0) and (cantidad <= 1000000):
+					# obtenemos el producto envase id
 					product = get_id_producto(id_producto,id_marca,id_um)
 					if product == -777 :
 						flash("el producto ingresado es incorrecto", 'error')
@@ -112,19 +113,26 @@ def agregar():
 							if product == -999 :
 								flash("La marca ingresada es incorrecta", 'error')
 							else:
-								usuario_id = current_user.get_id()
-								user = Usuario.query.filter_by(id=usuario_id).first()
-								if user.has_role('Operador'):
+								# debo verificar que el producto envase id tenga stock real suficiente
+								p = ProductoEnvase.query.filter_by(producto_id=product).first()
+								print('00000000000000000000000000000000000000000000000')
+								print('stock real : {}'.format(p.get_stock_real()))
+
+								user =current_user.get_id()
+								if current_user.has_role('Operador'):
 									if tipo_mov == 'entrada':
-										resultado = agregar_stock(user.id,product,cantidad,id_producto)
+										resultado = agregar_stock(user, product, cantidad, id_producto)
 										print(resultado, flush=True)
 										print('#'*80, flush=True)
 										flash("El producto se ha cargado correctamente", 'warning')
 									else:
-										resultado = salida(user.id,product,cantidad,id_producto)
-										print(resultado, flush=True)
-										print('#'*80, flush=True)
-										flash("Se ha descontado el stock con exito", 'warning')
+										if p.get_stock_real() < cantidad:
+											flash('La cantidad a descontar no es suficiente', 'error')
+										else:
+											resultado = salida(user, product, cantidad, id_producto)
+											print(resultado, flush=True)
+											print('#'*80, flush=True)
+											flash("Se ha descontado el stock con exito", 'warning')
 								else:
 									flash("Usuario incorrecto, contacte al administrador", 'error')
 				else:

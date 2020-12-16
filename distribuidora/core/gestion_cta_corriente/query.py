@@ -3,10 +3,9 @@ CONSULTAR_NRO_CUENTA_CORRIENTE = """
 	WHERE persona_id=('{nro_cliente}')
 """
 
-CONSULTA_MOVIMIENTOS_CTA_CORRIENTE = """
+CONSULTA_MOVIMIENTOS_CTA_CORRIENTE_BY_OPERADOR = """
 	SELECT * FROM movimiento_cta_corriente
-	WHERE ts_created>=DATETIME('{fecha_desde}') and
-		ts_created<=('{fecha_hasta}') and cta_corriente=('{nro_cliente}')
+	WHERE ts_created BETWEEN '{fecha_desde}' and '{fecha_hasta}' and cta_corriente=('{nro_cliente}')
 	"""
 
 CONSULT_ALL_USERS= """

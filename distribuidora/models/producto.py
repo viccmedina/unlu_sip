@@ -75,6 +75,9 @@ class ProductoEnvase(db.Model):
     def get_id(self):
         return self.producto_envase_id
 
+    def get_stock_real(self):
+        return self.stock_real
+
 
 class Marca(db.Model):
     """

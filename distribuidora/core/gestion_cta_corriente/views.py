@@ -49,10 +49,11 @@ def consultar_cta_corriente():
                 flash("ERROR, la FECHA HASTA es menor que la FECHA DESDE",'error')
             else:
                 cliente = form.cliente.data
-
+                print('CLIENTE --> {}'.format(cliente))
                 nro_cta = get_nro_cuenta_corriente(cliente)
-                nro_cta = nro_cta[0]['cuenta_corriente_id']
+                
                 if nro_cta:
+                    nro_cta = nro_cta[0]['cuenta_corriente_id']
                     resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cta)
                 else:
                     flash("La cuenta ingresada es incorrecta", 'error')

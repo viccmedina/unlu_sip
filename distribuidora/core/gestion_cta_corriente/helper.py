@@ -38,6 +38,7 @@ def get_nro_cuenta_corriente(nro_cliente):
     """
     nro_cta = None
     result = db.engine.execute(CONSULTAR_NRO_CUENTA_CORRIENTE.format(nro_cliente=nro_cliente))
+    print('!!!!!!!!!!!!!!!!!!!!!!')
     result = parser_result(result)
     print(result, flush=True)
     return result
@@ -52,11 +53,17 @@ def get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cliente):
     vamos a consultar todos los movimientos de la cta corriente de ese Cliente
     dentro de ese rango de fechas.
     """
-    result = db.engine.execute(CONSULTA_MOVIMIENTOS_CTA_CORRIENTE.format(\
+    print('FECHAS ---')
+    print(fecha_hasta)
+    print(type(fecha_hasta))
+    result = db.engine.execute(CONSULTA_MOVIMIENTOS_CTA_CORRIENTE_BY_OPERADOR.format(\
         fecha_desde=fecha_desde, fecha_hasta=fecha_hasta, \
         nro_cliente=nro_cliente))
-    resp = []
-    return parser_result(result)
+    resp = parser_result(result)
+
+    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    print(resp)
+    return resp
 
 def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
     id_t_mov = db.engine.execute(SELECT_ID_TIPO_MOVIMIENTO.format(tipo_movimiento=tipo_mov))
