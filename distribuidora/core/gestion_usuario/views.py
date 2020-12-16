@@ -114,6 +114,9 @@ def cambiar_contraseña():
                 flash("ERROR, Las contraseñas ingresadas no coinciden",'error')
             else:
                 user = Usuario.query.filter_by(username=current_user.get_username()).first()
+                print('####################################################')
+                print(user)
+                print('####################################################')
                 if user.check_password(passOld):
                     password_hash = generate_password_hash(passConfNew)
                     #updateContraseña(password_hash,current_user.get_username())
@@ -131,15 +134,21 @@ def cambiar_contraseña():
             if passNew != passConfNew:
                 flash("ERROR, Las contraseñas ingresadas no coinciden",'error')
             else:
+
                 user = Usuario.query.filter_by(username=users).first()
-                if user.check_password(passOld):
-                    password_hash = generate_password_hash(passConfNew)
-                    #updateContraseña(password_hash,current_user.get_username())
-                    print("user {}".format(users))
-                    db.engine.execute(UPDATE_USER.format(passw=password_hash,user=users))
-                    flash("Se ha cambiado la contraseña correctamente",'warning')
+                print('####################################################')
+                print(user)
+                if user is not None:
+                    if user.check_password(passOld):
+                        password_hash = generate_password_hash(passConfNew)
+                        #updateContraseña(password_hash,current_user.get_username())
+                        print("user {}".format(users))
+                        db.engine.execute(UPDATE_USER.format(passw=password_hash,user=users))
+                        flash("Se ha cambiado la contraseña correctamente",'warning')
+                    else:
+                        flash("La clave ingresada es incorrecta",'error')
                 else:
-                    flash("La clave ingresada es incorrecta",'error')
+                    flash("El usuario no existe!",'error')
 
         return render_template('cambiar_contraseña_login.html', \
             sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
