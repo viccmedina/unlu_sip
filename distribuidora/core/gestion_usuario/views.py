@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from distribuidora import db
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -80,13 +80,17 @@ def home_cliente():
     """
     Vista home del usuario de tipo Cliente
     """
-    site = 'Home {}'.format(current_user.get_username())
-    return render_template('home_cliente.html', \
-        datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated, \
-        rol='cliente',\
-        site=site,\
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+    if current_user.is_authenticated:
+        if current_user.has_role('Cliente'):
+            site = 'Home {}'.format(current_user.get_username())
+            return render_template('home_cliente.html', \
+                datos=current_user.get_mis_datos(), \
+                is_authenticated=current_user.is_authenticated, \
+                rol='cliente',\
+                site=site,\
+                sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+        abort(403)
+    abort(403)
 
 
 @login_required
