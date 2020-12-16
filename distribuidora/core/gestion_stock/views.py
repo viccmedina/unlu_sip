@@ -115,7 +115,6 @@ def agregar():
 							else:
 								# debo verificar que el producto envase id tenga stock real suficiente
 								p = ProductoEnvase.query.filter_by(producto_id=product).first()
-								print('00000000000000000000000000000000000000000000000')
 								print('stock real : {}'.format(p.get_stock_real()))
 
 								user =current_user.get_id()
@@ -217,12 +216,8 @@ def descargar_consulta_stock():
 		resultado = request.args.get("resultado", None)
 		desde = request.args.get('fecha_desde')
 		hasta = request.args.get('fecha_hasta')
-		print('RESULTADOO!')
 		print(resultado)
-		print('desde: {}'.format(desde))
-		print('hasta: {}'.format(hasta))
 		movimientos = get_movimientos_by_fechas(desde, hasta)
-		print('MOVIMIENTOS -------- {}'.format(movimientos))
 
 		html = render_template('tabla_consulta_stock_css.html',\
 			desde=desde,\

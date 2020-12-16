@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+
+{% block content %}
+	<div class="container-fluid">
+    	<div class="row">
+    		<div class="col-sm-5 offset-sm-7 col-md-6 offset-md-0">
+        		<div class="row row-cols-9 row-cols-md-3">
+
+    	   			{% for p in productos %}
+    	   				<div class="col mb-9" style="padding:5px">
+	    	   				<div class="card">
+	                  			
+	                  			<div class="card-body">
+
+				  					<img src="/static/img/productos/default.svg" class="card-img-top" alt="producto" width="45%" height="100">
+				  					<p><small>Producto: {{ p.producto_descripcion }}</small> </p>
+				  					<p><small>Envase {{p.envase}} {{ p.unidad_descripcion }}</small></p>
+				  					<p><small>Tipo de Producto {{ p.tp_descripcion }} </small></p>
+				  					<p><small>Precio $ {{p.precio}}</small></p>
+				  					
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>	  
+            
+{% endblock %}

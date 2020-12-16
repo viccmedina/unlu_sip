@@ -33,7 +33,6 @@ def index():
 
 @producto.route('/consultar/producto', methods=['POST', 'GET'])
 @login_required
-
 def consultar_producto():
     if current_user.has_role('Operador'):
         id_producto = None
@@ -196,9 +195,6 @@ def eliminar():
     abort(403)
 
 
-
-
-
 @producto.route('/producto/exportar', methods=['POST', 'GET'])
 @login_required
 def exportar():
@@ -230,23 +226,17 @@ def exportar():
 @login_required
 def importar_productos():
     if current_user.has_role('Operador'):
-        print('DIRECTORIO ---- {}'.format(app.config['UPLOAD_FOLDER']))
-        print('EXTENSIONES PERMITIDAS ---- {}'.format(app.config['UPLOAD_EXTENSIONS']))
         if 'file' not in request.files:
             pass
         else:
             file = request.files['file']
             filename = secure_filename(file.filename)
-            print(filename)
             extension = filename.split('.')
-            print('EXTENSION!!')
-            print(extension[1])
             if extension[1] not in app.config['UPLOAD_EXTENSIONS']:
                 flash('La extensión del archivo no es la correcta. Se aceptan: {}'.format(app.config['UPLOAD_EXTENSIONS']), 'error')
             else:
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 path = app.config['UPLOAD_FOLDER'] + filename
-                print('PATH: {}'.format(path))
                 result = importar_productos_from_file(path)
                 flash(result, 'warning')
 
@@ -261,7 +251,6 @@ def importar_productos():
 
 
 @producto.route('/listar/producto', methods=['GET', 'POST'])
-@login_required
 def listar_productos():
     page = request.args.get('page', 1, type=int)
     #productos = lista_de_productos().paginate(page,5,False)
@@ -274,16 +263,26 @@ def listar_productos():
         ProductoEnvase.stock_real > 0).paginate( page, 5, False)
 
 
+    if current_user.is_authenticated:
+        template = 'detalle_producto.html'
+        datos = current_user.get_mis_datos()
+        sin_leer = get_cantidad_msj_sin_leer(current_user.get_id())
+        rol = current_user.get_role()
+    else:
+        template = 'detalle_producto_sin_login.html'
+        datos = None
+        sin_leer = None
+        rol = None
+
     return render_template('listar_productos.html', \
-        datos=current_user.get_mis_datos(), \
+        datos=datos, \
         is_authenticated=current_user.is_authenticated, \
-        rol=current_user.get_role(), \
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+        rol=rol, \
+        sin_leer=sin_leer,\
         site='Listado de Productos', \
         producto=productos)
 
 @producto.route('/detalle/producto', methods=['GET', 'POST'])
-@login_required
 def detalle_producto():
     producto = request.args.get('producto', type=str)
     marca = request.args.get('marca', type=str)
@@ -302,7 +301,6 @@ def detalle_producto():
 
         #recupero el pedido en estado pcc
         pedido_id = get_ultimo_pedido_id(usuario_id)
-        print('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ')
         print(pedido_id)
         #recupero la cantidad de estados de ese pedido
         cantidad_estados = get_cantidad_estados_pedido(pedido_id)
@@ -315,51 +313,65 @@ def detalle_producto():
         print(form.errors)
         flash(form.errors, 'errors')
 
-    return render_template('detalle_producto.html',\
+    if current_user.is_authenticated:
+        template = 'detalle_producto.html'
+        datos = current_user.get_mis_datos()
+        sin_leer = get_cantidad_msj_sin_leer(current_user.get_id())
+        rol = current_user.get_role()
+    else:
+        template = 'detalle_producto_sin_login.html'
+        datos = None
+        sin_leer = None
+        rol = None
+
+    return render_template(template,\
         form=form,\
         productos=productos,\
-        datos=current_user.get_mis_datos(),\
+        datos=datos,\
         is_authenticated=current_user.is_authenticated, \
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
-        rol=current_user.get_role(), \
+        sin_leer=sin_leer,\
+        rol=rol, \
         site='Detalle Producto')
 
 @producto.route('/eliminar/productos', methods=['POST','GET'])
 @login_required
 def eliminar_producto():
+    if current_user.has_role('Operador'):
 
-    pro = request.args.get('producto')
-    mar = request.args.get('marca')
-    um = request.args.get('umed')
+        pro = request.args.get('producto')
+        mar = request.args.get('marca')
+        um = request.args.get('umed')
 
-    print("producto {}".format(pro))
-    print("marca {}".format(mar))
-    print("umed {}".format(um))
+        print("producto {}".format(pro))
+        print("marca {}".format(mar))
+        print("umed {}".format(um))
 
-    eli_producto(pro,mar,um)
+        eli_producto(pro,mar,um)
 
-    flash("Producto Eliminado",'warning')
-    return redirect(url_for('producto.eliminar'))
+        flash("Producto Eliminado",'warning')
+        return redirect(url_for('producto.eliminar'))
+    abort(403)
 
 @producto.route('/modificar/productos', methods=['POST','GET'])
 @login_required
 def modificar_producto():
+    if current_user.has_role('Operador'):
     #a modificar
-    pro = request.args.get('pro')
-    mar = request.args.get('mar')
-    umed = request.args.get('um')
-    env = request.args.get('env')
-    tp = request.args.get('tp')
-    #ingresado por el user
-    pro1 = request.args.get('pro1')
-    mar1 = request.args.get('mar1')
-    umed1 = request.args.get('um1')
-    print("prod 1 {}".format(pro1))
-    modific_producto(pro,mar,umed,env,tp,pro1,mar1,umed1)
-    flash("Producto Modificado",'warning')
+        pro = request.args.get('pro')
+        mar = request.args.get('mar')
+        umed = request.args.get('um')
+        env = request.args.get('env')
+        tp = request.args.get('tp')
+        #ingresado por el user
+        pro1 = request.args.get('pro1')
+        mar1 = request.args.get('mar1')
+        umed1 = request.args.get('um1')
+        print("prod 1 {}".format(pro1))
+        modific_producto(pro,mar,umed,env,tp,pro1,mar1,umed1)
+        flash("Producto Modificado",'warning')
 
-    return redirect(url_for('producto.modificar'))
-
+        return redirect(url_for('producto.modificar'))
+    abort(403)
 
 @producto.route('/producto/descargar/consulta')
 @login_required
