@@ -16,6 +16,17 @@ class ConsultarPrecio(FlaskForm):
 	cancelar = SubmitField('Cancelar')
 
 
+class AgregarPrecios(FlaskForm):
+	producto = SelectField(u'Producto', choices=[])
+	marca = SelectField(u'Marca', choices=[])
+	uMedida = SelectField(u'Unidad de Medida', choices=[])
+	cantidad = StringField('Precio',validators=[DataRequired()], render_kw={"placeholder": "0"})
+	format='%Y-%m-%dT%H:%M'
+	fecha_vigencia = DateTimeLocalField('Vigencia Hasta', format=format, validators=[DataRequired()])
+	submit = SubmitField('Consultar')
+	cancelar = SubmitField('Cancelar')
+
+
 
 class ModificarPrecios(FlaskForm):
 	producto = SelectField(u'Producto', choices=[])

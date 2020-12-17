@@ -52,6 +52,33 @@ def consultar_lista_precio():
     abort(403)
 
 
+@lista_precio.route('/agregar/precio', methods=['GET','POST'])
+@login_required
+def agregar():
+    if current_user.has_role('Operador'):
+        products = None
+        form = AgregarPrecios()
+        form.producto.choices = [(descripcion.descripcion) for descripcion in Producto.query.all()]
+        form.marca.choices = [(descripcion.descripcion) for descripcion in Marca.query.all()]
+        form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
+        if form.validate_on_submit():
+            id_producto = form.producto.data
+            id_marca = form.marca.data
+            id_um = form.uMedida.data
+            precio = form.cantidad.data
+            fecha = form.fecha_vigencia.data
+            agregar_precio_pProductoMarcaUMedida(id_producto,id_marca,id_um,precio,fecha)
+            flash("Precio agregado con exito",'warning')
+
+        return render_template('form_agregar_lista_precios.html', \
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated, \
+        sin_leer= get_cantidad_msj_sin_leer(current_user.get_id()),\
+        rol='operador',\
+        form=form,\
+        site='Gestion de Precios')
+    abort(403)
+
 
 @lista_precio.route('/modificar/precios', methods=['GET','POST'])
 @login_required
