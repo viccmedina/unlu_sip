@@ -249,9 +249,13 @@ def salida(usuario,producto,cantidad,desc):
     la baja de un producto y se descontara del stock real en la tabla proudcto_envase
     ojo es baja por rotura o vto, no es devolucion
     """
+    print("producto {}".format(producto))
+    print("cantidad {}".format(cantidad))
+    print("usuario {}".format(usuario))
+    print("desc {}".format(desc))
     descripcion = "Se quita {} por mal estado".format(desc)
     db.engine.execute(INSERT_MOVIMIENTO_STOCK.format(tipo_movimiento=2,usuario_id=usuario,producto_envase_id=producto,cantidad=cantidad,descripcion=descripcion))
-    db.engine.execute(BAJA_PRODUCTO.format(producto_envase_id=producto,cantidad=cantidad))
+    db.engine.execute(BAJA_PRODUCTO.format(producto_envase_id=producto,stock_real=cantidad))
 
 
 def consultaMovimientosExportar(desde,hasta):

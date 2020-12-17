@@ -126,7 +126,7 @@ def agregar():
 										flash("El producto se ha cargado correctamente", 'warning')
 									else:
 										if p.get_stock_real() < cantidad:
-											flash('La cantidad a descontar no es suficiente', 'error')
+    											flash('No hay suficiente stock para realizar la operación', 'error')
 										else:
 											resultado = salida(user, product, cantidad, id_producto)
 											print(resultado, flush=True)

@@ -149,8 +149,8 @@ producto_envase_id,descripcion,cantidad) VALUES ({tipo_movimiento},{usuario_id},
 UPDATE_STOCK_REAL = """UPDATE producto_envase SET stock_real = stock_real + '{cantidad}'  WHERE
 producto_envase_id = {producto_envase_id}"""
 
-BAJA_PRODUCTO = """UPDATE producto_envase SET stock_real='{stock_real}'  WHERE
-producto_envase_id='{producto_envase_id}' """
+BAJA_PRODUCTO = """UPDATE producto_envase SET stock_real= stock_real - {stock_real}  WHERE
+producto_envase_id={producto_envase_id} """
 
 CONSULTAR_MOVIMIENTOS = """
     SELECT p.descripcion as descripcion_p, m.descripcion as descripcion_m, um.descripcion, u.username,
@@ -170,10 +170,10 @@ UPDATE_NUEVO_PEDIDO_STOCK_REAL = """ UPDATE producto_envase SET stock_real='{sto
 
 SELECT_TIPO_MOVIMIENTO_STOCK = """ SELECT * FROM tipo_movimiento_stock WHERE descripcion='{descripcion}' """
 
-SELECT_MOVIMIENTOS_BY_FECHA = """ SELECT p.descripcion AS d_producto, m.descripcion AS d_marca, 
+SELECT_MOVIMIENTOS_BY_FECHA = """ SELECT p.descripcion AS d_producto, m.descripcion AS d_marca,
 	tms.descripcion AS d_tipo_movimiento, um.descripcion AS d_unidad_medida, e.descripcion AS d_envase,
 	ms.cantidad AS cantidad, ms.ts_created AS fecha
-	FROM movimiento_stock AS ms 
+	FROM movimiento_stock AS ms
 	INNER JOIN tipo_movimiento_stock AS tms ON tms.tipo_movimiento_stock_id=ms.tipo_movimiento_stock_id
 	INNER JOIN producto_envase AS pe ON pe.producto_envase_id=ms.producto_envase_id
 	INNER JOIN envase AS e ON e.envase_id=pe.envase_id
