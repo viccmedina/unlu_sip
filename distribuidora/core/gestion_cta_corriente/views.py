@@ -51,7 +51,7 @@ def consultar_cta_corriente():
                 cliente = form.cliente.data
                 print('CLIENTE --> {}'.format(cliente))
                 nro_cta = get_nro_cuenta_corriente(cliente)
-                
+
                 if nro_cta:
                     nro_cta = nro_cta[0]['cuenta_corriente_id']
                     resultado = get_consulta_movimientos(fecha_desde, fecha_hasta, nro_cta)
@@ -156,9 +156,6 @@ def exportar():
 			resultado = consultaCtaCorrienteExportar()
 			#print("lengt {}".format(resultado.length))
 			print('#'*80, flush=True)
-			#nro_cta = get_nro_cuenta_corriente(cliente)
-			#resultado = get_consulta_movimientos(fecha_desde, fecha_hasta,nro_cta[0]['cuenta_corriente_id'])
-			#print(resultado, flush=True)
 			print('#'*80, flush=True)
 		else:
 			print(form.errors, flush=True)
@@ -199,8 +196,7 @@ def descargar_consulta_cta_corriente():
         print(resultado)
         result = consultaCtaCorrienteExportar()
 
-        html = render_template('tabla_consulta_cta_corriente_css.html',\
-        	resultado=result)
+        html = render_template('tabla_consulta_cta_corriente_css.html',resultado=result)
         """
         stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
         return render_pdf(HTML(string=html), stylesheets=stylesheets)

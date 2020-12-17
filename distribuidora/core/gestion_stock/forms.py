@@ -32,11 +32,8 @@ class AgregarStock(FlaskForm):
 	producto = SelectField(u'Producto', choices=[])
 	marca = SelectField(u'Marca', choices=[])
 	uMedida = SelectField(u'Unidad de Medida', choices=[])
-	#producto = StringField('Ingrese El Nombre Producto', validators=[DataRequired()], render_kw={"placeholder": "Levadura"})
-	#marca = StringField('Ingrese La Marca del Producto', validators=[DataRequired()], render_kw={"placeholder": "Ejemplo"})
-	#uMedida = StringField('Ingrese La Unidad de Medida', validators=[DataRequired()], render_kw={"placeholder": "25gr"})
 	cantidad = StringField('Cantidad',validators=[DataRequired()], render_kw={"placeholder": "10"})
-	submit = SubmitField('Actuliazar')
+	submit = SubmitField('Actualizar')
 	cancelar = SubmitField('Cancelar')
 
 class DescargarConsulta(FlaskForm):
