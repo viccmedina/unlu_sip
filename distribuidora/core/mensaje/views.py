@@ -1,4 +1,4 @@
-from distribuidora.models.gestion_usuario import Usuario
+from distribuidora.models.gestion_usuario import Usuario, Rol
 from distribuidora.models.mensaje import Message
 from distribuidora.core.mensaje.forms import MessageForm
 from distribuidora.core.mensaje.helper import *
@@ -29,6 +29,7 @@ def index():
         site='Mensajería', \
         sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
 
+
 @msg.route('/mensaje/listar', methods=['GET'])
 @login_required
 def listar_mensajes():
@@ -43,10 +44,10 @@ def listar_mensajes():
 		msj_sin_leer = json.loads(msj_sin_leer)
 		result = update_read_mensaje(msj_sin_leer['id'])
 		print(result)
-	
+
 	usuarios_id = current_user.get_id()
 	msjs = get_mensajes(usuarios_id)
-	
+
 	return render_template('mis_mensajes.html', \
 		datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
@@ -59,32 +60,39 @@ def listar_mensajes():
 @msg.route('/mensaje/nuevo', methods=['GET', 'POST'])
 @login_required
 def enviar_mensaje():
-	form = MessageForm()
-	if form.validate_on_submit():
-		data = {
-			'emisor': current_user.get_id(),
-			'receptor': form.recipient.data,
-			'body': form.message.data
-		}
-		if data['receptor'] != current_user.get_id():
-			print('es distinto')
-			if current_user.has_role('Cliente') and data['receptor'] == '2':
-				print('data: {}'.format(data), flush=True)
-				result = insert_nuevo_mensaje(data)
-				#result = True
-				print(result)
-				if result:
-					flash('El mensaje ha sido enviado correctamente', 'success')
-				else:
-					flash('Verifique la información ingresada', 'error')
-			else:
-				flash('No es posible enviarle a este destinatario', 'error')
-		else:
-			flash('No es posible enviarle a este destinatario', 'error')
-	else:
-		cargar_errores(form.errors)
+    form = MessageForm()
+    form.recipient.choices = operadores()
+    if form.validate_on_submit():
+        data = {
+        	'emisor': current_user.get_id(),
+        	'receptor': form.recipient.data,
+        	'body': form.message.data
+        }
+        id_oper = id_operador(data['receptor'])
+        if id_oper != None:
+            id = id_oper[0]
+            if id_oper != current_user.get_id():
+            	print('es distinto')
+            	if current_user.has_role('Cliente'):
+            		print('data: {}'.format(data), flush=True)
+            		result = insert_nuevo_mensaje(data,id)
+            		#result = True
+            		print(result)
+            		if result:
+            			flash('El mensaje ha sido enviado correctamente', 'success')
+            		else:
+            			flash('Verifique la información ingresada', 'error')
+            	else:
+            		flash('No es posible enviarle a este destinatario', 'error')
+            else:
+            	flash('No es posible enviarle a este destinatario', 'error')
+        else:
+            	flash('No es posible enviarle a este destinatario', 'error')
 
-	return render_template('enviar_mensaje.html', \
+    else:
+        cargar_errores(form.errors)
+
+    return render_template('enviar_mensaje.html', \
         datos=current_user.get_mis_datos(), \
         is_authenticated=current_user.is_authenticated, \
         rol='ROL', \

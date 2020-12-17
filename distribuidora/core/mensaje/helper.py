@@ -8,15 +8,30 @@ def parser_result(result):
         resp.append(dict(row))
     return resp
 
+def operadores():
+    resp = []
+    resultado = db.engine.execute(SELECT_OPERADORES)
+    for row in resultado:
+        resp.append(row.name)
+    return resp
+
+def id_operador(operador):
+    resp = []
+    resultado = db.engine.execute(SELECT_ID_OPERADOR.format(oper=operador))
+    for row in resultado:
+        print("Row {}".format(row.id))
+        resp.append(row.id)
+    return resp
+
 def check(result):
     if result.rowcount == 1 :
         return True
     else:
         return False
 
-def insert_nuevo_mensaje(data):
+def insert_nuevo_mensaje(data,id_oper):
 	result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(\
-        recipient_id=data['receptor'], \
+        recipient_id=id_oper, \
         sender_id=data['emisor'],\
         body=data['body']))
 	return check(result)
@@ -26,7 +41,7 @@ def get_mensajes(usuario_id):
 		usuario_id=usuario_id))
 	enviados = parser_result(enviados)
 	print(enviados, flush=True)
-	
+
 	recibidos = db.engine.execute(SELECT_TODOS_MIS_MENSAJES_RECIBIDOS.format(\
 		usuario_id=usuario_id))
 	print('x'*100, flush=True)

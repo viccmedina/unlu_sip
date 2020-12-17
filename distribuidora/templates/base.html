@@ -19,21 +19,21 @@
     <a class="p-2 text-dark" href="{{ url_for('core_blueprint.productos' )  }}">Productos</a>
     <a class="p-2 text-dark" href="{{ url_for('core_blueprint.nosotros') }}">Nosotros</a>
     <a class="p-2 text-dark" href="{{ url_for('core_blueprint.como_comprar') }}">Cómo Comprar</a>
-    <a class="p-2 text-dark" href="{{ url_for('core_blueprint.contacto') }}">Contactos</a>
+    <a class="p-2 text-dark" href="{{ url_for('core_blueprint.contacto') }}">Contacto</a>
   </nav>
   {% if is_authenticated %}
 
-  	<a href="{{ url_for('mensajes.listar_mensajes') }}" class="btn btn-primary" style="margin-right: 1em;">Mensajes <span class="badge badge-light">{{ sin_leer[0]['sin_leer'] }}</span></a>
+  	<a href="{{ url_for('mensajes.listar_mensajes') }}" class="btn btn-primary" style="margin-right: 1em;">Notificaciones <span class="badge badge-light">{{ sin_leer[0]['sin_leer'] }}</span></a>
   	<div class="dropdown">
   		<button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    		Mi Perfil
+    		Mi Panel
   		</button>
 	  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 	  		{% if rol == 'Operador' %}
-		    	<a class="dropdown-item" href="{{ url_for('gestion_usuario.home_operador') }}">Mi Perfil</a>
+		    	<a class="dropdown-item" href="{{ url_for('gestion_usuario.home_operador') }}">Mi Panel</a>
 		    {% else %}
 		    	{% if rol == 'Cliente' %}
-		    	<a class="dropdown-item" href="{{ url_for('gestion_usuario.home_cliente') }}">Mi Perfil</a>
+		    	<a class="dropdown-item" href="{{ url_for('gestion_usuario.home_cliente') }}">Mi Panel</a>
 		    	{% endif %}
 		    {% endif %}
 		    <a class="dropdown-item" href="{{ url_for('gestion_usuario.logout') }}">Cerrar Sesión</a>
