@@ -119,7 +119,12 @@ INNER JOIN lista_precio_producto lpp ON lpp.producto_envase_id = pe.producto_env
 WHERE m.descripcion = '{marca}' and um.descripcion = '{uMedida}'
 """
 
-
+CONSULTAR_ID_PROENV = """
+SELECT pe.producto_envase_id FROM producto p INNER JOIN producto_envase pe ON
+p.producto_id = pe.producto_id INNER JOIN marca m ON m.marca_id = p.marca_id INNER JOIN unidad_medida um ON
+pe.unidad_medida_id = um.unidad_medida_id
+WHERE p.descripcion = '{producto}' and m.marca_id = {marca} and um.unidad_medida_id = {uMedida}
+"""
 PRODUCTOS_P_PRODUCTO_MARCA_UMEDIDA  = """
 SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,
 tp.descripcion as tipoProd,pe.stock_real as stock FROM producto p INNER JOIN producto_envase pe ON
@@ -162,6 +167,16 @@ SELECT m.marca_id FROM marca m WHERE m.descripcion = '{marca}'
 CONSULTA_ID_PRODUCTO_MARCA_UMEDIDA =  """ SELECT (pe.producto_envase_id) FROM producto p INNER JOIN
 producto_envase pe on p.producto_id = pe.producto_id
 WHERE p.marca_id = {marca} AND pe.unidad_medida_id = {uMedida} AND p.descripcion = '{producto}' """
+
+INSERTAR_PRODUCTO_LISTA_PRECIO="""
+INSERT INTO lista_precio_producto (producto_envase_id,precio_id,precio,fecha_inicio,fecha_fin)
+values ({producto},{precio_id},{precio},'{desde}','{hasta}')
+"""
+
+CONSULTAR_IDPRECIO ="""
+select p.precio_id, p.fecha_desde as desde,p.fecha_hasta as hasta from lista_precio p
+where p.fecha_desde < CURRENT_TIMESTAMP and p.fecha_hasta > CURRENT_TIMESTAMP
+"""
 
 CONSULTA_STOCK1 = """
 SELECT p.descripcion as producto, m.descripcion as marca, um.descripcion as umedida, lpp.precio as precio,

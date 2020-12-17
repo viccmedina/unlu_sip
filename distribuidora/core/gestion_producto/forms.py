@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, FileField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, FileField, SelectField,IntegerField
 from wtforms.validators import DataRequired, EqualTo
 from wtforms import ValidationError
 
@@ -20,6 +20,7 @@ class AgregarProducto(FlaskForm):
 	uMedida = SelectField(u'Unidad de Medida', choices=[])
 	tipo_producto = SelectField(u'Tipo Producto', choices=[], validators=[DataRequired()])
 	envase = SelectField(u'Envase', choices=[], validators=[DataRequired()])
+	precio = IntegerField('Ingrese El Precio Producto- Sin punto ni comas', validators=[DataRequired()])
 	submit = SubmitField('Agregar')
 
 class EliminarProducto(FlaskForm):

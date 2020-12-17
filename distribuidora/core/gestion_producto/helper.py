@@ -201,14 +201,23 @@ def consulta_producto_pMarcaUMedida(marca,uMedida):
 
 
 
-
-
-def insert_new_producto(producto,marca,uMedida,tProd,envase):
+def insert_new_producto(producto,marca,uMedida,tProd,envase,precio):
     db.engine.execute(INSERT_T_PRODUCTO.format(producto=producto,marca=Id_marca(marca),tProd=Id_tipo_producto(tProd)))
 
     db.engine.execute(INSERT_T_PRODUCTO_ENVASE.format(producto=producto_ide(producto,marca),\
     envase=envase_ide(envase),uMedida=unidad_medida_ide(uMedida)))
+    resultado  = db.engine.execute(CONSULTA_ID_PRODUCTO_MARCA_UMEDIDA.format(producto=producto,marca=Id_marca(marca),uMedida=unidad_medida_ide(uMedida)))
+    for row in resultado:
+        print("pe.id {}".format(row.producto_envase_id))
+        pe_ID = row.producto_envase_id
 
+    resultado = db.engine.execute(CONSULTAR_IDPRECIO)
+    for row in resultado:
+        desde = row.desde
+        hasta=row.hasta
+        preID = row.precio_id
+
+    db.engine.execute(INSERTAR_PRODUCTO_LISTA_PRECIO.format(producto=pe_ID,precio_id=preID,precio=precio,desde=desde,hasta=hasta))
     return True
 
 

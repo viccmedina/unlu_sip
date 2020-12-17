@@ -91,12 +91,17 @@ def agregar():
         form.tipo_producto.choices = [(descripcion.descripcion) for descripcion in TipoProducto.query.all()]
         form.envase.choices = [(descripcion.descripcion) for descripcion in Envase.query.all()]
         if form.validate_on_submit():
-            if insert_new_producto(form.producto.data,form.marca.data,form.uMedida.data,\
-            form.tipo_producto.data,form.envase.data):
-                flash("Se ha ingresado un nuevo producto", 'warning')
+            precio = int(form.precio.data)
+            if precio >= 0:
+                if insert_new_producto(form.producto.data,form.marca.data,form.uMedida.data,\
+                form.tipo_producto.data,form.envase.data,precio):
+                    flash("Se ha ingresado un nuevo producto", 'warning')
+                else:
+                    flash("No se ha podido crear el nuevo producto, ha surgido un error",'error')
             else:
-                flash("No se ha podido crear el nuevo producto, ha surgido un error",'error')
-
+                flash("Precio Invalido",'error')
+        else:
+            flash("Precio Invalido",'error')
 
         return render_template('form_agregar_producto.html',\
         datos=current_user.get_mis_datos(), \

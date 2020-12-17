@@ -58,7 +58,7 @@ def agregar_precio_pProductoMarcaUMedida(producto,marca,umedida,precio,fecha):
         p = row.producto
     if p == None:
         return None
-    db.engine.execute(AGREGAR_PRECIO.format(fecha=fecha))
+    #db.engine.execute(AGREGAR_PRECIO.format(fecha=fecha))
     id_precio = db.engine.execute(CONSULTAR_ID_PRECIO.format(fecha=fecha))
     for row in id_precio:
         print("precio id es {}".format(row.precio_id))
