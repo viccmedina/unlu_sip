@@ -90,6 +90,10 @@ def agregar():
         form.uMedida.choices = [(descripcion.descripcion) for descripcion in UnidadMedida.query.all()]
         form.tipo_producto.choices = [(descripcion.descripcion) for descripcion in TipoProducto.query.all()]
         form.envase.choices = [(descripcion.descripcion) for descripcion in Envase.query.all()]
+        b = "nflag"
+        if b == "nflag":
+            print("son igualles")
+        print("b es {}".format(b))
         if form.validate_on_submit():
             precio = int(form.precio.data)
             if precio >= 0:
@@ -100,16 +104,15 @@ def agregar():
                     flash("No se ha podido crear el nuevo producto, ha surgido un error",'error')
             else:
                 flash("Precio Invalido",'error')
-        else:
-            flash("Precio Invalido",'error')
 
-        return render_template('form_agregar_producto.html',\
-        datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated, \
-        rol='operador',\
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
-        products=products,\
-        form=form)
+        
+    return render_template('form_agregar_producto.html',\
+    datos=current_user.get_mis_datos(), \
+    is_authenticated=current_user.is_authenticated, \
+    rol='operador',\
+    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+    products=products,\
+    form=form)
     abort(403)
 
 

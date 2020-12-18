@@ -239,7 +239,8 @@ def modificar_estado_operador():
                     "receptor": receptor,
                     "body": body
                 }
-                resp = insert_nuevo_mensaje(data)
+                
+                resp = insert_nuevo_mensaje(data,-1)
                 if resp:
                     flash('Mensaje enviado', 'success')
                 else:

@@ -12,8 +12,9 @@ SELECT_PEDIDO_POR_ID = """ SELECT * FROM pedido WHERE pedido_id='{pedido_id}'"""
 LISTAR_DETALLE_PEDIDO = """ SELECT * FROM detalle_pedido WHERE
     pedido_id='{pedido_id}' """
 
+
 # Vamos a devolver el detalle pero con mas informaciónote
-DETALLE_INFORMACION_FULL = """ SELECT dp.pedido_id, dp.detalle_id, dp.producto_envase_id, 
+DETALLE_INFORMACION_FULL = """ SELECT dp.pedido_id, dp.detalle_id, dp.producto_envase_id,
     e.descripcion AS desc_envase, dp.pedido_id, pe.stock_real, dp.cantidad, lpp.precio,
     (lpp.precio * dp.cantidad) AS total, pr.descripcion AS desc_producto, m.descripcion AS desc_marca,
     um.descripcion AS desc_unidad_medida
@@ -58,7 +59,7 @@ SELECT_ID_ULTIMO_PEDIDO = """ SELECT pedido_id FROM pedido WHERE usuario_id='{us
 SELECT_PEDIDOS_ESTADO_PCO = """ SELECT  hep.historial_estado_pedido_id, hep.pedido_id, pe.descripcion, pe.orden FROM historial_estado_pedido AS hep
     INNER JOIN pedido_estado AS pe ON hep.pedido_estado_id = pe.pedido_estado_id
     WHERE pe.orden>1
-    GROUP by hep.pedido_id 
+    GROUP by hep.pedido_id
     HAVING MAX(hep.ts_created)
     ORDER BY hep.pedido_id  DESC"""
 
@@ -113,7 +114,6 @@ INSERT_NUEVO_COMPROBANTE_PAGO = """ INSERT INTO comprobante_pago (monto,
 SELECT_ID_FROM_ESTADO_COMPROBANTE_PAGO = """ SELECT * FROM estado_comprobante_pago
 	WHERE descripcion_corta='{descripcion_corta}' """
 
-SELECT_PEDIDO = """ SELECT * FROM pedido AS p 
+SELECT_PEDIDO = """ SELECT * FROM pedido AS p
     INNER JOIN pedido_estado AS pe ON pe.pedido_estado_id = p.estado_pedido_id
     WHERE pedido_id = '{pedido_id}' """
-

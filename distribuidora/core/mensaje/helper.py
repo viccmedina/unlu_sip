@@ -40,11 +40,14 @@ def check(result):
         return False
 
 def insert_nuevo_mensaje(data,id_oper):
-	result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(\
-        recipient_id=id_oper, \
-        sender_id=data['emisor'],\
-        body=data['body']))
-	return check(result)
+    print("id oper es {}".format(id_oper))
+    if id_oper == -1:
+        print("id oper es son igualess  sdas {}".format(id_oper))
+        result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(recipient_id=data['receptor'],sender_id=data['emisor'],body=data['body']))
+        return check(result)
+    else:
+        result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(recipient_id=id_oper,sender_id=data['emisor'],body=data['body']))
+        return check(result)
 
 
 

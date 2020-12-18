@@ -20,6 +20,7 @@ def check(result):
     else:
         return False
 
+
 def validar_nuevo_pedido(usuario_id):
     pedido_id = get_ultimo_pedido_id(usuario_id)
     #recupero la cantidad de estados de ese pedido
