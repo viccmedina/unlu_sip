@@ -1,7 +1,7 @@
 {% block tabla_movimientos %}
 <div class="container">
   <h2 align="center" >Resultado de la consulta</h2>
-  <p>Productos </p>
+  <p>Campos anteriores del Producto que se va a modificar: </p>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -41,7 +41,7 @@
     {% for r in products %}
       <tr>
         <div class="form-group">
-          <h5>Campos a modificar: </h5>
+          <h5>Campos nuevos que seran asentados: </h5>
           <td> {{ form1.product.data }} </td>
           <td> {{ form1.marc.data }}</td>
           <td> {{ form1.uMedid.data }}</td>
