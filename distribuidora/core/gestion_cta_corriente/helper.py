@@ -123,10 +123,34 @@ def consultaCtaCorrienteExportar():
     return list
 
 
+def consulta_saldo_aparte(nro_cta):
+    saldito = None
+    salDeuda = db.engine.execute(CONSULTAR_SALDO_DEUDA.format(nro_cta=nro_cta))
+    for row in salDeuda:
+        d= row[0]
+    salPagos = db.engine.execute(CONSULTAR_SALDO_PAGOS.format(nro_cta=nro_cta))
+    for row in salPagos:
+        p= row[0]
+    print("deudas {}".format(d))
+    print("pagos {}".format(p))
+    if p is None and d is not None:
+        saldito = d
+    elif d is None and p is not None:
+        saldito = p
+    elif d is not None and p is not None:
+        saldito = d - p
+    else:
+        saldito = 0
+
+    return saldito
+
 
 def consulta_saldo(nro_cta):
     saldo = db.engine.execute(CONSULTAR_SALDO.format(nro_cta=nro_cta))
+
     return parser_result(saldo)
+
+
 
 def actualizar_estado_comprobante_pago(monto, cliente):
     """

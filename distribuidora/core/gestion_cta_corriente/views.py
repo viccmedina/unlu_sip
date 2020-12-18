@@ -109,11 +109,13 @@ def agregar():
         sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
+
 @cta_corriente.route('/cta_corriente/consultarSaldo', methods=['GET', 'POST'])
 @login_required
 def consultar_saldo():
     if current_user.has_role('Operador'):
         resultado = None
+        saldito = None
         form = ConsultarSaldo()
 
         if form.validate_on_submit():
@@ -124,6 +126,7 @@ def consultar_saldo():
                 flash("El cliente no posee una Cta Corriente", 'error')
             else:
                 nro_cta = nro_cta[0]['cuenta_corriente_id']
+                saldito = consulta_saldo_aparte(nro_cta)
                 resultado = consulta_saldo(nro_cta)
         else:
             cargar_errores(form.errors)
@@ -133,6 +136,7 @@ def consultar_saldo():
             datos=current_user.get_mis_datos(), \
             is_authenticated=current_user.is_authenticated, \
             resultado=resultado,\
+            saldito=saldito,\
             form=form,\
             rol=ROL, \
             site= TITULO + ' - Consultar Saldo',\
