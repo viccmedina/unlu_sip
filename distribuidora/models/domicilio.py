@@ -50,12 +50,15 @@ class Domicilio(db.Model):
 		return 'Calle {} {}, localidad de'.format(self.calle, self.numero, loc)
 
 	def getDireccion(self):
-		return "calle " + self.calle + " numero " +self.numero
+		return "Calle " + self.calle + " Nro. " + str(self.numero)
 
 	def getLocalidad(self):
-		loca = Localidad.query.filter_by(localidad_id=self.localidad_id)
-		prov = Provincia.query.filter_by(provincia_id=loca.provincia_id)
-		return "Localidad {} de la provincia de {}".format(loca, prov)
+		loca = Localidad.query.filter_by(localidad_id=self.localidad_id).first()
+		prov = Provincia.query.filter_by(provincia_id=loca.provincia_id).first()
+		return "Localidad {} de la Provincia de {}".format(loca, prov)
+
+	def get_aclaracion(self):
+		return self.aclaracion
 
 # metodo qe devuelva calle/nº
 # localidad/pcia

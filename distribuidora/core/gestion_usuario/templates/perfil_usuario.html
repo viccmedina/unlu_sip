@@ -1,0 +1,36 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+<div class="container-fluid">
+	<div class="row">
+		{% include "acordeon_perfil_usuario.html" %}
+<div class="card mb-3">
+  <img src="{{ url_for('static', filename='profile.svg') }}" class="card-img-top"  width="50%" height="30%" alt="Profile">
+  <div class="card-body">
+    <h5 class="card-title">Mis Datos</h5>
+    
+    <p class="card-text" style="font-size:18px"><i class="fa fa-user-circle" aria-hidden="true"> <strong>Usuario: </strong> </i>  {{ datos.username }}</p>
+    <p class="card-text" style="font-size:18px"><i class="fa fa-address-card-o" aria-hidden="true"> <strong>Nombre y Apellido: </strong></i> {{ datos.apenom }}</p>
+    <p class="card-text" style="font-size:18px"><i class="fa fa-calendar-check-o" aria-hidden="true"><strong> Fecha de Nacimiento: </strong> </i>{{ datos.fecha_nacimiento }}</p>
+    <p class="card-text" style="font-size:18px"><i class="fa fa-address-card-o" aria-hidden="true"> <strong> DNI: </strong></i>{{ datos.dni }}</p>
+    <p class="card-text" style="font-size:18px"><i class="fa fa-map-marker" aria-hidden="true"><strong> Domicilio: </strong></i>{{ datos.domicilio.direccion }}</p>
+    <p class="card-text" style="font-size:18px"><i class="fa fa-thumb-tack" aria-hidden="true"><strong> Aclaración: </strong></i> {{ datos.domicilio.aclaracion }}</p>
+    <p class="card-text" style="font-size:18px"><i class="fa fa-phone-square" aria-hidden="true"><strong> Teléfono Principal: </strong></i>{{ datos.tel_principal }}</p>
+    <p class="card-text" style="font-size:18px"><i class="fa fa-phone-square" aria-hidden="true"><strong> Teléfono Secundario: </strong></i> {{ datos.tel_secundario }}</p>
+    <p class="card-text" style="font-size:18px"><i class="fa fa-envelope-o" aria-hidden="true"><strong> Email: </strong></i>{{ datos.email }}</p>
+    <p class="card-text" style="font-size:18px"><i class="fa fa-map-marker" aria-hidden="true"><strong> Razón Social: </strong></i> {{ datos.razon_social }}</p>
+
+  </div>
+</div>
+
+		</div>
+	</div>
+
+
+
+
+
+{% endblock %}
+
+

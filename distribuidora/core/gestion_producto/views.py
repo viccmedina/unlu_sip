@@ -321,8 +321,13 @@ def detalle_producto():
         print(form.errors)
         flash(form.errors, 'errors')
 
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.has_role('Cliente'):
         template = 'detalle_producto.html'
+        datos = current_user.get_mis_datos()
+        sin_leer = get_cantidad_msj_sin_leer(current_user.get_id())
+        rol = current_user.get_role()
+    elif current_user.is_authenticated and current_user.has_role('Operador'):
+        template = 'detalle_producto_sin_login.html'
         datos = current_user.get_mis_datos()
         sin_leer = get_cantidad_msj_sin_leer(current_user.get_id())
         rol = current_user.get_role()

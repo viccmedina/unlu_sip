@@ -60,6 +60,23 @@ def logout():
 
 
 @login_required
+@gestion_usuario.route('/usuario/perfil', methods=['GET'])
+def ver_perfil():
+    """
+    Vista home del usuario de tipo Operador
+    """
+    site = 'Perfil {}'.format(current_user.get_username())
+    datos=current_user.get_mis_datos()
+    print('DATOS: {}'.format(datos))
+    return render_template('perfil_usuario.html', \
+        datos=current_user.get_mis_datos(), \
+        is_authenticated=current_user.is_authenticated, \
+        rol='operador',\
+        site=site,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+
+
+@login_required
 @gestion_usuario.route('/home_operador', methods=['POST', 'GET'])
 def home_operador():
     """

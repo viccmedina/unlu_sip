@@ -70,3 +70,23 @@ class Persona(db.Model):
 
 	def get_tel_secundario(self):
 		return self.telefono_sec
+
+	def get_dni(self):
+		return self.num_dni
+
+	def get_fecha_nacimiento(self):
+		return self.fecha_nacimiento.strftime("%x")
+
+	def get_razon_social(self):
+		return self.razon_social
+
+	def get_domicilio(self):
+		print('####################################')
+		print(self.persona_id)
+		dom = Domicilio.query.filter_by(persona_id=self.persona_id).first()
+		result = dom.getDireccion() + ' ' + dom.getLocalidad()
+		data = {
+			'direccion': result,
+			'aclaracion': dom.get_aclaracion()
+		}
+		return data
