@@ -37,6 +37,7 @@ admin.add_view(ModelView(Usuario, db.session))
 admin.add_view(ModelView(Rol, db.session))
 admin.add_view(ModelView(Permiso, db.session))
 admin.add_view(ModelView(Persona, db.session))
+admin.add_view(ModelView(Domicilio, db.session))
 admin.add_view(ModelView(MovimientoCtaCorriente, db.session))
 
 
