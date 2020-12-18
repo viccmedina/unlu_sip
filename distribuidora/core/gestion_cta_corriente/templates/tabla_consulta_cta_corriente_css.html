@@ -19,18 +19,16 @@
           <th>Cliente Nº</th>
           <th>Nombre</th>
           <th>Email</th>
-          <th>Teléfono</th>
-          <th>Saldo</th>
+          <th>  Saldo</th>
         </tr>
       </thead>
       <tbody>
         {% for r in resultado %}
         <tr>
-          <td>{{r['cliente']}}</td>
+          <td>{{r['cta_corriente']}}</td>
           <td>{{r['nombre']}}</td>
           <td>{{r['email']}}</td>
-          <td>{{r['telefono']}}</td>
-          <td>{{r['saldo']}}</td>
+          <td>{{saldito}}</td>
         </tr>
         {% endfor %}
 

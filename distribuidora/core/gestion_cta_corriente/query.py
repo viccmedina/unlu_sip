@@ -16,11 +16,15 @@ WHERE r.nombre != 'Gerencia' AND r.nombre != 'Operador'
 
 CONSULTAR_MONTO_CC ="""
 SELECT sum(saldo) as saldoCC FROM movimiento_cta_corriente mccc WHERE mccc.usuario = {user}
+and mccc.tipo_movimiento_cta_corriente = 2
 """
 
 CONSULTAR_MONTO_CP = """
 SELECT sum(monto) as saldoCP FROM comprobante_pago cpp INNER JOIN pedido ped on cpp.pedido = ped.pedido_id
-inner join usuario u on ped.usuario_id = u.id WHERE u.id = {user}
+inner join usuario u on ped.usuario_id = u.id
+inner join movimiento_cta_corriente mcc on mcc.movimiento_id = cpp.movimiento
+inner join tipo_movimiento_cta_corriente tmcc on tmcc.id = mcc.tipo_movimiento_cta_corriente
+WHERE u.id = {user} and (tmcc.id = 1 or tmcc.id = 3)
 """
 
 
@@ -65,7 +69,7 @@ and tipo_movimiento_cta_corriente = 2
 
 CONSULTAR_SALDO_PAGOS = """
 SELECT sum(mov.saldo) FROM movimiento_cta_corriente mov  WHERE cta_corriente = {nro_cta}
-and tipo_movimiento_cta_corriente = 1 or tipo_movimiento_cta_corriente = 3 
+and tipo_movimiento_cta_corriente = 1 or tipo_movimiento_cta_corriente = 3
 """
 
 

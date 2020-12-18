@@ -75,7 +75,7 @@ def new_mov_cta_corriente(nro_cta,tipo_mov,user,monto):
 
     print(" t mov : {}".format(t_movimiento))
     if t_movimiento == 2 :
-        saldo = float(monto * (-1))
+        saldo = float(monto)
         query = db.engine.execute(INSERT_MOV_CTA_CORRIENTE.format(n_cta=nro_cta, t_mov=t_movimiento, \
             user=user,descripcion=desc,monto=saldo))
     else:
@@ -114,13 +114,8 @@ def consultaCtaCorrienteExportar():
         resta =   scc -   scp # resto deuda - pagos
         print("resta {}".format(resta))
         datos = db.engine.execute(CONSULTA_MOVIMIENTOS_CTA_CORRIENTE.format(user=id))# constultos el resto de los valores
-        for row in datos:
-            item = dict(row)
-            item['saldo'] =float(resta)# seteo valor de la resta al saldo
-            print("resta en dict {}".format(item['saldo']))
-            list.append(item)
 
-    return list
+    return parser_result(datos)
 
 
 def consulta_saldo_aparte(nro_cta):
@@ -134,11 +129,11 @@ def consulta_saldo_aparte(nro_cta):
     print("deudas {}".format(d))
     print("pagos {}".format(p))
     if p is None and d is not None:
-        saldito = d
+        saldito = d * (-1)
     elif d is None and p is not None:
         saldito = p
     elif d is not None and p is not None:
-        saldito = d - p
+        saldito =  p - d
     else:
         saldito = 0
 

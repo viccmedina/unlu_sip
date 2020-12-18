@@ -65,6 +65,8 @@ def consultar_cta_corriente():
             sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
+
+
 @cta_corriente.route('/cta_corriente/agregar', methods=['GET', 'POST'])
 @login_required
 def agregar():
@@ -88,9 +90,7 @@ def agregar():
                 if tipo_movimiento == 'Pago':
                     if actualizar_estado_comprobante_pago(monto, cliente):
                         flash("Pago agregar correctamente", 'success')
-                else:
-                    flash("Algo salió mal, verifique los datos ingresados", 'error')
-
+                
                 if resultado:
                     flash("La transacción se ha registrado con éxito", 'success')
                 else:
@@ -110,12 +110,15 @@ def agregar():
     abort(403)
 
 
+
+
 @cta_corriente.route('/cta_corriente/consultarSaldo', methods=['GET', 'POST'])
 @login_required
 def consultar_saldo():
     if current_user.has_role('Operador'):
         resultado = None
         saldito = None
+        nro_cta = None
         form = ConsultarSaldo()
 
         if form.validate_on_submit():
@@ -137,6 +140,7 @@ def consultar_saldo():
             is_authenticated=current_user.is_authenticated, \
             resultado=resultado,\
             saldito=saldito,\
+            nro_cta=nro_cta,\
             form=form,\
             rol=ROL, \
             site= TITULO + ' - Consultar Saldo',\
@@ -196,11 +200,13 @@ def importar():
 def descargar_consulta_cta_corriente():
     if current_user.has_role('Operador'):
         resultado = request.args.get("resultado", None)
+        nro_cta = request.args.get("nro_cta")
         print('RESULTADOO!')
         print(resultado)
-        result = consultaCtaCorrienteExportar()
+        saldito = consulta_saldo_aparte(nro_cta)
+        resultado = consulta_saldo(nro_cta)
 
-        html = render_template('tabla_consulta_cta_corriente_css.html',resultado=result)
+        html = render_template('tabla_consulta_cta_corriente_css.html',resultado=resultado,saldito=saldito)
         """
         stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
         return render_pdf(HTML(string=html), stylesheets=stylesheets)

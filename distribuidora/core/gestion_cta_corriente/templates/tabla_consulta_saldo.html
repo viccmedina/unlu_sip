@@ -5,6 +5,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th>Nº Cliente</th>
         <th>Usuario</th>
         <th>Nro Cuenta</th>
         <th>Saldo</th>
@@ -13,6 +14,7 @@
     <tbody>
       {% for r in resultado %}
         <tr>
+          <td>{{r['cta_corriente']}}</td>
           <td>{{ r.nombre }}</td>
           <td>{{ r.email }}</td>
           <td>{{ saldito }}</td>
