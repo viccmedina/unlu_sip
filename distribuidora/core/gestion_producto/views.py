@@ -262,34 +262,59 @@ def importar_productos():
 def listar_productos():
     page = request.args.get('page', 1, type=int)
     #productos = lista_de_productos().paginate(page,5,False)
-    productos = db.session.query(Producto, Marca, TipoProducto,Lista_precio_producto, UnidadMedida, ProductoEnvase).filter(\
+    productos = db.session.query(Producto, Marca, TipoProducto,Lista_precio_producto, UnidadMedida, ProductoEnvase, Envase).filter(\
         ProductoEnvase.producto_id == Producto.producto_id).filter(\
         Producto.tipo_producto_id == TipoProducto.tipo_producto_id).filter(\
+        ProductoEnvase.envase_id == Envase.envase_id).filter(\
         ProductoEnvase.unidad_medida_id == UnidadMedida.unidad_medida_id).filter(\
         Producto.marca_id == Marca.marca_id).filter(\
         ProductoEnvase.producto_envase_id == Lista_precio_producto.producto_envase_id).filter(\
-        ProductoEnvase.stock_real > 0).paginate( page, 5, False)
+        ProductoEnvase.stock_real > 0).paginate( page, 6, False)
 
 
+    cliente=False
     if current_user.is_authenticated:
-        template = 'detalle_producto.html'
+        if current_user.has_role('Cliente'):
+            cliente=True
         datos = current_user.get_mis_datos()
         sin_leer = get_cantidad_msj_sin_leer(current_user.get_id())
         rol = current_user.get_role()
     else:
-        template = 'detalle_producto_sin_login.html'
         datos = None
         sin_leer = None
         rol = None
 
-    return render_template('listar_productos.html', \
+    form = FormAgregarProducto()
+    if form.validate_on_submit():
+        #obtengo los datos del cliente
+        usuario_id = current_user.get_id()
+
+        #recupero el pedido en estado pcc
+        pedido_id = get_ultimo_pedido_id(usuario_id)
+        print(pedido_id)
+        #recupero la cantidad de estados de ese pedido
+        cantidad_estados = get_cantidad_estados_pedido(pedido_id)
+        if cantidad_estados == 1:
+            producto_envase_id = request.args.get("producto_envase_id")
+            cantidad = form.cantidad.data
+            insert_into_detalle_pedido(pedido_id=pedido_id, producto_envase_id=producto_envase_id, cantidad=cantidad)
+            flash('Producto agregado', 'success')
+    else:
+        flash(form.errors, 'errors')
+
+    
+
+    return render_template('listar_productos_v2.html', \
         datos=datos, \
         is_authenticated=current_user.is_authenticated, \
         rol=rol, \
+        cliente=cliente,\
         sin_leer=sin_leer,\
+        form=form,\
         site='Listado de Productos', \
         producto=productos)
 
+"""
 @producto.route('/detalle/producto', methods=['GET', 'POST'])
 def detalle_producto():
     producto = request.args.get('producto', type=str)
@@ -345,6 +370,7 @@ def detalle_producto():
         sin_leer=sin_leer,\
         rol=rol, \
         site='Detalle Producto')
+"""
 
 @producto.route('/eliminar/productos', methods=['POST','GET'])
 @login_required

@@ -82,13 +82,15 @@ def home_operador():
     """
     Vista home del usuario de tipo Operador
     """
-    site = 'Home {}'.format(current_user.get_username())
-    return render_template('home_operador.html', \
-        datos=current_user.get_mis_datos(), \
-        is_authenticated=current_user.is_authenticated, \
-        rol='operador',\
-        site=site,\
-        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+    if current_user.has_role('Operador'):
+        site = 'Home {}'.format(current_user.get_username())
+        return render_template('home_operador.html', \
+            datos=current_user.get_mis_datos(), \
+            is_authenticated=current_user.is_authenticated, \
+            rol='operador',\
+            site=site,\
+            sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
+    abort(403)
 
 
 @login_required

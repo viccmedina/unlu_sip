@@ -36,6 +36,9 @@ class Lista_precio(db.Model):
         """
         return 'precio de {}'.format(self.fecha_desde,self.fecha_hasta)
 
+    def entre_fechas(self):
+        return 'precio de {}'.format(self.fecha_desde,self.fecha_hasta)        
+
 
 class Lista_precio_producto(db.Model):
     """
@@ -75,4 +78,7 @@ class Lista_precio_producto(db.Model):
         """
         Nos devolverá una representación del Modelo
         """
-        return 'precio de {}'.format(self.fecha_inicio,self.fecha_fin)
+        return self.precio
+
+    def entre_fechas(self):
+        return 'precio de {}'.format(self.fecha_desde,self.fecha_hasta)  
