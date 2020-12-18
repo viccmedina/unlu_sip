@@ -1,12 +1,14 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
 from flask_login import login_user, current_user, logout_user, login_required
+from werkzeug.utils import secure_filename
 from distribuidora.core.gestion_lista_precio.forms import *
 from distribuidora.core.gestion_lista_precio.helper import *
 from distribuidora.models.producto import *
 from distribuidora.core.mensaje.helper import get_cantidad_msj_sin_leer
-from distribuidora import db
+from distribuidora import db, app
 from distribuidora.models.producto import Producto
 from datetime import datetime
+import os
 
 lista_precio = Blueprint('lista_precio', __name__, template_folder='templates')
 
@@ -108,14 +110,14 @@ def modificar():
                 return redirect(url_for('lista_precio.modificar_precios',producto=form.producto.data,marca=form.marca.data,umed=form.uMedida.data))
 
 
-
-    return render_template('form_modificar_lista_precios.html', \
-    datos=current_user.get_mis_datos(), \
-    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
-    is_authenticated=current_user.is_authenticated, \
-    rol='operador'  ,\
-    form=form,\
-    products=products)
+        return render_template('form_modificar_lista_precios.html', \
+        datos=current_user.get_mis_datos(), \
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+        is_authenticated=current_user.is_authenticated, \
+        rol='operador'  ,\
+        form=form,\
+        products=products)
+    abort(403)
 
 
 
@@ -149,85 +151,100 @@ def exportar():
 
 @lista_precio.route('/lista_precio/importar', methods=['GET','POST'])
 @login_required
-def importar():
+def importar_lista_precio():
     if current_user.has_role('Operador'):
+
+
+        if 'file' not in request.files:
+            pass
+        else:
+            file = request.files['file']
+            filename = secure_filename(file.filename)
+            extension = filename.split('.')
+            if extension[1] not in app.config['UPLOAD_EXTENSIONS']:
+                flash('La extensión del archivo no es la correcta. Se aceptan: {}'.format(app.config['UPLOAD_EXTENSIONS']), 'error')
+            else:
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                path = app.config['UPLOAD_FOLDER'] + filename
+                result = importar_lista_precios_from_file(path)
+                flash(result, 'warning')
+
+
+
         form = ImportarListaPrecio()
         return render_template('importar_lista_precio.html',\
         datos=current_user.get_mis_datos(),\
         is_authenticated=current_user.is_authenticated,\
         rol='operador',\
         site='Importar Lista de Precios',\
-        form=form)
+        form=form,\
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
-
-
-
-
 
 
 @lista_precio.route('/lista_precio/modificar', methods=['POST','GET'])
 @login_required
 def modificar_precios():
-    vigencia = "2020-01-01 00:00:00"
-    pro = request.args.get('producto')
-    mar = request.args.get('marca')
-    um = request.args.get('umed')
-    form1 = ModifiPrecios()
+    if current_user.has_role('Operador'):
+        vigencia = "2020-01-01 00:00:00"
+        pro = request.args.get('producto')
+        mar = request.args.get('marca')
+        um = request.args.get('umed')
+        form1 = ModifiPrecios()
 
-    product = consulta_precio_pProductoMarcaUMedida(pro,mar,um)
+        product = consulta_precio_pProductoMarcaUMedida(pro,mar,um)
 
-    products = consultar_precio_pProductoMarcaUMedida(pro,mar,um)
-    for row in products:
-        print("Precio {}".format(row.precio))
-        p = str(row.precio)
-        f = row.vigencia
-        producto = row.id
-        hoy = str(row.hoy)
-    print("Hoy {}".format(hoy))
-    if form1.validate_on_submit():
+        products = consultar_precio_pProductoMarcaUMedida(pro,mar,um)
+        for row in products:
+            print("Precio {}".format(row.precio))
+            p = str(row.precio)
+            f = row.vigencia
+            producto = row.id
+            hoy = str(row.hoy)
+        print("Hoy {}".format(hoy))
+        if form1.validate_on_submit():
 
-        precio = str(form1.cantidad.data)
-        print("precio1 {}".format(precio))
-        print("precio2 {}".format(p))
-        fech = str(form1.fecha_vigencia.data)
-        print("fechaaaaaa {}".format(p))
-        if str(precio) == str(p):
-            print("Las fech son distintas")
+            precio = str(form1.cantidad.data)
+            print("precio1 {}".format(precio))
+            print("precio2 {}".format(p))
+            fech = str(form1.fecha_vigencia.data)
+            print("fechaaaaaa {}".format(p))
+            if str(precio) == str(p):
+                print("Las fech son distintas")
 
-        if str(precio) == str(p) and (fech == vigencia):
-            flash("No has realizado ningun cambio",'warning')
-            return redirect(url_for('lista_precio.modificar'))
-        else:
-            if str(precio) == str(p) and (fech != vigencia):
-                if fech < hoy:
-                    flash("Error, la fecha ingresada no puede ser menor a 'HOY'",'error')
-                    return redirect(url_for('lista_precio.modificar'))
-                else:
-                    modificarFecha(fech,producto,f)
-                    flash("La fecha se ha cambiado con exito",'warning')
-                    return redirect(url_for('lista_precio.modificar'))
+            if str(precio) == str(p) and (fech == vigencia):
+                flash("No has realizado ningun cambio",'warning')
+                return redirect(url_for('lista_precio.modificar'))
             else:
-                if str(precio) != str(p) and (fech == vigencia):
-                    modificarPrecio(precio,producto)
-                    flash("El precio se ha modificado con exito",'warning')
-                    return redirect(url_for('lista_precio.modificar'))
+                if str(precio) == str(p) and (fech != vigencia):
+                    if fech < hoy:
+                        flash("Error, la fecha ingresada no puede ser menor a 'HOY'",'error')
+                        return redirect(url_for('lista_precio.modificar'))
+                    else:
+                        modificarFecha(fech,producto,f)
+                        flash("La fecha se ha cambiado con exito",'warning')
+                        return redirect(url_for('lista_precio.modificar'))
                 else:
-                    modificarPrecioFecha(fech,precio,producto,f)
-                    flash("El precio y la fecha se han modificado con exito",'warning')
-                    return redirect(url_for('lista_precio.modificar'))
+                    if str(precio) != str(p) and (fech == vigencia):
+                        modificarPrecio(precio,producto)
+                        flash("El precio se ha modificado con exito",'warning')
+                        return redirect(url_for('lista_precio.modificar'))
+                    else:
+                        modificarPrecioFecha(fech,precio,producto,f)
+                        flash("El precio y la fecha se han modificado con exito",'warning')
+                        return redirect(url_for('lista_precio.modificar'))
 
+        return render_template('form_modificar_lista_precio.html', \
+        datos=current_user.get_mis_datos(), \
+        sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
+        is_authenticated=current_user.is_authenticated, \
+        rol='operador'  ,\
+        form1=form1,\
+        products=product,\
+        precio=p,\
+        fecha=f)
 
-
-    return render_template('form_modificar_lista_precio.html', \
-    datos=current_user.get_mis_datos(), \
-    sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()),\
-    is_authenticated=current_user.is_authenticated, \
-    rol='operador'  ,\
-    form1=form1,\
-    products=product,\
-    precio=p,\
-    fecha=f)
-
+    abort(403)
 
 @lista_precio.route('/lista_precio/descargar/consulta')
 @login_required
