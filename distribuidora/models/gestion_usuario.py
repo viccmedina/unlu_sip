@@ -166,8 +166,13 @@ class Usuario(db.Model, UserMixin):
 		"""
 
 		datos = {}
+		persona = Persona.query.filter_by(persona_id=self.persona_id).first()
+		datos['apenom'] = persona.name_completo()
+		datos['domicilio'] = persona.get_domicilio()
+		datos['fecha_nacimiento'] = persona.get_fecha_nacimiento()
+		datos['razon_social'] = persona.get_razon_social()
+		datos['dni'] = persona.get_dni()
 		datos['username'] = self.username
-		persona = Persona.query.filter_by(persona_id = self.persona_id).first()
 		datos['email'] = persona.get_email()
 		datos['tel_principal'] = persona.get_tel_principal()
 		datos['tel_secundario'] = persona.get_tel_secundario()
