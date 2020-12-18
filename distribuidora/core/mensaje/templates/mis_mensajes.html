@@ -8,12 +8,12 @@
         <div class="col-sm-5 col-md-6">
           <div class="row row-cols-1 row-cols-md-9">
 		<div class="col mb-9">
-			<h5>Mensajes sin Leer </h5>
+			<h5>Notificaciones sin Leer </h5>
 			<p>Total: {{msjs['sin_leer']['cantidad']}}</p>
 			{% for sl in msjs['sin_leer']['msjs'] %}
 				<div class="card" style="margin-bottom: 10px;">
 				  <div class="card-body">
-				    <h5 class="card-title">Mensaje Nuevo</h5>
+				    <h5 class="card-title">Nueva Notificación</h5>
 				    <p><b>De: </b> {{sl['sender_id']}}</p>
 				    <p>{{ sl['body'] }}</p>
 				    <a id="leer_msj" class="btn btn-primary" href="{{ url_for('mensajes.listar_mensajes', msj_leido=sl) }}">Leer</a>
@@ -24,11 +24,11 @@
 		</div>
 		
 		<div class="col mb-9" style="padding-top: 20px; padding-bottom: 20px;">
-			<h5>Mensajes Recibidos </h5>
+			<h5>Notificaciones Recibidas </h5>
 			{% for r in msjs['recibidos'] %}
 				<div class="card" style="margin-bottom: 10px;">
 				  <div class="card-body">
-				    <h5 class="card-title">Mensaje Nuevo</h5>
+				    <h5 class="card-title">Notificación Nueva</h5>
 				    <p><b>De: </b> {{r['sender_id']}}</p>
 				    <p>{{ r['body'] }}</p>
 				  </div>
@@ -37,11 +37,11 @@
 		</div>
 		
 		<div class="col mb-9">
-			<h5>Mensajes Enviados </h5>
+			<h5>Notificaciones Enviadas </h5>
 			{% for e in msjs['enviados'] %}
 				<div class="card" style="margin-bottom: 10px;">
 				  <div class="card-body">
-				    <h5 class="card-title">Mensaje Nuevo</h5>
+				    <h5 class="card-title">Notificación Nueva</h5>
 				    <p><b>De: </b> {{e['sender_id']}}</p>
 				    <p>{{ e['body'] }}</p>
 				  </div>
