@@ -21,7 +21,7 @@ DETALLE_INFORMACION_FULL = """ SELECT dp.pedido_id, dp.detalle_id, dp.producto_e
     FROM detalle_pedido AS dp
     INNER JOIN producto_envase AS pe ON dp.producto_envase_id=pe.producto_envase_id
     INNER JOIN lista_precio_producto AS lpp ON dp.producto_envase_id=lpp.producto_envase_id
-    INNER JOIN envase AS e ON dp.producto_envase_id=e.envase_id
+    INNER JOIN envase AS e ON pe.envase_id=e.envase_id
     INNER JOIN pedido AS p ON p.pedido_id=dp.pedido_id
     INNER JOIN producto AS pr ON pr.producto_id = pe.producto_id
     INNER JOIN marca AS m ON m.marca_id = pr.marca_id

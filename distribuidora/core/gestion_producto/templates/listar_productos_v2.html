@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+
+{% block content %}
+{% include "flash_errors.html" %}
+	<div class="container-fluid">
+    	<div class="row">
+    		<div class="col-sm-5 offset-sm-7 col-md-6 offset-md-3">
+        		<div class="row row-cols-9 row-cols-md-3">
+
+    	   			{% for p in producto.items %}
+    	   				<div class="col mb-9" style="padding:5px">
+	    	   				<div class="card">
+	                  			
+	                  			<div class="card-body">
+
+				  					<img src="/static/img/productos/default.svg" class="card-img-top" alt="producto" width="45%" height="100">
+				  					<p><small>Producto: {{ p[0]}}</small> </p>
+				  					<p><small>Envase  {{ p[6] }} {{ p[4] }}</small></p>
+				  					<p><small>Tipo de Producto {{ p[2] }} </small></p>
+				  					<p><small>Precio $ {{p[3]}}</small></p>
+				  					{% if cliente %}
+				  					<form  action="{{ url_for('producto.listar_productos', producto_envase_id=p[5]) }}" method="POST">
+				    					{{ form.hidden_tag() }}
+				    					<div class="form-group">
+				      						<small>{{ form.cantidad.label }} {{ form.cantidad }}</small>
+				      					</div>
+			      						<div class="form-group">
+				        					{{ form.submit(class="btn btn-primary mb-2") }}
+				        				</div>
+					  				</form>
+					  				{% endif %}
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>	  
+
+	    <!-- Pagination Links-->
+
+
+          <div align = "right">
+              <a href="{{ url_for('producto.listar_productos', page=producto.prev_num) }}"
+                 class="btn btn-outline-dark
+                 {% if producto.page == 1 %}disabled{% endif %}">
+                  &laquo;
+              </a>
+              <!-- Loop through the number of pages to display a link for each-->
+
+                {% for page_num in producto.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                  {% if page_num %}
+                  <!-- Check for the active page and set the link to "Active"-->
+                        {% if producto.page == page_num %}
+                          <a href="{{ url_for('producto.listar_productos', page=page_num) }}"
+                            class="btn btn-dark">
+                              {{ page_num }}
+                          </a>
+                        {% else %}
+                          <a href="{{ url_for('producto.listar_productos', page=page_num) }}"
+                            class="btn btn-outline-dark">
+                              {{ page_num }}
+                            </a>
+                        {% endif %}
+                  {% else %}
+                    ...
+                  {% endif %}
+                {% endfor %}
+
+                <a href="{{ url_for('producto.listar_productos', page=producto.next_num) }}"
+                   class="btn btn-outline-dark
+                   {% if producto.page == producto.pages %}disabled{% endif %}">
+                    &raquo;
+                </a>
+                <p >
+                   Página {{ producto.page }} de {{ producto.pages }}
+                </p>
+            </div>
+            
+{% endblock %}
