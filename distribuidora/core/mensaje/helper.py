@@ -15,6 +15,16 @@ def operadores():
         resp.append(row.name)
     return resp
 
+def get_clientes():
+	# devolemos los clientes para el select de mensajeria.
+
+	resultado = db.engine.execute(SELECT_CLIENTES)
+	result = list()
+	for r in resultado:
+		result.append('Nro Cliente: {}'.format(r.id))
+	return result
+
+
 def id_operador(operador):
     resp = []
     resultado = db.engine.execute(SELECT_ID_OPERADOR.format(oper=operador))
@@ -35,6 +45,19 @@ def insert_nuevo_mensaje(data,id_oper):
         sender_id=data['emisor'],\
         body=data['body']))
 	return check(result)
+
+
+
+
+def insert_nueva_notificacion(data):
+	result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(\
+        recipient_id=data['receptor'], \
+        sender_id=data['emisor'],\
+        body=data['body']))
+	return check(result)
+
+
+
 
 def get_mensajes(usuario_id):
 	enviados = db.engine.execute(SELECT_TODOS_MIS_MENSAJES_ENVIADOS.format(\

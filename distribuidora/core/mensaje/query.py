@@ -30,3 +30,11 @@ CANTIDAD_MSJS_SIN_LEER =  """SELECT COUNT(*) AS sin_leer
 	WHERE recipient_id='{usuario_id}' AND read=0 """
 
 LEER_MENSAJE = """ UPDATE mensaje set read=true WHERE id='{mensaje_id}' """
+
+
+SELECT_CLIENTES = """ SELECT u.id 
+FROM persona AS p INNER JOIN usuario AS u ON p.persona_id = u.persona_id 
+INNER JOIN usuario_rol AS ur ON ur.id=u.id 
+INNER JOIN rol AS r ON r.rol_id=ur.rol_id
+WHERE r.descripcion='Cliente'
+"""

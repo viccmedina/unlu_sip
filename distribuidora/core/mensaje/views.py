@@ -61,33 +61,52 @@ def listar_mensajes():
 @login_required
 def enviar_mensaje():
     form = MessageForm()
-    form.recipient.choices = operadores()
+    if current_user.has_role('Cliente'):
+        form.recipient.choices = operadores()
+    elif current_user.has_role('Operador'):
+        form.recipient.choices = get_clientes()
     if form.validate_on_submit():
         data = {
         	'emisor': current_user.get_id(),
         	'receptor': form.recipient.data,
         	'body': form.message.data
         }
-        id_oper = id_operador(data['receptor'])
-        if id_oper != None:
-            id = id_oper[0]
-            if id_oper != current_user.get_id():
-            	print('es distinto')
-            	if current_user.has_role('Cliente'):
-            		print('data: {}'.format(data), flush=True)
-            		result = insert_nuevo_mensaje(data,id)
-            		#result = True
-            		print(result)
-            		if result:
-            			flash('El mensaje ha sido enviado correctamente', 'success')
-            		else:
-            			flash('Verifique la información ingresada', 'error')
-            	else:
-            		flash('No es posible enviarle a este destinatario', 'error')
+        if current_user.has_role('Cliente'):
+            id_oper = id_operador(data['receptor'])
+            if id_oper != None:
+                id = id_oper[0]
+                if id_oper != current_user.get_id():
+                	print('es distinto')
+                	if current_user.has_role('Cliente'):
+                		print('data: {}'.format(data), flush=True)
+                		result = insert_nuevo_mensaje(data,id)
+                		#result = True
+                		print(result)
+                		if result:
+                			flash('El mensaje ha sido enviado correctamente', 'success')
+                		else:
+                			flash('Verifique la información ingresada', 'error')
+                	else:
+                		flash('No es posible enviarle a este destinatario', 'error')
+                else:
+                	flash('No es posible enviarle a este destinatario', 'error')
             else:
-            	flash('No es posible enviarle a este destinatario', 'error')
-        else:
-            	flash('No es posible enviarle a este destinatario', 'error')
+                	flash('No es posible enviarle a este destinatario', 'error')
+        elif current_user.has_role('Operador'):
+            destinatario = form.recipient.data
+            destinatario_id = destinatario.split(':')
+            print(destinatario_id)
+            destinatario_id = destinatario_id[len(destinatario_id) - 1].replace(' ', '')
+            print(destinatario_id)
+            data = {
+                'emisor': current_user.get_id(),
+                'receptor': destinatario_id,
+                'body': form.message.data
+            }
+            if insert_nueva_notificacion(data):
+                flash('El mensaje ha sido enviado correctamente', 'success')
+            else:
+                flash('Verifique la información ingresada', 'error')
 
     else:
         cargar_errores(form.errors)
