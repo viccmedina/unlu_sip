@@ -10,7 +10,7 @@
 			<div class="row row-cols-1 row-cols-md-3">
 				<div class="col mb-4">
 				 	<div class="card h-100" style="height: 18rem;">
-				    	<img src="static/img/nuevo_mensaje.svg" class="card-img-top" alt="Nuevo Mensaje" width="100%" height="100">
+				    	<img src="{{ url_for('static', filename='img/nuevo_mensaje.svg') }}" class="card-img-top" alt="Nuevo Mensaje" width="100%" height="100">
 				      	<div class="card-body">
 				        	<h5 class="card-title">Nuevo Mensaje</h5>
 				        	{% if role == 'Operador' %}
@@ -21,21 +21,21 @@
 				      	</div>
 				      	<div class="card-footer">
 							<center>
-								<a class="btn btn-primary btn-sm" href="{{ url_for('mensajes.enviar_mensaje') }}" role="button">Ver Mas</a>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('mensajes.enviar_mensaje') }}" role="button">Ver Más</a>
 							</center>	
     					</div>
 				    </div>
 				 </div>
 				    <div class="col mb-4">
 				    <div class="card h-100" style="height: 18rem;">
-				    	<img src="static/img/mensaje.svg" class="card-img-top" alt="Mis Mensajes" width="100%" height="100">
+				    	<img src="{{ url_for('static', filename='img/mensaje.svg') }}" alt="Mis Mensajes" width="100%" height="100">
 				      	<div class="card-body">
 				        	<h5 class="card-title">Ver Mis Mensajes</h5>
 				        	<p class="card-text">Podés revisar las novedades aquí.</p>
 				      	</div>
 				      	<div class="card-footer">
 							<center>
-								<a class="btn btn-primary btn-sm" href="{{ url_for('mensajes.listar_mensajes') }}" role="button">Ver Mas</a>
+								<a class="btn btn-primary btn-sm" href="{{ url_for('mensajes.listar_mensajes') }}" role="button">Ver Más</a>
 							</center>	
     					</div>
 				    </div> </div>
