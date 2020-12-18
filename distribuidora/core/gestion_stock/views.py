@@ -47,7 +47,7 @@ def consultar_stock():
 			# hacer algo con los error de devolucine de id
 			print("Productooo: {} ".format(products))
 			if products == -777 :
-				flash("el producto ingresado es incorrecto", 'error')
+				flash("El producto ingresado es incorrecto", 'error')
 				products = None
 			else:
 				if products == -888 :
@@ -105,7 +105,7 @@ def agregar():
 					# obtenemos el producto envase id
 					product = get_id_producto(id_producto,id_marca,id_um)
 					if product == -777 :
-						flash("el producto ingresado es incorrecto", 'error')
+						flash("El producto ingresado es incorrecto", 'error')
 					else:
 						if product == -888 :
 							flash('La unidad de medida ingresada es incorrecta', 'error')
