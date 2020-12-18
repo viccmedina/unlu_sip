@@ -112,9 +112,6 @@ def modificar_detalle_producto():
         cantidad = form.cantidad.data
         result = update_detalle_producto(pedido, detalle,\
             cantidad, usuario=current_user.get_role())
-        print('%'*100, flush=True)
-        print(result, flush=True)
-        print('%'*100, flush=True)
         if result:
             flash('Actualizado Correctamente !', 'success')
             if current_user.has_role('Operador'):

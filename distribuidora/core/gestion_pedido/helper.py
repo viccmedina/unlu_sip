@@ -149,20 +149,21 @@ def get_listado_pedidos_pcc(usuario_id):
     return result
 
 def update_detalle_producto(pedido_id, detalle, cantidad, usuario=None):
-    print(usuario, flush=True)
-    if usuario == 'Cliente':
-        print('SOY CLIENTEEEEEEEEE', flush=True)
-        if get_cantidad_estados_pedido(pedido_id) < 3 :
+    if cantidad > 0:
+        print(usuario, flush=True)
+        if usuario == 'Cliente':
+            if get_cantidad_estados_pedido(pedido_id) < 3 :
+                result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
+                    detalle_id=detalle, cantidad=cantidad))
+                return check(result)
+            else:
+                return False
+        elif usuario == 'Operador':
             result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
-                detalle_id=detalle, cantidad=cantidad))
+                    detalle_id=detalle, cantidad=cantidad))
             return check(result)
-        else:
-            return False
-    elif usuario == 'Operador':
-        print('SOY OPERADOR, PUEDO MODIFCAR LO QUE SE ME DE LA GANA', flush=True)
-        result = db.engine.execute(UPDATE_CANTIDAD_DETALLE_PEDIDO.format(\
-                detalle_id=detalle, cantidad=cantidad))
-        return check(result)
+    else:
+        return False
 
 
 
