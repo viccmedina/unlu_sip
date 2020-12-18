@@ -268,7 +268,7 @@ def anular_pedido_por_cliente(pedido_id):
     """
     pedido = db.engine.execute(SELECT_PEDIDO.format(pedido_id=pedido_id))
     pedido = parser_result(pedido)
-    if pedido[0]['descripcion_corta'] == 'PCC':
+    if pedido[0]['descripcion_corta'] in ['PCC', 'PCO']:
         delete = db.engine.execute(DELETE_PEDIDO_BY_CLIENTE.format(pedido_id=pedido_id))
         d = db.engine.execute(DELETE_PEDIDO_FROM_HISTORIAL.format(pedido_id=pedido_id))
         return check(delete)
