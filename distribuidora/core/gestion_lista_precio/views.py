@@ -222,19 +222,45 @@ def modificar_precios():
                         return redirect(url_for('lista_precio.modificar'))
                     else:
                         modificarFecha(fech,producto,f)
-                        flash("La fecha se ha cambiado con exito",'warning')
+                        flash("La fecha se ha cambiado con exito",'success')
                         return redirect(url_for('lista_precio.modificar'))
                 else:
                     if str(precio) != str(p) and (fech == vigencia):
                         try:
-                            precio = int(precio)
-                            if precio >= 0:
-                                modificarPrecio(precio,producto)
-                                flash("El precio se ha modificado con exito",'warning')
-                                return redirect(url_for('lista_precio.modificar'))
-                            else:
-                                flash("El campo precio debe ser mayor o igual a 0",'warning')
-                                return redirect(url_for('lista_precio.modificar'))
+                            precioSplit = precio.split(".")
+                            print("tamaño {}".format(len(precioSplit)))
+                            if len(precioSplit) == 2:
+                                numero =  int(precioSplit[0])
+                                decimal = int(precioSplit[1])
+                                print("decimal es {}".format(decimal))
+                                if numero >=0 :
+                                    numero= str(numero)
+                                    decimal= str(decimal)
+                                    precio = numero + "."+decimal
+                                    modificarPrecio(precio,producto)
+                                    flash("El precio se ha modificado con exito",'success')
+                                    return redirect(url_for('lista_precio.modificar'))
+                                else:
+                                    flash("El campo precio debe ser mayor o igual a 0",'warning')
+                                    return redirect(url_for('lista_precio.modificar'))
+                            elif len(precioSplit) == 1:
+                                precio =  int(precio)
+                                if precio >=0 :
+                                    modificarPrecio(precio,producto)
+                                    flash("El precio se ha modificado con exito",'success')
+                                    return redirect(url_for('lista_precio.modificar'))
+                                else:
+                                    flash("El campo precio debe ser mayor o igual a 0",'warning')
+                                    return redirect(url_for('lista_precio.modificar'))
+                            elif len(precioSplit) == 0:
+                                precio = int(precio)
+                                if precio >=0 :
+                                    modificarPrecio(precio,producto)
+                                    flash("El precio se ha modificado con exito",'success')
+                                    return redirect(url_for('lista_precio.modificar'))
+                                else:
+                                    flash("El campo precio debe ser mayor o igual a 0",'warning')
+                                    return redirect(url_for('lista_precio.modificar'))
                         except ValueError:
                             flash("El campo precio es invalido",'warning')
                             return redirect(url_for('lista_precio.modificar'))
