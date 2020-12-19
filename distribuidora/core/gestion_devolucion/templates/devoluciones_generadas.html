@@ -16,6 +16,7 @@
 		                  		<div class="card-body">
 									<h5 class="card-title">Nro de Devolución #{{ d.devolucion_id }} </h5>
 									<p><i>Fecha: {{d.ts_created}}</i></p>
+									<p><i>Estado: {{d.descripcion}}</i></p>
 									<span style="float:center">
 										<a href="{{ url_for('devoluciones.ver_detalle', pedido=d.pedido_id) }}" class="btn btn-primary">Ver Detalle</a>
 		 							</span>
