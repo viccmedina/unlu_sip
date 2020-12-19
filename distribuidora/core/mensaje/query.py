@@ -3,7 +3,7 @@ INSERTAR_NUEVO_MENSAJE = """ INSERT INTO mensaje (sender_id, recipient_id, body,
 """
 
 SELECT_OPERADORES="""
-SELECT p.nombre as name
+SELECT u.id as id
 from persona p INNER JOIN usuario u ON u.persona_id = p.persona_id INNER JOIN usuario_rol ur ON ur.id = u.id INNER JOIN rol r ON r.rol_id = ur.rol_id
 WHERE r.descripcion = "Operador";
 
@@ -16,14 +16,14 @@ FROM usuario u INNER JOIN usuario_rol ur ON ur.id = u.id INNER JOIN rol r ON r.r
 """
 
 SELECT_TODOS_MIS_MENSAJES_ENVIADOS = """ SELECT * FROM mensaje
-	WHERE sender_id='{usuario_id}' """
+	WHERE sender_id='{usuario_id}' ORDER BY ts_created DESC """
 
 SELECT_TODOS_MIS_MENSAJES_RECIBIDOS = """ SELECT * FROM mensaje
-	WHERE recipient_id='{usuario_id}' """
+	WHERE recipient_id='{usuario_id}' ORDER BY ts_created DESC"""
 
 
 SELECT_MENSAJES_SIN_LEER = """ SELECT * FROM mensaje
-	WHERE recipient_id='{usuario_id}' AND read=0 """
+	WHERE recipient_id='{usuario_id}' AND read=0 ORDER BY ts_created DESC"""
 
 CANTIDAD_MSJS_SIN_LEER =  """SELECT COUNT(*) AS sin_leer
 	FROM mensaje

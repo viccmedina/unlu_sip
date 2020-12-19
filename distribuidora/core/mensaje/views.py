@@ -68,30 +68,31 @@ def enviar_mensaje():
     if form.validate_on_submit():
         data = {
         	'emisor': current_user.get_id(),
-        	'receptor': form.recipient.data,
         	'body': form.message.data
         }
+        
+
         if current_user.has_role('Cliente'):
-            id_oper = id_operador(data['receptor'])
-            if id_oper != None:
-                id = id_oper[0]
-                if id_oper != current_user.get_id():
-                	print('es distinto')
-                	if current_user.has_role('Cliente'):
-                		print('data: {}'.format(data), flush=True)
-                		result = insert_nuevo_mensaje(data,id)
-                		#result = True
-                		print(result)
-                		if result:
-                			flash('El mensaje ha sido enviado correctamente', 'success')
-                		else:
-                			flash('Verifique la información ingresada', 'error')
-                	else:
-                		flash('No es posible enviarle a este destinatario', 'error')
+            print("#"*100)
+            print('RECEPTOR: {}'.format(form.recipient.data))
+            print('RECEPTOR: {}'.format(type(form.recipient.data)))
+       
+            identificador=form.recipient.data
+            print(identificador)
+            us_id = Usuario.query.filter_by(id=identificador).first()
+            print(us_id.get_id())
+            if us_id != None:
+                data['receptor'] = us_id.get_id()
+                result = insert_nuevo_mensaje(data)
+                
+                if result:
+                    flash('El mensaje ha sido enviado correctamente', 'success')
                 else:
-                	flash('No es posible enviarle a este destinatario', 'error')
+                    flash('Verifique la información ingresada', 'error')
+
             else:
-                	flash('No es posible enviarle a este destinatario', 'error')
+                flash('No es posible enviarle a este destinatario', 'error')
+   
         elif current_user.has_role('Operador'):
             destinatario = form.recipient.data
             destinatario_id = destinatario.split(':')

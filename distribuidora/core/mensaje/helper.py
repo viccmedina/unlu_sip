@@ -9,11 +9,12 @@ def parser_result(result):
     return resp
 
 def operadores():
-    resp = []
-    resultado = db.engine.execute(SELECT_OPERADORES)
-    for row in resultado:
-        resp.append(row.name)
-    return resp
+	resp = []
+	resultado = db.engine.execute(SELECT_OPERADORES)
+	for row in resultado:
+		print(row)
+		resp.append(row.id)
+	return resp
 
 def get_clientes():
 	# devolemos los clientes para el select de mensajeria.
@@ -39,18 +40,9 @@ def check(result):
     else:
         return False
 
-def insert_nuevo_mensaje(data,id_oper):
-    print("id oper es {}".format(id_oper))
-    if id_oper == -1:
-        print("id oper es son igualess  sdas {}".format(id_oper))
-        result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(recipient_id=data['receptor'],sender_id=data['emisor'],body=data['body']))
-        return check(result)
-    else:
-        result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(recipient_id=id_oper,sender_id=data['emisor'],body=data['body']))
-        return check(result)
-
-
-
+def insert_nuevo_mensaje(data):
+    result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(recipient_id=data['receptor'],sender_id=data['emisor'],body=data['body']))
+    return check(result)
 
 def insert_nueva_notificacion(data):
 	result = db.engine.execute(INSERTAR_NUEVO_MENSAJE.format(\
