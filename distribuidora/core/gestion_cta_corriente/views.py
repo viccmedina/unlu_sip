@@ -39,6 +39,9 @@ def index():
 def consultar_cta_corriente():
     if current_user.has_role('Operador'):
         resultado = None
+        fecha_hasta= None
+        nro_cta = None
+        fecha_desde= None
         form = ConsultarMovimientos()
         if form.validate_on_submit():
             fecha_desde = form.fecha_desde.data
@@ -61,7 +64,7 @@ def consultar_cta_corriente():
         return render_template('form_consultar_cta_corriente.html', \
             datos=current_user.get_mis_datos(),	\
             is_authenticated=current_user.is_authenticated, rol=ROL, form=form, \
-            resultado=resultado, site= TITULO + ' - Consulta',\
+            resultado=resultado,nro_cta=nro_cta,fecha_desde=fecha_desde, fecha_hasta=fecha_hasta,site= TITULO + ' - Consulta',\
             sin_leer=get_cantidad_msj_sin_leer(current_user.get_id()))
     abort(403)
 
@@ -72,6 +75,7 @@ def consultar_cta_corriente():
 def agregar():
     if current_user.has_role('Operador'):
         form = AgregarMovimiento(request.form, meta={'locales': ['es_ES', 'es']})
+        nro_cta = None
         form.tipo_movimiento.choices = [\
             (descripcion.descripcion) for descripcion in TipoMovimientoCtaCorriente.query.all()\
             ]
@@ -90,8 +94,7 @@ def agregar():
                 if tipo_movimiento == 'Pago':
                     if actualizar_estado_comprobante_pago(monto, cliente):
                         flash("Pago agregar correctamente", 'success')
-                    else:
-                        flash("Algo salió mal, verifique los datos ingresados", 'error')
+
 
                 if resultado:
                     flash("La transacción se ha registrado con éxito", 'success')
@@ -197,18 +200,59 @@ def importar():
     abort(403)
 
 
-@cta_corriente.route('/cta_corriente/descargar/consulta')
+@cta_corriente.route('/cta_corriente/descargar/consulta/saldo')
 @login_required
-def descargar_consulta_cta_corriente():
+def descargar_consulta_cta_corriente_saldo():
     if current_user.has_role('Operador'):
-        resultado = request.args.get("resultado", None)
+        #resultado = request.args.get("resultado", None)
+
         nro_cta = request.args.get("nro_cta")
         print('RESULTADOO!')
-        print(resultado)
         saldito = consulta_saldo_aparte(nro_cta)
         resultado = consulta_saldo(nro_cta)
 
         html = render_template('tabla_consulta_cta_corriente_css.html',resultado=resultado,saldito=saldito)
+        """
+        stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
+        return render_pdf(HTML(string=html), stylesheets=stylesheets)
+        """
+
+        return render_pdf(HTML(string=html))
+    abort(403)
+
+
+@cta_corriente.route('/cta_corriente/descargar/consulta')
+@login_required
+def descargar_consulta_cta_corriente():
+    if current_user.has_role('Operador'):
+        #resultado = request.args.get("resultado", None)
+
+        nro_cta = request.args.get("nro_cta")
+        desde = request.args.get("desde")
+        hasta = request.args.get("hasta")
+        print('RESULTADOO!')
+        resultado = get_consulta_movimientos(desde, hasta, nro_cta)
+
+        html = render_template('tabla_consulta_cta_corrientee_css.html',resultado=resultado)
+        """
+        stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
+        return render_pdf(HTML(string=html), stylesheets=stylesheets)
+        """
+
+        return render_pdf(HTML(string=html))
+    abort(403)
+
+
+@cta_corriente.route('/cta_corriente/descargar/consulta/export')
+@login_required
+def descargar_consulta_cta_corriente_export():
+    if current_user.has_role('Operador'):
+        #resultado = request.args.get("resultado", None)
+
+
+        resultado = consultaCtaCorrienteExportar()
+
+        html = render_template('tabla_consulta_cta_corrienteexport_css.html',resultado=resultado)
         """
         stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"]
         return render_pdf(HTML(string=html), stylesheets=stylesheets)

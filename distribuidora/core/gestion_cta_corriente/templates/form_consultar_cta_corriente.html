@@ -38,7 +38,7 @@
 												<div class="form-group">
 													{% include "tabla_movimientos_cta_corriente.html" %}
 													<div align="right">
-														<a align="left" class="btn btn-success" href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', resultado=resultado) }}" role="button">Descargar</a>
+														<a align="left" class="btn btn-success" href="{{ url_for('cta_corriente.descargar_consulta_cta_corriente', nro_cta=nro_cta,desde=fecha_desde,hasta=fecha_hasta) }}" role="button">Descargar</a>
 													</div>
 												</div>
 											{% else %}

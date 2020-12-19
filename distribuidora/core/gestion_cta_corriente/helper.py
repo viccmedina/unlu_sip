@@ -114,7 +114,8 @@ def consultaCtaCorrienteExportar():
         resta =   scc -   scp # resto deuda - pagos
         print("resta {}".format(resta))
         datos = db.engine.execute(CONSULTA_MOVIMIENTOS_CTA_CORRIENTE.format(user=id))# constultos el resto de los valores
-
+        for row in datos:
+            print(row)
     return parser_result(datos)
 
 
