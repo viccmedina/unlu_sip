@@ -7,19 +7,22 @@
     		<div class="col-sm-5 offset-sm-7 col-md-6 offset-md-3">
         		<div class="row row-cols-9 row-cols-md-3">
 
-    	   			{% for p in producto.items %}
+    	   			{% for p in otro_listado %}
     	   				<div class="col mb-9" style="padding:5px">
+                  
 	    	   				<div class="card">
 	                  			
-	                  			<div class="card-body">
+	                   <div class="card-body">
 
-				  					<img src="/static/img/productos/default.svg" class="card-img-top" alt="producto" width="45%" height="100">
-				  					<p><small>Producto: {{ p[0]}}</small> </p>
-				  					<p><small>Envase  {{ p[6] }} {{ p[4] }}</small></p>
-				  					<p><small>Tipo de Producto {{ p[2] }} </small></p>
-				  					<p><small>Precio $ {{p[3]}}</small></p>
+				  					<img src="{{ url_for('static', filename=p.path_img ) }}"  width="550" height="200" class="card-img-top" alt="producto">
+				  					<p><small>Producto: {{ p.descripcion }}</small> </p>
+                    <p><small>Marca: {{ p.marca }}</small> </p>
+
+				  					<p><small>Envase  {{ p.envase }} {{ p.unidad_medida }}</small></p>
+				  					<p><small>Tipo de Producto {{ p.tipo_producto }} </small></p>
+				  					<p><small>Precio $ {{ p.precio }}</small></p>
 				  					{% if cliente %}
-				  					<form  action="{{ url_for('producto.listar_productos', producto_envase_id=p[5]) }}" method="POST">
+				  					<form  action="{{ url_for('producto.listar_productos', producto_envase_id=p.producto_envase_id) }}" method="POST">
 				    					{{ form.hidden_tag() }}
 				    					<div class="form-group">
 				      						<small>{{ form.cantidad.label }} {{ form.cantidad }}</small>
@@ -29,6 +32,7 @@
 				        				</div>
 					  				</form>
 					  				{% endif %}
+                  
 								</div>
 							</div>
 						</div>

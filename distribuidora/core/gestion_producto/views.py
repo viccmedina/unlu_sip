@@ -302,7 +302,9 @@ def listar_productos():
     else:
         flash(form.errors, 'errors')
 
-    
+    otro_listado = agregar_path_img(productos.items)
+    print("@"*100)
+    print(otro_listado)
 
     return render_template('listar_productos_v2.html', \
         datos=datos, \
@@ -312,7 +314,8 @@ def listar_productos():
         sin_leer=sin_leer,\
         form=form,\
         site='Listado de Productos', \
-        producto=productos)
+        producto=productos,\
+        otro_listado=otro_listado)
 
 """
 @producto.route('/detalle/producto', methods=['GET', 'POST'])

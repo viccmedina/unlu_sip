@@ -1,12 +1,42 @@
-from distribuidora import db
+from distribuidora import db, app
 from distribuidora.core.gestion_producto.query import *
 from distribuidora.models.producto import Marca, TipoProducto, Envase, UnidadMedida, \
     Producto, ProductoEnvase
 from distribuidora.models.precio import Lista_precio_producto
 import csv
 from datetime import datetime
+import os.path
 
 #from distribuidora.core.gestion_stock.query import CONSULTA_STOCK1
+
+def agregar_path_img(productos):
+    print('GENERANDO PATH DE IMGS')
+    lista = list()
+    for p in productos:
+        print(p[5])
+        if os.path.isfile(app.config['PATH_IMG'] + str(p[5]) + '.jpg'):
+            path = 'img/productos/{}.jpg'.format(p[5])
+        else:
+            path = 'img/productos/default.svg'
+        data = {
+
+            "descripcion": p[0],
+            "marca": p[1],
+            "tipo_producto": p[2],
+            "precio": p[3],
+            "unidad_medida": p[4],
+            "producto_envase_id": p[5],
+            "envase": p[6],
+            "path_img": path
+        }
+
+        lista.append(data)
+    return lista
+
+
+
+
+
 
 def parser_result(result):
     resp = []

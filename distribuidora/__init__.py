@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from distribuidora.settings import DB_PATH, DB_SECRET_KEY, FILE_PATH
+from distribuidora.settings import DB_PATH, DB_SECRET_KEY, FILE_PATH, PATH_IMG
 
 
 
@@ -12,6 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = DB_SECRET_KEY
 app.config['UPLOAD_EXTENSIONS'] = ['csv']
 app.config['UPLOAD_FOLDER'] = FILE_PATH
+app.config['PATH_IMG'] = PATH_IMG
 
 db = SQLAlchemy(app)
 
