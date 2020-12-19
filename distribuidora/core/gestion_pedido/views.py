@@ -108,7 +108,7 @@ def modificar_detalle_producto():
     pedido = request.args.get('pedido', type=int)
     if form.validate_on_submit():
         detalle = request.args.get('detalle_pedido', type=int)
-        producto = request.args.get('producto', type=int)
+        producto = request.args.get('producto_envase_id', type=int)
         cantidad = form.cantidad.data
         result = update_detalle_producto(pedido, detalle,\
             cantidad, usuario=current_user.get_role())
