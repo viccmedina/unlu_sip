@@ -274,6 +274,7 @@ def actualizar_stock_real(pedido_id):
     Dado un pedido, vamos a descontar las cantidades afectadas al pedido.
     En sqlite no tenemos stored procedure asi que vamos a improvisar.
     """
+    precio = None
     detalle_pedido = db.engine.execute(DETALLE_INFORMACION_FULL.format(\
         pedido_id=pedido_id))
     detalle_pedido = parser_result(detalle_pedido)
@@ -284,7 +285,17 @@ def actualizar_stock_real(pedido_id):
         stock_descontar = int(dp['stock_real'])- int(dp['cantidad'])
         print('stock a descontar ---> {}'.format(stock_descontar), flush=True)
         if stock_descontar >= 0:
-            costo += float(dp['cantidad'].replace(',','.')) * float(dp['precio'].replace(',','.'))
+            precio = str(dp['precio'])
+            precioSplit = precio.split(",")
+            if len(precioSplit) == 2:
+                numero =  str(precioSplit[0])
+                decimal = str(precioSplit[1])
+                precio = numero + "."+decimal
+            elif len(precioSplit) == 1:
+                precio =  float(precioSplit[0])
+                costo += float(dp['cantidad'].replace(',','.')) * float(precio)
+            else:
+                costo += float(dp['cantidad'].replace(',','.')) * float(dp['cantidad'])
             #detalle_pedido = db.engine.execute(UPDATE_NUEVO_PEDIDO_STOCK_REAL.format(producto_envase_id=dp['producto_envase_id'], stock_real=stock_descontar))
             pe = ProductoEnvase.query.get(dp['producto_envase_id'])
             print(pe, flush=True)

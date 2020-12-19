@@ -90,7 +90,9 @@ def agregar():
                 if tipo_movimiento == 'Pago':
                     if actualizar_estado_comprobante_pago(monto, cliente):
                         flash("Pago agregar correctamente", 'success')
-                
+                    else:
+                        flash("Algo salió mal, verifique los datos ingresados", 'error')
+
                 if resultado:
                     flash("La transacción se ha registrado con éxito", 'success')
                 else:

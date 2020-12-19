@@ -11,8 +11,8 @@
     	   				<div class="col mb-9" style="padding:5px">
                   
 	    	   				<div class="card">
-	                  			
-	                   <div class="card-body">
+
+	                  			<div class="card-body">
 
 				  					<img src="{{ url_for('static', filename=p.path_img ) }}"  width="550" height="200" class="card-img-top" alt="producto">
 				  					<p><small>Producto: {{ p.descripcion }}</small> </p>
@@ -40,7 +40,7 @@
 				</div>
 			</div>
 		</div>
-	</div>	  
+	</div>
 
 	    <!-- Pagination Links-->
 
@@ -81,5 +81,5 @@
                    Página {{ producto.page }} de {{ producto.pages }}
                 </p>
             </div>
-            
+
 {% endblock %}

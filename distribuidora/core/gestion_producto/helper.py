@@ -54,11 +54,17 @@ def lista_de_productos():
     return parser_result(resultado)
 
 def get_lista_productos():
-	"""
-	Devolvemos todos los productos que tenemos cargados en la base.
-	"""
-	result = db.engine.execute(LISTAR_PRODUCTOS)
-	return parser_result(result)
+    """
+    Devolvemos todos los productos que tenemos cargados en la base.
+    """
+    resp = []
+    result = db.engine.execute(LISTAR_PRODUCTOS)
+    for row in result:
+        row[3] = str(row[3])
+        print("row 3 es {}".format(row[3]))
+        resp.append(dict(row))
+
+    return resp
 
 def get_producto_by_descripcion_marca(producto, marca):
     """
