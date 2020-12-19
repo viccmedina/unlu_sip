@@ -115,7 +115,7 @@ def modificar_detalle_producto():
         if result:
             flash('Actualizado Correctamente !', 'success')
             if current_user.has_role('Operador'):
-                body = 'Modificacion del pedido #{} : - {}'.format(pedido, estado_nuevo)
+                body = 'Modificacion del pedido #{} : - producto: {}, cantidad: {}'.format(pedido, producto, cantidad)
                 receptor = get_pedido_by_id(pedido)[0]['usuario_id']
                 print('receptor {}'.format(receptor), flush=True)
                 emisor = current_user.get_id()
