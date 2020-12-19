@@ -240,7 +240,7 @@ def modificar_estado_operador():
                     "body": body
                 }
                 
-                resp = insert_nuevo_mensaje(data,-1)
+                resp = insert_nuevo_mensaje(data)
                 if resp:
                     flash('Mensaje enviado', 'success')
                 else:
