@@ -226,9 +226,18 @@ def modificar_precios():
                         return redirect(url_for('lista_precio.modificar'))
                 else:
                     if str(precio) != str(p) and (fech == vigencia):
-                        modificarPrecio(precio,producto)
-                        flash("El precio se ha modificado con exito",'warning')
-                        return redirect(url_for('lista_precio.modificar'))
+                        try:
+                            precio = int(precio)
+                            if precio >= 0:
+                                modificarPrecio(precio,producto)
+                                flash("El precio se ha modificado con exito",'warning')
+                                return redirect(url_for('lista_precio.modificar'))
+                            else:
+                                flash("El campo precio debe ser mayor o igual a 0",'warning')
+                                return redirect(url_for('lista_precio.modificar'))
+                        except ValueError:
+                            flash("El campo precio es invalido",'warning')
+                            return redirect(url_for('lista_precio.modificar'))
                     else:
                         modificarPrecioFecha(fech,precio,producto,f)
                         flash("El precio y la fecha se han modificado con exito",'warning')
