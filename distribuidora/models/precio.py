@@ -80,5 +80,8 @@ class Lista_precio_producto(db.Model):
         """
         return self.precio
 
+    def get_precio(self):
+        return self.precio
+
     def entre_fechas(self):
         return 'precio de {}'.format(self.fecha_desde,self.fecha_hasta)  

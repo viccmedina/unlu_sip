@@ -18,12 +18,17 @@ def agregar_path_img(productos):
             path = 'img/productos/{}.jpg'.format(p[5])
         else:
             path = 'img/productos/default.svg'
+
+        print(type(p[3]))
+
+
+
         data = {
 
             "descripcion": p[0],
             "marca": p[1],
             "tipo_producto": p[2],
-            "precio": p[3],
+            "precio": str(p[3].get_precio()),
             "unidad_medida": p[4],
             "producto_envase_id": p[5],
             "envase": p[6],

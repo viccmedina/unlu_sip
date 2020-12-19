@@ -48,11 +48,11 @@
 
       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
         <div class="card-body">
-          <p>{{ datos.username }}</p>
-          <p>{{ datos.email }}</p>
+          <p>Usuario: {{ datos.username }}</p>
+          <p>Email: {{ datos.email }}</p>
           <p>Teléfono Principal: {{ datos.tel_principal }}</p>
           {% if datos.tel_secundario is not none %}
-          <p>{{ datos.tel_secundario }}</p>
+          <p>Teléfono Secundario{{ datos.tel_secundario }}</p>
           {% endif %}
         </div>
       </div>

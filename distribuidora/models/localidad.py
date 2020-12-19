@@ -32,4 +32,4 @@ class Localidad(db.Model):
 		"""
 		Nos devolverá una representación del Modelo
 		"""
-		return 'localidad de {}'.format(self.descripcion, self.provincia_id)
+		return self.descripcion
